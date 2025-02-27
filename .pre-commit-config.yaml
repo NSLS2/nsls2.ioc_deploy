@@ -1,0 +1,27 @@
+---
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+
+  - repo: local
+    hooks:
+      - id: ansible-lint
+        files: \.(yaml|yml)$
+        name: ansible lint
+        language: system
+        entry: ansible-lint -c .ansible-lint
+        types: [yaml]
+        description: Perform ansible linting
+
+      - id: yamllint
+        name: yaml lint
+        language: system
+        entry: yamllint --strict -c .github/linters/.yaml-lint.yml
+        description: YamlLint with same config as super-linter
+        types: [yaml]

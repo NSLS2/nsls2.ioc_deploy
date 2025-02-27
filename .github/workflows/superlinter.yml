@@ -1,7 +1,7 @@
 ---
 name: Run Superlinter
 
-on: # yamllint disable-line rule:truthy
+on:  # yamllint disable-line rule:truthy
   push:
     branches: [main]
   pull_request:
@@ -32,6 +32,9 @@ jobs:
         env:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          YAML_ERROR_ON_WARNING: true
+          VALIDATE_YAML_PRETTIER: false
+          VALIDATE_NATURAL_LANGUAGE: false
 
   run_ansible_lint:
     name: Run ansible-lint

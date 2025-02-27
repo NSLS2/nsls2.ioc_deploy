@@ -1,10 +1,12 @@
+---
+
 namespace: nsls2
 name: ioc_deploy
 version: 1.0.0
 readme: README.md
 authors:
-  - your name <example@domain.com>
-description: your collection description
+  - Jakub Wlodek <jwlodek@bnl.gov>
+description: Collection of ansible roles to perform centralized IOC deployments
 license:
   - BSD-3-Clause
 license_file: "LICENSE"
