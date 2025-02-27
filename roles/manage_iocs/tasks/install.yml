@@ -1,0 +1,90 @@
+---
+
+- name: Set IOC directory
+  ansible.builtin.set_fact:
+    manage_iocs_ioc_dir:
+      "{{ manage_iocs_iocs_directory }}/{{ manage_iocs_ioc_name }}"
+
+- name: Show IOC directory
+  ansible.builtin.debug:
+    msg: "{{ manage_iocs_ioc_dir }}"
+
+- name: Read configured IOC port number
+  ansible.builtin.shell:
+    cmd: set -o pipefail && cat config | grep ^PORT | awk -F '=' '{print($2)}'
+    chdir: "{{ manage_iocs_ioc_dir }}"
+  register: manage_iocs_ioc_port
+  changed_when: manage_iocs_ioc_port.rc == 0
+
+- name: Read configured IOC user
+  ansible.builtin.shell:
+    cmd: set -o pipefail && cat config | grep ^USER | awk -F '=' '{print($2)}'
+    chdir: "{{ manage_iocs_ioc_dir }}"
+  register: manage_iocs_ioc_user
+  changed_when: manage_iocs_ioc_user.rc == 0
+
+- name: Ensure ioc user is set
+  ansible.builtin.fail:
+    msg: USER field missing in {{ manage_iocs_ioc_dir }}/config !
+  when: manage_iocs_ioc_user.stdout == ""
+
+- name: Print configured IOC user
+  ansible.builtin.debug:
+    msg: "IOC user is {{ manage_iocs_ioc_user.stdout }}"
+
+# Split out the check for port number into a separate task,
+# since if we move to containerized IOCs, the port number will be redundant.
+- name: Enusre ioc port number is set
+  ansible.builtin.fail:
+    msg: PORT field missing in {{ manage_iocs_ioc_dir }}/config !
+  when: manage_iocs_ioc_port.stdout == ""
+
+- name: Check how many IOCs configured for specified port
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      find -maxdepth 2 -name config -type f -exec cat {} \; \
+      | grep ^PORT \
+      | awk -F '=' '{print($2)}' \
+      | grep -c {{ manage_iocs_ioc_port.stdout }}
+    chdir: "{{ manage_iocs_ioc_dir }}"
+  register: manage_iocs_num_iocs_using_port
+  changed_when: manage_iocs_num_iocs_using_port.rc == 0
+
+- name: Make sure port number isn't already in use.
+  ansible.builtin.fail:
+    msg: "Port number {{ manage_iocs_ioc_port.stdout }} already in use!"
+  when: manage_iocs_num_iocs_using_port.stdout != "1"
+
+- name: Print configured IOC port number
+  ansible.builtin.debug:
+    msg: "IOC port number is {{ manage_iocs_ioc_port.stdout }}"
+
+- name: Create base log directory if it doesn't exist
+  ansible.builtin.file:
+    path: "{{ manage_iocs_log_directory }}"
+    owner: "{{ manage_iocs_ioc_user.stdout }}"
+    group: "{{ manage_iocs_ioc_group }}"
+    state: directory
+    mode: "0775"
+
+- name: Get path to ioc log directory
+  ansible.builtin.set_fact:
+    manage_iocs_ioc_log_dir:
+      "{{ manage_iocs_log_directory }}/{{ manage_iocs_ioc_name }}"
+
+- name: Create ioc log directory if it doesn't exist
+  ansible.builtin.file:
+    path: "{{ manage_iocs_ioc_log_dir }}"
+    state: directory
+    owner: "{{ manage_iocs_ioc_user.stdout }}"
+    group: "{{ manage_iocs_ioc_group }}"
+    mode: "0664"
+
+- name: Install IOC service file
+  ansible.builtin.template:
+    src: templates/softioc.service.j2
+    dest: "/etc/systemd/system/softioc-{{ manage_iocs_ioc_name }}.service"
+    owner: root
+    group: root
+    mode: "0644"

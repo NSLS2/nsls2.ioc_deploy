@@ -1,0 +1,6 @@
+---
+
+- name: Stop IOC service
+  ansible.builtin.systemd_service:
+    name: "softioc-{{ manage_iocs_ioc_name }}.service"
+    state: stopped

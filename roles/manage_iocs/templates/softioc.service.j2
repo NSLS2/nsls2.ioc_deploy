@@ -1,0 +1,19 @@
+#
+# {{ ansible_managed }}
+#
+[Unit]
+Description=IOC {{ manage_iocs_ioc_name }} via procServ
+After=network.target remote_fs.target local_fs.target syslog.target time.target centrifydc.service
+ConditionFileIsExecutable=/usr/bin/procServ
+
+[Service]
+User={{ manage_iocs_ioc_user.stdout }}
+ExecStart=/usr/bin/procServ -f -q -c {{ manage_iocs_ioc_dir }} -i ^D^C^] -p /var/run/softioc-{{ manage_iocs_ioc_name }}.pid -n {{ manage_iocs_ioc_name }} --restrict -L {{ manage_iocs_ioc_log_dir }}/{{ manage_iocs_ioc_name }}.log {{ manage_iocs_ioc_port.stdout }} {{ manage_iocs_ioc_dir }}/{{ manage_iocs_exec }}
+Environment="PROCPORT={{ manage_iocs_ioc_port.stdout }}"
+Environment="HOSTNAME={{ inventory_hostname }}"
+Environment="IOCNAME={{ manage_iocs_ioc_name }}"
+Environment="TOP={{ manage_iocs_ioc_dir }}"
+#Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

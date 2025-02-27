@@ -1,0 +1,4 @@
+---
+
+- name: Run tasks based on command
+  ansible.builtin.include_tasks: "{{ manage_iocs_command }}.yml"

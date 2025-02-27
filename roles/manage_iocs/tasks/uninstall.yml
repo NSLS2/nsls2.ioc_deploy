@@ -1,0 +1,13 @@
+---
+
+- name: Stop the IOC
+  ansible.builtin.include_tasks: stop.yml
+
+- name: Disable the IOC
+  ansible.builtin.include_tasks: disable.yml
+
+- name: Remove IOC service file
+  ansible.builtin.file:
+    path:
+      "/etc/systemd/system/softioc-{{ manage_iocs_ioc_name }}.service"
+    state: absent

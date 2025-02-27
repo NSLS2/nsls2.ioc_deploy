@@ -1,0 +1,6 @@
+---
+
+manage_iocs_exec: "st.cmd"
+manage_iocs_log_directory: "/var/log/softioc"
+manage_iocs_iocs_directory: "/epics/iocs"
+manage_iocs_ioc_group: "n2sn-instadmin"
