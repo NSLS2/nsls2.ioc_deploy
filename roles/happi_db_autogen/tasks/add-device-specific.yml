@@ -1,0 +1,41 @@
+---
+
+- name: Replace and dashes with underscores in device name
+  ansible.builtin.set_fact:
+    happi_db_autogen_device_name:
+      "{{ happi_db_autogen_device_name |
+          replace('-', '_') }}"
+
+- name: Get device configuration
+  ansible.builtin.set_fact:
+    happi_db_autogen_device: "{{ host_config[happi_db_autogen_device_name] }}"
+
+- name: Check if vars file exists for device type
+  ansible.builtin.stat:
+    path: "{{ role_path }}/vars/{{ happi_db_autogen_device.type }}.yml"
+  register: device_type_vars_file
+  delegate_to: localhost
+
+- name: Add in device specific ophyd objects if defined
+  when: device_type_vars_file.stat.exists
+  block:
+    - name: Load device-specific objects
+      ansible.builtin.include_vars:
+        file: "vars/{{ happi_db_autogen_device.type }}.yml"
+
+    - name: Create new dictionary to store device-specific objects
+      ansible.builtin.set_fact:
+        happi_db_autogen_device_objs: {}
+
+    - name: Convert device objects to dictionary
+      ansible.builtin.set_fact:
+        happi_db_autogen_device_objs: >-
+          {{ happi_db_autogen_device_objs |
+              combine({ item._id : item }) }}
+      loop: "{{ happi_db_autogen_device_obj_list }}"
+
+    - name: Merge device-specific objects into Happi database contents
+      ansible.builtin.set_fact:
+        happi_db_autogen_contents:
+          "{{ happi_db_autogen_contents |
+              combine(happi_db_autogen_device_objs) }}"
