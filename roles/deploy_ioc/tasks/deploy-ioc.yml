@@ -60,6 +60,15 @@
         mode: "0664"
       when: deploy_ioc_use_common
 
+    - name: Generate common cmd file for AD IOCs
+      ansible.builtin.template:
+        src: templates/ad_common.cmd.j2
+        dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/common.cmd"
+        owner: "{{ host_info_softioc_user }}"
+        group: "{{ host_info_softioc_group }}"
+        mode: "0664"
+      when: deploy_ioc_use_ad_common
+
     - name: Install EPICS environment file
       ansible.builtin.template:
         src: templates/epicsEnv.cmd.j2

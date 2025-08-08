@@ -3,16 +3,26 @@
 deploy_ioc_post_deploy_step: "None"
 deploy_ioc_template_root_path: "/usr/lib/epics"
 deploy_ioc_iocs_directory: "/epics/iocs"
+deploy_ioc_ioc_directory: "{{ deploy_ioc_iocs_directory }}/{{ ioc_name }}"
 deploy_ioc_executable: "softIoc"
 deploy_ioc_standard_st_cmd: true
 deploy_ioc_standard_post_init: true
 deploy_ioc_use_common: true
+deploy_ioc_use_ad_common: true
 deploy_ioc_load_as_substitutions: true
-deploy_ioc_nextport: 4000
+deploy_ioc_manage_iocs_nextport: 4000
+
+# Autosave directory configuration
 deploy_ioc_as_dir_name: "as"
-deploy_ioc_device_specific_env: {}
+deploy_ioc_as_directory:
+  "{{ deploy_ioc_ioc_directory }}/{{ deploy_ioc_as_dir_name }}"
 deploy_ioc_req_file_list: []
 
+deploy_ioc_ioc_host_vars_read_token: ""
+
+# A dict for device-specific environment variables. Override this as needed
+# to provide custom environment configurations for specific devices.
+deploy_ioc_device_specific_env: {}
 deploy_ioc_default_env:
   IOC: "{{ ioc.type }}"
   IOC_DIR: "{{ deploy_ioc_iocs_directory }}"

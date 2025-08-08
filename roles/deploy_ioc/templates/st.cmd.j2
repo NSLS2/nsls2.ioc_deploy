@@ -6,7 +6,7 @@
 # Load IOC specific startup configuration
 < ./base.cmd
 
-{% if deploy_ioc_use_common %}
+{% if deploy_ioc_use_common or deploy_ioc_use_ad_common %}
 # Load any additional configured databases, prep autosave
 < ./common.cmd
 {% endif %}

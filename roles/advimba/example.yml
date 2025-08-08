@@ -1,0 +1,11 @@
+---
+
+cam-av1:
+  type: "advimba"
+
+  environment:
+    PREFIX: "XF:31ID1-ES{GigE-Cam:1}"
+    ENGINEER: "D. Gavrilov"
+    CAMERA_ID: "DEV_000F315DFEB9"
+
+    # GENICAM_DB_FILE: "$(ADGENICAM)/db/AVT_Mako_G030B.template"

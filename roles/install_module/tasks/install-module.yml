@@ -52,6 +52,18 @@
       register: install_module_make_dir_safe
       changed_when: install_module_make_dir_safe.rc == 0
 
+    - name: If ADCore, install commonPlugin files
+      ansible.builtin.copy:
+        src: "files/{{ item }}"
+        dest: "{{ install_module_dir }}/iocBoot/{{ item }}"
+        owner: "{{ host_info_softioc_user }}"
+        group: "{{ host_info_softioc_group }}"
+        mode: "0664"
+      when: install_module_name.startswith("adcore")
+      with_items:
+        - "commonPlugins.cmd"
+        - "commonPlugin_settings.req"
+
     - name: Create dict to track total config entries for module
       ansible.builtin.set_fact:
         install_module_config_dict:
