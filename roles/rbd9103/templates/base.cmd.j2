@@ -1,0 +1,22 @@
+
+dbLoadDatabase("{{ deploy_ioc_required_module_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+epicsEnvSet("SERIAL_PORT", "RBD_TTY")
+
+# Configure low level serial port
+drvAsynSerialPortConfigure("$(SERIAL_PORT)", "/dev/rbd9103_{{ rbd9103_serial_num }}", 0, 0, 0)
+
+# For serial options, see the `Communications and Command Reference` section
+# of the RBD9103 manual. These are the settings for low-speed comms.
+asynSetOption("$(SERIAL_PORT)", 0, "baud", 57600)
+asynSetOption("$(SERIAL_PORT)", 0, "bits", 8)
+asynSetOption("$(SERIAL_PORT)", 0, "parity", "none")
+asynSetOption("$(SERIAL_PORT)", 0, "stop", 1)
+
+# CRLF terminators for commands and responses
+asynOctetSetOutputEos("$(SERIAL_PORT)", 0, "\r\n")
+asynOctetSetInputEos("$(SERIAL_PORT)", 0, "\r\n")
+
+# Instantiate the RBD9103 driver
+RBD9103Config("$(PORT)", "$(SERIAL_PORT)")

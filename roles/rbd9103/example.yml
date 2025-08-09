@@ -1,0 +1,24 @@
+---
+
+rbd9103-01:
+  type: "rbd9103"
+  environment:
+    PREFIX: "XF:31ID1-ES{RBD9103-AMM:1}"
+    ENGINEER: "J. Wlodek"
+    SERIAL_NUMBER: "AQ01SPJH"
+    PORT: "RBD"
+    SERIAL_PORT: "RBD_TTY"
+  substitutions:
+    rbd9103:
+      - filepath: "$(RBD9103)/db/rbd9103.template"
+        pattern: ["P", "R", "PORT"]
+        instances:
+          - ["XF:31ID1-ES", "{RBD9103-AMM:1}", "RBD9103"]
+      - filepath: "$(RBD9103)/db/rbd9103_recording.template"
+        pattern: ["P", "R", "PORT"]
+        instances:
+          - ["XF:31ID1-ES", "{RBD9103-AMM:1}", "RBD9103"]
+      - filepath: "$(EPICS_BASE)/db/asynRecord.db"
+        pattern: ["P", "R", "PORT", "ADDR", "OMAX", "IMAX"]
+        instances:
+          - ["XF:31ID1-ES", "{RBD9103-AMM:1}AsynIO", "RBD_TTY", "0", "0", "0"]
