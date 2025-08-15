@@ -1,0 +1,5 @@
+# {{ ansible_managed }}
+
+{% for axis in ioc.substitutions.motorSim[0].instances %}
+file "motorSimAxis_settings.req", P={{ axis[0] }}, M={{ axis[1] }}
+{% endfor %}

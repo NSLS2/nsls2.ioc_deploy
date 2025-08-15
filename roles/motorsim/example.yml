@@ -1,0 +1,15 @@
+---
+mc01:
+  type: motorsim
+  environment:
+    PREFIX: "XF:31ID1-ES{MC:01}"
+    ENGINEER: "J. Wlodek"
+  substitutions:
+    motorSim:
+      - filepath: "$(TOP)/db/motorSim.template"
+        pattern: ["P", "M", "PORT", "ADDR", "EGU", "DHLM", "DLLM"]
+        instances:
+          - ["XF:31ID1-ES", "{MC:01-Ax:X}Mtr", "$(PORT)", 0, "mm", 100, -100]
+          - ["XF:31ID1-ES", "{MC:01-Ax:Y}Mtr", "$(PORT)", 1, "mm", 100, -100]
+          - ["XF:31ID1-ES", "{MC:01-Ax:Z}Mtr", "$(PORT)", 2, "mm", 100, -100]
+          - ["XF:31ID1-ES", "{MC:01-Ax:Rot}Mtr", "$(PORT)", 3, "deg", 180, -180]

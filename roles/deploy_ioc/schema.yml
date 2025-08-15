@@ -15,5 +15,5 @@ template:
 
 substitution:
   filepath: str()
-  pattern: list(str)
+  pattern: list(str())
   instances: list(list(any(str(), int(), num())))

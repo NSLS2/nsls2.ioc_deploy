@@ -1,0 +1,10 @@
+---
+# Variables for the motorsim role
+deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
+deploy_ioc_required_module: motorsim_ioc_683afc0
+deploy_ioc_executable: motorSim
+deploy_ioc_req_file_list:
+  - name: motorSim_settings.req
+    macros: ""
+deploy_ioc_device_specific_env:
+  PORT: MTRSIM1

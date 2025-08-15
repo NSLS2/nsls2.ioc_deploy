@@ -1,6 +1,6 @@
 ---
 
-motorsim_R1_2:
+motorsim_d1d0eb8:
   name: MotorSim
   url: https://github.com/epics-motor/motorMotorSim
-  version: R1-2
+  version: d1d0eb8

@@ -1,0 +1,11 @@
+errLogInit(2000)
+
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+motorSimCreateController("$(PORT)", {{ ioc.substitutions.motorSim[0].instances | length }})
+
+# Create axes as defined in the IOC configuration
+{% for axis in ioc.substitutions.motorSim[0].instances %}
+motorSimConfigAxis("$(PORT)", {{ axis[3] }}, {{ (axis[5] + motorsim_soft_limit_offset) / motorsim_default_res }}, {{ (axis[6] - motorsim_soft_limit_offset) / motorsim_default_res }}, 0, 0)
+{% endfor %}

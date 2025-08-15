@@ -9,4 +9,4 @@ environment:
   CBUFFS: int(min=1, required=False)  # Optional circular buffer size
   MAX_THREADS: int(min=1, required=False)  # Optional maximum number of threads
   PORT: str(required=False)  # Optional asyn port to use
-  FFMSTREAM_PORT: int(min=8000, required=False)  # Port for
+  FFMSTREAM_PORT: int(min=8000, required=False)  # Port for ffmpeg server

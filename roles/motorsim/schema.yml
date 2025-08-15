@@ -1,0 +1,10 @@
+---
+type: enum("motorsim")
+environment:
+  PREFIX: str()
+  ENGINEER: str(required=False)
+substitutions:
+  motorSim:
+    - filepath: enum("$(TOP)/db/motorSim.template")
+      pattern: list(any(enum("P"), enum("M"), enum("PORT"), enum("ADDR"), enum("EGU"), enum("DHLM"), enum("DLLM"))) # yamllint disable-line rule:line-length
+      instances: list(list(min=7, max=7))

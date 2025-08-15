@@ -1,0 +1,7 @@
+---
+motorsim_ioc_683afc0:
+  name: MotorSimIOC
+  url: https://github.com/NSLS2/motorSim-ioc
+  version: 683afc0
+  module_deps:
+    - motorsim_d1d0eb8
