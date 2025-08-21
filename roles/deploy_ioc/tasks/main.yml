@@ -1,5 +1,9 @@
 ---
 
+- name: Test to see if collection auto pulled
+  ansible.builtin.fail:
+    msg: "It worked"
+
 - name: Fetch host information
   ansible.builtin.include_role:
     name: nsls2.ioc_deploy.host_info
