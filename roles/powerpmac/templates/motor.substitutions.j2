@@ -1,0 +1,11 @@
+#
+# {{ ansible_managed }}
+#
+file "$(PPMAC)/db/motor.db"
+{{"{"}}
+pattern
+{{"{"}}P, M, MOTOR, PORT, ADDR, DESC, DTYP, MRES, EGU, PREC, ALIAS{{"}"}}
+{% for axis in ioc.axes %}
+{{"{"}}"{{ ioc.environment.SYS }}", "{{"{"}}{{ axis.component }}-Ax:{{ axis.name }}{{"}"}}Mtr", "$(PORT)", {{ axis.num }}, {{ axis.desc }}, asynMotor, {{ axis.mres }}, "{{ axis.egu }}", 4, ""{{"}"}}
+{% endfor %}
+{{"}"}}

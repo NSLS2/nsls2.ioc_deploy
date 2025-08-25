@@ -1,0 +1,20 @@
+---
+deploy_ioc_use_common: true
+deploy_ioc_required_module: ppmac_4752c2f
+deploy_ioc_executable: ppmac
+deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
+deploy_ioc_make_autosave_files: true
+
+# Generated req files don't need macros
+deploy_ioc_req_file_list:
+  - name: "info_positions.req"
+    macros: ""
+  - name: "info_settings.req"
+    macros: ""
+
+deploy_ioc_device_specific_env:
+  STREAM_PROTOCOL_PATH: "$(PMAC)/protocol:$(PPMAC)/protocol:$(TOP)/protocol"
+  PORT: PPMAC
+  SSH_PORT: PPMAC_SSH
+  CT_PREFIX: "$(CT_SYS){$(PMAC)}"
+  IOC_PREFIX: "$(CT_SYS){IOC-$(PMAC)}"

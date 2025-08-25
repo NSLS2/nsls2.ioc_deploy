@@ -1,0 +1,11 @@
+#
+# {{ ansible_managed }}
+#
+file "$(PPMAC)/db/ppmacaux.db"
+{{"{"}}
+pattern
+{{"{"}}SYSP, DEVP, SYSV, DEVV, AXIS, PORT{{"}"}}
+{% for axis in ioc.axes %}
+{{"{"}}"{{ ioc.environment.CT_SYS }}", "{{"{"}}{{ ioc.environment.PMAC }}-Ax:{{ axis.num }}{{"}"}}", "{{ ioc.environment.SYS }}", "{{"{"}}{{ axis.component }}-Ax:{{ axis.name }}{{"}"}}", {{ axis.num }}, "$(SSH_PORT)"{{"}"}}
+{% endfor %}
+{{"}"}}
