@@ -86,8 +86,8 @@
         mode: "0775"
 
     - name: Install top level IOC startup script
-      ansible.builtin.copy:
-        src: files/st.cmd
+      ansible.builtin.template:
+        src: templates/st_top.cmd.j2
         dest: "{{ deploy_ioc_ioc_directory }}/st.cmd"
         owner: "{{ host_info_softioc_user }}"
         group: "{{ host_info_softioc_group }}"

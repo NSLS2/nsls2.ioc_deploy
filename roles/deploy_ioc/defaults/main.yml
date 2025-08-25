@@ -14,6 +14,7 @@ deploy_ioc_load_as_substitutions: true
 deploy_ioc_nextport: 4000
 deploy_ioc_req_file_list: []
 deploy_ioc_dbpf_list: []
+deploy_ioc_env_exports: {}
 
 # Autosave directory configuration
 deploy_ioc_as_dir_name: "as"

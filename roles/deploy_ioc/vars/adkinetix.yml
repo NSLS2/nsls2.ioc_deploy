@@ -19,3 +19,7 @@ deploy_ioc_device_specific_env:
   YSIZE: 3200
   NELEMENTS: 500000
   EPICS_DB_INCLUDE_PATH: "$(ADCORE)/db"
+deploy_ioc_env_exports:
+  PVCAM_UMD_PATH: "/opt/pvcam/drivers/user-mode"
+  PVCAM_SDK_PATH: "/opt/pvcam/sdk"
+  PVCAM_VERSION: "$(cat /opt/pvcam/pvcam.version)"
