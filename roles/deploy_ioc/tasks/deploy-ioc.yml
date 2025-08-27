@@ -94,7 +94,7 @@
 
 - name: Deploy IOC template
   ansible.builtin.include_role:
-    name: "nsls2.ioc_deploy.{{ ioc.type }}"
+    name: "nsls2.ioc_deploy.device_roles.{{ ioc.type }}"
 
 - name: Writeout IOC configuration used to yml
   ansible.builtin.copy:
