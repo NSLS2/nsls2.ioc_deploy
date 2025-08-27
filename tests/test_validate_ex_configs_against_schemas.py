@@ -5,8 +5,11 @@ import pytest
 import yamale
 import yaml
 
-
-DEVICE_ROLES = [role for role in os.listdir("roles/device_roles")]
+DEVICE_ROLES = [
+    role
+    for role in os.listdir("roles/device_roles")
+    if os.path.isdir(os.path.join("roles/device_roles", role))
+]
 
 
 class HostnameValidator(yamale.validators.Validator):
@@ -40,9 +43,9 @@ pytestmark = pytest.mark.parametrize("device_role", DEVICE_ROLES)
 
 
 def test_ensure_example_present(device_role):
-    assert os.path.exists(os.path.join("roles/device_roles", device_role, "example.yml")), (
-        f"Example configuration file for {device_role} role is missing."
-    )
+    assert os.path.exists(
+        os.path.join("roles/device_roles", device_role, "example.yml")
+    ), f"Example configuration file for {device_role} role is missing."
 
 
 def test_ensure_required_schema_present(device_role):

@@ -24,9 +24,9 @@
 
 - name: Clone genicam-xml-converter tools
   ansible.builtin.git:
-    repo: "{{ adaravis_genicam_xml_converters_url }}"
+    repo: "{{ device_roles_adaravis_genicam_xml_converters_url }}"
     dest: "{{ deploy_ioc_ioc_directory }}/genicam-xml-converters"
-    version: "{{ adaravis_genicam_xml_converters_version }}"
+    version: "{{ device_roles_adaravis_genicam_xml_converters_version }}"
 
 - name: Initialize venv
   ansible.builtin.shell: >-

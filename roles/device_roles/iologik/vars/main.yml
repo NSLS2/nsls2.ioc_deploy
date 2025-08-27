@@ -2,7 +2,7 @@
 
 # Dictionary that maps iologik models to the number of each type of connection
 # This is used to generate EPICS database files for each model dynamically.
-iologik_connections:
+device_roles_iologik_connections:
   E1210:
     DI: 16
     DO: 0

@@ -28,7 +28,7 @@
   ansible.builtin.pip:
     executable: "{{ deploy_ioc_ioc_directory }}/venv/bin/pip"
     name: "{{ item }}"
-  loop: "{{ pandabox_pip_dependencies }}"
+  loop: "{{ device_roles_pandabox_pip_dependencies }}"
 
 - name: Update ownership of venv directory
   ansible.builtin.command:

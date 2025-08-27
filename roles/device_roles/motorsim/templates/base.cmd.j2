@@ -7,5 +7,5 @@ motorSimCreateController("$(PORT)", {{ ioc.substitutions.motorSim[0].instances |
 
 # Create axes as defined in the IOC configuration
 {% for axis in ioc.substitutions.motorSim[0].instances %}
-motorSimConfigAxis("$(PORT)", {{ axis[3] }}, {{ (axis[5] + motorsim_soft_limit_offset) / motorsim_default_res }}, {{ (axis[6] - motorsim_soft_limit_offset) / motorsim_default_res }}, 0, 0)
+motorSimConfigAxis("$(PORT)", {{ axis[3] }}, {{ (axis[5] + device_roles_motorsim_soft_limit_offset) / device_roles_motorsim_default_res }}, {{ (axis[6] - device_roles_motorsim_soft_limit_offset) / motorsim_default_res }}, 0, 0)
 {% endfor %}

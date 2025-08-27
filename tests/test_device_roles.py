@@ -2,7 +2,12 @@ import os
 
 import pytest
 
-DEVICE_ROLES = [role for role in os.listdir("roles/device_roles")]
+DEVICE_ROLES = [
+    role
+    for role in os.listdir("roles/device_roles")
+    if os.path.isdir(os.path.join("roles/device_roles", role))
+]
+
 
 @pytest.mark.parametrize("device_role", DEVICE_ROLES)
 def test_ensure_var_file_for_device_role_exists(device_role):

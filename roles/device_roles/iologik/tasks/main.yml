@@ -1,5 +1,9 @@
 ---
 
+- name: Set iologik model dictionary
+  ansible.builtin.set_fact:
+    iologik_connections: "{{ device_roles_iologik_connections }}"
+
 - name: Copy DIO configuration template
   ansible.builtin.copy:
     src: "files/dioConfig.template"

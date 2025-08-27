@@ -1,4 +1,4 @@
 ---
 
-motorsim_default_res: 0.01
-motorsim_soft_limit_offset: 10
+device_roles_motorsim_default_res: 0.01
+device_roles_motorsim_soft_limit_offset: 10

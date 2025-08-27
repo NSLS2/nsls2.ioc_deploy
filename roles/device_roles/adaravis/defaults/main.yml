@@ -1,4 +1,5 @@
 ---
 
-adaravis_genicam_xml_converters_url: https://github.com/jwlodek/genicam-xml-converters
-adaravis_genicam_xml_converters_version: "224b03b"
+device_roles_adaravis_genicam_xml_converters_url:
+  https://github.com/jwlodek/genicam-xml-converters
+device_roles_adaravis_genicam_xml_converters_version: "224b03b"

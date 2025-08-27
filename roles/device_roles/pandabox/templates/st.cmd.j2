@@ -17,7 +17,7 @@ export EPICS_PVA_AUTO_ADDR_LIST=NO
 export EPICS_PVAS_AUTO_BEACON_ADDR_LIST=NO
 export EPICS_PVA_ADDR_LIST={{ host_config.epics_interface.broadcast }}
 export EPICS_PVAS_BEACON_ADDR_LIST={{ host_config.epics_interface.broadcast }}
-export EPICS_PVAS_INTF_ADDR_LIST={{ host_config.epics_interface.broadcast }}
+export EPICS_PVAS_INTF_ADDR_LIST={{ host_config.epics_interface.address }}
 
 
 {{ deploy_ioc_ioc_directory }}/venv/bin/pandablocks-ioc softioc --screens-dir="$OPI_DIR" --clear-bobfiles {{ ioc.environment.PANDA_HOSTNAME }} {{ ioc.environment.PREFIX }}
