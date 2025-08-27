@@ -29,14 +29,6 @@
     host_info_softioc_group: "n2sn-instadmin"
   when: host_config.host_softioc_group is not defined
 
-- name: Create common directory if it does not exist
-  ansible.builtin.file:
-    path: "/epics/common"
-    state: directory
-    mode: "0775"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
-
 - name: Get SCI interface ip
   ansible.builtin.set_fact:
     host_info_sci_intf_ip: "{{ ansible_default_ipv4.address }}"

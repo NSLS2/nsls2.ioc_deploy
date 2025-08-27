@@ -1,8 +1,8 @@
 ---
 
-- name: Fetch host information
+- name: Install common files and fetch host info
   ansible.builtin.include_role:
-    name: nsls2.ioc_deploy.host_info
+    name: nsls2.ioc_deploy.deploy_common
 
 - name: Make deploymnent list all IOCs if requested
   ansible.builtin.set_fact:
