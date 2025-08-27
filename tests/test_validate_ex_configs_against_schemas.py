@@ -5,15 +5,8 @@ import pytest
 import yamale
 import yaml
 
-COMMON_ROLES = [
-    "install_module",
-    "deploy_ioc",
-    "deploy_common",
-    "host_info",
-    "manage_iocs",
-]
 
-DEVICE_ROLES = [role for role in os.listdir("roles") if role not in COMMON_ROLES]
+DEVICE_ROLES = [role for role in os.listdir("roles/device_roles")]
 
 
 class HostnameValidator(yamale.validators.Validator):
@@ -47,20 +40,20 @@ pytestmark = pytest.mark.parametrize("device_role", DEVICE_ROLES)
 
 
 def test_ensure_example_present(device_role):
-    assert os.path.exists(os.path.join("roles", device_role, "example.yml")), (
+    assert os.path.exists(os.path.join("roles/device_roles", device_role, "example.yml")), (
         f"Example configuration file for {device_role} role is missing."
     )
 
 
 def test_ensure_required_schema_present(device_role):
-    schema_path = os.path.join("roles", device_role, "schema.yml")
+    schema_path = os.path.join("roles/device_roles", device_role, "schema.yml")
     assert os.path.exists(schema_path), (
         f"Schema file for {device_role} role is missing at {schema_path}."
     )
 
 
 def test_ensure_example_validates_with_base_schema(device_role):
-    with open(os.path.join("roles", device_role, "example.yml")) as fp:
+    with open(os.path.join("roles/device_roles", device_role, "example.yml")) as fp:
         example_data = yaml.safe_load(fp)
         ioc_name = list(example_data.keys())[0]
         ioc_config = example_data[ioc_name]
@@ -82,8 +75,8 @@ def test_ensure_example_validates_with_base_schema(device_role):
 
 
 def test_ensure_example_validates_with_role_specific_schema(device_role):
-    schema_path = os.path.join("roles", device_role, "schema.yml")
-    example_path = os.path.join("roles", device_role, "example.yml")
+    schema_path = os.path.join("roles/device_roles", device_role, "schema.yml")
+    example_path = os.path.join("roles/device_roles", device_role, "example.yml")
 
     validators = yamale.validators.DefaultValidators.copy()
     validators["hostname"] = HostnameValidator

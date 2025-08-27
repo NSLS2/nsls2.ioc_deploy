@@ -23,7 +23,7 @@ pytestmark = pytest.mark.parametrize(
 
 
 def test_deploy_ioc_var_file_has_matching_role(deploy_ioc_var_file):
-    assert os.path.exists(os.path.join("roles", deploy_ioc_var_file.name))
+    assert os.path.exists(os.path.join("roles/device_roles", deploy_ioc_var_file.name))
 
 
 def test_deploy_ioc_var_files_valid(deploy_ioc_var_file, module_name_validator):
