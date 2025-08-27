@@ -2,15 +2,11 @@ import os
 
 import pytest
 
-COMMON_ROLES = [
-    "install_module",
-    "deploy_ioc",
-    "deploy_common",
-    "host_info",
-    "manage_iocs",
+DEVICE_ROLES = [
+    role
+    for role in os.listdir("roles/device_roles")
+    if os.path.isdir(os.path.join("roles/device_roles", role))
 ]
-
-DEVICE_ROLES = [role for role in os.listdir("roles") if role not in COMMON_ROLES]
 
 
 @pytest.mark.parametrize("device_role", DEVICE_ROLES)

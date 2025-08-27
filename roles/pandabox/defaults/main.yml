@@ -1,4 +1,0 @@
----
-
-pandabox_pip_dependencies:
-  - "pandablocks-ioc==0.11.5"

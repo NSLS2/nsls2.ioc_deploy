@@ -30,7 +30,7 @@ dbLoadRecords("{{ template.filepath }}", "
 < $(ADCORE)/iocBoot/commonPlugins.cmd
 
 {% if deploy_ioc_merged_env.FFMPEGSERVER is defined and ioc.environment.FFMSTREAM_PORT is defined %}
-ffmpegServerConfigure("$(FFMSTREAM_PORT)", "{{ host_info_epics_intf_ip }}")
+ffmpegServerConfigure("$(FFMSTREAM_PORT)", "{{ host_config.epics_interface.address }}")
 ffmpegStreamConfigure("FfmStream1", $(QSIZE), 0, "$(PORT)", 0, -1, 0)
 dbLoadRecords("$(FFMPEGSERVER)/db/ffmpegStream.template", "P=$(PREFIX),R=ffmstream1:,PORT=FfmStream1,NDARRAY_PORT=$(PORT)")
 

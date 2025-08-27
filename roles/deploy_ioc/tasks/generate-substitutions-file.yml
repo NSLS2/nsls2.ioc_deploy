@@ -22,6 +22,6 @@
   ansible.builtin.template:
     src: templates/default.substitutions.j2
     dest: "{{ deploy_ioc_ioc_directory }}/db/{{ deploy_ioc_substitution_file_name }}.substitutions" # yamllint disable-line rule:line-length
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0664"

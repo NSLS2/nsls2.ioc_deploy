@@ -1,0 +1,43 @@
+---
+
+- name: Set iologik model dictionary
+  ansible.builtin.set_fact:
+    iologik_connections: "{{ device_roles_iologik_connections }}"
+
+- name: Copy DIO configuration template
+  ansible.builtin.copy:
+    src: "files/dioConfig.template"
+    dest: "{{ deploy_ioc_ioc_directory }}/db/dioConfig.template"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Install base startup script
+  ansible.builtin.template:
+    src: "templates/base.cmd.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Check for device prefix in ioc configuration
+  ansible.builtin.set_fact:
+    iologik_device_prefix: "{{ ioc.environment.DEV }}-IOL"
+  when: ioc.environment.DEV is defined
+
+- name: Set default device prefix
+  ansible.builtin.set_fact:
+    iologik_device_prefix: "IOLOGIK"
+  when: ioc.environment.DEV is not defined
+
+- name: Install substitution files for any required models
+  ansible.builtin.template:
+    src: "templates/ioLogik.substitutions.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/db/ioLogik_{{ iologik_index + 1 }}_{{ iologik_device.model }}.substitutions" # yamllint disable-line rule:line-length
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+  loop: "{{ ioc.devices }}"
+  loop_control:
+    loop_var: iologik_device
+    index_var: iologik_index

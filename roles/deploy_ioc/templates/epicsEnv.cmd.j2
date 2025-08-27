@@ -1,5 +1,5 @@
 
-< /epics/common/{{ host_info_hostname }}-netsetup.cmd
+< /epics/common/{{ inventory_hostname.split('.')[0] }}-netsetup.cmd
 
 errlogInit(20000)
 

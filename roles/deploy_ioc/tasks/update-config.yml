@@ -48,6 +48,6 @@
   ansible.builtin.template:
     src: "templates/config.j2"
     dest: "{{ deploy_ioc_iocs_directory }}/{{ deploy_ioc_ioc_name }}/config"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0664"
