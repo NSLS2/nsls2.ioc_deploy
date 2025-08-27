@@ -212,7 +212,7 @@ def add_role():
     if not standard_st_cmd:
         return
 
-    role_path = os.path.join("roles", role_name_actual)
+    role_path = os.path.join("roles/device_roles", role_name_actual)
     os.makedirs(role_path, exist_ok=True)
     for subdir in ["templates", "tasks"]:
         os.makedirs(os.path.join(role_path, subdir), exist_ok=True)
@@ -264,7 +264,7 @@ def delete_role():
         "Select a role to delete:", choices=get_role_list()
     ).unsafe_ask()
 
-    role_path = os.path.join("roles", role)
+    role_path = os.path.join("roles/device_roles", role)
     role_vars_path = os.path.join("roles", "deploy_ioc", "vars", f"{role}.yml")
 
     shutil.rmtree(role_path)
