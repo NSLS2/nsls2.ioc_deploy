@@ -5,29 +5,29 @@
     src: files/motorSimAxis_settings.req
     dest: "{{ deploy_ioc_as_directory }}/req/motorSimAxis_settings.req"
     mode: "0664"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
 
 - name: Install motor sim template file
   ansible.builtin.copy:
     src: files/motorSim.template
     dest: "{{ deploy_ioc_ioc_directory }}/db/motorSim.template"
     mode: "0664"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
 
 - name: Install motor sim autosave req file
   ansible.builtin.template:
     src: motorSim_settings.req.j2
     dest: "{{ deploy_ioc_as_directory }}/req/motorSim_settings.req"
     mode: "0664"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
 
 - name: Deploy base startup script
   ansible.builtin.template:
     src: templates/base.cmd.j2
     dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
     mode: "0664"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"

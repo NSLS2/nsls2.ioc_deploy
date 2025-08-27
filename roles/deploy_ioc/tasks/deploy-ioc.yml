@@ -24,8 +24,8 @@
 - name: Create IOC directory
   ansible.builtin.file:
     path: "{{ deploy_ioc_ioc_directory }}"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     state: directory
     mode: "0775"
 
@@ -35,8 +35,8 @@
     - name: Create standard IOC dirs
       ansible.builtin.file:
         path: "{{ deploy_ioc_ioc_directory }}/{{ item }}"
-        owner: "{{ host_info_softioc_user }}"
-        group: "{{ host_info_softioc_group }}"
+        owner: "{{ host_config.softioc_user }}"
+        group: "{{ host_config.softioc_group }}"
         state: directory
         mode: "0775"
       with_items:
@@ -55,8 +55,8 @@
       ansible.builtin.template:
         src: templates/common.cmd.j2
         dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/common.cmd"
-        owner: "{{ host_info_softioc_user }}"
-        group: "{{ host_info_softioc_group }}"
+        owner: "{{ host_config.softioc_user }}"
+        group: "{{ host_config.softioc_group }}"
         mode: "0664"
       when: deploy_ioc_use_common
 
@@ -64,32 +64,32 @@
       ansible.builtin.template:
         src: templates/epicsEnv.cmd.j2
         dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/epicsEnv.cmd"
-        owner: "{{ host_info_softioc_user }}"
-        group: "{{ host_info_softioc_group }}"
+        owner: "{{ host_config.softioc_user }}"
+        group: "{{ host_config.softioc_group }}"
         mode: "0664"
 
     - name: Generate postInit cmd file
       ansible.builtin.template:
         src: templates/postInit.cmd.j2
         dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/postInit.cmd"
-        owner: "{{ host_info_softioc_user }}"
-        group: "{{ host_info_softioc_group }}"
+        owner: "{{ host_config.softioc_user }}"
+        group: "{{ host_config.softioc_group }}"
         mode: "0664"
 
     - name: Install standard IOC startup script
       ansible.builtin.template:
         src: templates/st.cmd.j2
         dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/st.cmd"
-        owner: "{{ host_info_softioc_user }}"
-        group: "{{ host_info_softioc_group }}"
+        owner: "{{ host_config.softioc_user }}"
+        group: "{{ host_config.softioc_group }}"
         mode: "0775"
 
     - name: Install top level IOC startup script
       ansible.builtin.copy:
         src: files/st.cmd
         dest: "{{ deploy_ioc_ioc_directory }}/st.cmd"
-        owner: "{{ host_info_softioc_user }}"
-        group: "{{ host_info_softioc_group }}"
+        owner: "{{ host_config.softioc_user }}"
+        group: "{{ host_config.softioc_group }}"
         mode: "0775"
 
 - name: Deploy IOC template
@@ -100,16 +100,16 @@
   ansible.builtin.copy:
     content: "{{ {deploy_ioc_ioc_name: ioc} | to_nice_yaml(sort_keys=False) }}"
     dest: "{{ deploy_ioc_ioc_directory }}/{{ deploy_ioc_ioc_name }}.yml"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0664"
 
 - name: Generate IOC README file
   ansible.builtin.template:
     src: templates/README.md.j2
     dest: "{{ deploy_ioc_ioc_directory }}/README.md"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0664"
 
 - name: Generate manage-iocs config file

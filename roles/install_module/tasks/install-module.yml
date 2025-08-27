@@ -11,8 +11,8 @@
 - name: Create modules directory if it doesn't exist
   ansible.builtin.file:
     path: "{{ install_module_install_dir }}"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     state: "directory"
     mode: "0775"
 
@@ -56,8 +56,8 @@
       ansible.builtin.copy:
         src: "files/{{ item }}"
         dest: "{{ install_module_dir }}/iocBoot/{{ item }}"
-        owner: "{{ host_info_softioc_user }}"
-        group: "{{ host_info_softioc_group }}"
+        owner: "{{ host_config.softioc_user }}"
+        group: "{{ host_config.softioc_group }}"
         mode: "0664"
       when: install_module_name.startswith("adcore")
       with_items:
@@ -133,7 +133,7 @@
 
 - name: Ensure proper ownership of module files
   ansible.builtin.command:
-    "chown -R {{ host_info_softioc_user }}:{{ host_info_softioc_group }} {{ install_module_dir }}" # yamllint disable-line rule:line-length
+    "chown -R {{ host_config.softioc_user }}:{{ host_config.softioc_group }} {{ install_module_dir }}" # yamllint disable-line rule:line-length
   register: install_module_ownership_result
   changed_when: install_module_ownership_result.rc == 0
 

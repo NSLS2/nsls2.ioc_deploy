@@ -4,14 +4,14 @@
   ansible.builtin.template:
     src: "templates/base.cmd.j2"
     dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0664"
 
 - name: Copy autosave req file
   ansible.builtin.template:
     src: "templates/auto_settings.req.j2"
     dest: "{{ deploy_ioc_as_directory }}/req/auto_settings.req"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0664"

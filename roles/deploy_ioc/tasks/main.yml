@@ -1,12 +1,47 @@
 ---
 
-- name: Install common files and fetch host info
-  ansible.builtin.include_role:
-    name: nsls2.ioc_deploy.deploy_common
+- name: Fail if host configuration has not been loaded
+  ansible.builtin.fail:
+    msg: >-
+      Host configuration dictionary must be loaded
+      and include epics_interface (address & broadcast),
+      softioc_user, and softioc_group!
+  when: >-
+    host_config is not defined or
+    host_config.epics_interface is not defined or
+    host_config.epics_interface.address is not defined or
+    host_config.epics_interface.broadcast is not defined or
+    host_config.softioc_user is not defined or
+    host_config.softioc_group is not defined
+
+- name: Print EPICS interface ip
+  ansible.builtin.debug:
+    msg: "EPICS interface IP: {{ host_config.epics_interface.address }}"
+
+- name: Deploy netsetup file
+  ansible.builtin.template:
+    src: "templates/netsetup.j2"
+    dest: "{{ deploy_ioc_common_dir }}/{{ inventory_hostname.split('.')[0] }}-netsetup.cmd" # yamllint disable-line rule:line-length
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Create empty list to store IOC names
+  ansible.builtin.set_fact:
+    deploy_ioc_full_ioc_list: []
+
+- name: Get list of IOC names from loaded config
+  ansible.builtin.set_fact:
+    deploy_ioc_full_ioc_list: >-
+      "{{ host_config |
+          dict2items |
+          selectattr('value', 'mapping') |
+          selectattr('value.type', 'defined') |
+          map(attribute='key') | list }}"
 
 - name: Make deploymnent list all IOCs if requested
   ansible.builtin.set_fact:
-    deploy_ioc_ioc_list: "{{ host_info_ioc_list }}"
+    deploy_ioc_ioc_list: "{{ deploy_ioc_full_ioc_list }}"
   when: deploy_ioc_target == "all"
 
 - name: Set deploy iocs to specified IOCs if requested

@@ -4,8 +4,8 @@
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ deploy_ioc_ioc_directory }}/db"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0664"
   with_fileglob: "files/*.template"
 
@@ -13,6 +13,6 @@
   ansible.builtin.template:
     src: "templates/base.cmd.j2"
     dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0664"

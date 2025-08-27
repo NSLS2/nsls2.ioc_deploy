@@ -7,7 +7,7 @@
 - name: Make sure IOC with given name is configured on host
   ansible.builtin.fail:
     msg: "IOC with name {{ deploy_ioc_ioc_name }} is not configured on host"
-  when: deploy_ioc_ioc_name not in host_info_ioc_list
+  when: deploy_ioc_ioc_name not in deploy_ioc_full_ioc_list
 
 - name: Set IOC configuration to variable
   ansible.builtin.set_fact:

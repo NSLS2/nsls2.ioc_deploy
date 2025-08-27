@@ -40,8 +40,8 @@
   ansible.builtin.template:
     src: "templates/RELEASE.j2"
     dest: "{{ item.path }}/{{ install_module_release_file_name }}"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0664"
 
 - name: Find all existing CONFIG_SITE* files
@@ -84,6 +84,6 @@
   ansible.builtin.template:
     src: "templates/CONFIG_SITE.j2"
     dest: "{{ item.path }}/{{ install_module_config_site_file_name }}"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0664"

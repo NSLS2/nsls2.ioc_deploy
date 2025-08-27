@@ -14,8 +14,8 @@
   ansible.builtin.file:
     path: "{{ deploy_ioc_ioc_directory }}/venv"
     state: directory
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0775"
 
 - name: Create python3.11 virtual environment
@@ -32,7 +32,7 @@
 
 - name: Update ownership of venv directory
   ansible.builtin.command:
-    cmd: chown -R {{ host_info_softioc_user }}:{{ host_info_softioc_group }} {{ deploy_ioc_ioc_directory }}/venv # yamllint disable-line rule:line-length
+    cmd: chown -R {{ host_config.softioc_user }}:{{ host_config.softioc_group }} {{ deploy_ioc_ioc_directory }}/venv # yamllint disable-line rule:line-length
   register: pandabox_venv_ownership_result
   changed_when: pandabox_venv_ownership_result.rc == 0
 
@@ -40,6 +40,6 @@
   ansible.builtin.template:
     src: "templates/st.cmd.j2"
     dest: "{{ deploy_ioc_ioc_directory }}/st.cmd"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0775"

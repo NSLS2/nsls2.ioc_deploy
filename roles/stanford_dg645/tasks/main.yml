@@ -4,8 +4,8 @@
   ansible.builtin.file:
     path: "{{ deploy_ioc_ioc_directory }}/protocol"
     state: directory
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0775"
 
 - name: Copy databases file for Stanford DG645

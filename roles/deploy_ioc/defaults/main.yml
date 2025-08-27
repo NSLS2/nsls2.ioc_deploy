@@ -1,5 +1,6 @@
 ---
 
+deploy_ioc_common_dir: "/epics/common"
 deploy_ioc_post_deploy_step: "None"
 deploy_ioc_template_root_path: "/usr/lib/epics"
 deploy_ioc_iocs_directory: "/epics/iocs"
@@ -30,7 +31,7 @@ deploy_ioc_default_env:
   IOC_DIR: "{{ deploy_ioc_iocs_directory }}"
   TOP: "$(IOC_DIR)/{{ deploy_ioc_ioc_name }}"
   TEMPLATE_TOP: "{{ deploy_ioc_template_root_path }}"
-  HOSTNAME: "{{ host_info_hostname }}"
+  HOSTNAME: "{{ inventory_hostname.split('.')[0] }}"
   IOCNAME: "{{ deploy_ioc_ioc_name }}"
 
   # Same default EPICS locations for common modules as install_module

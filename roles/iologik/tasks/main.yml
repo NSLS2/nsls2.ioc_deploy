@@ -4,16 +4,16 @@
   ansible.builtin.copy:
     src: "files/dioConfig.template"
     dest: "{{ deploy_ioc_ioc_directory }}/db/dioConfig.template"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0664"
 
 - name: Install base startup script
   ansible.builtin.template:
     src: "templates/base.cmd.j2"
     dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0664"
 
 - name: Check for device prefix in ioc configuration
@@ -30,8 +30,8 @@
   ansible.builtin.template:
     src: "templates/ioLogik.substitutions.j2"
     dest: "{{ deploy_ioc_ioc_directory }}/db/ioLogik_{{ iologik_index + 1 }}_{{ iologik_device.model }}.substitutions" # yamllint disable-line rule:line-length
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0664"
   loop: "{{ ioc.devices }}"
   loop_control:

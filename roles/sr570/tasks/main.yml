@@ -4,16 +4,16 @@
   ansible.builtin.copy:
     src: "files/SR570.template"
     dest: "{{ deploy_ioc_ioc_directory }}/db/SR570.template"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0664"
 
 - name: Copy autosave req file
   ansible.builtin.copy:
     src: "files/SR570preamp_settings.req"
     dest: "{{ deploy_ioc_as_directory }}/req/SR570preamp_settings.req"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0664"
 
 - name: Deploy base startup script
@@ -21,5 +21,5 @@
     src: templates/base.cmd.j2
     dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
     mode: "0664"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
