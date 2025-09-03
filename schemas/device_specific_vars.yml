@@ -14,6 +14,8 @@ deploy_ioc_device_specific_env:
   map(any(str(), int(), num()), key=str(), required=False)
 deploy_ioc_required_system_packages: list(str(), required=False)
 deploy_ioc_dbpf_list: list(include("dbpf"), required=False)
+deploy_ioc_os_env_exports:
+  map(any(str(), int(), num()), key=str(), required=False)
 
 ---
 

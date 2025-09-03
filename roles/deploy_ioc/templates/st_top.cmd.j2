@@ -1,0 +1,7 @@
+#!/bin/bash
+
+{% for deploy_ioc_os_env_export in deploy_ioc_os_env_exports|dict2items %}
+export {{ deploy_ioc_os_env_export.key }}="{{ deploy_ioc_os_env_export.value }}"
+{% endfor %}
+
+cd iocBoot && ./st.cmd

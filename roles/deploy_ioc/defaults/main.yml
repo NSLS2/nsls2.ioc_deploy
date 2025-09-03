@@ -11,6 +11,7 @@ deploy_ioc_use_common: true
 deploy_ioc_use_ad_common: false
 deploy_ioc_load_as_substitutions: true
 deploy_ioc_nextport: 4000
+deploy_ioc_os_env_exports: {}
 deploy_ioc_req_file_list: []
 deploy_ioc_dbpf_list: []
 

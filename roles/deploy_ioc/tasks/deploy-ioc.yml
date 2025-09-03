@@ -60,33 +60,21 @@
         mode: "0664"
       when: deploy_ioc_use_common
 
-    - name: Install EPICS environment file
+    - name: Install remaining standard iocBoot templates
       ansible.builtin.template:
-        src: templates/epicsEnv.cmd.j2
-        dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/epicsEnv.cmd"
+        src: "templates/{{ item }}.j2"
+        dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/{{ item }}"
         owner: "{{ host_info_softioc_user }}"
         group: "{{ host_info_softioc_group }}"
         mode: "0664"
-
-    - name: Generate postInit cmd file
-      ansible.builtin.template:
-        src: templates/postInit.cmd.j2
-        dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/postInit.cmd"
-        owner: "{{ host_info_softioc_user }}"
-        group: "{{ host_info_softioc_group }}"
-        mode: "0664"
-
-    - name: Install standard IOC startup script
-      ansible.builtin.template:
-        src: templates/st.cmd.j2
-        dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/st.cmd"
-        owner: "{{ host_info_softioc_user }}"
-        group: "{{ host_info_softioc_group }}"
-        mode: "0775"
+      with_items:
+        - epicsEnv.cmd
+        - postInit.cmd
+        - st.cmd
 
     - name: Install top level IOC startup script
-      ansible.builtin.copy:
-        src: files/st.cmd
+      ansible.builtin.template:
+        src: templates/st_top.cmd.j2
         dest: "{{ deploy_ioc_ioc_directory }}/st.cmd"
         owner: "{{ host_info_softioc_user }}"
         group: "{{ host_info_softioc_group }}"

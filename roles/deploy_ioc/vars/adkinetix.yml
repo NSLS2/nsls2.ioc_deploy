@@ -5,10 +5,19 @@ deploy_ioc_executable: kinetixApp
 deploy_ioc_required_module: adkinetix_aa87406
 deploy_ioc_template_root_path:
   "{{ deploy_ioc_required_module_path }}/iocs/kinetixIOC"
+
 deploy_ioc_use_ad_common: true
 deploy_ioc_req_file_list:
   - name: auto_settings.req
     macros: "P=$(PREFIX)"
+
+# PVCam requires these env vars to be set, and the softioc account
+# doesn't load profile.d, so set them here.
+deploy_ioc_os_env_exports:
+  PVCAM_VERSION: "$(cat /opt/pvcam/pvcam.version)"
+  PVCAM_UMD_PATH: "/opt/pvcam/drivers/user-mode"
+  PVCAM_SDK_PATH: "/opt/pvcam/sdk"
+
 deploy_ioc_device_specific_env:
   CBUFFS: 500
   MAX_THREADS: 8
@@ -17,5 +26,5 @@ deploy_ioc_device_specific_env:
   QSIZE: 20
   XSIZE: 3200
   YSIZE: 3200
-  NELEMENTS: 500000
+  NELEMENTS: 5000000
   EPICS_DB_INCLUDE_PATH: "$(ADCORE)/db"
