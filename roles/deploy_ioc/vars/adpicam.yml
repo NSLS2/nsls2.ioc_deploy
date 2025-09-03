@@ -1,0 +1,8 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_use_ad_common: true
+deploy_ioc_required_module: adpicam_0d86fae
+deploy_ioc_executable: ADPICamApp
+deploy_ioc_template_root_path:
+  "{{ deploy_ioc_required_module_path }}/iocs/PICamIOC"

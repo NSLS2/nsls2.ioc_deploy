@@ -1,0 +1,70 @@
+---
+# Tasks for adpicam role
+- name: Add UDEV rules for PICam
+  ansible.builtin.copy:
+    src: "files/80-picam.rules"
+    dest: "/etc/udev/rules.d/80-picam.rules"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+- name: Change mode of /opt/PrincetonInstruments (PICam SDK)
+  ansible.builtin.file:
+    path: /opt/PrincetonInstruments
+    mode: '0755'
+    recurse: true
+
+- name: Change mode of /opt/pleora (PICam SDK)
+  ansible.builtin.file:
+    path: /opt/pleora
+    mode: '0755'
+    recurse: true
+
+- name: Install common startup files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot"
+    owner: "{{ host_info_softioc_user }}"
+    group: "{{ host_info_softioc_group }}"
+    mode: "0664"
+  with_fileglob: "files/*.cmd"
+
+- name: Copy st.cmd
+  ansible.builtin.template:
+    src: "templates/st.cmd.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/st.cmd"
+    owner: "{{ host_info_softioc_user }}"
+    group: "{{ host_info_softioc_group }}"
+    mode: "0775"
+
+- name: Copy st_start.cmd
+  ansible.builtin.template:
+    src: "templates/st_start.cmd.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/st_start.cmd"
+    owner: "{{ host_info_softioc_user }}"
+    group: "{{ host_info_softioc_group }}"
+    mode: "0664"
+
+- name: Copy base.cmd
+  ansible.builtin.template:
+    src: "templates/base.cmd.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    owner: "{{ host_info_softioc_user }}"
+    group: "{{ host_info_softioc_group }}"
+    mode: "0664"
+
+- name: Copy autosave req file
+  ansible.builtin.copy:
+    src: "files/auto_settings.req"
+    dest: "{{ deploy_ioc_ioc_directory }}//autosave/req/auto_settings.req"
+    owner: "{{ host_info_softioc_user }}"
+    group: "{{ host_info_softioc_group }}"
+    mode: "0664"
+
+- name: Copy postInit.cmd
+  ansible.builtin.template:
+    src: "templates/postInit.cmd.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/postInit.cmd"
+    owner: "{{ host_info_softioc_user }}"
+    group: "{{ host_info_softioc_group }}"
+    mode: "0664"

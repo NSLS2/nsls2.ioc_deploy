@@ -1,0 +1,6 @@
+---
+
+type: enum("adpicam")
+environment:
+  ENGINEER: str()
+  PREFIX: str()

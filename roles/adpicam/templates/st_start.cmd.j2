@@ -1,0 +1,20 @@
+
+# Perform base environment setup and configuration
+< ./epicsEnv.cmd
+
+# Load IOC specific startup configuration
+< ./base.cmd
+
+{% if _use_common %}
+# Load any additional configured databases, prep autosave
+< ./common.cmd
+{% endif %}
+
+iocInit()
+
+# Perform standard IOC post-init actions
+< ./postInit.cmd
+
+dbl > $(TOP)/records.dbl
+
+# The IOC startup script has completed execution!!!
