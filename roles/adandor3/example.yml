@@ -1,0 +1,10 @@
+---
+
+andor-marana-test:
+  type: "adandor3"
+
+  environment:
+    ADANDOR3: "/epics/modules/ADAndor3"
+    PREFIX: "XF:18IDB-ES{Det:Marana1}"
+    PORT: "ANDOR"
+    ENGINEER: "C. Engineer"

@@ -1,0 +1,20 @@
+---
+
+type: enum("adandor3")
+environment:
+  ENGINEER: str(required=True)
+  PREFIX: str(required=True)
+  ADANDOR3: str(required=True)
+  PORT: str(required=True)
+  XSIZE: int(min=1, required=False, default=2048)
+  YSIZE: int(min=1, required=False, default=2048)
+  HIST_SIZE: int(min=1, required=False, default=4096)
+  QSIZE: int(min=1, required=False, default=20)
+  NCHANS: int(min=1, required=False, default=2048)
+  CBUFFS: int(min=1, required=False, default=500)
+  NDTYPE: str(required=False)
+  NDFTVL: str(required=False)
+  NELMT: int(min=1, required=False)
+  MAX_THREADS: int(min=1, required=False)
+  EPICS_DB_INCLUDE_PATH: str(required=False)
+  NELEMENTS: int(min=1, required=False)
