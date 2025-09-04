@@ -1,0 +1,24 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_use_ad_common: true
+deploy_ioc_required_module: admythen_bcf2947
+deploy_ioc_executable: mythenApp
+deploy_ioc_as_dir_name: autosave
+deploy_ioc_template_root_path:
+  "{{ deploy_ioc_required_module_path }}/iocs/mythenIOC"
+
+deploy_ioc_device_specific_env:
+  ADMYTHEN: "/epics/modules/ADMythen"
+  MYTHEN_IP: 192.168.0.90
+  MYTHEN_IP_PORT: 1031
+  IP_PORT_NAME: "MDS1_IP"
+  PORT: "MSD1"
+  QSIZE: 20
+  XSIZE: 1280
+  YSIZE: 1
+  NCHANS: 1280
+  CBUFFS: 100
+  MAX_THREADS: 8
+  EPICS_DB_INCLUDE_PATH: "$(ADCORE)/db:$(ADMYTHEN)/db"
+  NELEMENTS: 5000000

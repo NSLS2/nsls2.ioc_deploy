@@ -1,0 +1,12 @@
+---
+
+admythen_bcf2947:
+  name: ADMythen
+  version: bcf2947
+  url: https://github.com/areaDetector/ADMythen
+  include_base_ad_config: true
+  module_deps:
+    - adcore_60080dc
+    - adcompvision_9750d13
+    - adpluginbar_448d96b
+    - ffmpeg_server_07c570f

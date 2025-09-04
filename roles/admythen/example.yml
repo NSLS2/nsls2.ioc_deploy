@@ -1,0 +1,12 @@
+---
+
+admythen-01:
+  type: admythen
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{ADMYTHEN:01}
+    MYTHEN_IP: 192.168.0.90
+    MYTHEN_IP_PORT: 1031
+    XSIZE: 1280 # No Y-size for Mythen
+    PORT: MSD1
+    IP_PORT: MDS1_IP

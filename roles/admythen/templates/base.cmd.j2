@@ -1,0 +1,18 @@
+
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# admythen specific commands
+drvAsynIPPortConfigure("$(IP_PORT_NAME)", "$(MYTHEN_IP):$(MYTHEN_IP_PORT)", 0, 0, 1)
+
+asynOctetSetInputEos("$(IP_PORT_NAME)",0,"\r\n")
+asynOctetSetOutputEos("$(IP_PORT_NAME)",0,"\r")
+
+mythenConfig("$(PORT)", "$(IP_PORT_NAME)", -1,-1)
+
+dbLoadRecords("$(ADMYTHEN)/mythenApp/Db/mythen.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
+
+# Load asynRecord records on Mythen communication
+dbLoadRecords("$(ASYN)/db/asynRecord.db", "P=$(PREFIX),R=asyn_1,PORT=$(IP_PORT_NAME),ADDR=0,OMAX=256,IMAX=256")
+
+set_requestfile_path("$(TOP)/mythenApp/Db")
