@@ -1,0 +1,62 @@
+---
+
+happi_db_autogen_directory: "/opt/happi_db_autogen"
+happi_db_autogen_beamline_acronym: "tst"
+happi_db_autogen_redis_url: "https://info.tst.nsls2.bnl.gov"
+happi_db_autogen_redis_prefix: ""
+
+
+# Base set of objects to instantiate
+
+happi_db_autogen_base_objects:
+  redis_md_server:
+    id: "redis_md_server"
+    name: "redis_md_server"
+    type: "HappiItem"
+    args:
+      - host: "{{ happi_db_autogen_redis_url}}"
+    active: true
+    last_edit: "{{ ansible_date_time.iso8601 }}"
+    device_class: "redis.Redis"
+
+  runengine_metadata:
+    _id: "runengine_metadata"
+    name: "runengine_metadata"
+    type: "HappiItem"
+    args:
+      - "redis_md_server"
+    kwargs:
+      prefix: "{{ happi_db_autogen_redis_prefix }}"
+    active: true
+    last_edit: "{{ ansible_date_time.iso8601 }}"
+    device_class: "redis_json_dict.RedisJSONDict"
+
+  RE:
+    _id: "RE"
+    name: "RE"
+    type: "HappiItem"
+    args:
+      - "runengine_metadata"
+    active: true
+    last_edit: "{{ ansible_date_time.iso8601 }}"
+    device_class: "bluesky.run_engine.RunEngine"
+
+  tiled_writing_client:
+    _id: "tiled_writing_client"
+    name: "tiled_writing_client"
+    type: "HappiItem"
+    active: true
+    args:
+      - "{{ happi_db_autogen_beamline_acronym }}"
+    last_edit: "{{ ansible_date_time.iso8601 }}"
+    device_class: "tiled.client.from_profile"
+
+  tiled_writer:
+    _id: "tiled_writer"
+    name: "tiled_writer"
+    type: "HappiItem"
+    active: true
+    args:
+      - "tiled_writing_client"
+    last_edit: "{{ ansible_date_time.iso8601 }}"
+    device_class: "bluesky.callbacks.tiled_writer.TiledWriter"
