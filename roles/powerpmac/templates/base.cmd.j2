@@ -20,8 +20,8 @@ pmacDisableLimitsCheck("$(PORT)", 0, 1)
 # Disable the limits disabled check for some axes (normally this should be left enabled)
 {% for disable_lim_axis in ioc.disable_lim_axes %}
 pmacDisableLimitsCheck("$(PORT)", {{ disable_lim_axis }}, 0)
-{% endif %}
 {% endfor %}
+{% endif %}
 {% endif %}
 
 {% if ioc.coord_systems is defined %}
