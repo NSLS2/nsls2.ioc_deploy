@@ -1,0 +1,8 @@
+---
+xspress3_911d16d:
+  name: xspress3
+  version: 911d16d
+  url: https://github.com/epics-modules/xspress3
+  include_base_ad_config: true
+  module_deps:
+    - adcore_60080dc
