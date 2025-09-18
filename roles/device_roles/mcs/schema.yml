@@ -1,6 +1,6 @@
 ---
 
-type: enum("mcs2")
+type: enum("mcs")
 model: enum(1, 2)
 environment:
   ENGINEER: str()
