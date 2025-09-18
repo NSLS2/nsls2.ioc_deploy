@@ -1,0 +1,20 @@
+#
+# {{ ansible_managed }}
+#
+file "$(TPMAC)/db/motorstatus.db"
+{{"{"}}
+pattern
+{{"{"}}SYS, DEV, PORT, AXIS{{"}"}}
+{% for axis in ioc.axes %}
+{{"{"}}"{{ ioc.environment.SYS }}", "{{"{"}}{{ axis.component }}-Ax:{{ axis.name }}{{"}"}}", "$(ASYN_PORT)", {{ axis.num }}{{"}"}}
+{% endfor %}
+{{"}"}}
+
+file "$(TPMAC)/db/pmacStatusAxis.db"
+{{"{"}}
+pattern
+{{"{"}}SYS, DEV, PORT, AXIS{{"}"}}
+{% for axis in ioc.axes %}
+{{"{"}}"{{ ioc.environment.CT_SYS }}", "{{"{"}}{{ axis.component }}-Ax:{{ axis.name }}{{"}"}}", "$(ASYN_PORT)", {{ axis.num }}{{"}"}}
+{% endfor %}
+{{"}"}}

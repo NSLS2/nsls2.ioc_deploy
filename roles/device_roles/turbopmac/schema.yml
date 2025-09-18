@@ -1,0 +1,51 @@
+---
+type: enum("turbopmac")
+environment:
+  ENGINEER: str(required=False)
+  SYS: str()
+  DEV: str()
+  PMAC: str()
+  ASYN_PORT: str()
+  CONTROLLER_PORT: str()
+  NUM_AXES: int(min=1, max=8)
+  CONTROLLER_IP: any(ip(), hostname())
+  CT_SYS: str(required=False)
+  IOC_ASYN: str(required=False)
+
+disable_all_limits: bool(required=False)
+disable_lim_axes: list(int(min=1, max=8), required=False)
+
+open_loop_axes: list(include("open_loop_axis"), required=False)
+coord_systems: list(include("coord_system"), required=False)
+axes: list(include("axis"), min=1, max=8)
+virtual_axes: list(include("virtual_axis"), required=False)
+
+---
+
+open_loop_axis:
+  axis_num: int(min=1, max=8)
+  encoder_axis: int(min=1, max=8)
+
+coord_system:
+  num: int()
+  motion_prog: int(min=1, max=99)
+  num_axes: int()
+
+axis:
+  name: str()
+  num: int(min=1, max=8)
+  component: str()
+  desc: str()
+  mres: num()
+  egu: str()
+  home_plc: int(min=1, max=20)
+
+virtual_axis:
+  name: str()
+  num: int(min=1, max=8)
+  cs: int()
+  component: str()
+  desc: str()
+  mres: num()
+  egu: str()
+  home_plc: int(min=1, max=20)

@@ -1,0 +1,75 @@
+---
+mc01:
+  type: turbopmac
+  environment:
+    ENGINEER: J. Wlodek
+    SYS: "XF:31ID1-ES"
+    PMAC: "MC:01"
+    DEV: "{$(PMAC)}"
+    CT_SYS: XF:31ID1-CT
+    IOC_ASYN: "$(CT_SYS)$(DEV)Asyn"
+    ASYN_PORT: "P0"
+    CONTROLLER_PORT: "M0"
+    NUM_AXES: 8
+    CONTROLLER_IP: "10.10.10.10"
+
+  disable_all_limits: false # Disable limits for all axes
+  disable_lim_axes: [1, 4] # Disable limits for axes 1 and 4
+
+  # Define open loop axes
+  open_loop_axes:
+    - axis_num: 1
+      encoder_axis: 1
+    - axis_num: 2
+      encoder_axis: 5
+
+  # Define coordinate systems
+  coord_systems:
+    - num: 2
+      motion_prog: 10
+      num_axes: 9
+
+  # Define axes
+  axes:
+    - name: "Rot"
+      num: 1
+      component: Smpl:Trans
+      desc: "Rotation"
+      mres: 0.0001
+      egu: "deg"
+      home_plc: 8
+
+    - name: "X"
+      num: 2
+      component: Smpl:Trans
+      desc: "X translation"
+      mres: 0.0001
+      egu: "mm"
+      home_plc: 9
+
+    - name: "Y"
+      num: 3
+      component: Smpl:Trans
+      desc: "Y translation"
+      mres: 0.0001
+      egu: "mm"
+      home_plc: 10
+
+    - name: "Z"
+      num: 4
+      component: Smpl:Trans
+      desc: "Z translation"
+      mres: 0.0001
+      egu: "mm"
+      home_plc: 11
+
+# Define virtual axes
+virtual_axes:
+  - name: "Diag"
+    num: 7
+    cs: 2
+    component: Smpl:Trans
+    desc: "X-Y diagonal translation virtual axis"
+    mres: 0.0001
+    egu: "mm"
+    home_plc: 17

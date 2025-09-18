@@ -1,0 +1,22 @@
+---
+# Tasks for turbopmac role
+
+- name: Install base.cmd
+  ansible.builtin.template:
+    src: templates/base.cmd.j2
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    mode: "0664"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+
+- name: Install default list of substitution files
+  ansible.builtin.template:
+    src: "templates/{{ item }}.substitutions.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/db/{{ item }}.substitutions"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+  with_items:
+    - "motor"
+    - "motorstatus"
+    - "pmac_asyn_motor"
