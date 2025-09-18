@@ -36,7 +36,7 @@ pmacDisableLimitsCheck("$(CONTROLLER_PORT)", {{ disable_lim_axis }}, 0)
 {% endif %}
 
 # ============================ SET OPEN LOOP AXES =============================
-{%if ioc.open_loop_axes is defined %}
+{% if ioc.open_loop_axes is defined %}
 # Set the encoder axis for an open loop axis.
 # pmacSetOpenLoopEncoderAxis(const char *controller, int axis, int encoder_axis)
 {% for open_loop_axis in ioc.open_loop_axes %}
