@@ -1,8 +1,8 @@
 ---
 
 tpmac_3a50d15:
-  name: tpmac
-  version: 3a50d15
+  name: "tpmac"
+  version: "3a50d15"
   url: https://github.com/epics-modules/tpmac
   module_deps:
     - pmac_f811ee1
