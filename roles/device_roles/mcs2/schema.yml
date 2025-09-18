@@ -1,6 +1,0 @@
----
-
-type: enum("mcs2")
-environment:
-  ENGINEER: str()
-  PREFIX: str()

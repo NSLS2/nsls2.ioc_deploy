@@ -1,0 +1,28 @@
+---
+
+mcs2-01:
+  type: mcs
+  model: 2
+  environment:
+    CTRL_NAME: "MCS2:01"
+    CTRL_IP: "192.168.1.100"
+    P: "XF31ID1-ES"
+    R: "{$(MCS)}"
+    AXES_MASK: 0xF48
+    ENGINEER: C. Engineer
+
+  axes:
+    - name: "X"
+      num: 1
+      desc: "X"
+      mres: 0.00001
+      egu: "mm"
+      dir: "Pos"
+      velo: 2.0
+
+  substitutions:
+    asynComm:
+      - filepath: "$(ASYN)/db/asynRecord.db"
+        pattern: ["P", "R", "ADDR", "IMAX", "OMAX"]
+        instances:
+          - ["$(P)", "$(R)AsynIO", "0", "256", "256"]

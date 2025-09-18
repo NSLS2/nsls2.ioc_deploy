@@ -1,0 +1,29 @@
+---
+
+type: enum("mcs2")
+model: enum(1, 2)
+environment:
+  ENGINEER: str()
+  PREFIX: str()
+  CTRL_NAME: str()
+  CTRL_IP: any(ip(), hostname())
+  PORT_NUM: int(required=False)
+  P: str()
+  R: str()
+  AXES_MASK: int()
+
+axes: include(list(axis, min=1))
+
+---
+
+axis:
+  name: str()
+  num: int(min=0)
+  desc: str()
+  mres: num()
+  egu: str()
+  dir: enum("Pos", "Neg", required=False)
+  velo: num(required=False)
+  accl: num(required=False)
+  vmax: num(required=False)
+  prec: int(required=False)
