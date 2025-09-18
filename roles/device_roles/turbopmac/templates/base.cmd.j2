@@ -1,0 +1,79 @@
+
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# turbopmac specific commands
+
+# pmacAsynIPConfigure() is a wrapper for drvAsynIPPort::drvAsynIPPortConfigure() and
+# pmacAsynIPPort::pmacAsynIPPortConfigureEos().
+# See pmacAsynIPPort.c
+pmacAsynIPConfigure("$(IP_PORT)", "$(CONTROLLER_IP):1025")
+
+# WARNING: a trace-mask of containing 0x10 will TRACE_FLOW (v. noisy!!)
+#asynSetTraceMask("P0",-1,0x9)
+#asynSetTraceIOMask("P0",-1,0x2)
+
+# New model 3 driver
+## pmacCreateController(motor record port name, low level port, low level port address, num axes,
+## moving polling period (ms), idle polling period (ms))
+pmacCreateController("$(CONTROLLER_PORT)","$(IP_PORT)",0, $(NUM_AXES), 100, 1000)
+
+#New model 3 driver
+{% for i in range(1, ioc.environment.NUM_AXES) %}
+pmacCreateAxis("$(CONTROLLER_PORT)", {{ i }})
+{% endfor %}
+
+# Disable the limits disabled check for some axes (normally this should be left enabled)
+# pmacDisableLimitsCheck(string portname, int axis, int allAxes)
+{% if ioc.disable_lim_axes is defined %}
+{% for disable_lim_axis in ioc.disable_lim_axes %}
+{% if disable_lim_axis == "all" %}
+pmacDisableLimitsCheck("$(CONTROLLER_PORT)", 0, 1)
+{% else %}
+pmacDisableLimitsCheck("$(CONTROLLER_PORT)", {{ disable_lim_axis }}, 0)
+{% endif %}
+{% endfor %}
+{% endif %}
+
+#Set the axis scale factor
+#pmacSetAxisScale("M0", 1, 1)
+
+#Set the encoder axis for an open loop axis.
+#pmacSetOpenLoopEncoderAxis(const char *controller, int axis, int encoder_axis)
+{%if ioc.open_loop_axes is defined %}
+{% for open_loop_axis in ioc.open_loop_axes.instances %}
+pmacSetOpenLoopEncoderAxis("$(CONTROLLER_PORT)", {{ open_loop_axis[0] }}, {{ open_loop_axis[1] }})
+{% endfor %}
+{% endif %}
+
+{% if ioc.coord_systems is defined %}
+{% for coord_system in ioc.coord_systems.instances %}
+# Initialize the coord-system(port, addr, cs, ref, prog#)
+pmacAsynCoordCreate("$(IP_PORT)", 0, {{ coord_system[0] }}, {{ coord_system[0] }}, 10)
+
+# setup the coord-sys(portName, drvel-name, ref#(from create), nAxes+1)
+drvAsynMotorConfigure("CS{{ coord_system[0] }}","pmacAsynCoord", {{ coord_system[0] }}, 9)
+
+#Set scale factor (int ref, int axis, double stepsPerUnit)
+{% for virtual_axis in coord_system[1] %}
+pmacSetCoordStepsPerUnit({{ coord_system[0] }}, {{ virtual_axis[0] }}, {{ virtual_axis[1] }})
+{% endfor %}
+{% endfor %}
+{% endif %}
+
+# change poll rates (card, poll-period in ms)
+pmacSetMovingPollPeriod(1, 100)
+pmacSetIdlePollPeriod(1, 1000)
+{% if ioc.coord_systems is defined %}
+pmacSetCoordMovingPollPeriod(1,200)
+pmacSetCoordIdlePollPeriod(1,2000)
+{% endif %}
+
+# Load asynComm.db
+{% if ioc.environment.IOC_ASYN is defined %}
+dbLoadRecords("$(TPMAC)/db/asynComm.db", "P=$(IOC_ASYN), PORT=$(IP_PORT), ADDR=0")
+{% elif ioc.environment.CT_PREFIX is defined %}
+dbLoadRecords("$(TPMAC)/db/asynComm.db", "P=$(CT_PREFIX)Asyn, PORT=$(IP_PORT), ADDR=0")
+{% else %}
+dbLoadRecords("$(TPMAC)/db/asynComm.db", "P=$(PREFIX)Asyn, PORT=$(IP_PORT), ADDR=0")
+{% endif %}

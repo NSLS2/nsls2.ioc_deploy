@@ -1,0 +1,74 @@
+---
+turbopmac-01:
+  type: turbopmac
+  environment:
+    ENGINEER: J. Wlodek
+    PREFIX: XF:31ID1-ES
+    CT_PREFIX: XF:31ID1-CT{MC:01}
+    IOC_ASYN: "$(CT_PREFIX)Asyn"
+    IP_PORT: "P0"
+    CONTROLLER_IP: "10.10.10.10"
+    CONTROLLER_PORT: "M0"
+    NUM_AXES: 8
+  disable_lim_axes:
+    - "all" # If you want to disable all limits
+    - 1
+    - 4 # Specify axis numbers if you want to disable limits on specific axis
+  open_loop_axes:
+    pattern: ["axis_num", "encoder_axis_num"]
+    instances:
+      - [1, 1] # Configure axis 1 for open loop
+      - [2, 5] # Configure axis 2 for open loop with different encoder port
+  coord_systems:
+    pattern: ["cs_num", [["virtual_axis1", "scale_factor1"], ["virtual_axis2", "scale_factor2"]]] # yamllint disable-line rule:line-length
+    instances: # Coordinate system 2, scale factor 10000.0 for axis 6 & 7
+      - [2, [[6, 10000.0], [7, 10000.0]]]
+  # Example substitution files for 8 axies with 10nm per count encoders.
+  substitutions:
+    motor:
+      - filepath: "$(TPMAC)/db/motor.db"
+        pattern: ["P", "M", "MOTOR", "PORT", "ADDR", "DESC", "DTYP", "MRES", "EGU", "PREC", "ALIAS"] # yamllint disable-line rule:line-length
+        instances:
+          - ["XF:31ID1-ES", "{MC:01-Ax:1}Mtr", "M0", "P0", 1, "Axis 1", "asynMotor", "1e-05", "mm", 4, ""] # yamllint disable-line rule:line-length
+          - ["XF:31ID1-ES", "{MC:01-Ax:2}Mtr", "M0", "P0", 2, "Axis 2", "asynMotor", "1e-05", "mm", 4, ""] # yamllint disable-line rule:line-length
+          - ["XF:31ID1-ES", "{MC:01-Ax:3}Mtr", "M0", "P0", 3, "Axis 3", "asynMotor", "1e-05", "mm", 4, ""] # yamllint disable-line rule:line-length
+          - ["XF:31ID1-ES", "{MC:01-Ax:4}Mtr", "M0", "P0", 4, "Axis 4", "asynMotor", "1e-05", "mm", 4, ""] # yamllint disable-line rule:line-length
+          - ["XF:31ID1-ES", "{MC:01-Ax:5}Mtr", "M0", "P0", 5, "Axis 5", "asynMotor", "1e-05", "mm", 4, ""] # yamllint disable-line rule:line-length
+          - ["XF:31ID1-ES", "{MC:01-Ax:6}Mtr", "M0", "P0", 6, "Axis 6", "asynMotor", "1e-05", "mm", 4, ""] # yamllint disable-line rule:line-length
+          - ["XF:31ID1-ES", "{MC:01-Ax:7}Mtr", "M0", "P0", 7, "Axis 7", "asynMotor", "1e-05", "mm", 4, ""] # yamllint disable-line rule:line-length
+          - ["XF:31ID1-ES", "{MC:01-Ax:8}Mtr", "M0", "P0", 8, "Axis 8", "asynMotor", "1e-05", "mm", 4, ""] # yamllint disable-line rule:line-length
+    motorstatus:
+      - filepath: "$(TPMAC)/db/motorstatus.db"
+        pattern: ["SYS", "DEV", "PORT", "AXIS"]
+        instances:
+          - ["XF:31ID1-ES", "{MC:01-Ax:1}", "P0", 1]
+          - ["XF:31ID1-ES", "{MC:01-Ax:2}", "P0", 2]
+          - ["XF:31ID1-ES", "{MC:01-Ax:3}", "P0", 3]
+          - ["XF:31ID1-ES", "{MC:01-Ax:4}", "P0", 4]
+          - ["XF:31ID1-ES", "{MC:01-Ax:5}", "P0", 5]
+          - ["XF:31ID1-ES", "{MC:01-Ax:6}", "P0", 6]
+          - ["XF:31ID1-ES", "{MC:01-Ax:7}", "P0", 7]
+          - ["XF:31ID1-ES", "{MC:01-Ax:8}", "P0", 8]
+      - filepath: "$(TPMAC)/db/pmacStatusAxis.db"
+        pattern: ["SYS", "DEV", "PORT", "AXIS"]
+        instances:
+          - ["XF:31ID1-CT", "{MC:01-Ax:1}", "P0", 1]
+          - ["XF:31ID1-CT", "{MC:01-Ax:2}", "P0", 2]
+          - ["XF:31ID1-CT", "{MC:01-Ax:3}", "P0", 3]
+          - ["XF:31ID1-CT", "{MC:01-Ax:4}", "P0", 4]
+          - ["XF:31ID1-CT", "{MC:01-Ax:5}", "P0", 5]
+          - ["XF:31ID1-CT", "{MC:01-Ax:6}", "P0", 6]
+          - ["XF:31ID1-CT", "{MC:01-Ax:7}", "P0", 7]
+          - ["XF:31ID1-CT", "{MC:01-Ax:8}", "P0", 8]
+    pmac_asyn_motor:
+      - filepath: "$(TPMAC)/db/pmac_asyn_motor.db"
+        pattern: ["SYS", "DEV", "MOTOR", "SPORT", "ADDR", "DESC", "DTYP", "PREC", "EGU"] # yamllint disable-line rule:line-length
+        instances:
+          - ["XF:31ID1-ES", "{MC:01-Ax:1}", "M0", "P0", 1, "Axis 1", asynMotor, 4, "mm"] # yamllint disable-line rule:line-length
+          - ["XF:31ID1-ES", "{MC:01-Ax:2}", "M0", "P0", 2, "Axis 2", asynMotor, 4, "mm"] # yamllint disable-line rule:line-length
+          - ["XF:31ID1-ES", "{MC:01-Ax:3}", "M0", "P0", 3, "Axis 3", asynMotor, 4, "mm"] # yamllint disable-line rule:line-length
+          - ["XF:31ID1-ES", "{MC:01-Ax:4}", "M0", "P0", 4, "Axis 4", asynMotor, 4, "mm"] # yamllint disable-line rule:line-length
+          - ["XF:31ID1-ES", "{MC:01-Ax:5}", "M0", "P0", 5, "Axis 5", asynMotor, 4, "mm"] # yamllint disable-line rule:line-length
+          - ["XF:31ID1-ES", "{MC:01-Ax:6}", "M0", "P0", 6, "Axis 6", asynMotor, 4, "mm"] # yamllint disable-line rule:line-length
+          - ["XF:31ID1-ES", "{MC:01-Ax:7}", "M0", "P0", 7, "Axis 7", asynMotor, 4, "mm"] # yamllint disable-line rule:line-length
+          - ["XF:31ID1-ES", "{MC:01-Ax:8}", "M0", "P0", 8, "Axis 8", asynMotor, 4, "mm"] # yamllint disable-line rule:line-length

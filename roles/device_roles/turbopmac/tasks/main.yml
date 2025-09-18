@@ -1,0 +1,8 @@
+---
+- name: Copy base.cmd
+  ansible.builtin.template:
+    src: "templates/base.cmd.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    owner: "{{ softioc_user }}"
+    group: "{{ softioc_group }}"
+    mode: "0664"
