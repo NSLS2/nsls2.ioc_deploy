@@ -1,5 +1,5 @@
 ---
-# Tasks for mcs2 role
+# Tasks for mcs role
 
 - name: Install base.cmd
   ansible.builtin.template:
