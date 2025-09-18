@@ -10,7 +10,7 @@ environment:
   CONTROLLER_PORT: str()
   NUM_AXES: int()
 
-disable_lim_axes: list(any(str(), int()), required=False)
+disable_lim_axes: list(any(enum("all"), int()), required=False)
 
 open_loop_axes:
   pattern: list(enum("axis_num", "encoder_axis_num"), min=2, max=2)
