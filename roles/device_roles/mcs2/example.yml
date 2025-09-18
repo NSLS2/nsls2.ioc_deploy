@@ -1,0 +1,7 @@
+---
+
+mcs2-01:
+  type: mcs2
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{MCS2:01}
