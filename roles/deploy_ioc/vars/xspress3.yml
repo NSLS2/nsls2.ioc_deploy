@@ -1,0 +1,75 @@
+---
+deploy_ioc_use_common: true
+deploy_ioc_use_ad_common: false
+deploy_ioc_required_module: xspress3_911d16d
+deploy_ioc_executable: xspress3App
+
+deploy_ioc_req_file_list:
+  - name: "auto_settings.req"
+    macros: "P=$(PREFIX)"
+
+deploy_ioc_dbpf_list:
+
+  - pv: "$(PREFIX)det1:RUN_FLAGS"
+    value: 0
+  - pv: "$(PREFIX)det1:NUM_CHANNELS"
+    value: "$(NUM_CHANNELS)"
+  - pv: "$(PREFIX)det1:NumImages"
+    value: 16000
+  - pv: "$(PREFIX)det1:AcquireTime"
+    value: 0.25
+  - pv: "$(PREFIX)det1:CONNECT"
+    value: "1"
+  - pv: "$(PREFIX)det1:CTRL_DTC"
+    value: "Disable"
+  - pv: "$(PREFIX)det1:TriggerMode"
+    value: "Internal"
+  - pv: "$(PREFIX)det1:EraseOnStart"
+    value: "Yes"
+  - pv: "$(PREFIX)det1:FrameAdvance"
+    value: 0
+
+  # Enable Array Callbacks, set Attributes file
+  - pv: "$(PREFIX)det1:ArrayCallbacks"
+    value: "Enable"
+
+  # Configure HDF Plugin
+  - pv: "$(PREFIX)HDF1:FileTemplate"
+    value: "%s%s%d.hdf5"
+  - pv: "$(PREFIX)HDF1:FileWriteMode"
+    value: "Stream"
+  - pv: "$(PREFIX)HDF1:EnableCallbacks"
+    value: "Enable"
+  - pv: "$(PREFIX)HDF1:Compression"
+    value: "zlib"
+  - pv: "$(PREFIX)HDF1:ZLevel"
+    value: "1"
+  - pv: "$(PREFIX)HDF1:AutoIncrement"
+    value: "Yes"
+
+  # Configure PROC plugin spectra summing
+  - pv: "$(PREFIX)Proc1:EnableFilter"
+    value: "Enable"
+  - pv: "$(PREFIX)Proc1:FilterType"
+    value: "Sum"
+  - pv: "$(PREFIX)Proc1:EnableCallbacks"
+    value: "Enable"
+
+  # Disable EraseOnStart
+  - pv: "$(PREFIX)det1:EraseOnStart"
+    value: "No"
+
+  # Set path to calibration
+  - pv: "$(PREFIX)det1:CONFIG_PATH"
+    value: "$(CALIBRATION_DIR)"
+    sleep: 2
+
+
+deploy_ioc_device_specific_env:
+  MAX_FRAMES: 16834
+  MAX_DRV_FRAMES: 16834
+  QSIZE: 512
+  CBUFFS: 8192
+  NUM_BINS: 4096
+  PORT: "XSP3"
+  CIRC_BUFFER: 1
