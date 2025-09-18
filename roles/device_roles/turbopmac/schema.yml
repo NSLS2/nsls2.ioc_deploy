@@ -1,0 +1,6 @@
+---
+
+type: enum("turbopmac")
+environment:
+  ENGINEER: str()
+  PREFIX: str()

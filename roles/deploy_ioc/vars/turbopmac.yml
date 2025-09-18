@@ -1,0 +1,7 @@
+---
+
+deploy_ioc_use_common: false
+deploy_ioc_required_module: 'tpmac_3a50d15
+
+  '
+deploy_ioc_executable: tpmac

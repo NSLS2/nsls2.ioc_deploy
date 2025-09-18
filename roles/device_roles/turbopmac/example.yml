@@ -1,0 +1,7 @@
+---
+
+turbopmac-01:
+  type: turbopmac
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{TURBOPMAC:01}
