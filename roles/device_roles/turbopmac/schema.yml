@@ -18,7 +18,7 @@ open_loop_axes:
 
 coord_systems:
   pattern: list(enum("cs_num"), list(list(enum("virtual_axis1", "scale_factor1"), min=2, max=2), list(enum("virtual_axis2", "scale_factor2"), min=2, max=2), min=2, max=2), min=3, max=3)  # yamllint disable-line rule:line-length
-  instances: list(list(int(), list(list(int(), float(), min=2, max=2), min=2, max=2)), min=3, max=3) # yamllint disable-line rule:line-length
+  instances: list(list(int(), list(list(num(), min=2, max=2), min=2, max=2)), min=3, max=3) # yamllint disable-line rule:line-length
 
 substitutions:
   motor: list(include("motor_substitution"), min=1, max=1)
