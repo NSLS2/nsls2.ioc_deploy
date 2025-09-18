@@ -19,7 +19,7 @@ pmacAsynIPConfigure("$(IP_PORT)", "$(CONTROLLER_IP):1025")
 pmacCreateController("$(CONTROLLER_PORT)","$(IP_PORT)",0, $(NUM_AXES), 100, 1000)
 
 #New model 3 driver
-{% for i in range(1, ioc.environment.NUM_AXES) %}
+{% for i in range(1, ioc.environment.NUM_AXES + 1) %}
 pmacCreateAxis("$(CONTROLLER_PORT)", {{ i }})
 {% endfor %}
 
