@@ -4,3 +4,4 @@ venv/
 dev_install.sh
 __pycache__/
 *.pyc
+.ansible/

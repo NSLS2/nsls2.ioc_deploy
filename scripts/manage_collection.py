@@ -6,6 +6,7 @@ import subprocess
 import sys
 
 import questionary
+import tabulate
 import yaml
 
 
@@ -320,8 +321,30 @@ def delete_role():
 
 
 def report():
-    """Placeholder for future reporting functionality."""
-    pass
+    """Print a report of all modules and roles"""
+
+    print("\nDeployable modules:\n")
+    modules = {}
+    for module in get_module_list():
+        module_name, ver = tuple(module.rsplit("_", 1))
+        if module_name not in modules:
+            modules[module_name] = []
+        modules[module_name].append(ver)
+
+    print(
+        tabulate.tabulate(
+            [(k, ", ".join(v)) for k, v in modules.items()],
+            headers=["Module", "Versions"],
+            tablefmt="simple",
+        )
+    )
+
+    print("\nDeployable IOC roles:\n")
+    for role in get_role_list():
+        print(f" - {role}")
+
+    print("\nNumber of deployable modules:", len(get_module_list()))
+    print("Number of deployable IOC roles:", len(get_role_list()))
 
 
 if __name__ == "__main__":
@@ -331,10 +354,10 @@ if __name__ == "__main__":
         print("Targets: role, module")
         sys.exit(1)
     action = sys.argv[1]
-    target = sys.argv[2]
     if action == "report":
         func = report
     else:
+        target = sys.argv[2]
         func = getattr(sys.modules[__name__], f"{action}_{target}")
     try:
         func()

@@ -12,74 +12,68 @@ on:
 
 jobs:
   run_module_vars_files_validation:
-    name: Validate module vars files
+    name: Validate Module Vars Files
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Install python
-        uses: actions/setup-python@v4
+      - name: Setup Pixi
+        uses: prefix-dev/setup-pixi@8ca4608ef7f4daeb54f5205b20d0b7cb42f11143  # yamllint disable-line rule:line-length
         with:
-          python-version: '3.11'
+          pixi-version: v0.55.0
+          cache: false
+          frozen: true
 
-      - name: Install dependencies
+      - name: Run Module Config Validation
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pixi run validate tests/test_install_module_vars.py
 
-      - name: Run module config validation
-        run: |
-          pytest tests/test_install_module_vars.py
   run_device_specific_role_validation:
-    name: Validate device specific roles
+    name: Validate Device Specific Roles
     runs-on: ubuntu-latest
     needs: run_module_vars_files_validation
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Install python
-        uses: actions/setup-python@v4
+      - name: Setup Pixi
+        uses: prefix-dev/setup-pixi@8ca4608ef7f4daeb54f5205b20d0b7cb42f11143  # yamllint disable-line rule:line-length
         with:
-          python-version: '3.11'
+          pixi-version: v0.55.0
+          cache: false
+          frozen: true
 
-      - name: Install dependencies
+      - name: Run Device Specific Config Validation
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run device specific config validation
-        run: |
-          pytest tests/test_deploy_ioc_vars.py tests/test_device_roles.py
+          pixi run validate tests/test_deploy_ioc_vars.py \
+          tests/test_device_roles.py
 
   run_validation_of_example_configs:
-    name: Validate example configs
+    name: Validate Example Configs
     runs-on: ubuntu-latest
     needs: run_device_specific_role_validation
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Install python
-        uses: actions/setup-python@v4
+      - name: Setup Pixi
+        uses: prefix-dev/setup-pixi@8ca4608ef7f4daeb54f5205b20d0b7cb42f11143  # yamllint disable-line rule:line-length
         with:
-          python-version: '3.11'
+          pixi-version: v0.55.0
+          cache: false
+          frozen: true
 
-      - name: Install dependencies
+      - name: Run Example Config Validation
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run example config validation
-        run: |
-          pytest tests/test_validate_ex_configs_against_schemas.py
+          pixi run validate \
+          tests/test_validate_ex_configs_against_schemas.py
