@@ -2,7 +2,6 @@
 deploy_ioc_use_common: true
 deploy_ioc_use_ad_common: false
 deploy_ioc_required_module: modbus_bb9fa05
-deploy_ioc_executable: modbusApp
 deploy_ioc_device_specific_env:
   PORT: E3K
   MODBUS_PREFIX: EURTHM3K

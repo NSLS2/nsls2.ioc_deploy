@@ -1,7 +1,6 @@
 ---
 
 deploy_ioc_as_dir_name: autosave
-deploy_ioc_executable: kinetixApp
 deploy_ioc_required_module: adkinetix_aa87406
 deploy_ioc_template_root_path:
   "{{ deploy_ioc_required_module_path }}/iocs/kinetixIOC"

@@ -14,7 +14,7 @@ delete-role = "make delete role"
 delete-module = "make delete module"
 report = "make report"
 lint-changes = "pre-commit"
-lint-all = "pre-commit run --all-files"
+lint = "pre-commit run --all-files"
 ruff-fix = "ruff check --fix"
 validate = "pytest"
 

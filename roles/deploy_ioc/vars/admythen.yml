@@ -3,7 +3,6 @@
 deploy_ioc_use_common: true
 deploy_ioc_use_ad_common: true
 deploy_ioc_required_module: admythen_bcf2947
-deploy_ioc_executable: mythenApp
 deploy_ioc_as_dir_name: autosave
 deploy_ioc_template_root_path:
   "{{ deploy_ioc_required_module_path }}/iocs/mythenIOC"

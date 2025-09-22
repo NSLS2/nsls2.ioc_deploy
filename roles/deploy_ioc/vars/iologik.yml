@@ -1,4 +1,3 @@
 ---
-deploy_ioc_executable: "modbusApp"
 deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
 deploy_ioc_required_module: modbus_bb9fa05
