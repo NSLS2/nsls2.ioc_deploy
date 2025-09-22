@@ -49,4 +49,4 @@ jobs:
           frozen: true
 
       - name: Run Pre-Commit Hooks
-        run: pixi run lint-all --show-diff-on-failure
+        run: pixi run lint --show-diff-on-failure
