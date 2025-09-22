@@ -10,6 +10,7 @@ pattern
 {% endfor %}
 {{"}"}}
 
+{% if ioc.model == 2 %}
 file "$(MCS)/db/MCS2_Extra.db"
 {{"{"}}
 pattern
@@ -18,3 +19,4 @@ pattern
 {{"{"}}"{{ ioc.environment.P }}", "{{"{"}}{{ ioc.environment.CTRL_NAME }}-Ax:{{ axis.name }}{{"}"}}", {{ axis.num }}{{"}"}}
 {% endfor %}
 {{"}"}}
+{% endif %}

@@ -7,7 +7,7 @@ mcs2-01:
     CTRL_NAME: "MCS2:01"
     CTRL_IP: "192.168.1.100"
     P: "XF31ID1-ES"
-    R: "{$(MCS)}"
+    R: "{$(CTRL_NAME)}"
     AXES_MASK: 0xF48
     ENGINEER: C. Engineer
 
