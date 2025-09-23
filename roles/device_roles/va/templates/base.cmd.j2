@@ -11,4 +11,3 @@ epicsEnvSet("STREAM_PROTOCOL_PATH", "${VA}/protocol")
 drvAsynIPPortConfigure({{ device.PORT }}, "{{ device.HOST }}:{{ device.IP_PORT }}")
 {% endfor %}
 
-dbLoadRecords("${VA}/db/reccaster.db", "P=${PREFIX}RecSync")
