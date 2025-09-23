@@ -63,8 +63,10 @@ def main():
     playbook_cmd.append(args.playbook)
     print("Running command:", " ".join(playbook_cmd))
 
-    subprocess.run(playbook_cmd)
-    os.remove(temp_path)
+    try:
+        subprocess.run(playbook_cmd)
+    finally:
+        os.remove(temp_path)
 
 
 if __name__ == "__main__":
