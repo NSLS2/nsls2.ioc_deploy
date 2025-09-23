@@ -72,6 +72,10 @@
         - postInit.cmd
         - st.cmd
 
+    - name: Ensure nested startup script is executable
+      ansible.builtin.file:
+        path: "{{ deploy_ioc_ioc_directory }}/iocBoot/st.cmd"
+        mode: "0775"
 
     - name: Install top level IOC startup script
       ansible.builtin.template:

@@ -6,6 +6,9 @@ name = "nsls2.ioc_deploy"
 platforms = ["linux-64", "osx-64", "osx-arm64"]
 version = "1.2.0"
 
+[environments]
+default = { solve-group = "default" }
+
 [tasks]
 make-role = "make role"
 make-module = "make module"
@@ -16,7 +19,7 @@ report = "make report"
 lint-changes = "pre-commit"
 lint-all = "pre-commit run --all-files"
 ruff-fix = "ruff check --fix"
-validate = "pytest"
+tests = "pytest"
 
 [build-dependencies]
 make = "*"
@@ -29,6 +32,7 @@ yamale = "*"
 pre-commit = "*"
 ruff = "*"
 import-linter = "*"
+pip = "*"
 pytest = "*"
 pyyaml = "*"
 yamllint = "*"
@@ -37,11 +41,22 @@ ansible-compat = "==24.10.0"
 ansible-core = "==2.15.5"
 ansible-lint = "==6.22.2"
 
-[tasks.install]
+[tasks.reinstall-collection]
 args = [
-    { arg = "path", default = "$PWD/../ansible-roles-nsls2" }, # Path to NSLS2/ansible checkout
+    { arg = "path", default = "$PWD/../ansible-roles-nsls2" }, # Path into which to install collection
 ]
 cmd = "echo Installing collection to {{ path }} && ansible-galaxy collection install $PWD -p {{ path }}/collections --force"
 
-[environments]
-default = { solve-group = "default" }
+[tasks.deploy-example]
+args = [
+    "type",
+    "limit"
+]
+cmd = "scripts/deploy_example.py {{ type }} {{ limit }}"
+
+[tasks.install-module]
+args = [
+    "module",
+    "limit"
+]
+cmd = "scripts/intall_module.py {{ module }} {{ limit }}"
