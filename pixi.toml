@@ -59,4 +59,4 @@ args = [
     "module",
     "limit"
 ]
-cmd = "scripts/intall_module.py {{ module }} {{ limit }}"
+cmd = "scripts/install_module.py {{ module }} {{ limit }}"
