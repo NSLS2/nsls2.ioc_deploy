@@ -39,7 +39,7 @@ ansible-lint = "==6.22.2"
 
 [tasks.install]
 args = [
-    { arg = "path", default = "/path/to/nsls2/ansible" }, # Path to NSLS2/ansible checkout
+    { arg = "path", default = "$PWD/../ansible-roles-nsls2" }, # Path to NSLS2/ansible checkout
 ]
 cmd = "echo Installing collection to {{ path }} && ansible-galaxy collection install $PWD -p {{ path }}/collections --force"
 
