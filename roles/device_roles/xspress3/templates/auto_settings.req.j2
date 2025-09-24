@@ -1,0 +1,57 @@
+file "ADBase_settings.req",  P=$(P), R=det1:
+
+file "built_settings.req",  P=$(P)
+file "NDFileHDF5_settings.req",  P=$(P), R=HDF1:
+{% for i in range(ioc.environment.NUM_CHANNELS) %}
+file "NDROIStat_settings.req",   P=$(P), R=MCA{{ loop.index }}ROI:
+
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:1:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:2:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:3:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:4:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:5:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:6:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:7:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:8:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:9:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:10:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:11:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:12:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:13:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:14:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:15:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:16:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:17:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:18:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:19:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:20:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:21:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:22:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:23:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:24:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:25:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:26:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:27:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:28:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:29:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:30:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:31:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:32:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:33:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:34:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:35:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:36:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:37:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:38:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:39:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:40:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:41:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:42:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:43:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:44:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:45:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:46:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:47:
+file "NDROIStatN_settings.req",  P=$(P), R=MCA{{ loop.index }}ROI:48:
+
+{% endfor %}
