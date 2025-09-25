@@ -1,4 +1,3 @@
-
 dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
 {{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
 
@@ -8,16 +7,16 @@ dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable
 # pmacAsynIPConfigure() is a wrapper for drvAsynIPPort::drvAsynIPPortConfigure() and
 # pmacAsynIPPort::pmacAsynIPPortConfigureEos().
 # See pmacAsynIPPort.c
-pmacAsynIPConfigure("$(IP_PORT)", "$(CONTROLLER_IP):1025")
+pmacAsynIPConfigure("$(ASYN_PORT)", "$(CONTROLLER_IP):1025")
 
 # WARNING: a trace-mask of containing 0x10 will TRACE_FLOW (v. noisy!!)
-#asynSetTraceMask("P0",-1,0x9)
-#asynSetTraceIOMask("P0",-1,0x2)
+#asynSetTraceMask("$(ASYN_PORT)",-1,0x9)
+#asynSetTraceIOMask("$(ASYN_PORT)",-1,0x2)
 
 # Configure Model 3 Controller Driver
 # (motor record port name, low level port, low level port address, num axes,
 #  moving polling period (ms), idle polling period (ms))
-pmacCreateController("$(CONTROLLER_PORT)","$(IP_PORT)", 0, $(NUM_AXES), 100, 1000)
+pmacCreateController("$(CONTROLLER_PORT)","$(ASYN_PORT)", 0, $(NUM_AXES), 100, 1000)
 
 # Configure axes for the model 3 driver
 pmacCreateAxes("$(CONTROLLER_PORT)", $(NUM_AXES))
@@ -48,7 +47,7 @@ pmacSetOpenLoopEncoderAxis("$(CONTROLLER_PORT)", {{ open_loop_axis.axis_num }}, 
 {% if ioc.coord_systems is defined %}
 {% for coord_system in ioc.coord_systems %}
 # Initialize the coord-system(port, addr, cs, ref, prog#)
-pmacAsynCoordCreate("$(IP_PORT)", 0, {{ coord_system.num }}, {{ coord_system.num }}, {{ coord_system.motion_prog }})
+pmacAsynCoordCreate("$(ASYN_PORT)", 0, {{ coord_system.num }}, {{ coord_system.num }}, {{ coord_system.motion_prog }})
 
 # setup the coord-sys(portName, drvel-name, ref#(from create), nAxes+1)
 drvAsynMotorConfigure("CS{{ coord_system.num }}","pmacAsynCoord", {{ coord_system.num }}, {{ coord_system.num_axes }})
@@ -81,9 +80,9 @@ dbLoadTemplate("$(TOP)/db/pmac_asyn_motor.substitutions")
 # ============================ LOAD ASYN COMM.DB ==============================
 # Load asynComm.db
 {% if ioc.environment.IOC_ASYN is defined %}
-dbLoadRecords("$(TPMAC)/db/asynComm.db", "P=$(IOC_ASYN), PORT=$(IP_PORT), ADDR=0")
+dbLoadRecords("$(TPMAC)/db/asynComm.db", "P=$(IOC_ASYN), PORT=$(ASYN_PORT), ADDR=0")
 {% elif ioc.environment.CT_SYS is defined %}
-dbLoadRecords("$(TPMAC)/db/asynComm.db", "P=$(CT_SYS)$(DEV)Asyn, PORT=$(IP_PORT), ADDR=0")
+dbLoadRecords("$(TPMAC)/db/asynComm.db", "P=$(CT_SYS)$(DEV)Asyn, PORT=$(ASYN_PORT), ADDR=0")
 {% else %}
-dbLoadRecords("$(TPMAC)/db/asynComm.db", "P=$(SYS)$(DEV)Asyn, PORT=$(IP_PORT), ADDR=0")
+dbLoadRecords("$(TPMAC)/db/asynComm.db", "P=$(SYS)$(DEV)Asyn, PORT=$(ASYN_PORT), ADDR=0")
 {% endif %}
