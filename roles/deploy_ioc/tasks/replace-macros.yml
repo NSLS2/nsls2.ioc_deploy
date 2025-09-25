@@ -1,11 +1,15 @@
 ---
 
+- name: Extract macro variable name
+  ansible.builtin.set_fact:
+    deploy_ioc_macro_var_name: "{{ deploy_ioc_macro_in_var | regex_replace('\\$\\((.*)\\)', '\\1') }}"
+
 - name: Ensure macro value doesn't also contain macro
   ansible.builtin.fail:
     msg: >-
-      "Environment variable {{ deploy_ioc_macro_in_var }} uses a macro!"
+      "Environment variable {{ deploy_ioc_macro_var_name }} uses a macro!"
       "Make sure environment vars are in a valid order!"
-  when: deploy_ioc_merged_env[deploy_ioc_macro_in_var] | regex_search('\\$\\(')
+  when: deploy_ioc_merged_env[deploy_ioc_macro_var_name] | regex_search('\\$\\(')
 
 - name: Full macro regex
   ansible.builtin.set_fact:
@@ -16,4 +20,4 @@
     deploy_ioc_replaced_macros:
       "{{ deploy_ioc_replaced_macros |
           regex_replace(deploy_ioc_macro_regex,
-                        deploy_ioc_merged_env[deploy_ioc_macro_in_var]) }}"
+                        deploy_ioc_merged_env[deploy_ioc_macro_var_name]) }}"
