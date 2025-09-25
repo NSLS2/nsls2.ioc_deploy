@@ -1,0 +1,9 @@
+#
+# {{ ansible_managed }}
+#
+file "$(PPMAC)/db/ppmacStatus.db"
+{{"{"}}
+pattern
+{{"{"}}SYS, PMAC, VERSION, PLC, PORT, NAXES{{"}"}}
+{{"{"}}"{{ ioc.environment.CT_SYS }}", "{{ ioc.environment.PMAC }}", 1, 5, "$(SSH_PORT)", {{ ioc.environment.NUM_AXES }}{{"}"}}
+{{"}"}}
