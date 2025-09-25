@@ -1,0 +1,11 @@
+#
+# {{ ansible_managed }}
+#
+file "$(TPMAC)/db/pmac_asyn_motor.db"
+{{"{"}}
+pattern
+{{"{"}}SYS, DEV, MOTOR, SPORT, ADDR, DESC, DTYP, PREC, EGU{{"}"}}
+{% for axis in ioc.axes %}
+{{"{"}}"{{ ioc.environment.SYS }}", "{{"{"}}{{ axis.component }}-Ax:{{ axis.name }}{{"}"}}", "$(CONTROLLER_PORT)", "$(ASYN_PORT)", {{ axis.num }}, {{ axis.desc }}, asynMotor, 4, "{{ axis.egu }}"{{"}"}}
+{% endfor %}
+{{"}"}}
