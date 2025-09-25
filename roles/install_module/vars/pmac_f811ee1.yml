@@ -11,8 +11,8 @@ pmac_f811ee1:
     USE_GRAPHICSMAGICK: "NO"
     WITH_BOOST: "NO"
     SSH: "/usr"
-    SSH_LIB: "$(usr)/lib64"
-    SSH_INCLUDE: "$(usr)/include"
+    SSH_LIB: "$(SSH)/lib64"
+    SSH_INCLUDE: "$(SSH)/include"
   # See https://github.com/DiamondLightSource/pmac/pull/131
   # on why -j flag must be avoided for now.
   compilation_command: "make"
