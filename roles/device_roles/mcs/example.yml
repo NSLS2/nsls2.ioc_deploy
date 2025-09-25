@@ -4,13 +4,15 @@ mcs2-01:
   type: mcs
   model: 2
   environment:
+    PORT: "MCS2"
     CTRL_NAME: "MCS2:01"
-    CTRL_IP: "192.168.1.100"
+    CTRL_IP: "127.0.0.1"
     P: "XF31ID1-ES"
     R: "{$(CTRL_NAME)}"
     AXES_MASK: 0xF48
     ENGINEER: C. Engineer
 
+  # Define the individal motor axes here
   axes:
     - name: "X"
       num: 1
@@ -23,6 +25,6 @@ mcs2-01:
   substitutions:
     asynComm:
       - filepath: "$(ASYN)/db/asynRecord.db"
-        pattern: ["P", "R", "ADDR", "IMAX", "OMAX"]
+        pattern: ["P", "R", "ADDR", "PORT", "TIMEOUT", "IMAX", "OMAX"]
         instances:
-          - ["$(P)", "$(R)AsynIO", "0", "256", "256"]
+          - ["$(P)", "$(R)AsynIO", "$(PORT)", "1", "0", "256", "256"]

@@ -4,9 +4,9 @@
 file "$(MCS)/db/motor.db"
 {{"{"}}
 pattern
-{{"{"}}P, M, DTYP, ADDR, DIR, ALIAS, DESC, EGU, VELO, VBAS, ACCL, VMAX, BDST, BVEL, BACC, MRES, PREC, DHLM, DLLM{{"}"}}
+{{"{"}}P, M, MOTOR, DTYP, ADDR, DIR, ALIAS, DESC, EGU, VELO, VBAS, ACCL, VMAX, BDST, BVEL, BACC, MRES, PREC, DHLM, DLLM{{"}"}}
 {% for axis in ioc.axes %}
-{{"{"}}"{{ ioc.environment.P }}", "{{"{"}}{{ ioc.environment.CTRL_NAME }}-Ax:{{ axis.name }}{{"}"}}Mtr", asynMotor, {{ axis.num }}, {{ axis.dir | default("Pos") }}, {{ axis.name }}, {{ axis.desc }}, {{ axis.egu | default("mm") }}, {{ axis.velo | default("2.0") }}, 0.0, {{ axis.accl | default(0.2) }}, {{ axis.vmax | default(5.0) }}, 0, 0.5, 0.5, {{ axis.mres }}, {{ axis.prec | default(5) }}, 0, 0{{"}"}}
+{{"{"}}"{{ ioc.environment.P }}", "{{"{"}}{{ ioc.environment.CTRL_NAME }}-Ax:{{ axis.name }}{{"}"}}Mtr", "{{ ioc.environment.PORT }}", asynMotor, {{ axis.num - 1 }}, {{ axis.dir | default("Pos") }}, {{ axis.name }}, {{ axis.desc }}, {{ axis.egu | default("mm") }}, {{ axis.velo | default("2.0") }}, 0.0, {{ axis.accl | default(0.2) }}, {{ axis.vmax | default(5.0) }}, 0, 0.5, 0.5, {{ axis.mres }}, {{ axis.prec | default(5) }}, 0, 0{{"}"}}
 {% endfor %}
 {{"}"}}
 
@@ -14,9 +14,9 @@ pattern
 file "$(MCS)/db/MCS2_Extra.db"
 {{"{"}}
 pattern
-{{"{"}}P, M, ADDR,{{"}"}}
+{{"{"}}P, M, ADDR, PORT, TIMEOUT{{"}"}}
 {% for axis in ioc.axes %}
-{{"{"}}"{{ ioc.environment.P }}", "{{"{"}}{{ ioc.environment.CTRL_NAME }}-Ax:{{ axis.name }}{{"}"}}", {{ axis.num }}{{"}"}}
+{{"{"}}"{{ ioc.environment.P }}", "{{"{"}}{{ ioc.environment.CTRL_NAME }}-Ax:{{ axis.name }}{{"}"}}", {{ axis.num }}, "{{ ioc.environment.PORT }}", 1.0{{"}"}}
 {% endfor %}
 {{"}"}}
 {% endif %}
