@@ -1,0 +1,143 @@
+---
+
+va-01:
+  type: va
+
+  # SYS and DEV: used to generate prefix for each device
+  # IOC_SYS and IOC_DEV: used to generate prefix for IOC-specific PVs
+  # HOST may be an IP address or host name, IP_PORT is the host port number
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{VA:01}
+
+  devices:
+    - HOST: "10.66.66.71"
+      IP_PORT: 4001
+      PORT: tsrv1-P1
+    - HOST: "10.66.66.71"
+      IP_PORT: 4002
+      PORT: tsrv1-P2
+    - HOST: "10.66.66.71"
+      IP_PORT: 4003
+      PORT: tsrv1-P3
+    - HOST: "10.66.66.71"
+      IP_PORT: 4004
+      PORT: tsrv1-P4
+    - HOST: "10.66.66.80"
+      IP_PORT: 4001
+      PORT: tsrv10-P1
+    - HOST: "10.66.66.80"
+      IP_PORT: 4002
+      PORT: tsrv10-P2
+    - HOST: "10.66.66.80"
+      IP_PORT: 4003
+      PORT: tsrv10-P3
+    - HOST: "10.66.66.82"
+      IP_PORT: 4001
+      PORT: tsrv12-P1
+    - HOST: "10.66.66.82"
+      IP_PORT: 4002
+      PORT: tsrv12-P2
+
+    - HOST: "10.66.66.141"
+      IP_PORT: 23
+      PORT: xf09id1-ipc1
+    - HOST: "10.66.66.142"
+      IP_PORT: 23
+      PORT: xf09id1-ipc2
+    - HOST: "10.66.66.143"
+      IP_PORT: 23
+      PORT: xf09id1-ipc3
+    - HOST: "10.66.66.144"
+      IP_PORT: 23
+      PORT: xf09id1-ipc4
+
+# Schema is in-exact, so caution must be used when copying filepath/patern
+  substitutions:
+    vgc: # Vacuum Gauge Controller
+    # Vacuum Gauge Controller
+      - filepath: "$(VA)/db/mks937b_controller.template"
+        pattern: ["Sys", "Cntl", "PORT", "ADR"]
+        instances:
+          - ["XF:09IDA-VA", "{VGC:1}", "tsrv1-P1", "253"]
+
+    # Cold Cathode Gauge and relay
+      - filepath: "$(VA)/db/mks937b_ccg.template"
+        pattern: ["Sys", "Dev", "CHAN", "PORT", "ADR", "Cntl"]
+        instances:
+          - ["XF:09IDA-VA", "{Msk:WB-CCG:1}", "1", "tsrv1-P1", "253", "{VGC:1}"]
+
+      - filepath: "$(VA)/db/mks937b_relay_ccg.template"
+        pattern:
+          - "Sys"
+          - "Dev"
+          - "SPNUM"
+          - "PORT"
+          - "ADR"
+          - "Cntl"
+        instances:
+          - [
+            "XF:09IDA-VA",
+            "{Msk:WB-CCG:1}",
+            "1",
+            "tsrv1-P1",
+            "253",
+            "{VGC:1}"
+          ]
+
+    # Thermocouple Gauge and relay
+      - filepath: "$(VA)/db/mks937b_pirg.template"
+        pattern:
+          - "Sys"
+          - "Dev"
+          - "CHAN"
+          - "PORT"
+          - "ADR"
+          - "Cntl"
+          - "SPNUM1"
+          - "SPNUM2"
+        instances:
+          - [
+            "XF:09IDA-VA",
+            "{Msk:WB-TCG:1}",
+            "5",
+            "tsrv1-P1",
+            "253",
+            "{VGC:1}",
+            "9",
+            "10"
+          ]
+
+      - filepath: "$(VA)/db/mks937b_relay_pirg.template"
+        pattern: ["Sys", "Dev", "SPNUM", "PORT", "ADR", "Cntl"]
+        instances:
+          - ["XF:09IDA-VA", "{Msk:WB-TCG:1}", "9", "tsrv1-P1", "253", "{VGC:1}"]
+
+    ipc: # Ion Pump Controller, Pump, and Pump Relay
+      - filepath: "$(VA)/db/gammampcq_controller.template"
+        pattern: ["Sys", "Cntl", "PORT"]
+        instances:
+          - ["XF:09IDA-VA", "{IPC:1}", "xf09id1-ipc1"]
+
+      - filepath: "$(VA)/db/gammampcq_ip.template"
+        pattern: ["Sys", "Dev", "CHAN", "PORT", "Cntl"]
+        instances:
+          - ["XF:09IDA-VA", "{Msk:WB-IP:1}", "1", "xf09id1-ipc1", "{IPC:1}"]
+
+      - filepath: "$(VA)/db/gammampcq_setpoint.template"
+        pattern: ["Sys", "Dev", "CHAN", "SPNUM", "PORT", "Cntl"]
+        instances:
+          - [
+            "XF:09IDA-VA",
+            "{Msk:WB-IP:1}",
+            "1",
+            "1",
+            "xf09id1-ipc1",
+            "{IPC:1}"
+          ]
+
+    asyn: # Asyn Port configurations
+      - filepath: "$(EPICS_BASE)/db/asynRecord.db"
+        pattern: ["P", "R", "PORT", "ADDR", "IMAX", "OMAX"]
+        instances:
+          - ["XF:09IDA-CT", "{VGC:1}Asyn", "tsrv1-P1", "0", "256", "256"]

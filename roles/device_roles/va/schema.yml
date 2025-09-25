@@ -1,0 +1,61 @@
+---
+
+type: enum("va")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
+
+devices: list(include('device'), min=1)
+
+substitutions:
+  vgc: list(include('vcg_substitution_block'))
+  ipc: list(include('ipc_substitution_block'))
+  asyn: list(include('asyn_substitution_block'))
+
+---
+
+device:
+  HOST: any(ip(), hostname())
+  IP_PORT: int()
+  PORT: str()
+
+
+# Substitution blocks for vgc, ccg, ccg_relay, tcg, tcg_relay
+vcg_substitution_block:
+  filepath: enum(
+    "$(VA)/db/mks937b_controller.template",
+    "$(VA)/db/mks937b_ccg.template",
+    "$(VA)/db/mks937b_relay_ccg.template",
+    "$(VA)/db/mks937b_pirg.template",
+    "$(VA)/db/mks937b_relay_pirg.template"
+    )
+  pattern: list(
+    enum(
+      "Sys", "Cntl", "PORT", "ADR",
+      "Dev", "SPNUM", "CHAN",
+      "SPNUM1", "SPNUM2"
+    )
+    )
+  instances: list(list(min=4, max=8))
+
+# Substitution block for ipc, ip, ip_relay
+ipc_substitution_block:
+  filepath: enum(
+    "$(VA)/db/gammampcq_controller.template",
+    "$(VA)/db/gammampcq_ip.template",
+    "$(VA)/db/gammampcq_setpoint.template"
+    )
+  pattern: list(
+    enum("Sys", "Dev", "CHAN", "PORT", "Cntl", "SPNUM")
+    )
+  instances: list(list(min=3, max=6))
+
+asyn_substitution_block:
+  filepath: enum("$(EPICS_BASE)/db/asynRecord.db")
+  pattern: list(
+    any(
+      enum("P"), enum("R"), enum("PORT"),
+      enum("ADDR"), enum("IMAX"), enum("OMAX")
+    )
+    )
+  instances: list(list(min=6, max=6))
