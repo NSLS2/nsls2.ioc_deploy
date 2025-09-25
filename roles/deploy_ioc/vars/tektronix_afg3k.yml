@@ -2,7 +2,6 @@
 
 deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
 deploy_ioc_required_module: "base_stream_ioc_093e6cf"
-deploy_ioc_executable: "baseStreamApp"
 deploy_ioc_device_specific_env:
   PORT: "AFG3K"
   PREFIX: "$(P)$(R)"

@@ -5,6 +5,7 @@ admerlin_399508f:
   url: https://github.com/areadetector/ADMerlin
   include_base_ad_config: true
   version: 399508f
+  executable: merlinApp
   module_deps:
     - adcore_60080dc
     - adcompvision_9750d13

@@ -2,7 +2,6 @@
 
 deploy_ioc_use_ad_common: true
 deploy_ioc_required_module: adaravis_a0aa4d6
-deploy_ioc_executable: ADAravisApp
 deploy_ioc_template_root_path:
   "{{ deploy_ioc_required_module_path }}/iocs/aravisIOC"
 deploy_ioc_as_dir_name: autosave

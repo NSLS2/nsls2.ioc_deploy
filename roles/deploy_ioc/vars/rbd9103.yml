@@ -1,6 +1,5 @@
 ---
 
-deploy_ioc_executable: "rbd9103App"
 deploy_ioc_required_module: rbd9103_a835e1c
 deploy_ioc_template_root_path:
   "{{ deploy_ioc_required_module_path }}/iocs/rbd9103IOC"

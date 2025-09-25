@@ -4,6 +4,7 @@ aduvc_86918b6:
   version: 86918b6
   url: https://github.com/areaDetector/ADUVC
   include_base_ad_config: true
+  executable: uvcApp
   module_deps:
     - adcore_60080dc
     - adcompvision_9750d13

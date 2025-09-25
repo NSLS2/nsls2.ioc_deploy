@@ -14,6 +14,17 @@
     host_config.softioc_user is not defined or
     host_config.softioc_group is not defined
 
+- name: Merge locally-passed-in config with loaded host config
+  when: deploy_ioc_extra_host_config is defined
+  block:
+    - name: Show extra host config
+      ansible.builtin.debug:
+        msg: "{{ deploy_ioc_extra_host_config }}"
+
+    - name: Combine extra host config
+      ansible.builtin.set_fact:
+        host_config: "{{ host_config | combine(deploy_ioc_extra_host_config) }}"
+
 - name: Print EPICS interface ip
   ansible.builtin.debug:
     msg: "EPICS interface IP: {{ host_config.epics_interface.address }}"

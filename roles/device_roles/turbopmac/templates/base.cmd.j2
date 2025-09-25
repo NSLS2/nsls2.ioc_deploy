@@ -1,0 +1,88 @@
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# turbopmac specific commands
+
+# ============================ CONFIGURATION ===================================
+# pmacAsynIPConfigure() is a wrapper for drvAsynIPPort::drvAsynIPPortConfigure() and
+# pmacAsynIPPort::pmacAsynIPPortConfigureEos().
+# See pmacAsynIPPort.c
+pmacAsynIPConfigure("$(ASYN_PORT)", "$(CONTROLLER_IP):1025")
+
+# WARNING: a trace-mask of containing 0x10 will TRACE_FLOW (v. noisy!!)
+#asynSetTraceMask("$(ASYN_PORT)",-1,0x9)
+#asynSetTraceIOMask("$(ASYN_PORT)",-1,0x2)
+
+# Configure Model 3 Controller Driver
+# (motor record port name, low level port, low level port address, num axes,
+#  moving polling period (ms), idle polling period (ms))
+pmacCreateController("$(CONTROLLER_PORT)","$(ASYN_PORT)", 0, $(NUM_AXES), 100, 1000)
+
+# Configure axes for the model 3 driver
+pmacCreateAxes("$(CONTROLLER_PORT)", $(NUM_AXES))
+
+# ============================ DISABLE LIMITS =================================
+# Disable the limits disabled check for some axes (normally this should be left enabled)
+# pmacDisableLimitsCheck(string portname, int axis, int allAxes)
+{% if ioc.disable_all_limits is defined %}
+pmacDisableLimitsCheck("$(CONTROLLER_PORT)", 0, 1)
+{% else %}
+{% if ioc.disable_lim_axes is defined %}
+{% for disable_lim_axis in ioc.disable_lim_axes %}
+pmacDisableLimitsCheck("$(CONTROLLER_PORT)", {{ disable_lim_axis }}, 0)
+{% endfor %}
+{% endif %}
+{% endif %}
+
+# ============================ SET OPEN LOOP AXES =============================
+{% if ioc.open_loop_axes is defined %}
+# Set the encoder axis for an open loop axis.
+# pmacSetOpenLoopEncoderAxis(const char *controller, int axis, int encoder_axis)
+{% for open_loop_axis in ioc.open_loop_axes %}
+pmacSetOpenLoopEncoderAxis("$(CONTROLLER_PORT)", {{ open_loop_axis.axis_num }}, {{ open_loop_axis.encoder_axis }})
+{% endfor %}
+{% endif %}
+
+# ============================ SET COORDINATE SYSTEMS =========================
+{% if ioc.coord_systems is defined %}
+{% for coord_system in ioc.coord_systems %}
+# Initialize the coord-system(port, addr, cs, ref, prog#)
+pmacAsynCoordCreate("$(ASYN_PORT)", 0, {{ coord_system.num }}, {{ coord_system.num }}, {{ coord_system.motion_prog }})
+
+# setup the coord-sys(portName, drvel-name, ref#(from create), nAxes+1)
+drvAsynMotorConfigure("CS{{ coord_system.num }}","pmacAsynCoord", {{ coord_system.num }}, {{ coord_system.num_axes }})
+
+{% endfor %}
+{% endif %}
+
+# ============================ SET SCALE FACTOR ===============================
+{% if ioc.virtual_axes is defined %}
+# Set scale factor (int ref, int axis, double stepsPerUnit)
+{% for virtual_axis in ioc.virtual_axes %}
+pmacSetCoordStepsPerUnit({{ virtual_axis.cs }}, {{ virtual_axis.num }}, {{ 1 / virtual_axis.mres }})
+{% endfor %}
+{% endif %}
+
+# ============================ SET POLL RATES =================================
+# change poll rates (card, poll-period in ms)
+pmacSetMovingPollPeriod(1, 100)
+pmacSetIdlePollPeriod(1, 1000)
+{% if ioc.coord_systems is defined %}
+pmacSetCoordMovingPollPeriod(1, 200)
+pmacSetCoordIdlePollPeriod(1, 2000)
+{% endif %}
+
+# ============================ SUBSTITUTIONS ==================================
+dbLoadTemplate("$(TOP)/db/motor.substitutions")
+dbLoadTemplate("$(TOP)/db/motorstatus.substitutions")
+dbLoadTemplate("$(TOP)/db/pmac_asyn_motor.substitutions")
+
+# ============================ LOAD ASYN COMM.DB ==============================
+# Load asynComm.db
+{% if ioc.environment.IOC_ASYN is defined %}
+dbLoadRecords("$(TPMAC)/db/asynComm.db", "P=$(IOC_ASYN), PORT=$(ASYN_PORT), ADDR=0")
+{% elif ioc.environment.CT_SYS is defined %}
+dbLoadRecords("$(TPMAC)/db/asynComm.db", "P=$(CT_SYS)$(DEV)Asyn, PORT=$(ASYN_PORT), ADDR=0")
+{% else %}
+dbLoadRecords("$(TPMAC)/db/asynComm.db", "P=$(SYS)$(DEV)Asyn, PORT=$(ASYN_PORT), ADDR=0")
+{% endif %}

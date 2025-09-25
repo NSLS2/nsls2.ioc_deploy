@@ -6,6 +6,8 @@ adsimdetector_4b236f4:
 
   overwrite_config_site: true
 
+  executable: "simDetectorApp"
+
   # Use commit hash as version. R2-11 requires newest asyn,
   # R2-10 breaks with newer ADCore
   version: 4b236f4
