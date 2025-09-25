@@ -1,0 +1,22 @@
+
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# adscanpb specific commands
+
+ADScanPBConfig("$(PORT)", 0, 0, 0, 0)
+epicsThreadSleep(2)
+
+asynSetTraceIOMask($(PORT), 0, 2)
+
+dbLoadRecords("$(ADCORE)/db/ADBase.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
+dbLoadRecords("$(ADSCANPB)/db/ADScanPB.template","P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
+dbLoadRecords("$(ADSCANPB)/db/ADScanPBTrig.template","P=$(PREFIX),R=cam1:,TRIGGER_SIGNAL=$(TRIGGER_SIGNAL),PORT=$(PORT),ADDR=0,TIMEOUT=1")
+
+{% if ioc.environment.TILED_METADATA_URL is defined %}
+# Optionally, if tiled support is included
+dbLoadRecords("$(ADSCANPB)/db/ADScanPBTiled.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1, TILED_METADATA_URL=$(TILED_METADATA_URL), TILED_ARRAY_URL=$(TILED_ARRAY_URL)")
+{% endif %}
+
+
+set_requestfile_path("$(ADSCANPB)/scanPBApp/Db")

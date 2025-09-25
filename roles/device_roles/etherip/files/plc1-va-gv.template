@@ -1,0 +1,179 @@
+# Gate Valve Template
+# Interfaces to GV UDTs in PLC, i.e. GV_GV_Sts and GV_GV_Cmd
+# This template can be used for non-vacuum valves which re-use GV Handler objects
+
+#
+# Gate Valve Readbacks/Statuses
+#
+
+record(bi, "$(Sys){$(Dev)}Sw:OpnLim-Sts") {
+    field(DESC, "$(Dev) Opn Limit Sts")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.OpnSw S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "In Position")
+}
+
+record(bi, "$(Sys){$(Dev)}Sw:ClsLim-Sts") {
+    field(DESC, "$(Dev) Cls Limit Sts")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.ClsSw S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "In Position")
+}
+
+record(bi, "$(Sys){$(Dev)}Pos-Sts") {
+    field(DESC, "$(Dev) Status")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.Sts S 0.5")
+    field(ZNAM, "Not Open")
+    field(ONAM, "Open")
+    field(ZSV,  "MINOR")
+}
+
+record(bi, "$(Sys){$(Dev)}Err-Sts") {
+    field(DESC, "$(Dev) Err Status")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.StsFault S 0.5")
+    field(ZNAM, "Error")
+    field(ONAM, "OK")
+    field(ZSV,  "MAJOR")
+}
+
+record(bi, "$(Sys){$(Dev)}Sts:Coil-Sts") {
+    field(DESC, "$(Dev) Coil Sts")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.Coil1 S 0.5")
+    field(ZNAM, "Not Energized")
+    field(ONAM, "Energized")
+}
+
+# Some valves have dual-coil solenoids,
+#   but does not exist in all cases
+record(bi, "$(Sys){$(Dev)}Sts:Coil2-Sts") {
+    field(DESC, "$(Dev) Coil2 Sts")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.Coil2 S 0.5")
+    field(ZNAM, "Not Energized")
+    field(ONAM, "Energized")
+}
+
+record(bi, "$(Sys){$(Dev)}Sts:FailOpn-Sts") {
+    field(DESC, "$(Dev) Fail Open")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.FailedToOpn S 0.5")
+    field(ZNAM, "Error")
+    field(ONAM, "OK")
+    field(ZSV,  "MINOR")
+}
+
+record(bi, "$(Sys){$(Dev)}Sts:FailCls-Sts") {
+    field(DESC, "$(Dev) Fail Close")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.FailedToCls S 0.5")
+    field(ZNAM, "Error")
+    field(ONAM, "OK")
+    field(ZSV,  "MINOR")
+}
+
+record(bi, "$(Sys){$(Dev)}Sts:DS_Intlk-Sts") {
+    field(DESC, "$(Dev) DS I/L Sts")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.LockDS S 0.5")
+    field(ZNAM, "Interlocked")
+    field(ONAM, "OK")
+    field(ZSV,  "MAJOR")
+}
+
+record(bi, "$(Sys){$(Dev)}Sts:US_Intlk-Sts") {
+    field(DESC, "$(Dev) US I/L Sts")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.LockUS S 0.5")
+    field(ZNAM, "Interlocked")
+    field(ONAM, "OK")
+    field(ZSV,  "MAJOR")
+}
+
+# Permit To Close status not currently included in GV_Sts data type
+record(bi, "$(Sys){$(Dev)}Sts:Cls_Permit-Sts") {
+    field(DESC, "$(Dev) Permit To Close Sts")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts_PermitToCls S 0.5")
+    field(ZNAM, "Not permitted")
+    field(ONAM, "Permitted")
+    field(ZSV,  "MINOR")
+}
+
+# Permit To Open status not currently included in GV_Sts data type
+record(bi, "$(Sys){$(Dev)}Sts:Opn_Permit-Sts") {
+    field(DESC, "$(Dev) Permit To Open Sts")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts_PermitToOpn S 0.5")
+    field(ZNAM, "Not permitted")
+    field(ONAM, "Permitted")
+    field(ZSV,  "MINOR")
+}
+
+#
+# Gate Valve Commands/Controls
+#
+
+# Note: for now, valves have intermediate tags for requesting open/close.
+#  This is to fix a bug in the GV handler which can sometimes drop async commands.
+#  Eventually this fix should be moved into the GV Cmd UDT or GV Handler.
+
+# New record for GV open commands
+record(bo, "$(Sys){$(Dev)}Cmd:Opn-Cmd") {
+    field(DESC, "$(Dev) Req Open Cmd")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) $(Tag)_ReqOpnCmd S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "Open")
+    field(ASG,  "$(ASG=DEFAULT)")
+}
+
+# Old record for GV open commands
+record(bo, "$(Sys){$(Dev)}Cmd:Opn-Cmd_") {
+    field(DESC, "$(Dev) Open Cmd")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) $(Tag)_GV_Cmd.OpnCmd S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "Open")
+    field(ASG,  "EPSEXPERT")
+}
+
+# New record for GV close commands
+record(bo, "$(Sys){$(Dev)}Cmd:Cls-Cmd") {
+    field(DESC, "$(Dev) Req Close Cmd")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) $(Tag)_ReqClsCmd S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "Close")
+    field(ASG,  "$(ASG=DEFAULT)")
+}
+
+# Old record for GV close commands
+record(bo, "$(Sys){$(Dev)}Cmd:Cls-Cmd_") {
+    field(DESC, "$(Dev) Close Cmd")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) $(Tag)_GV_Cmd.ClsCmd S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "Close")
+    field(ASG,  "EPSEXPERT")
+}

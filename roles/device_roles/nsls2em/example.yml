@@ -1,0 +1,20 @@
+---
+nsls2em-01:
+  type: nsls2em
+  environment:
+    DEVICE_IP: "10.69.58.70"
+    SYS: "XF:31ID1-BI"
+    DEV: "EM:1"
+    DEVICE_SN: "EC0009"
+    PREFIX: "$(SYS){$(DEV)}"
+
+    ENGINEER: C. Engineer
+
+  # Settings for PID (if used), PID_PERMIT1 -> A, PID_PERMIT2 -> B
+  # ... PID_PERMIT6 -> F
+  # PID_PERMITx typically are PV names with logical values
+  # FB_ON_CALC specifies logical expression evaluated to enable or disable
+  # the PID loop (do not modify the part of expression with J, K and L)
+    FB_ON_CALC: "A&&B&&C&&D&&E&&F&&J&&K&&L"
+    PID_PERMIT1: "XF:31ID1-OP{A}"  # Those should be PV names
+    PID_PERMIT2: "XF:31ID1-OP{B}"

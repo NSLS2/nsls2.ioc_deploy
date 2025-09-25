@@ -1,0 +1,23 @@
+# Automatically disable polling for a Eurotherm 3K device if there's a read error
+
+record(calcout, "$(SYS)$(DEV)AUTODISABLE")
+{
+    field(CALC, "A=0")
+    field(DESC, "Disable polling in case of read error")
+    field(DOPT, "Use OCAL")
+    field(INPA, "$(SYS)$(DEV)LOOP1:PV:RBV.SEVR")
+    field(OCAL, "1")
+    field(OOPT, "When Zero")
+    field(SCAN, "Passive")
+}
+
+record(bi, "$(SYS)$(DEV)DISABLE")
+{
+    field(DESC, "Enable/Disable polling")
+    field(ONAM, "Disabled")
+    field(SCAN, "Passive")
+    field(VAL,  "1")
+    field(ZNAM, "Enabled")
+    alias("$(SYS)$(DEV)LOOP1:DISABLE")
+    alias("$(SYS)$(DEV)LOOP2:DISABLE")
+}

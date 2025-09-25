@@ -1,0 +1,25 @@
+---
+
+adeiger-01:
+  type: adeiger
+  # Eiger version must be 1 for Eiger or 2 for Eiger2
+  eiger_version: 1
+
+  # Configure local port if Eiger is connected directly to the server.
+  # Comment out otherwise.
+  # adeiger_local_intf_mac: "98:b7:85:01:4a:dd"
+  # adeiger_local_intf_ip: "192.168.0.1"
+
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{ADEIGER:01}
+    EIGER_IP: "10.69.57.71"
+
+    XSIZE: 1030
+    YSIZE: 1065
+
+    QSIZE: 2048
+
+    # The maximum number of frames buffered in the NDPluginCircularBuff plugin
+    CBUFFS: 8192
+    NELEMENTS: 1096950

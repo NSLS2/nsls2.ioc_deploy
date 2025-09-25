@@ -1,0 +1,24 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_use_ad_common: true
+deploy_ioc_required_module: adandor3_1e33769
+deploy_ioc_req_file_list:
+  - name: auto_settings.req
+    macros: "P=$(PREFIX)"
+deploy_ioc_template_root_path:
+  "{{ deploy_ioc_required_module_path }}/iocs/andor3IOC"
+deploy_ioc_device_specific_env:
+  PORT: "ANDOR"
+  XSIZE: 2048
+  YSIZE: 2048
+  HIST_SIZE: 4096
+  QSIZE: 20
+  NCHANS: 2048
+  CBUFFS: 500
+  NDTYPE: "Int8"
+  NDFTVL: "UCHAR"
+  NELMT: 12000000
+  MAX_THREADS: 8
+  EPICS_DB_INCLUDE_PATH: "$(ADCORE)/db:$(ADANDOR3)/db"
+  NELEMENTS: 10000000

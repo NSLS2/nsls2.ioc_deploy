@@ -3,7 +3,26 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import pytest
+import yamale
 import yaml
+
+INSTALL_MODULE_FILES = [
+    os.path.splitext(f)[0]
+    for f in os.listdir("roles/install_module/vars")
+    if f.endswith(".yml")
+]
+
+
+class ModuleNameValidator(yamale.validators.Validator):
+    tag = "module_name"
+
+    def _is_valid(self, value: str) -> bool:
+        return value in INSTALL_MODULE_FILES
+
+
+@pytest.fixture
+def module_name_validator():
+    return ModuleNameValidator
 
 
 @dataclass

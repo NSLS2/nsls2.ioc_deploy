@@ -1,0 +1,33 @@
+
+record(stringin, "$(P)$(R):Manufacturer") {
+    field(DESC, "Manufacturer")
+    field(DTYP, "stream")
+    field(INP,  "@afg3k.proto getDeviceID($(P)$(R):Model, $(P)$(R):SerialNumber) $(PORT)")
+    field(PINI, "YES")
+    field(SCAN, "Passive")
+}
+
+record(stringin, "$(P)$(R):Model") {
+    field(DESC, "Model")
+    field(DTYP, "Soft Channel")
+}
+
+record(stringin, "$(P)$(R):SerialNumber") {
+    field(DESC, "Serial Number")
+    field(DTYP, "Soft Channel")
+}
+
+record(stringin, "$(P)$(R):SystemVersion"){
+    field(DESC, "SCPI Version")
+    field(DTYP, "stream")
+    field(INP, "@afg3k.proto getSystemVersion() $(PORT)")
+    field(PINI, "YES")
+    field(SCAN, "Passive")
+}
+
+# record(bo, "$(P)$(R):PhaseInitiate") {
+#     field(DESC, "Phase Initiate Command")
+#     field(DTYP, "stream")
+#     field(OUT, "@afg3k.proto setPhaseInitiate() $(PORT)")
+#     field(SCAN, "I/O Intr")
+# }

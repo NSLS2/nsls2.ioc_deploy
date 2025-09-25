@@ -1,0 +1,12 @@
+---
+
+type: enum("adaravis")
+adaravis_genicam_xml_converters_url: str(required=False)
+environment:
+  ENGINEER: str()
+  PREFIX: str()
+  # For camera name, use `/opt/aravis/bin/arv-tool-0.8` to list all cameras
+  # find the one with the IP you assigned to it, and copy the entire entry
+  # without the IP.
+  CAMERA_NAME: str()
+  ENABLE_CACHING: int(min=0, max=1, default=0)  # Optional caching enable flag

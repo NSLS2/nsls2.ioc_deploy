@@ -1,0 +1,12 @@
+---
+
+adaravis-01:
+  type: adaravis
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{ADARAVIS:01}
+    # For camera name, use `/opt/aravis/bin/arv-tool-0.8` to list all cameras
+    # find the one with the IP you assigned to it, and copy the entire entry
+    # without the IP.
+    CAMERA_NAME: "Allied Vision-Manta G-040B (E0022660)-50-0503548886"
+    ENABLE_CACHING: 1

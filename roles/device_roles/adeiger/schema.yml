@@ -1,0 +1,24 @@
+---
+
+type: enum("adeiger")
+# Eiger version must be 1 for Eiger or 2 for Eiger2
+eiger_version: enum(1, 2)
+
+# Configure local port if Eiger is connected directly to the server.
+# Comment out otherwise.
+adeiger_local_intf_mac: str(required=False)
+adeiger_local_intf_ip: any(ip(), hostname(), required=False)
+
+environment:
+  ENGINEER: str()
+  PREFIX: str()
+  EIGER_IP: any(ip(), hostname())
+  STREAM_IP: any(ip(), hostname(), required=False)
+
+  XSIZE: int()
+  YSIZE: int()
+  QSIZE: int()
+
+  # The maximum number of frames buffered in the NDPluginCircularBuff plugin
+  CBUFFS: int()
+  NELEMENTS: int()

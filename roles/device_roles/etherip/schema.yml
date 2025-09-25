@@ -1,0 +1,8 @@
+---
+
+type: enum("etherip")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
+  PLC_IP: any(ip(), hostname())
+  PLC: str()

@@ -1,0 +1,28 @@
+---
+deploy_ioc_required_module: nsls2em_f76d209
+deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
+deploy_ioc_make_autosave_files: true
+
+deploy_ioc_dbpf_list:
+  - pv: $(PREFIX)Reg31-Sp
+    value: 255
+    sleep: 0.2
+  - pv: $(PREFIX)Reg31-Sp
+    value: 0
+    sleep: 1
+  - pv: $(PREFIX)regsend.SCAN
+    value: ".02 second"
+  - pv: $(PREFIX)Reg8-Sp
+    value: 7520
+  - pv: $(PREFIX)Reg49-I.FLNK
+    value: $(PREFIX)$(PID_X):Inp-Sts
+  - pv: $(PREFIX)Reg50-I.FLNK
+    value: $(PREFIX)$(PID_Y):Inp-Sts
+
+deploy_ioc_device_specific_env:
+  PORT: "NSLS2_EM"
+  QSIZE: 20
+  RING_SIZE: 10000
+  TSPOINTS: 10000
+  EPICS_CA_MAX_ARRAY_BYTES: 10000000
+  EPICS_DB_INCLUDE_PATH: "$(NSLS2EM)/db:$(PSCDRV)/db:$(ADCORE)/db:$(EPICS_BASE)/db"

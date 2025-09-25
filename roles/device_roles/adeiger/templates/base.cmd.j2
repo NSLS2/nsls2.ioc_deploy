@@ -1,0 +1,17 @@
+
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# adeiger specific commands
+errlogInit(20000)
+
+{% if ioc.environment.STREAMIP is defined %}
+eigerDetectorConfig("$(PORT)", "$(EIGER_IP)", "$(STREAMIP)", 0, 0)
+{% else %}
+eigerDetectorConfig("$(PORT)", "$(EIGER_IP)", 0, 0)
+{% endif %}
+dbLoadRecords("$(ADEIGER)/db/eiger{{ ioc.eiger_version }}.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
+
+
+# Debug
+#asynSetTraceMask("$(PORT)", 0, 0x11)

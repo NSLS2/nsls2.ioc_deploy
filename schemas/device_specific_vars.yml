@@ -1,0 +1,29 @@
+---
+deploy_ioc_post_deploy_step: str(required=False)
+deploy_ioc_template_root_path: str(required=False)
+deploy_ioc_required_module: module_name(required=False)
+deploy_ioc_executable: str(required=False)
+deploy_ioc_standard_st_cmd: bool(required=False)
+deploy_ioc_use_common: bool(required=False)
+deploy_ioc_use_ad_common: bool(required=False)
+deploy_ioc_load_as_substitutions: bool(required=False)
+deploy_ioc_req_file_list: list(include("req_file"), required=False)
+deploy_ioc_as_dir_name: str(required=False)
+deploy_ioc_make_autosave_files: bool(required=False)
+deploy_ioc_device_specific_env:
+  map(any(str(), int(), num()), key=str(), required=False)
+deploy_ioc_required_system_packages: list(str(), required=False)
+deploy_ioc_dbpf_list: list(include("dbpf"), required=False)
+deploy_ioc_os_env_exports:
+  map(any(str(), int(), num()), key=str(), required=False)
+
+---
+
+req_file:
+  name: str()
+  macros: str()
+
+dbpf:
+  pv: str()
+  value: any(int(), num(), str())
+  sleep: num(required=False)

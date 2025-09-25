@@ -1,11 +1,12 @@
 ---
 
-- name: Ensure macro value doesn't also contain macro
-  ansible.builtin.fail:
-    msg: >-
-      "Environment variable {{ deploy_ioc_macro_in_var }} uses a macro!"
-      "Make sure environment vars are in a valid order!"
-  when: deploy_ioc_merged_env[deploy_ioc_macro_in_var] | regex_search('\\$\\(')
+# This is no longer needed, since we do the replacement recursively.
+# - name: Ensure macro value doesn't also contain macro
+#  ansible.builtin.fail:
+#    msg: >-
+#      "Environment variable {{ deploy_ioc_macro_in_var }} uses a macro!"
+#      "Make sure environment vars are in a valid order!"
+#  when: deploy_ioc_merged_env[deploy_ioc_macro_in_var] | regex_search('\\$\\(')
 
 - name: Full macro regex
   ansible.builtin.set_fact:

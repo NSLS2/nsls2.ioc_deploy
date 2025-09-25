@@ -1,0 +1,18 @@
+---
+apcpdu-01:
+  type: apcpdu
+
+  devices:
+    - TYPE: AP7900
+      SYS: "XF:31ID1-ES"
+      DEV: "{PDU:1}"
+      HOST: "lab3-pdu1.nsls2.bnl.local"
+    - TYPE: AP7900
+      SYS: "XF:31ID1-ES"
+      DEV: "{PDU:2}"
+      HOST: "10.69.58.151"
+  environment:
+    ENGINEER: C. Engineer
+
+    # PREFIX used by any common PVs.
+    PREFIX: XF:31ID1-ES{APCPDU-IOC:01}

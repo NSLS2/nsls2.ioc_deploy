@@ -1,0 +1,134 @@
+# Thermocouple Template
+# Interfaces to "T" arrays in PLC, i.e. T_Sts, T_LoLo, T_Low, and T_I
+# Thermocouples are processed by thermocouple handlers (THRM_HNDL)
+# This template can be used for other temperature sensors which share this pattern, such as RTDs
+
+#
+# Thermocouple Readbacks/Statuses
+#
+
+record(ai, "$(Sys){$(Dev)}T-I") {
+    field(DESC, "Temperature reading")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) T_I_$(Seq)[$(ArrNum)] S 1")
+    field(LINR, "SLOPE")
+    field(ESLO, "$(ESLO=0.10)")
+    field(EGU,  "$(EGU=C)")
+    field(PREC, "$(PREC=1)")
+    field(EOFF, "$(EOFF=0)")
+    field(AOFF, "$(AOFF=0)")
+    field(LOW,  "$(LOW=)")
+    field(LOLO, "$(LOLO=)")
+    field(LSV,  "$(LSV=)")
+    field(LLSV, "$(LLSV=)")
+    field(HIGH, "$(HIGH=)")
+    field(HIHI, "$(HIHI=)")
+    field(HSV,  "$(HSV=MINOR)")
+    field(HHSV, "$(HHSV=MAJOR)")
+    field(HYST, "$(HYST=)")
+}
+
+record(ai, "$(Sys){$(Dev)}T_High-RB") {
+    field(DESC, "Temperature warning level RB")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) T_High_$(Seq)[$(ArrNum)] S 1")
+    field(LINR, "SLOPE")
+    field(ESLO, "$(ESLO=0.10)")
+    field(EGU,  "$(EGU=C)")
+    field(PREC, "$(PREC=1)")
+    field(EOFF, "$(EOFF=0)")
+    field(AOFF, "$(AOFF=0)")
+    field(FLNK, "$(Sys){$(Dev)}T_High-ao_")
+}
+
+record(ai, "$(Sys){$(Dev)}T_HiHi-RB") {
+    field(DESC, "Temperature alarm level RB")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) T_HiHi_$(Seq)[$(ArrNum)] S 1")
+    field(LINR, "SLOPE")
+    field(ESLO, "$(ESLO=0.10)")
+    field(EGU,  "$(EGU=C)")
+    field(PREC, "$(PREC=1)")
+    field(EOFF, "$(EOFF=0)")
+    field(AOFF, "$(AOFF=0)")
+    field(FLNK, "$(Sys){$(Dev)}T_HiHi-ao_")
+}
+
+record(bi, "$(Sys){$(Dev)}T-Sts") {
+    field(DESC, "Temperature PLC-alarm status")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) T_Sts_$(Seq)[$(ArrNum)] S 1")
+    field(ZNAM, "Alarm")
+    field(ONAM, "OK")
+    field(ZSV,  "MAJOR")
+}
+
+record(bi, "$(Sys){$(Dev)}T-First") {
+    field(DESC, "Sensor tripped first in last IL event")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) T_Lock_$(Seq)[$(ArrNum)] S 1")
+    field(ZNAM, "None")
+    field(ONAM, "First")
+    field(OSV,  "MINOR")
+}
+
+#
+# Thermocouple "Private" Records to update alarm fields
+#
+
+record(ao, "$(Sys){$(Dev)}T_High-ao_") {
+    field(DESC, "Update T-I warning-level field")
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+    field(OMSL, "closed_loop")
+    field(DOL,  "$(Sys){$(Dev)}T_High-RB NPP")
+    field(OUT,  "$(Sys){$(Dev)}T-I.HIGH NPP")
+}
+
+record(ao, "$(Sys){$(Dev)}T_HiHi-ao_") {
+    field(DESC, "Update T-I alarm-level field")
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+    field(OMSL, "closed_loop")
+    field(DOL,  "$(Sys){$(Dev)}T_HiHi-RB NPP")
+    field(OUT,  "$(Sys){$(Dev)}T-I.HIHI NPP")
+}
+
+#
+# Thermocouple Controls/Setpoints
+#
+
+record(ao, "$(Sys){$(Dev)}T_High-SP") {
+    field(DESC, "Temperature warning level SP")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) T_High_$(Seq)[$(ArrNum)] S 1")
+    field(LINR, "SLOPE")
+    field(ESLO, "$(ESLO=0.10)")
+    field(EGU,  "$(EGU=C)")
+    field(PREC, "$(PREC=1)")
+    field(EOFF, "$(EOFF=0)")
+    field(AOFF, "$(AOFF=0)")
+    field(ASG,  "EPSEXPERT")
+    info(autosaveFields, "VAL")
+}
+
+record(ao, "$(Sys){$(Dev)}T_HiHi-SP") {
+    field(DESC, "Temperature alarm level SP")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) T_HiHi_$(Seq)[$(ArrNum)] S 1")
+    field(LINR, "SLOPE")
+    field(ESLO, "$(ESLO=0.10)")
+    field(EGU,  "$(EGU=C)")
+    field(PREC, "$(PREC=1)")
+    field(EOFF, "$(EOFF=0)")
+    field(AOFF, "$(AOFF=0)")
+    field(ASG,  "EPSEXPERT")
+    info(autosaveFields, "VAL")
+}

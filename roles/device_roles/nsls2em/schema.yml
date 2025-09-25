@@ -1,0 +1,28 @@
+---
+type: enum("nsls2em")
+environment:
+  ENGINEER: str()
+  SYS: str()
+  DEV: str()
+  PREFIX: str()
+  DEVICE_SN: str()
+  DEVICE_IP: any(ip(), hostname())
+
+  PORT: str(required=False)
+  QSIZE: int(required=False)
+  RING_SIZE: int(required=False)
+  TSPOINTS: int(required=False)
+  EPICS_CA_MAX_ARRAY_BYTES: int(required=False)
+
+  # Settings for PID (if used), PID_PERMIT1 -> A, PID_PERMIT2 -> B
+  # ... PID_PERMIT6 -> F
+  # PID_PERMITx typically are PV names with logical values
+  # FB_ON_CALC specifies logical expression evaluated to enable or disable
+  # the PID loop (do not modify the part of expression with J, K and L)
+  FB_ON_CALC: str(required=False)
+  PID_PERMIT1: str(required=False)
+  PID_PERMIT2: str(required=False)
+  PID_PERMIT3: str(required=False)
+  PID_PERMIT4: str(required=False)
+  PID_PERMIT5: str(required=False)
+  PID_PERMIT6: str(required=False)

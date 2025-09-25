@@ -1,0 +1,38 @@
+---
+# Tasks for adpicam role
+- name: Add UDEV rules for PICam
+  ansible.builtin.copy:
+    src: "files/80-picam.rules"
+    dest: "/etc/udev/rules.d/80-picam.rules"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+- name: Change mode of /opt/PrincetonInstruments (PICam SDK)
+  ansible.builtin.file:
+    path: /opt/PrincetonInstruments
+    mode: '0755'
+    recurse: true
+
+- name: Change mode of /opt/pleora (PICam SDK)
+  ansible.builtin.file:
+    path: /opt/pleora
+    mode: '0755'
+    recurse: true
+
+
+- name: Copy base.cmd
+  ansible.builtin.template:
+    src: "templates/base.cmd.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Copy autosave req file
+  ansible.builtin.template:
+    src: "templates/auto_settings.req.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/req/auto_settings.req"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"

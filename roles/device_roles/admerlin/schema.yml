@@ -1,0 +1,27 @@
+---
+
+type: enum("admerlin")
+
+# Configure local port if Merlin is connected directly to the server.
+# Comment out otherwise.
+admerlin_local_intf_mac: str(required=False)
+admerlin_local_intf_ip: ip(required=False)
+
+environment:
+  ENGINEER: str()
+  PREFIX: str()
+  MERLIN_IP: any(ip(), hostname())
+  # The IP port for the command socket
+  COMMAND_IPPORT: int(min=1, max=65535, default=6341)
+  # The IP port for the data socket
+  DATA_IPPORT: int(min=1, max=65535, default=6342)
+  # The model type for this Medipix detector
+  # 0=Merlin, 1=MedipixXBPM, 2=UomXBPM, 3=MerlinQuad
+  MODEL: int(min=0, max=3, default=3)
+  XSIZE: int(min=1)
+  YSIZE: int(min=1)
+  NELEM: int(min=1)
+  QSIZE: int(min=1, default=2048)
+  # The maximum number of frames buffered in the NDPluginCircularBuff plugin
+  CBUFFS: int()
+  NELEMENTS: int()

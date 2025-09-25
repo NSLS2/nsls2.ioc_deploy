@@ -1,0 +1,9 @@
+---
+
+ether_ip_b27350b:
+  name: ether_ip
+  version: b27350b
+  url: https://github.com/epics-modules/ether_ip
+  include_base_ad_config: false
+  executable: ether_ipApp
+  module_deps: []

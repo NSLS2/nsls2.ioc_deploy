@@ -1,0 +1,6 @@
+---
+
+deploy_ioc_use_ad_common: true
+deploy_ioc_required_module: adscanpb_f54e2c1
+deploy_ioc_template_root_path:
+  "{{ deploy_ioc_required_module_path }}/iocs/scanPBIOC"

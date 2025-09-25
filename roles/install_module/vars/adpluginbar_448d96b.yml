@@ -7,3 +7,5 @@ adpluginbar_448d96b:
   include_base_ad_config: true
   module_deps:
     - adcore_60080dc
+  pkg_deps:
+    - zbar-devel

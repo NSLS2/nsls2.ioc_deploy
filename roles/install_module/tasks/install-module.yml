@@ -11,8 +11,8 @@
 - name: Create modules directory if it doesn't exist
   ansible.builtin.file:
     path: "{{ install_module_install_dir }}"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     state: "directory"
     mode: "0775"
 
@@ -31,8 +31,8 @@
     - name: Stash any local changes if module already cloned
       ansible.builtin.command:
         "git -C {{ install_module_dir }} stash" # noqa command-instead-of-module
-      register: stash_result
-      changed_when: stash_result.rc == 0
+      register: install_module_stash_result
+      changed_when: install_module_stash_result.rc == 0
       when: install_module_cloned.stat.exists
 
     - name: Clone module repository and checkout the correct version
@@ -56,8 +56,8 @@
       ansible.builtin.copy:
         src: "files/{{ item }}"
         dest: "{{ install_module_dir }}/iocBoot/{{ item }}"
-        owner: "{{ host_info_softioc_user }}"
-        group: "{{ host_info_softioc_group }}"
+        owner: "{{ host_config.softioc_user }}"
+        group: "{{ host_config.softioc_group }}"
         mode: "0664"
       when: install_module_name.startswith("adcore")
       with_items:
@@ -125,15 +125,17 @@
     state: present
 
 - name: Compile the module
-  ansible.builtin.command: "{{ install_module_compilation_command }}"
-  register: install_module_compile_result
-  args:
+  ansible.builtin.shell:
+    # yamllint disable rule:line-length
+    cmd: "{{ install_module_compilation_command }}" # noqa: command-instead-of-shell
+    # yamllint enable rule:line-length
     chdir: "{{ install_module_dir }}"
+  register: install_module_compile_result
   changed_when: install_module_compile_result.rc == 0
 
 - name: Ensure proper ownership of module files
   ansible.builtin.command:
-    "chown -R {{ host_info_softioc_user }}:{{ host_info_softioc_group }} {{ install_module_dir }}" # yamllint disable-line rule:line-length
+    "chown -R {{ host_config.softioc_user }}:{{ host_config.softioc_group }} {{ install_module_dir }}" # yamllint disable-line rule:line-length
   register: install_module_ownership_result
   changed_when: install_module_ownership_result.rc == 0
 
@@ -152,3 +154,9 @@
 - name: Set path of installed leaf module
   ansible.builtin.set_fact:
     install_module_leaf_module_path: "{{ install_module_dir }}"
+
+- name: If specified, set installed leaf module executable
+  ansible.builtin.set_fact:
+    install_module_leaf_executable: >
+      {{ install_module_config.executable }}
+  when: install_module_config.executable is defined

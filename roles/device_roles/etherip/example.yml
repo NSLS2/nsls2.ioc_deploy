@@ -1,0 +1,9 @@
+---
+
+etherip-01:
+  type: etherip
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{ETHERIP:01}
+    PLC_IP: xf31id1-plc1.nsls2.bnl.local
+    PLC: "XF31ID1_TST_EPS"

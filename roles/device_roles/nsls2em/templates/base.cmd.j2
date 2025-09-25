@@ -1,0 +1,67 @@
+
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# nsls2em specific commands
+drvAsynIPPortConfigure("IP_$(PORT)", "$(DEVICE_IP):17", 0, 0, 0)
+asynOctetSetInputEos("IP_$(PORT)",  0, "\r\n")
+asynOctetSetOutputEos("IP_$(PORT)", 0, "\r")
+# Set both TRACE_IO_ESCAPE (for ASCII command/response) and TRACE_IO_HEX (for binary data)
+asynSetTraceIOMask("IP_$(PORT)", 0, 6)
+asynSetTraceIOTruncateSize("IP_$(PORT)", 0, 4000)
+# Load asynRecord record
+dbLoadRecords("$(ASYN)/db/asynRecord.db","P=$(PREFIX),R=asyn1,PORT=IP_$(PORT),ADDR=0,OMAX=256,IMAX=256")
+asynSetTraceIOMask("IP_$(PORT)",0,2)
+
+###################################################
+## /epics/utils/rhel8-epics-config/BUILD/support/areaDetector/ADCore/ADApp/Db/NDArrayBase.template
+##
+drvNSLS2_VEMConfigure("$(PORT)", "IP_$(PORT)", $(RING_SIZE))
+dbLoadRecords("$(ADCORE)/db/NDArrayBase.template", "P=$(SYS), R="{$(DEV)}", PORT=$(PORT), ADDR=0, TIMEOUT=1")
+dbLoadRecords("$(NSLS2EM)/db/quadEM_nsls2em.template",  "P=$(SYS), R="{$(DEV)}", PORT=$(PORT), ADDR=0, TIMEOUT=1")
+dbLoadRecords("$(NSLS2EM)/db/nsls2em_RevD.template", "P=$(SYS), R="{$(DEV)}", PORT=$(PORT), ADDR=0, TIMEOUT=1")
+
+### Plugins - use a different set of common plugins than the ADCore default
+< $(NSLS2EM)/iocBoot/iocnsls2em/commonPlugins.cmd
+###################################################
+
+######################################################
+## Load pscdrv record instances
+######################################################
+dbLoadRecords("$(NSLS2EM)/db/nsls2em_pscdrv.template", "PriSys=$(SYS),PSC=$(DEV)")
+
+#Port 7: Command and Status
+cd $(NSLS2EM)
+dbLoadRecords("$(NSLS2EM)/db/Connection.db", "PriSys=$(SYS),PSC=$(DEV)")
+dbLoadRecords("$(NSLS2EM)/db/Misc.db", "PriSys=$(SYS),PSC=$(DEV)")
+dbLoadRecords("$(NSLS2EM)/db/DAC_Setpoint.db", "PriSys=$(SYS),PSC=$(DEV)")
+dbLoadTemplate ("$(NSLS2EM)/db/CommandReg.substitutions", "PriSys=$(SYS),PSC=$(DEV)")
+dbLoadTemplate ("$(NSLS2EM)/db/StatusFloatReg.substitutions", "PriSys=$(SYS),PSC=$(DEV)")
+dbLoadTemplate ("$(NSLS2EM)/db/StatusReg.substitutions", "PriSys=$(SYS),PSC=$(DEV)")
+dbLoadTemplate ("$(NSLS2EM)/db/RangeGainOffset.substitutions", "PriSys=$(SYS),PSC=$(DEV)")
+cd $(TOP)/iocBoot
+
+# EPID records for X and Y axes
+epicsEnvSet("PID_X", "PID_X")
+epicsEnvSet("PID_Y", "PID_Y")
+
+epicsEnvSet("FB_ON_CALC",$(FB_ON_CALC="A&&B&&C&&D&&E&&F&&J&&K&&L"))
+epicsEnvSet("PP1", $(PID_PERMIT1=1))
+epicsEnvSet("PP2", $(PID_PERMIT2=1))
+epicsEnvSet("PP3", $(PID_PERMIT3=1))
+epicsEnvSet("PP4", $(PID_PERMIT4=1))
+epicsEnvSet("PP5", $(PID_PERMIT5=1))
+epicsEnvSet("PP6", $(PID_PERMIT6=1))
+dbLoadRecords("$(NSLS2EM)/db/fb_epid.db", "Sys=$(SYS),Dev={$(DEV)}$(PID_X):,IN=$(SYS){$(DEV)}Reg49-I,OUT=,MODE=PID,CALC=$(FB_ON_CALC),PERMIT1=$(PP1),PERMIT2=$(PP2),PERMIT3=$(PP3),PERMIT4=$(PP4),PERMIT5=$(PP5),PERMIT6=$(PP6),PREC=0,EGU=nm,IEGU=nm,OEGU=nm,MTR_OFF=")
+dbLoadRecords("$(NSLS2EM)/db/fb_epid.db", "Sys=$(SYS),Dev={$(DEV)}$(PID_Y):,IN=$(SYS){$(DEV)}Reg50-I,OUT=,MODE=PID,CALC=$(FB_ON_CALC),PERMIT1=$(PP1),PERMIT2=$(PP2),PERMIT3=$(PP3),PERMIT4=$(PP4),PERMIT5=$(PP5),PERMIT6=$(PP6),PREC=0,EGU=nm,IEGU=nm,OEGU=nm,MTR_OFF=")
+
+# pscDrv port
+epicsThreadSleep(1)
+var(PSCDebug, 1)
+createPSCUDP("CmdPort_$(DEV)", $(DEVICE_IP), 1234, 1234)
+
+# DMA waveform
+createPSC("wfm_rx_$(DEV)",  $(DEVICE_IP), 3000, 20)
+createPSC("RxPort_$(DEV)", "$(DEVICE_IP)", 7,10)
+
+epicsThreadSleep(1)

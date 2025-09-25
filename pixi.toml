@@ -1,0 +1,62 @@
+[project]
+authors = ["Jakub Wlodek"]
+channels = ["conda-forge"]
+description = "Collection of ansible roles to perform centralized IOC deployments"
+name = "nsls2.ioc_deploy"
+platforms = ["linux-64", "osx-64", "osx-arm64"]
+version = "1.2.0"
+
+[environments]
+default = { solve-group = "default" }
+
+[tasks]
+make-role = "make role"
+make-module = "make module"
+update-module = "make update module"
+delete-role = "make delete role"
+delete-module = "make delete module"
+report = "make report"
+lint-changes = "pre-commit"
+lint = "pre-commit run --all-files"
+ruff-fix = "ruff check --fix"
+tests = "pytest"
+
+[build-dependencies]
+make = "*"
+
+[dependencies]
+requests = "*"
+tabulate = "*"
+questionary = "*"
+yamale = "*"
+pre-commit = "*"
+ruff = "*"
+import-linter = "*"
+pip = "*"
+pytest = "*"
+pyyaml = "*"
+yamllint = "*"
+
+ansible-compat = "==24.10.0"
+ansible-core = "==2.15.5"
+ansible-lint = "==6.22.2"
+
+[tasks.reinstall-collection]
+args = [
+    { arg = "path", default = "$PWD/../ansible-roles-nsls2" }, # Path into which to install collection
+]
+cmd = "echo Installing collection to {{ path }} && ansible-galaxy collection install $PWD -p {{ path }}/collections --force"
+
+[tasks.deploy-example]
+args = [
+    "type",
+    "limit"
+]
+cmd = "scripts/deploy_example.py {{ type }} {{ limit }}"
+
+[tasks.install-module]
+args = [
+    "module",
+    "limit"
+]
+cmd = "scripts/install_module.py {{ module }} {{ limit }}"

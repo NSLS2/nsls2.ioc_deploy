@@ -1,0 +1,56 @@
+---
+
+# Tasks for admerlin role
+
+- name: Install common startup files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+  with_fileglob: "files/*.cmd"
+
+- name: Copy base.cmd
+  ansible.builtin.template:
+    src: "templates/base.cmd.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Configure local interface on target server if specified
+  when: >-
+    ioc.admerlin_local_intf_mac is defined
+      and ioc.admerlin_local_intf_ip is defined
+  block:
+    - name: Prepare parameters
+      ansible.builtin.set_fact:
+        _local_mac: "{{ ioc.admerlin_local_intf_mac }}"
+        _local_ip: "{{ ioc.admerlin_local_intf_ip }}"
+        _local_netmask: "255.255.255.192"
+
+    - name: Check MAC does collision with SCI/CAM/INST interfaces
+      ansible.builtin.include_tasks: "validate_local_intf.yml"
+
+    - name: Print selected parameters
+      ansible.builtin.debug:
+        msg:
+          MAC: "{{ _local_mac }}"
+          IP: "{{ _local_ip }}"
+          NETMASK: "{{ _local_netmask }}"
+          MTU: "{{ _local_intf_mtu }}"
+          INTERFACE: "{{ _local_intf }}"
+
+    - name: Add config file for processing scripts
+      ansible.builtin.template:
+        src: templates/ifcfg-interface.sh.j2
+        dest: "/etc/sysconfig/network-scripts/ifcfg-{{ _local_intf }}"
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Restart NetworkManager
+      ansible.builtin.service:
+        name: NetworkManager
+        state: restarted

@@ -1,0 +1,13 @@
+---
+quadem_f5ab1e9:
+  name: quadEM
+  version: f5ab1e9
+  url: https://github.com/epics-modules/quadEM
+  include_base_ad_config: true
+  # The include paths are set so that it picks outdated version from
+  # /usr/lib/epics/include and there is no way to override it.
+  # The workaround is to copy the correct version to sydorSrc directory.
+  compilation_command:
+    "cp quadEMApp/src/drvQuadEM.h quadEMApp/sydorSrc && make -sj"
+  module_deps:
+    - adcore_60080dc

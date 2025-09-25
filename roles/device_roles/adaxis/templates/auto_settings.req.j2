@@ -1,0 +1,19 @@
+file "ADAxis_settings.req", P=$(P),  R=cam1:
+file "commonPlugin_settings.req", P=$(P)
+
+# For the second process plugin
+file "NDProcess_settings.req",      P=$(P),  R=Proc2:
+file "NDFileTIFF_settings.req",     P=$(P),  R=Proc2:TIFF:
+
+# For the second transform plugin
+file "NDTransform_settings.req",    P=$(P),  R=Trans2:
+
+{% if deploy_ioc_merged_env.FFMPEGSERVER is defined and ioc.environment.FFMSTREAM_PORT is defined %}
+file "ffmpegServer_settings.req",         P=$(P),  R=ffmstream1:
+{% endif %}
+{% if deploy_ioc_merged_env.ADCOMPVISION is defined %}
+file "NDCV_settings.req",              P=$(P),  R=CV1:
+{% endif %}
+{% if deploy_ioc_merged_env.ADPLUGINBAR is defined %}
+file "NDPluginBar_settings.req",       P=$(P),  R=Bar1:
+{% endif %}

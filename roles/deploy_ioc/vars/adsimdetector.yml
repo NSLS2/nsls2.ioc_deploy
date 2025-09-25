@@ -1,7 +1,5 @@
 ---
 
-deploy_ioc_executable: "simDetectorApp"
-deploy_ioc_as_dir_name: "autosave"
 deploy_ioc_template_root_path:
   "{{ deploy_ioc_required_module_path }}/iocs/simDetectorIOC"
 deploy_ioc_required_module: adsimdetector_4b236f4

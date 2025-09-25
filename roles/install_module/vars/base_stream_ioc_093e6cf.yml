@@ -1,0 +1,6 @@
+---
+base_stream_ioc_093e6cf:
+  name: BaseStreamIOC
+  url: https://github.com/NSLS2/BaseStreamDevice
+  version: 093e6cf
+  executable: "baseStreamApp"

@@ -1,5 +1,6 @@
 ---
 
+deploy_ioc_common_dir: "/epics/common"
 deploy_ioc_post_deploy_step: "None"
 deploy_ioc_template_root_path: "/usr/lib/epics"
 deploy_ioc_iocs_directory: "/epics/iocs"
@@ -7,13 +8,13 @@ deploy_ioc_ioc_directory:
   "{{ deploy_ioc_iocs_directory }}/{{ deploy_ioc_ioc_name }}"
 deploy_ioc_executable: "softIoc"
 deploy_ioc_standard_st_cmd: true
-deploy_ioc_standard_post_init: true
 deploy_ioc_use_common: true
 deploy_ioc_use_ad_common: false
 deploy_ioc_load_as_substitutions: true
 deploy_ioc_nextport: 4000
+deploy_ioc_os_env_exports: {}
 deploy_ioc_req_file_list: []
-deploy_ioc_dbpf_list: {}
+deploy_ioc_dbpf_list: []
 
 # Autosave directory configuration
 deploy_ioc_as_dir_name: "as"
@@ -31,7 +32,7 @@ deploy_ioc_default_env:
   IOC_DIR: "{{ deploy_ioc_iocs_directory }}"
   TOP: "$(IOC_DIR)/{{ deploy_ioc_ioc_name }}"
   TEMPLATE_TOP: "{{ deploy_ioc_template_root_path }}"
-  HOSTNAME: "{{ host_info_hostname }}"
+  HOSTNAME: "{{ inventory_hostname.split('.')[0] }}"
   IOCNAME: "{{ deploy_ioc_ioc_name }}"
 
   # Same default EPICS locations for common modules as install_module

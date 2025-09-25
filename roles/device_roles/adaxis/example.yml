@@ -1,0 +1,14 @@
+---
+adaxis-01:
+  type: adaxis
+  environment:
+    ENGINEER: T. Hopkins
+    PREFIX: XF:31ID1-ES{ADAXIS:01}
+    PORT: "AXIS1"  # Port name for AD plugin
+    QSIZE: 20  # Queue size for the AD plugins
+    XSIZE: 4096  # X size of the image
+    YSIZE: 4096  # Y size of the image
+    NCHANS: 2048 # Maximum number of time
+                   # series points in the NDPluginStats plugin
+    CBUFFS: 500 # Maximum number of frames buffered in the
+                  # NDPluginCircularBuff plugin

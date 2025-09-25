@@ -1,0 +1,21 @@
+---
+
+pmac_f811ee1:
+  name: "pmac"
+  url: "https://github.com/dls-controls/pmac"
+  version: "f811ee1"
+  pkg_deps:
+    - libssh2-devel
+  config:
+    BUILD_IOCS: "NO"
+    USE_GRAPHICSMAGICK: "NO"
+    WITH_BOOST: "NO"
+    SSH: "/usr"
+    SSH_LIB: "$(SSH)/lib64"
+    SSH_INCLUDE: "$(SSH)/include"
+  # See https://github.com/DiamondLightSource/pmac/pull/131
+  # on why -j flag must be avoided for now.
+  compilation_command: "make"
+  # We need to overwrite these files because the repo contains bad defaults
+  overwrite_release: true
+  overwrite_config_site: true

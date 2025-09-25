@@ -1,9 +1,0 @@
----
-
-adaravis_e5b1ab4:
-  name: ADAravis
-  url: https://github.com/areaDetector/ADAravis
-  include_base_ad_config: true
-  version: e5b1ab4
-  module_deps:
-    - adgenicam_5d08a11

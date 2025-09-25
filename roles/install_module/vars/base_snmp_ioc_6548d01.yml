@@ -1,0 +1,11 @@
+---
+
+base_snmp_ioc_6548d01:
+  name: BaseSNMPIOC
+  version: 6548d01
+  url: https://github.com/NSLS2/snmp-bnl
+  include_base_ad_config: false
+  executable: snmp
+  module_deps: []
+  pkg_deps:
+    - net-snmp-devel

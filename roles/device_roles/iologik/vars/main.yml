@@ -1,0 +1,95 @@
+---
+
+# Dictionary that maps iologik models to the number of each type of connection
+# This is used to generate EPICS database files for each model dynamically.
+device_roles_iologik_connections:
+  E1210:
+    DI: 16
+    DO: 0
+    DIO: 0
+    AI: 0
+    AO: 0
+    Relay: 0
+    TC: 0
+    RTD: 0
+  E1211:
+    DI: 0
+    DO: 16
+    DIO: 0
+    AI: 0
+    AO: 0
+    Relay: 0
+    TC: 0
+    RTD: 0
+  E1212:
+    DI: 8
+    DO: 0
+    DIO: 8
+    AI: 0
+    AO: 0
+    Relay: 0
+    TC: 0
+    RTD: 0
+  E1213:
+    DI: 8
+    DO: 4
+    DIO: 4
+    AI: 0
+    AO: 0
+    Relay: 0
+    TC: 0
+    RTD: 0
+  E1214:
+    DI: 6
+    DO: 0
+    DIO: 0
+    AI: 0
+    AO: 0
+    Relay: 6
+    TC: 0
+    RTD: 0
+  E1240:
+    DI: 0
+    DO: 0
+    DIO: 0
+    AI: 8
+    AO: 0
+    Relay: 0
+    TC: 0
+    RTD: 0
+  E1241:
+    DI: 0
+    DO: 0
+    DIO: 0
+    AI: 0
+    AO: 4
+    Relay: 0
+    TC: 0
+    RTD: 0
+  E1242:
+    DI: 4
+    DO: 0
+    DIO: 4
+    AI: 4
+    AO: 0
+    Relay: 0
+    TC: 0
+    RTD: 0
+  E1260:
+    DI: 0
+    DO: 0
+    DIO: 0
+    AI: 0
+    AO: 0
+    Relay: 0
+    TC: 0
+    RTD: 6
+  E1262:
+    DI: 0
+    DO: 0
+    DIO: 0
+    AI: 0
+    AO: 0
+    Relay: 0
+    TC: 8
+    RTD: 0

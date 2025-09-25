@@ -1,0 +1,65 @@
+---
+
+- name: Set SCIENCE interface facts
+  ansible.builtin.set_fact:
+    sci_interface: "{{ ansible_default_ipv4.interface }}"
+    sci_address: "{{ ansible_default_ipv4.address }}"
+    _local_intf_mtu: >-
+      {{ ansible_facts[ansible_default_ipv4.interface]['mtu'] }}
+    sci_mac: >-
+      {{ ansible_facts[ansible_default_ipv4.interface]['macaddress'] }}
+
+
+- name: Select which interface (device) to configure
+  block:
+    - name: Find interface based on MAC address
+      ansible.builtin.set_fact:
+        _local_intf: "{{ item }}"
+      with_items: "{{ ansible_facts['interfaces'] }}"
+      when: >
+        "macaddress" in ansible_facts[item] and
+        (ansible_facts[item]['macaddress'] | lower)==(_local_mac | lower)
+
+    - name: Check if the interface with the MAC address was found
+      ansible.builtin.assert:
+        that:
+          - _local_intf is defined
+        msg:
+          "The interface with MAC address {{ _local_mac }} was not found"
+
+    - name: Verify that we are not attempting to reconfigure the SCI interface
+      ansible.builtin.assert:
+        that:
+          - (_local_mac | lower)!=(sci_mac | lower)
+        msg: MAC {{ _local_mac }} belongs to the SCIENCE interface
+
+    - name: Verify that we are not attempting to reconfigure the CAM interface
+      ansible.builtin.assert:
+        that:
+          - (network_macaddress_cam is undefined) or (_local_mac | lower)!=
+            (network_macaddress_cam | lower)
+        msg: MAC {{ _local_mac }} belongs to the CAM interface
+
+    - name: Verify that we are not attempting to reconfigure the INST interface
+      ansible.builtin.assert:
+        that:
+          - (network_macaddress_inst is undefined) or ((_local_mac | lower)!=
+            (network_macaddress_inst | lower))
+        msg: MAC {{ _local_mac }} belongs to the INST interface
+
+    - name: Print the selected interface
+      ansible.builtin.debug:
+        var: _local_intf
+
+- name: Adjust MTU for 10G network unless MTU was explicitly specified
+  block:
+    - name: Get Link Speed for the selected interface
+      ansible.builtin.command:
+        "cat /sys/class/net/{{ _local_intf }}/speed"
+      register: link_speed
+      changed_when: true
+
+    - name: Adjust MTU if necessary
+      ansible.builtin.set_fact:
+        _local_intf_mtu: 9000
+      when: link_speed.stdout|int > 1000

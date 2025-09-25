@@ -1,0 +1,70 @@
+# Database program files
+
+record(ao, "$(SYS)$(DEV)PROGNUM")
+{
+    field(DRVH, "10")
+    field(DRVL, "1")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(modbus_prefix)_MASTER_TX,5193,1000)MODBUS_DATA")
+    field(FLNK, "$(SYS)$(DEV)PROGNUM:RBV")
+    field(PREC, "0")
+    field(SDIS, "$(SYS)$(DEV)DISABLE")
+}
+
+record(ai, "$(SYS)$(DEV)PROGNUM:RBV")
+{
+    field(DTYP, "asynInt32")
+    field(INP,  "@asyn($(modbus_prefix)_MASTER_RX,5193,1000)MODBUS_DATA")
+    field(PREC, "0")
+#    field(SCAN, "1 second")
+    field(SDIS, "$(SYS)$(DEV)DISABLE")
+}
+
+record(bo, "$(SYS)$(DEV)PROGRESET")
+{
+    field(DTYP, "asynUInt32Digital")
+    field(ONAM, "Run Reset")
+    field(OUT,  "@asynMask($(modbus_prefix)_MASTER_TX,5229,1,1000)MODBUS_DATA")
+    field(SDIS, "$(SYS)$(DEV)DISABLE")
+    field(ZNAM, "Stopped")
+}
+
+record(bo, "$(SYS)$(DEV)PROGRUN")
+{
+    field(DTYP, "asynUInt32Digital")
+    field(ONAM, "Run")
+    field(OUT,  "@asynMask($(modbus_prefix)_MASTER_TX,5226,1,1000)MODBUS_DATA")
+    field(FLNK, "$(SYS)$(DEV)PROGRUN:RBV")
+    field(SDIS, "$(SYS)$(DEV)DISABLE")
+    field(ZNAM, "Stop")
+}
+
+record(bi, "$(SYS)$(DEV)PROGRUN:RBV")
+{
+    field(DESC, "Running/Not Running")
+    field(DTYP, "asynUInt32Digital")
+    field(INP,  "@asynMask($(modbus_prefix)_MASTER_RX,5226,1,1000)MODBUS_DATA")
+    field(ONAM, "Running")
+#    field(SCAN, "1 second")
+    field(SDIS, "$(SYS)$(DEV)DISABLE")
+    field(ZNAM, "Stopped")
+}
+
+record(mbbi, "$(SYS)$(DEV)PROGSTAT:RBV")
+{
+    field(DTYP, "asynInt32")
+    field(FRST, "End")
+    field(FRVL, "16")
+    field(INP,  "@asynMask($(modbus_prefix)_MASTER_RX,5195,0x1f,1000)MODBUS_DATA")
+    field(ONST, "Running")
+    field(ONVL, "2")
+    #field(SCAN, "1 second")
+    field(SCAN, "10 second")
+    field(SDIS, "$(SYS)$(DEV)DISABLE")
+    field(THST, "Holdback")
+    field(THVL, "8")
+    field(TWST, "Hold")
+    field(TWVL, "4")
+    field(ZRST, "Not Running")
+    field(ZRVL, "1")
+}

@@ -1,0 +1,18 @@
+
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+
+# drvAsynIPPortConfigure("portName","hostInfo",priority,noAutoConnect, noProcessEos)
+drvAsynIPPortConfigure("$(PORT)", "$(IP_PORT)", 100, 0, 1)
+
+# modbusInterposeConfig(portName, linkType, timeoutMsec, writeDelayMsec)
+modbusInterposeConfig("$(PORT)", 0, 2000, 0)
+
+# drvModbusAsynConfigure(portName, tcpPortName, slaveAddress, modbusFunction, modbusStartAddress, modbusLength,dataType,  pollMsec,  plcType)
+drvModbusAsynConfigure("$(RX_PORT)", "$(PORT)", 1, 3, -1, 1, 0, 1000, "" )
+drvModbusAsynConfigure("$(TX_PORT)", "$(PORT)", 1, 6, -1, 1, 0, 0, "" )
+
+asynSetTraceMask("$(PORT)",-1,0x09)
+asynSetTraceIOMask("$(PORT)",-1,0x4)
+asynSetOption("$(PORT)", 0, "disconnectOnReadTimeout", "Y")

@@ -1,0 +1,38 @@
+---
+eurotherm3504:
+  type: "eurotherm3k"
+  environment:
+    ENGINEER: "C. Engineer"
+    DEVICE_IP: "10.69.58.150"
+    PORT: "E3K"
+    SYS: "XF:31ID1-ES"
+    DEV: "{E3K:01}"
+    MODBUS_PREFIX: "EURTHM3K"
+
+  substitutions:
+    Eurotherm3K:
+      - filepath: "$(TOP)/db/eurothermDis.template"
+        pattern: ["SYS", "DEV"]
+        instances:
+          - [$(SYS), $(DEV)]
+      - filepath: "$(TOP)/db/eurothermL1.template"
+        pattern: ["SYS", "DEV", "modbus_prefix", "rregu"]
+        instances:
+          - [$(SYS), $(DEV), "$(MODBUS_PREFIX)", 1]
+      - filepath: "$(TOP)/db/eurothermL2.template"
+        pattern: ["SYS", "DEV", "modbus_prefix", "rregu"]
+        instances:
+          - [$(SYS), $(DEV), "$(MODBUS_PREFIX)", 1]
+      - filepath: "$(TOP)/db/eurothermProg.template"
+        pattern: ["SYS", "DEV", "modbus_prefix"]
+        instances:
+          - [$(SYS), $(DEV), "$(MODBUS_PREFIX)"]
+      - filepath: "$(TOP)/db/eurothermRec.template"
+        pattern: ["SYS", "DEV", "modbus_prefix"]
+        instances:
+          - [$(SYS), $(DEV), "$(MODBUS_PREFIX)"]
+    asynRecord:
+      - filepath: "$(ASYN)/db/asynRecord.db"
+        pattern: ["P", "R", "PORT", "ADDR", "IMAX", "OMAX"]
+        instances:
+          - [$(SYS), $(DEV), $(PORT), 0, 80, 80]

@@ -1,0 +1,9 @@
+---
+type: enum("eurotherm3k")
+environment:
+  ENGINEER: str(required=False)
+  SYS: str()
+  DEV: str()
+  DEVICE_IP: any(ip(), hostname())
+  MODBUS_PREFIX: str(required=False)
+  PORT: str(required=False)

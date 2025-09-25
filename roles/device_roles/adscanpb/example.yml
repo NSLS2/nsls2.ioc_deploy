@@ -1,0 +1,13 @@
+---
+
+adscanpb-01:
+  type: adscanpb
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{ADSCANPB:01}
+
+    TRIGGER_SIGNAL: "XF:31ID1-ES{PANDA:1}:LUT1:OUT"
+
+    # Two below are optional parameters to include tiled support
+    TILED_METADATA_URL: https://tiled.nsls2.bnl.gov/api/v1/node/metadata
+    TILED_ARRAY_URL: https://tiled.nsls2.bnl.gov/api/v1/array/full

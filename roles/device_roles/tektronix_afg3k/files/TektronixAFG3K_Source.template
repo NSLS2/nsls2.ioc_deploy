@@ -1,0 +1,308 @@
+record(bo, "$(P)$(R)$(SOURCE_NUM):BurstMode") {
+    field(DESC, "Burst Mode")
+    field(DTYP, "stream")
+    field(OUT, "@afg3k.proto setBurstMode($(SOURCE_NUM)) $(PORT)")
+    field(ZNAM, "TRIG")
+    field(ONAM, "GAT")
+    field(SCAN, "Passive")
+}
+
+record(bi, "$(P)$(R)$(SOURCE_NUM):BurstMode_RBV") {
+    field(DESC, "Burst Mode Status")
+    field(DTYP, "stream")
+    field(ZNAM, "TRIG")
+    field(ONAM, "GAT")
+    field(INP, "@afg3k.proto getBurstModeStatus($(SOURCE_NUM)) $(PORT)")
+    field(SCAN, "1 second")
+}
+
+record(ao, "$(P)$(R)$(SOURCE_NUM):BurstNCycles") {
+    field(DESC, "Burst N Cycles")
+    field(DTYP, "stream")
+    field(HIHI, "1000000")
+    field(LOLO, "1")
+    field(OUT, "@afg3k.proto setBurstNCycles($(SOURCE_NUM)) $(PORT)")
+    field(SCAN, "Passive")
+}
+
+record(ai, "$(P)$(R)$(SOURCE_NUM):BurstNCycles_RBV") {
+    field(DESC, "Burst N Cycles Status")
+    field(DTYP, "stream")
+    field(HIHI, "1000000")
+    field(LOLO, "1")
+    field(INP, "@afg3k.proto getBurstNCycles($(SOURCE_NUM)) $(PORT)")
+    field(SCAN, "1 second")
+}
+
+record(bo, "$(P)$(R)$(SOURCE_NUM):BurstState") {
+    field(DESC, "Burst State")
+    field(DTYP, "stream")
+    field(OUT, "@afg3k.proto setBurstState($(SOURCE_NUM)) $(PORT)")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+    field(SCAN, "Passive")
+}
+
+
+record(bi, "$(P)$(R)$(SOURCE_NUM):BurstState_RBV") {
+    field(DESC, "Burst State RB")
+    field(DTYP, "stream")
+    field(INP, "@afg3k.proto getBurstState($(SOURCE_NUM)) $(PORT)")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+    field(SCAN, "1 second")
+}
+
+record(mbbo, "$(P)$(R)$(SOURCE_NUM):FunctionShape") {
+    field(DESC, "Function Shape")
+    field(DTYP, "stream")
+    field(OUT, "@afg3k.proto setFuncShape($(SOURCE_NUM)) $(PORT)")
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "2")
+    field(THVL, "3")
+    field(FRVL, "4")
+    field(FVVL, "5")
+    field(SXVL, "6")
+    field(SVVL, "7")
+    field(EIVL, "8")
+    field(NIVL, "9")
+    field(TEVL, "10")
+    field(ELVL, "11")
+    field(ZRST, "SIN")
+    field(ONST, "SQU")
+    field(TWST, "PUL")
+    field(THST, "RAMP")
+    field(FRST, "PRN")
+    field(FVST, "DC")
+    field(SXST, "SINC")
+    field(SVST, "GAUS")
+    field(EIST, "LOR")
+    field(NIST, "ERIS")
+    field(TEST, "EDEC")
+    field(ELST, "HAV")
+}
+
+record(mbbi, "$(P)$(R)$(SOURCE_NUM):FunctionShape_RBV") {
+    field(DESC, "Function Shape Status")
+    field(DTYP, "stream")
+    field(INP, "@afg3k.proto getFuncShapeStatus($(SOURCE_NUM)) $(PORT)")
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "2")
+    field(THVL, "3")
+    field(FRVL, "4")
+    field(FVVL, "5")
+    field(SXVL, "6")
+    field(SVVL, "7")
+    field(EIVL, "8")
+    field(NIVL, "9")
+    field(TEVL, "10")
+    field(ELVL, "11")
+    field(ZRST, "SIN")
+    field(ONST, "SQU")
+    field(TWST, "PUL")
+    field(THST, "RAMP")
+    field(FRST, "PRN")
+    field(FVST, "DC")
+    field(SXST, "SINC")
+    field(SVST, "GAUS")
+    field(EIST, "LOR")
+    field(NIST, "ERIS")
+    field(TEST, "EDEC")
+    field(ELST, "HAV")
+    field(SCAN, "1 second")
+}
+
+record(ao, "$(P)$(R)$(SOURCE_NUM):FixedFreq") {
+    field(DESC, "Fixed Frequency")
+    field(DTYP, "stream")
+    field(OUT, "@afg3k.proto setFixedFreq($(SOURCE_NUM)) $(PORT)")
+    field(EGU, "Hz")
+    field(SCAN, "Passive")
+}
+
+record(ai, "$(P)$(R)$(SOURCE_NUM):FixedFreq_RBV") {
+    field(DESC, "Fixed Frequency RB")
+    field(DTYP, "stream")
+    field(INP, "@afg3k.proto getFixedFreq($(SOURCE_NUM)) $(PORT)")
+    field(EGU, "Hz")
+    field(SCAN, "1 second")
+}
+
+record(ao, "$(P)$(R)$(SOURCE_NUM):FreqStart"){
+    field(DESC, "Frequency Start")
+    field(DTYP, "stream")
+    field(OUT, "@afg3k.proto setFreqStart($(SOURCE_NUM)) $(PORT)")
+    field(EGU, "Hz")
+    field(SCAN, "Passive")
+}
+
+record(ai, "$(P)$(R)$(SOURCE_NUM):FreqStart_RBV") {
+    field(DESC, "Frequency Start RB")
+    field(DTYP, "stream")
+    field(INP, "@afg3k.proto getFreqStart($(SOURCE_NUM)) $(PORT)")
+    field(EGU, "Hz")
+    field(SCAN, "1 second")
+}
+
+record(ao, "$(P)$(R)$(SOURCE_NUM):FreqStop"){
+    field(DESC, "Frequency Stop")
+    field(DTYP, "stream")
+    field(OUT, "@afg3k.proto setFreqStop($(SOURCE_NUM)) $(PORT)")
+    field(EGU, "Hz")
+    field(SCAN, "Passive")
+}
+
+record(ai, "$(P)$(R)$(SOURCE_NUM):FreqStop_RBV") {
+    field(DESC, "Frequency Stop RB")
+    field(DTYP, "stream")
+    field(INP, "@afg3k.proto getFreqStop($(SOURCE_NUM)) $(PORT)")
+    field(EGU, "Hz")
+    field(SCAN, "1 second")
+}
+
+
+record(ao, "$(P)$(R)$(SOURCE_NUM):Amplitude") {
+    field(DESC, "Amplitude")
+    field(DTYP, "stream")
+    field(OUT, "@afg3k.proto setAmplitude($(SOURCE_NUM)) $(PORT)")
+    field(SCAN, "Passive")
+    field(PREC, "3")
+
+}
+
+record(ai, "$(P)$(R)$(SOURCE_NUM):Amplitude_RBV") {
+    field(DESC, "Amplitude")
+    field(DTYP, "stream")
+    field(INP, "@afg3k.proto getAmplitude($(SOURCE_NUM)) $(PORT)")
+    field(SCAN, "1 second")
+    field(PREC, "3")
+}
+
+record(mbbo, "$(P)$(R)$(SOURCE_NUM):AmplitudeUnits") {
+    field(DESC, "Voltage Amplitude Units")
+    field(DTYP, "stream")
+    field(OUT, "@afg3k.proto setAmpUnits($(SOURCE_NUM)) $(PORT)")
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "2")
+    field(ZRST, "VPP")
+    field(ONST, "VRMS")
+    field(TWST, "DBM")
+    field(SCAN, "Passive")
+}
+
+record(mbbi, "$(P)$(R)$(SOURCE_NUM):AmplitudeUnits_RBV") {
+    field(DESC, "Voltage Amplitude Units RB")
+    field(DTYP, "stream")
+    field(INP, "@afg3k.proto getAmpUnits($(SOURCE_NUM)) $(PORT)")
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "2")
+    field(ZRST, "VPP")
+    field(ONST, "VRMS")
+    field(TWST, "DBM")
+    field(SCAN, "1 second")
+}
+
+record(ao, "$(P)$(R)$(SOURCE_NUM):HighLevelAmplitude") {
+    field(DESC, "High level amplitude")
+    field(DTYP, "stream")
+    field(OUT, "@afg3k.proto setHighAmp($(SOURCE_NUM)) $(PORT)")
+    field(SCAN, "Passive")
+    field(EGU, "V")
+    field(PREC, "3")
+
+}
+
+record(ai, "$(P)$(R)$(SOURCE_NUM):HighLevelAmplitude_RBV") {
+    field(DESC, "High level amplitude")
+    field(DTYP, "stream")
+    field(INP, "@afg3k.proto getHighAmp($(SOURCE_NUM)) $(PORT)")
+    field(SCAN, "1 second")
+    field(EGU, "V")
+    field(PREC, "3")
+
+}
+
+record(ao, "$(P)$(R)$(SOURCE_NUM):LowLevelAmplitude") {
+    field(DESC, "Low level amplitude")
+    field(DTYP, "stream")
+    field(OUT, "@afg3k.proto setLowAmp($(SOURCE_NUM)) $(PORT)")
+    field(SCAN, "Passive")
+    field(EGU, "V")
+    field(PREC, "3")
+
+}
+
+record(ai, "$(P)$(R)$(SOURCE_NUM):LowLevelAmplitude_RBV") {
+    field(DESC, "Low level amplitude")
+    field(DTYP, "stream")
+    field(INP, "@afg3k.proto getLowAmp($(SOURCE_NUM)) $(PORT)")
+    field(SCAN, "1 second")
+    field(EGU, "V")
+    field(PREC, "3")
+
+}
+
+record(ao, "$(P)$(R)$(SOURCE_NUM):VoltageOffset") {
+    field(DESC, "Offset")
+    field(DTYP, "stream")
+    field(OUT, "@afg3k.proto setVoltageOffset($(SOURCE_NUM)) $(PORT)")
+    field(SCAN, "Passive")
+    field(EGU, "V")
+    field(PREC, "3")
+
+}
+
+record(ai, "$(P)$(R)$(SOURCE_NUM):VoltageOffset_RBV") {
+    field(DESC, "Offset")
+    field(DTYP, "stream")
+    field(INP, "@afg3k.proto getVoltageOffset($(SOURCE_NUM)) $(PORT)")
+    field(SCAN, "1 second")
+    field(EGU, "V")
+    field(PREC, "3")
+
+}
+
+record(ao, "$(P)$(R)$(SOURCE_NUM):Phase") {
+    field(DESC, "Phase Adjustment")
+    field(DTYP, "stream")
+    field(OUT, "@afg3k.proto setPhase($(SOURCE_NUM)) $(PORT)")
+    field(EGU, "rad")
+    field(SCAN, "Passive")
+    field(PREC, "3")
+}
+
+record(ai, "$(P)$(R)$(SOURCE_NUM):Phase_RBV") {
+    field(DESC, "Phase Adjustment")
+    field(DTYP, "stream")
+    field(INP, "@afg3k.proto getPhase($(SOURCE_NUM)) $(PORT)")
+    field(EGU, "rad")
+    field(SCAN, "1 second")
+    field(PREC, "3")
+}
+
+record(ao, "$(P)$(R)$(SOURCE_NUM):RampSymmetry") {
+    field(DESC, "Ramp Symmetry")
+    field(DTYP, "stream")
+    field(OUT, "@afg3k.proto setRampSymmetry($(SOURCE_NUM)) $(PORT)")
+    field(LOLO, "0")
+    field(HIHI, "100")
+    field(EGU, "%")
+    field(SCAN, "Passive")
+    field(PREC, "1")
+}
+
+
+record(ai, "$(P)$(R)$(SOURCE_NUM):RampSymmetry_RBV") {
+    field(DESC, "Ramp Symmetry")
+    field(DTYP, "stream")
+    field(INP, "@afg3k.proto getRampSymmetry($(SOURCE_NUM)) $(PORT)")
+    field(LOLO, "0")
+    field(HIHI, "100")
+    field(EGU, "%")
+    field(SCAN, "1 second")
+    field(PREC, "1")
+}

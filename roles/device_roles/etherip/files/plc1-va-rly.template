@@ -1,0 +1,27 @@
+# Vacuum Gauge Relay Template
+# Interfaces to gauge status arrays in PLC, i.e. CCG_Sts, TCG_Sts, IP_Sts
+# This template can be used for non-vacuum status relays which use status arrays
+
+#
+# CCG, TCG, and Ion Pump status relay
+#
+
+record(bi, "$(Sys){$(Dev)}Sts:Rly1PLC-Sts") {
+    field(DESC, "$(Mod) controller relay status")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Mod)_Sts_$(Seq)[$(ArrNum)] S 0.5")
+    field(ZNAM, "Relay Open")
+    field(ONAM, "Relay Closed")
+    field(ZSV,  "MINOR")
+}
+
+record(bi, "$(Sys){$(Dev)}Sts:Rly1PLC-First") {
+    field(DESC, "$(Mod) tripped first in last IL event")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Mod)_Lock_$(Seq)[$(ArrNum)] S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "First")
+    field(OSV,  "MINOR")
+}

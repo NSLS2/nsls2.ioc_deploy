@@ -1,0 +1,16 @@
+#
+# Generic binary output record for multi-use
+#
+
+# If a non-writeable readback of this output is desired,
+#   define a matching substitution line for plc1-bi.template
+
+record(bo, "$(Sys){$(Dev)}$(Sig)") {
+    field(DESC, "$(DESC)")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) $(Tag) S $(Rate=1)")
+    field(ZNAM, "$(ZNAM)")
+    field(ONAM, "$(ONAM)")
+    field(ASG,  "$(ASG=DEFAULT)")
+}

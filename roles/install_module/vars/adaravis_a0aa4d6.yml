@@ -1,0 +1,10 @@
+---
+
+adaravis_a0aa4d6:
+  name: ADAravis
+  url: https://github.com/areaDetector/ADAravis
+  include_base_ad_config: true
+  version: a0aa4d6
+  executable: ADAravisApp
+  module_deps:
+    - adgenicam_5d08a11

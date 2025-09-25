@@ -1,0 +1,93 @@
+record(ai, "$(P)$(R)$(OUTPUT_NUM):Name_RBV"){
+    field(DESC, "Output #")
+    field(DTYP, "Soft Channel")
+    field(VAL, "$(OUTPUT_NUM)")
+}
+
+record(bo, "$(P)$(R)$(OUTPUT_NUM):Enable") {
+    field(DESC, "Output Cmd")
+    field(DTYP, "stream")
+    field(OUT, "@afg3k.proto setOutputStatus($(OUTPUT_NUM)) $(PORT)")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+    field(SCAN, "Passive")
+}
+
+record(bi, "$(P)$(R)$(OUTPUT_NUM):Enable_RBV") {
+    field(DESC, "Output Status")
+    field(DTYP, "stream")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+    field(INP, "@afg3k.proto getOutputStatus($(OUTPUT_NUM)) $(PORT)")
+    field(PINI, "YES")
+    field(SCAN, "1 second")
+}
+
+
+record(bo, "$(P)$(R)$(OUTPUT_NUM):Polarity") {
+    field(DESC, "Polarity")
+    field(DTYP, "stream")
+    field(OUT, "@afg3k.proto setPolarity($(OUTPUT_NUM)) $(PORT)")
+    field(ZNAM, "NORM")
+    field(ONAM, "INV")
+    field(SCAN, "Passive")
+    field(PINI, "NO")
+}
+
+record(bi, "$(P)$(R)$(OUTPUT_NUM):Polarity_RBV") {
+    field(DESC, "Polarity Status")
+    field(DTYP, "stream")
+    field(ZNAM, "NORM")
+    field(ONAM, "INV")
+    field(INP, "@afg3k.proto getPolarityStatus($(OUTPUT_NUM)) $(PORT)")
+    field(SCAN, "1 second")
+}
+
+record(ao, "$(P)$(R)$(OUTPUT_NUM):Impedance") {
+    field(DESC, "Impedance")
+    field(DTYP, "stream")
+    field(HIHI, "10000")
+    field(LOLO, "1")
+    field(EGU, "Ohm")
+    field(OUT, "@afg3k.proto setImpedance($(OUTPUT_NUM)) $(PORT)")
+    field(SCAN, "Passive")
+}
+
+record(ai, "$(P)$(R)$(OUTPUT_NUM):Impedance_RBV") {
+    field(DESC, "Impedence Status")
+    field(DTYP, "stream")
+    field(HIHI, "10000")
+    field(LOLO, "1")
+    field(INP, "@afg3k.proto getImpedanceStatus($(OUTPUT_NUM)) $(PORT)")
+    field(SCAN, "1 second")
+}
+
+# record(mbbo, "$(P)$(R)$(OUTPUT_NUM):ImpedanceMinMaxInf"){
+#     field(DESC, "Impedance Min/Max")
+#     field(DTYP, "stream")
+#     field(OUT, "@afg3k.proto setImpedanceMinMaxInf($(OUTPUT_NUM)) $(PORT)")
+#     field(ZRVL, "0")
+#     field(ONVL, "1")
+#     field(TWVL, "2")
+#     field(ZRST, "MIN")
+#     field(ONST, "MAX")
+#     field(TWST, "INF")
+#     field(SCAN, "Passive")
+# }
+
+
+# record(bo, "$(P)$(R)$(OUTPUT_NUM):TriggerMode"){
+#     field(DESC, "Trigger Mode")
+#     field(DTYP, "stream")
+#     field(OUT, "@afg3k.proto setTriggerMode($(OUTPUT_NUM)) $(PORT)")
+#     field(ZNAM, "TRIG")
+#     field(ONAM, "SYNC")
+#     field(SCAN, "Passive")
+# }
+
+# record(bi, "$(P)$(R)$(OUTPUT_NUM):TriggerMode_RBV") {
+#     field(DESC, "Trigger Mode Status")
+#     field(DTYP, "stream")
+#     field(INP, "@afg3k.proto getTriggerModeStatus($(OUTPUT_NUM)) $(PORT)")
+#     field(SCAN, "1 second")
+# }

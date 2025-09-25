@@ -1,0 +1,18 @@
+---
+deploy_ioc_use_common: true
+deploy_ioc_use_ad_common: false
+deploy_ioc_required_module: modbus_bb9fa05
+deploy_ioc_device_specific_env:
+  PORT: E3K
+  MODBUS_PREFIX: EURTHM3K
+  RX_PORT: $(MODBUS_PREFIX)_MASTER_RX
+  TX_PORT: $(MODBUS_PREFIX)_MASTER_TX
+  IP_PORT: $(DEVICE_IP):502
+  PREFIX: "$(SYS)$(DEV)"
+deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
+# Sets initial values for temperature mask (TMSK) and time-out mode (TIOM)
+deploy_ioc_dbpf_list:
+  - pv: $(SYS)$(DEV).TMSK
+    value: "0x1"
+  - pv: $(SYS)$(DEV).TIOM
+    value: "0x0"

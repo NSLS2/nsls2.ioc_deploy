@@ -1,0 +1,32 @@
+---
+
+type: enum("mcs")
+model: enum(1, 2)
+simulation: bool(required=False, default=False)
+environment:
+  ENGINEER: str()
+  CTRL_NAME: str()
+  CTRL_IP: any(ip(), hostname())
+  # Only specify if different from default, eg for simulation mode
+  CTRL_PORT_NUM: int(required=False)
+  P: str()
+  R: str()
+  AXES_MASK: int()
+  PORT: str()
+  NUM_AXES: int(min=1)
+
+axes: list(include("axis"), min=1)
+
+---
+
+axis:
+  name: str()
+  num: int(min=0)
+  desc: str()
+  mres: num()
+  egu: str()
+  dir: enum("Pos", "Neg", required=False)
+  velo: num(required=False)
+  accl: num(required=False)
+  vmax: num(required=False)
+  prec: int(required=False)

@@ -1,7 +1,5 @@
 ---
 
-deploy_ioc_executable: "vimbaApp"
-deploy_ioc_as_dir_name: "autosave"
 deploy_ioc_template_root_path:
   "{{ deploy_ioc_required_module_path }}/iocs/vimbaIOC"
 deploy_ioc_required_module: advimba_34686fe

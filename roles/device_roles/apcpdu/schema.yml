@@ -1,0 +1,14 @@
+---
+type: enum("apcpdu")
+devices: list(include("apcpdu_device"))
+environment:
+  ENGINEER: str()
+  PREFIX: str()
+
+---
+
+apcpdu_device:
+  TYPE: enum("AP7900", "AP7930", "AP8959")
+  SYS: str()
+  DEV: str()
+  HOST: any(ip(), hostname())

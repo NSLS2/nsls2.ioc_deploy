@@ -5,5 +5,6 @@ advimba_34686fe:
   url: https://github.com/areaDetector/ADVimba
   version: 34686fe
   include_base_ad_config: true
+  executable: "vimbaApp"
   module_deps:
     - adgenicam_5d08a11

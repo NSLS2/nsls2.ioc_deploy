@@ -1,0 +1,30 @@
+---
+
+admerlin-01:
+  type: admerlin
+
+  # Configure local port if Merlin is connected directly to the server.
+  # Comment out otherwise.
+  # admerlin_local_intf_mac: "98:b7:85:01:4a:dd"
+  # admerlin_local_intf_ip: "192.168.0.1"
+
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{ADMERLIN:01}
+    MERLIN_IP: "12.34.56.78"
+    # The IP port for the command socket
+    COMMAND_IPPORT: 6341
+    # The IP port for the data socket
+    DATA_IPPORT: 6342
+    # The model type for this Medipix detector
+    MODEL: 3  # 0=Merlin, 1=MedipixXBPM, 2=UomXBPM, 3=MerlinQuad
+
+    XSIZE: 512
+    YSIZE: 512
+    NELEM: 262144
+
+    QSIZE: 2048
+
+    # The maximum number of frames buffered in the NDPluginCircularBuff plugin
+    CBUFFS: 8192
+    NELEMENTS: 10000000000

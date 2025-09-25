@@ -1,0 +1,26 @@
+---
+
+- name: Create protocol directory
+  ansible.builtin.file:
+    path: "{{ deploy_ioc_ioc_directory }}/protocol"
+    state: directory
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0775"
+
+- name: Copy databases file for Stanford DG645
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ deploy_ioc_ioc_directory }}/db"
+    owner: "{{ softioc_user }}"
+    group: "{{ softioc_group }}"
+    mode: "0664"
+  with_fileglob: "files/*.template"
+
+- name: Copy protocol file for Stanford DG645
+  ansible.builtin.copy:
+    src: "files/dg645.proto"
+    dest: "{{ deploy_ioc_ioc_directory }}/protocol/dg645.proto"
+    owner: "{{ softioc_user }}"
+    group: "{{ softioc_group }}"
+    mode: "0664"

@@ -1,0 +1,11 @@
+---
+name: str()
+url: url()
+version: str()
+include_base_ad_config: bool(required=False)
+module_deps: list(module_name(), required=False)
+pkg_deps: list(str(), required=False)
+config: map(str(), key=str(), required=False)
+use_token: bool(required=False)
+executable: str(required=False)
+compilation_command: str(required=False)

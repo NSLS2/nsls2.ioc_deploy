@@ -1,0 +1,340 @@
+Terminator = LF;
+InTerminator = LF;
+
+getDeviceID {
+    wait 50;
+    ExtraInput=Ignore;
+    out "*IDN?";
+    in "%[_a-zA-Z0-9],%(\$1)[_a-zA-Z0-9],%(\$2)[_a-zA-Z0-9],";
+}
+
+getSystemVersion {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SYST:VERS?";
+    in "%15c";
+}
+
+setOutputStatus {
+    wait 50;
+    ExtraInput=Ignore;
+    out "OUTP\$1:STAT %d";
+}
+
+getOutputStatus {
+    wait 50;
+    ExtraInput=Ignore;
+    out "OUTP\$1:STAT?";
+    in "%d";
+}
+
+setPolarity {
+    wait 100;
+    out "OUTP\$1:POL %s";
+}
+
+getPolarityStatus {
+    wait 50;
+    ExtraInput=Ignore;
+    out "OUTP\$1:POL?";
+    in "%s";
+}
+
+setImpedance {
+    wait 50;
+    ExtraInput=Ignore;
+    out "OUTP\$1:IMP %d";
+}
+
+getImpedanceStatus {
+    wait 50;
+    ExtraInput=Ignore;
+    out "OUTP\$1:IMP?";
+    in "%d";
+}
+
+# setTriggerMode {
+#     wait 50;
+#     ExtraInput=Ignore;
+#     out "OUTP\$1:TRIG:MODE %s";
+# }
+
+# getTriggerModeStatus {
+#     wait 50;
+#     ExtraInput=Ignore;
+#     out "OUTP\$1:TRIG:MODE?";
+#     in "%s";
+# }
+
+setModDeviation {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:\$2:DEV %fkHz";
+}
+
+getModDeviationStatus {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:\$2:DEV?";
+}
+
+setAMDepth {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:AM:DEPT %fPCT";
+}
+
+getAMDepthStatus {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:AM:DEPT?";
+    in "%s";
+}
+
+setModIntFreq {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:\$2:INT:FREQ %fkHz";
+}
+
+setModIntFreqMinMax {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:\$2:INT:FREQ %s";
+}
+
+getModIntFreq {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:\$2:INT:FREQ?";
+    in "%f";
+}
+
+setModIntFunc {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:\$2:INT:FUNC %s";
+}
+
+getModIntFunc {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:\$2:INT:FUNC?";
+    in "%s";
+}
+
+setModSource {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:\$2:SOUR %s";
+}
+
+getModSource {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:\$2:SOUR?";
+    in "%s";
+}
+
+setModEnable {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:\$2:STAT %s";
+}
+
+getModEnable {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:\$2:STAT?";
+    in "%d";
+}
+
+
+### Source functions
+
+setBurstMode {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:BURS:MODE %s";
+}
+
+getBurstModeStatus {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:BURS:MODE?";
+    in "%s";
+}
+
+setBurstNCycles {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:BURS:NCYC %d";
+}
+
+getBurstNCycles {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:BURS:NCYC?";
+    in "%d";
+}
+
+setBurstState {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:BURS:STAT %d";
+}
+
+getBurstState {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:BURS:STAT?";
+    in "%d";
+}
+
+setFuncShape {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:FUNC:SHAP %s";
+}
+
+getFuncShapeStatus {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:FUNC:SHAP?";
+    in "%s";
+}
+
+setFixedFreq {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:FREQ:FIX %f";
+}
+
+getFixedFreq {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:FREQ:FIX?";
+    in "%f";
+}
+
+setAmpUnits {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:VOLT:UNIT %s";
+}
+
+getAmpUnits {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:VOLT:UNIT?";
+    in "%s";
+}
+
+###
+
+setPhase {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:PHAS:ADJ %f";
+}
+
+getPhase {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:PHAS:ADJ?";
+    in "%f";
+}
+
+setRampSymmetry {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:FUNC:RAMP:SYMM %f";
+}
+
+getRampSymmetry {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:FUNC:RAMP:SYMM?";
+    in "%f";
+}
+
+
+setHighAmp {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:VOLT:LEV:IMM:HIGH %fV";
+}
+
+getHighAmp {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:VOLT:LEV:IMM:HIGH?";
+    in "%f";
+}
+
+
+setLowAmp {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:VOLT:LEV:IMM:LOW %fV";
+}
+
+getLowAmp {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:VOLT:LEV:IMM:LOW?";
+    in "%f";
+}
+
+
+setVoltageOffset {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:VOLT:LEV:IMM:OFFS %fV";
+}
+
+getVoltageOffset {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:VOLT:LEV:IMM:OFFS?";
+    in "%f";
+}
+
+setAmplitude {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:VOLT:LEV:IMM:AMPL %f";
+}
+
+getAmplitude {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:VOLT:LEV:IMM:AMPL?";
+    in "%f";
+}
+
+setFreqStart {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:FREQ:STAR %fkHz";
+}
+
+getFreqStart {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:FREQ:STAR?";
+    in "%f";
+}
+
+setFreqStop {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:FREQ:STOP %fkHz";
+}
+
+getFreqStop {
+    wait 50;
+    ExtraInput=Ignore;
+    out "SOUR\$1:FREQ:STOP?";
+    in "%f";
+}

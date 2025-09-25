@@ -1,0 +1,19 @@
+#
+# Generic record for multi-use to capture "first" interlock detection
+#
+
+# This template is intended for use alongside a misc. binary input or similar,
+#   when that input is something which can cause a shutter interlock event.
+# However, it is generally good practice to capture the "first" (or "lock") bit
+#   even if that signal cannot directly cause an interlock event, as it may assist
+#   in troubleshooting during root-cause analysis.
+
+record(bi, "$(Sys){$(Dev)}$(Sig)-First") {
+    field(DESC, "Signal tripped first in last IL event")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) Misc_Lock_$(Seq)[$(ArrNum)] S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "First")
+    field(OSV,  "MINOR")
+}

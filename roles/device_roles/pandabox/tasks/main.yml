@@ -1,0 +1,45 @@
+---
+
+- name: Ensure python3.11 is installed
+  ansible.builtin.dnf:
+    name: python3.11
+    state: present
+
+- name: Delete old venv if present
+  ansible.builtin.file:
+    path: "{{ deploy_ioc_ioc_directory }}/venv"
+    state: absent
+
+- name: Create virtual environment directory
+  ansible.builtin.file:
+    path: "{{ deploy_ioc_ioc_directory }}/venv"
+    state: directory
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0775"
+
+- name: Create python3.11 virtual environment
+  ansible.builtin.command:
+    cmd: python3.11 -m venv "{{ deploy_ioc_ioc_directory }}/venv"
+  register: pandabox_create_venv
+  changed_when: pandabox_create_venv.rc == 0
+
+- name: Install required python packages in venv
+  ansible.builtin.pip:
+    executable: "{{ deploy_ioc_ioc_directory }}/venv/bin/pip"
+    name: "{{ item }}"
+  loop: "{{ device_roles_pandabox_pip_dependencies }}"
+
+- name: Update ownership of venv directory
+  ansible.builtin.command:
+    cmd: chown -R {{ host_config.softioc_user }}:{{ host_config.softioc_group }} {{ deploy_ioc_ioc_directory }}/venv # yamllint disable-line rule:line-length
+  register: pandabox_venv_ownership_result
+  changed_when: pandabox_venv_ownership_result.rc == 0
+
+- name: Install startup script file
+  ansible.builtin.template:
+    src: "templates/st.cmd.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/st.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0775"

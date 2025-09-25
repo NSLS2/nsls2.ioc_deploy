@@ -1,0 +1,29 @@
+---
+
+afg3k:
+  type: tektronix_afg3k
+  environment:
+    P: "XF:31ID1-ES"
+    R: "{Tektronix-AFG3K:01}"
+    DEVICE_IP: "192.168.1.1"
+
+  substitutions:
+    afg3k:
+      - filepath: "$(TOP)/db/TektronixAFG3K.template"
+        pattern: ["P", "R", "PORT"]
+        instances:
+          - ["$(P)", "$(R)", "$(PORT)"]
+      - filepath: "$(TOP)/db/TektronixAFG3K_Output.template"
+        pattern: ["P", "R", "OUTPUT_NUM", "PORT"]
+        instances:
+          - ["$(P)", "$(R)", "1", "$(PORT)"]
+      - filepath: "$(TOP)/db/TektronixAFG3K_Source.template"
+        pattern: ["P", "R", "SOURCE_NUM", "PORT"]
+        instances:
+          - ["$(P)", "$(R)", "1", "$(PORT)"]
+
+    asynRecord:
+      - filepath: "$(ASYN)/db/asynRecord.db"
+        pattern: ["P", "R", "PORT", "ADDR", "TIMEOUT", "OMAX", "IMAX"]
+        instances:
+          - ["$(P)", "$(R)AsynIO", "$(PORT)", "0", "1", "0", "0"]

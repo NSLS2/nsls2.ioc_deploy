@@ -1,0 +1,9 @@
+---
+deploy_ioc_required_module: base_snmp_ioc_6548d01
+deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
+deploy_ioc_make_autosave_files: true
+deploy_ioc_req_file_list:
+  - name: "info_settings.req"
+    macros: ""
+  - name: "info_positions.req"
+    macros: ""

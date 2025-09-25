@@ -1,0 +1,19 @@
+
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+ADAxisConfig("$(PORT)", 0)
+dbLoadRecords("$(ADAXIS)/db/ADAxis.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
+
+epicsThreadSleep(3.0)
+
+NDStdArraysConfigure("Image1", 5, 0, "$(PORT)", 0, 0)
+dbLoadRecords("$(ADCORE)/db/NDStdArrays.template", "P=$(PREFIX),R=image1:,PORT=Image1,ADDR=0,TIMEOUT=1,NDARRAY_PORT=$(PORT),TYPE=Int32,FTVL=LONG,NELEMENTS=5600000")
+
+# Create a second process plugin
+NDProcessConfigure("PROC2", $(QSIZE), 0, "$(PORT)", 0, 0, 0)
+dbLoadRecords("NDProcess.template",   "P=$(PREFIX),R=Proc2:,  PORT=PROC2,ADDR=0,TIMEOUT=1,NDARRAY_PORT=$(PORT)")
+
+# Create a second transform plugin
+NDTransformConfigure("TRANS2", $(QSIZE), 0, "$(PORT)", 0, 0, 0, 0, 0, $(MAX_THREADS=5))
+dbLoadRecords("NDTransform.template", "P=$(PREFIX),R=Trans2:,  PORT=TRANS2,ADDR=0,TIMEOUT=1,NDARRAY_PORT=$(PORT)")

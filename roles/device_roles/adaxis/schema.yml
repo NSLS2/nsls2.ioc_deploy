@@ -1,0 +1,11 @@
+---
+type: enum("adaxis")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
+  PORT: str()
+  QSIZE: int(min=1)
+  XSIZE: int(min=1)
+  YSIZE: int(min=1)
+  NCHANS: int(min=1)
+  CBUFFS: int(min=1)

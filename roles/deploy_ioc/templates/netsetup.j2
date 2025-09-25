@@ -1,0 +1,15 @@
+#
+# {{ inventory_hostname.split('.')[0] }}-netsetup.cmd
+# {{ ansible_managed }}
+#
+epicsEnvSet("EPICS_CA_AUTO_ADDR_LIST",         "NO")
+epicsEnvSet("EPICS_CA_ADDR_LIST",              "{{ host_config.epics_interface.broadcast }}")
+epicsEnvSet("EPICS_CAS_AUTO_BEACON_ADDR_LIST", "NO")
+epicsEnvSet("EPICS_CAS_BEACON_ADDR_LIST",      "{{ host_config.epics_interface.broadcast }}")
+epicsEnvSet("EPICS_CAS_INTF_ADDR_LIST",        "{{ host_config.epics_interface.address }}")
+
+epicsEnvSet("EPICS_PVA_AUTO_ADDR_LIST",         "NO")
+epicsEnvSet("EPICS_PVA_ADDR_LIST",              "{{ host_config.epics_interface.broadcast }}")
+epicsEnvSet("EPICS_PVAS_AUTO_BEACON_ADDR_LIST", "NO")
+epicsEnvSet("EPICS_PVAS_BEACON_ADDR_LIST",      "{{ host_config.epics_interface.broadcast }}")
+epicsEnvSet("EPICS_PVAS_INTF_ADDR_LIST",        "{{ host_config.epics_interface.address }}")

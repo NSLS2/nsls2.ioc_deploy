@@ -1,0 +1,7 @@
+---
+pscdrv_1ed650d:
+  name: pscdrv
+  version: 1ed650d
+  url: https://github.com/mdavidsaver/pscdrv
+  pkg_deps:
+    - libevent-devel

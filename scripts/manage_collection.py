@@ -6,10 +6,12 @@ import subprocess
 import sys
 
 import questionary
+import tabulate
 import yaml
 
 
 def get_module_list():
+    """Return a list of module names from the install_module vars directory."""
     return [
         os.path.splitext(f)[0]
         for f in os.listdir(os.path.join("roles", "install_module", "vars"))
@@ -17,6 +19,7 @@ def get_module_list():
 
 
 def get_role_list():
+    """Return a list of role names from the deploy_ioc vars directory."""
     return [
         os.path.splitext(f)[0]
         for f in os.listdir(os.path.join("roles", "deploy_ioc", "vars"))
@@ -24,6 +27,10 @@ def get_role_list():
 
 
 def add_module():
+    """Interactively add a new module configuration file to install_module vars.
+    Prompts user for module details and writes a new YAML config file.
+    Returns the new module name-version string.
+    """
     module_name = questionary.text(
         "Enter the name of the new module (e.g., 'ADKinetix'):",
     ).unsafe_ask()
@@ -33,7 +40,7 @@ def add_module():
     ).unsafe_ask()
 
     url = questionary.text(
-        "Enter the git URL for the module (e.g. https://github.com/areaDetector/ADKinetix):",
+        "Enter the git URL for the module (e.g. https://github.com/NSLS2/ADKinetix):",
     ).unsafe_ask()
 
     is_ad = questionary.confirm(
@@ -62,12 +69,25 @@ def add_module():
     )
 
     with open(module_config_path, "w") as file:
-        yaml.safe_dump(module_config, file, default_flow_style=False, sort_keys=False)
+        file.write("---\n\n")
+        file.write(f"{module_name_ver}:\n")
+        for key, value in module_config[module_name_ver].items():
+            if key != "module_deps" and not (
+                key == "include_base_ad_config" and not value
+            ):
+                file.write(f"  {key}: {value}\n")
+            elif key == "module_deps" and len(value) > 0:
+                file.write(f"  {key}:\n")
+                for dep in value:
+                    file.write(f"    - {dep}\n")
 
     return module_name_ver
 
 
 def update_module():
+    """Interactively update an existing module's version and update all references.
+    Prompts user for new version, updates config, and optionally deletes old config.
+    """
     module = questionary.select(
         "Select a module to update:", choices=get_module_list()
     ).unsafe_ask()
@@ -127,8 +147,17 @@ def update_module():
         ]
     )
 
+    delete_old_module_config = questionary.confirm(
+        f"Delete old module config file {old_module_name_ver}.yml?", default=True
+    ).unsafe_ask()
+    if delete_old_module_config:
+        os.remove(old_module_config_path)
+
 
 def delete_module():
+    """Interactively delete a module config if not required by other modules or roles.
+    Raises RuntimeError if dependencies exist.
+    """
     module = questionary.select(
         "Select a module to update:", choices=get_module_list()
     ).unsafe_ask()
@@ -159,6 +188,9 @@ def delete_module():
 
 
 def add_role():
+    """Interactively add a new IOC role and its configuration files.
+    Creates role config, example, schema, README, and template files.
+    """
     role_name = questionary.text(
         "Enter the name of the new role (e.g., 'sr570'):",
     ).unsafe_ask()
@@ -207,17 +239,19 @@ def add_role():
         ioc_type_config["deploy_ioc_executable"] = executable
 
     with open(role_var_file_path, "w") as file:
+        file.write("---\n\n")
         yaml.safe_dump(ioc_type_config, file, default_flow_style=False, sort_keys=False)
 
     if not standard_st_cmd:
         return
 
-    role_path = os.path.join("roles", role_name_actual)
+    role_path = os.path.join("roles/device_roles", role_name_actual)
     os.makedirs(role_path, exist_ok=True)
     for subdir in ["templates", "tasks"]:
         os.makedirs(os.path.join(role_path, subdir), exist_ok=True)
 
     with open(os.path.join(role_path, "example.yml"), "w") as file:
+        file.write("---\n\n")
         example_config = {
             f"{role_name_actual}-01": {
                 "type": role_name_actual,
@@ -228,7 +262,9 @@ def add_role():
             }
         }
         yaml.safe_dump(example_config, file, default_flow_style=False, sort_keys=False)
+
     with open(os.path.join(role_path, "schema.yml"), "w") as file:
+        file.write("---\n\n")
         schema_config = {
             "type": f'enum("{role_name_actual}")',
             "environment": {
@@ -244,6 +280,15 @@ def add_role():
 
     with open(os.path.join(role_path, "tasks", "main.yml"), "w") as file:
         file.write(f"---\n# Tasks for {role_name} role\n")
+        file.write("""
+- name: Install base.cmd
+  ansible.builtin.template:
+    src: templates/base.cmd.j2
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    mode: "0664"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+""")
 
     with open(os.path.join(role_path, "templates", "base.cmd.j2"), "w") as file:
         file.write(
@@ -256,15 +301,17 @@ def add_role():
 
 
 def update_role():
+    """Roles cannot be updated. Raises NotImplementedError."""
     raise NotImplementedError("Roles cannot be updated.")
 
 
 def delete_role():
+    """Interactively delete a role and its configuration files."""
     role = questionary.select(
         "Select a role to delete:", choices=get_role_list()
     ).unsafe_ask()
 
-    role_path = os.path.join("roles", role)
+    role_path = os.path.join("roles/device_roles", role)
     role_vars_path = os.path.join("roles", "deploy_ioc", "vars", f"{role}.yml")
 
     shutil.rmtree(role_path)
@@ -274,7 +321,30 @@ def delete_role():
 
 
 def report():
-    pass
+    """Print a report of all modules and roles"""
+
+    print("\nDeployable modules:\n")
+    modules = {}
+    for module in get_module_list():
+        module_name, ver = tuple(module.rsplit("_", 1))
+        if module_name not in modules:
+            modules[module_name] = []
+        modules[module_name].append(ver)
+
+    print(
+        tabulate.tabulate(
+            [(k, ", ".join(v)) for k, v in modules.items()],
+            headers=["Module", "Versions"],
+            tablefmt="simple",
+        )
+    )
+
+    print("\nDeployable IOC roles:\n")
+    for role in get_role_list():
+        print(f" - {role}")
+
+    print("\nNumber of deployable modules:", len(get_module_list()))
+    print("Number of deployable IOC roles:", len(get_role_list()))
 
 
 if __name__ == "__main__":
@@ -284,10 +354,10 @@ if __name__ == "__main__":
         print("Targets: role, module")
         sys.exit(1)
     action = sys.argv[1]
-    target = sys.argv[2]
     if action == "report":
         func = report
     else:
+        target = sys.argv[2]
         func = getattr(sys.modules[__name__], f"{action}_{target}")
     try:
         func()

@@ -1,0 +1,258 @@
+# PPS Shutter Template
+# Interfaces to SH UDTs in PLC, i.e. SH_Sts and SH_Cmd
+# This template can be used for non-PPS shutters which re-use SH Handler objects
+
+#
+# PPS Shutter Readbacks/Statuses
+#
+
+record(bi, "$(Sys){$(Dev)}Sts:Cls-Sts") {
+    field(DESC, "$(Dev) Raw Position Status")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(ShTag)_Sts.StatusRaw S 0.5")
+    field(ZNAM, "Open")
+    field(ONAM, "Closed")
+}
+
+record(bi, "$(Sys){$(Dev)}Sts:OpnCmd-Sts") {
+    field(DESC, "$(Dev) PPS Command Latched")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(ShTag)_Sts.CMDRaw S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "Latched")
+}
+
+record(bi, "$(Sys){$(Dev)}Pos-Sts") {
+    field(DESC, "$(Dev) Status")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(ShTag)_Sts.Sts S 0.5")
+    field(ZNAM, "Open")
+    field(ONAM, "Not Open")
+    field(ZSV,  "MINOR")
+}
+
+record(bi, "$(Sys){$(Dev)}Err-Sts") {
+    field(DESC, "$(Dev) Err Status")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(ShTag)_Sts.StsFault S 0.5")
+    field(ZNAM, "Error")
+    field(ONAM, "OK")
+    field(ZSV,  "MAJOR")
+}
+
+record(bi, "$(Sys){$(Dev)}Cmd:Opn-Sts") {
+    field(DESC, "$(Dev) EPS Open Cmd Status")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(ShTag)_Sts.OpenRaw S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "Open")
+}
+
+record(bi, "$(Sys){$(Dev)}Cmd:Cls-Sts") {
+    field(DESC, "$(Dev) EPS Close Cmd Status")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(ShTag)_Sts.CloseRaw S 0.5")
+    field(ZNAM, "Close")
+    field(ONAM, "None")
+}
+
+record(bi, "$(Sys){$(Dev)}Sts:FailOpn-Sts") {
+    field(DESC, "$(Dev) Fail Open")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(ShTag)_Sts.FailedToOpn S 0.5")
+    field(ZNAM, "Error")
+    field(ONAM, "OK")
+    field(ZSV,  "MINOR")
+}
+
+record(bi, "$(Sys){$(Dev)}Sts:FailCls-Sts") {
+    field(DESC, "$(Dev) Fail Close")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(ShTag)_Sts.FailedToCls S 0.5")
+    field(ZNAM, "Error")
+    field(ONAM, "OK")
+    field(ZSV,  "MINOR")
+}
+
+record(bi, "$(Sys){$(Dev)}Sts:Permit-Sts") {
+    field(DESC, "$(Dev) EPS Permit/Interlock")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(ShTag)_Sts.Permit S 0.5")
+    field(ZNAM, "Interlocked")
+    field(ONAM, "OK")
+    field(ZSV,  "MAJOR")
+}
+
+record(bi, "$(Sys){$(Dev)}Enbl-Sts") {
+    field(DESC, "$(Dev) enable signal from PPS")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(ShTag)_Sts.EnableRaw S 0.5")
+    field(ZNAM, "Fault")
+    field(ONAM, "Able to open")
+    field(ZSV,  "MAJOR")
+}
+
+record(bi, "$(Sys){$(Dev)}Sts:ForceCls-Sts") {
+    field(DESC, "$(Dev) closed not by EPS")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(ShTag)_Sts.ForceClose S 0.5")
+    field(ZNAM, "CLOSED")
+    field(ONAM, "OK")
+    field(ZSV,  "MINOR")
+}
+
+#
+#  PPS Shutter Commands/Controls
+#
+
+# Note: for now, shutters have intermediate tags for requesting open/close.
+#  This is to fix a bug in the SH handler which can sometimes drop async commands.
+#  Eventually this fix should be moved into the SH Cmd UDT or SH Handler.
+
+# New record for SH open commands
+record(bo, "$(Sys){$(Dev)}Cmd:Opn-Cmd") {
+    field(DESC, "$(Dev) EPS Req Open Cmd")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) $(ShTag)_ReqOpnCmd S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "Open")
+}
+
+# Old record for SH open commands
+record(bo, "$(Sys){$(Dev)}Cmd:Opn-Cmd_") {
+    field(DESC, "$(Dev) EPS Open Cmd")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) $(ShTag)_Cmd.OpnCmd S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "Open")
+    field(ASG,  "EPSEXPERT")
+}
+
+# New record for SH close commands
+record(bo, "$(Sys){$(Dev)}Cmd:Cls-Cmd") {
+    field(DESC, "$(Dev) EPS Req Close Cmd")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) $(ShTag)_ReqClsCmd S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "Close")
+}
+
+# Old record for SH close commands
+record(bo, "$(Sys){$(Dev)}Cmd:Cls-Cmd_") {
+    field(DESC, "$(Dev) EPS Close Cmd")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) $(ShTag)_Cmd.ClsCmd S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "Close")
+    field(ASG,  "EPSEXPERT")
+}
+
+record(bo, "$(Sys){$(Dev)}Permit:Enbl-Cmd") {
+    field(DESC, "$(Dev) User Permit Select")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) $(ShTag)_Cmd.PermitEna S 0.5")
+    field(ZNAM, "Prohibit")
+    field(ONAM, "Permit")
+    field(ASG,  "EPSEXPERT")
+}
+
+record(bi, "$(Sys){$(Dev)}Permit:Enbl-Sts") {
+    field(DESC, "$(Dev) User Permit Status")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(ShTag)_Cmd.PermitEna S 0.5")
+    field(ZNAM, "Not permitted")
+    field(ONAM, "Permitted")
+    field(ZSV,  "MINOR")
+}
+
+record(bo, "$(Sys){$(Dev)}Intlk:Ack-Sel") {
+    field(DESC, "$(Dev) Interlock Ack Select")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) $(ShTag)_IntlkAck S 0.5")
+    field(ZNAM, "Unacknowledge")
+    field(ONAM, "Acknowledge")
+}
+
+record(bi, "$(Sys){$(Dev)}Intlk:Ack-Sts") {
+    field(DESC, "$(Dev) Interlock Ack Status")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(ShTag)_IntlkAck S 0.5")
+    field(ZNAM, "Unacknowledged")
+    field(ONAM, "Acknowledged")
+    field(ZSV,  "MINOR")
+}
+
+# Auto re-open mode does not currently work, due to how PPS functions.
+record(bo, "$(Sys){$(Dev)}Mode:Auto-Sel") {
+    field(DESC, "$(Dev) auto re-open mode select")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) $(ShTag)_Cmd.AutoMd S 0.5")
+    field(ZNAM, "Disable")
+    field(ONAM, "Enable")
+}
+
+record(bi, "$(Sys){$(Dev)}Mode:Auto-Sts") {
+    field(DESC, "$(Dev) auto re-open mode status")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(ShTag)_Cmd.AutoMd S 0.5")
+    field(ZNAM, "Disabled")
+    field(ONAM, "Enabled")
+}
+
+# "Local Open Disabled" mode does not currently work, due to how PPS functions.
+record(bo, "$(Sys){$(Dev)}Mode:LocalOpn-Sel") {
+    field(DESC, "$(Dev) local open mode select")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) $(ShTag)_Cmd.LocalOpnMd S 0.5")
+    field(ZNAM, "Disable")
+    field(ONAM, "Enable")
+}
+
+record(bi, "$(Sys){$(Dev)}Mode:LocalOpn-Sts") {
+    field(DESC, "$(Dev) local open mode status")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(ShTag)_Cmd.LocalOpnMd S 0.5")
+    field(ZNAM, "Disabled")
+    field(ONAM, "Enabled")
+}
+
+record(bo, "$(Sys){$(Dev)}Mode:LocalCls-Sel") {
+    field(DESC, "$(Dev) local close mode select")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) $(ShTag)_Cmd.LocalClsMd S 0.5")
+    field(ZNAM, "Disable")
+    field(ONAM, "Enable")
+}
+
+record(bi, "$(Sys){$(Dev)}Mode:LocalCls-Sts") {
+    field(DESC, "$(Dev) local close mode status")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(ShTag)_Cmd.LocalClsMd S 0.5")
+    field(ZNAM, "Disabled")
+    field(ONAM, "Enabled")
+}

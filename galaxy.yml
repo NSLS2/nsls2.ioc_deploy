@@ -2,7 +2,7 @@
 
 namespace: nsls2
 name: ioc_deploy
-version: 1.1.0
+version: 1.2.0
 readme: README.md
 authors:
   - Jakub Wlodek <jwlodek@bnl.gov>
@@ -16,4 +16,4 @@ repository: http://github.com/nsls2/nsls2.ioc_deploy
 documentation: http://github.com/nsls2/nsls2.ioc_deploy
 homepage: http://www.bnl.gov/nsls2
 issues: https://github.com/NSLS2/nsls2.ioc_deploy/issues
-build_ignore: ["venv/", ".pixi/"]
+build_ignore: ["tests", "venv", ".pixi"]

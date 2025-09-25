@@ -1,0 +1,15 @@
+file "aravisCamera_settings.req", P=$(P),  R=cam1:
+file "commonPlugin_settings.req", P=$(P)
+
+$(P)cam1:GC_Gamma
+$(P)cam1:GC_GevSCPSPacketSize
+
+{% if deploy_ioc_merged_env.FFMPEGSERVER is defined and ioc.environment.FFMSTREAM_PORT is defined %}
+file "ffmpegServer_settings.req",         P=$(P),  R=ffmstream1:
+{% endif %}
+{% if deploy_ioc_merged_env.ADCOMPVISION is defined %}
+file "NDCV_settings.req",              P=$(P),  R=CV1:
+{% endif %}
+{% if deploy_ioc_merged_env.ADPLUGINBAR is defined %}
+file "NDPluginBar_settings.req",       P=$(P),  R=Bar1:
+{% endif %}

@@ -1,0 +1,23 @@
+---
+
+- name: Set fact for serial number
+  ansible.builtin.set_fact:
+    rbd9103_serial_num: "{{ ioc.environment.SERIAL_NUMBER }}"
+
+- name: Install udev rule file for RBD9103
+  ansible.builtin.template:
+    src: "templates/99-rbd9103.rules.j2"
+    dest: "/etc/udev/rules.d/99-rbd9103-{{ rbd9103_serial_num }}.rules"
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - Reload udev rules
+
+- name: Install base startup script
+  ansible.builtin.template:
+    src: "templates/base.cmd.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"

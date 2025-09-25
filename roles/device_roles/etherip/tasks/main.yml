@@ -1,0 +1,27 @@
+---
+# Tasks for etherip role
+
+- name: Create req directory
+  ansible.builtin.file:
+    path: "{{ deploy_ioc_ioc_directory }}/req"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    state: directory
+    mode: '0775'
+
+- name: Copy EPICS database template files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ deploy_ioc_ioc_directory }}/db"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: preserve
+  loop: "{{ lookup('fileglob', 'files/*.template', wantlist=True) }}"
+
+- name: Generate base startup
+  ansible.builtin.template:
+    src: templates/base.cmd.j2
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"

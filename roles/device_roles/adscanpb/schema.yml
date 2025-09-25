@@ -1,0 +1,11 @@
+---
+
+type: enum("adscanpb")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
+  TRIGGER_SIGNAL: str()
+
+  # Two below are optional parameters to include tiled support
+  TILED_METADATA_URL: str(required=False)
+  TILED_ARRAY_URL: str(required=False)

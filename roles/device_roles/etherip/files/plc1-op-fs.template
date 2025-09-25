@@ -1,0 +1,158 @@
+# Fluorescent Screen Template
+# Interfaces to GV UDTs in PLC, i.e. GV_GV_Sts and GV_GV_Cmd
+# This template is customized for fluorescent screens rather than gate valves,
+#   but can be reused for other devices that fit the same terminology.
+
+#
+# Fluorescent Screen Readbacks/Statuses
+#
+
+record(bi, "$(Sys){$(Dev)}Sw:InLim-Sts") {
+    field(DESC, "$(Dev) In Limit Sts")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.OpnSw S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "In Position")
+}
+
+record(bi, "$(Sys){$(Dev)}Sw:OutLim-Sts") {
+    field(DESC, "$(Dev) Out Limit Sts")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.ClsSw S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "In Position")
+}
+
+record(bi, "$(Sys){$(Dev)}Pos-Sts") {
+    field(DESC, "$(Dev) Status")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.Sts S 0.5")
+    field(ZNAM, "Not Inserted")
+    field(ONAM, "Inserted")
+    field(ZSV,  "MINOR")
+}
+
+record(bi, "$(Sys){$(Dev)}Err-Sts") {
+    field(DESC, "$(Dev) Err Status")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.StsFault S 0.5")
+    field(ZNAM, "Error")
+    field(ONAM, "OK")
+    field(ZSV,  "MAJOR")
+}
+
+record(bi, "$(Sys){$(Dev)}Sts:Coil-Sts") {
+    field(DESC, "$(Dev) Coil Sts")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.Coil1 S 0.5")
+    field(ZNAM, "Not Energized")
+    field(ONAM, "Energized")
+}
+
+# Some screens may have dual-coil solenoids,
+#   but does not exist in all cases
+record(bi, "$(Sys){$(Dev)}Sts:Coil2-Sts") {
+    field(DESC, "$(Dev) Coil2 Sts")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.Coil2 S 0.5")
+    field(ZNAM, "Not Energized")
+    field(ONAM, "Energized")
+}
+
+record(bi, "$(Sys){$(Dev)}Sts:FailIn-Sts") {
+    field(DESC, "$(Dev) Fail Insert")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.FailedToOpn S 0.5")
+    field(ZNAM, "Error")
+    field(ONAM, "OK")
+    field(ZSV,  "MINOR")
+}
+
+record(bi, "$(Sys){$(Dev)}Sts:FailOut-Sts") {
+    field(DESC, "$(Dev) Fail Retract")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.FailedToCls S 0.5")
+    field(ZNAM, "Error")
+    field(ONAM, "OK")
+    field(ZSV,  "MINOR")
+}
+
+record(bi, "$(Sys){$(Dev)}Sts:DS_Intlk-Sts") {
+    field(DESC, "$(Dev) DS I/L Sts")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.LockDS S 0.5")
+    field(ZNAM, "Interlocked")
+    field(ONAM, "OK")
+    field(ZSV,  "MAJOR")
+}
+
+record(bi, "$(Sys){$(Dev)}Sts:US_Intlk-Sts") {
+    field(DESC, "$(Dev) US I/L Sts")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag)_GV_Sts.LockUS S 0.5")
+    field(ZNAM, "Interlocked")
+    field(ONAM, "OK")
+    field(ZSV,  "MAJOR")
+}
+
+#
+# Fluorescent Screen Commands/Controls
+#
+
+# Note: for now, screens have intermediate tags for requesting insert/retract.
+#  This is to fix a bug in the GV handler which can sometimes drop async commands.
+#  Eventually this fix should be moved into the GV Cmd UDT or GV Handler.
+
+# New record for FS insert commands
+record(bo, "$(Sys){$(Dev)}Cmd:In-Cmd") {
+    field(DESC, "$(Dev) Req Insert Cmd")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) $(Tag)_ReqOpnCmd S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "Insert")
+    field(ASG,  "$(ASG=DEFAULT)")
+}
+
+# Old record for FS insert commands
+record(bo, "$(Sys){$(Dev)}Cmd:In-Cmd_") {
+    field(DESC, "$(Dev) Insert Cmd")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) $(Tag)_GV_Cmd.OpnCmd S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "Insert")
+    field(ASG,  "EPSEXPERT")
+}
+
+# New record for FS retract commands
+record(bo, "$(Sys){$(Dev)}Cmd:Out-Cmd") {
+    field(DESC, "$(Dev) Req Retract Cmd")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) $(Tag)_ReqClsCmd S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "Retract")
+    field(ASG,  "$(ASG=DEFAULT)")
+}
+
+# Old record for FS retract commands
+record(bo, "$(Sys){$(Dev)}Cmd:Out-Cmd_") {
+    field(DESC, "$(Dev) Retract Cmd")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) $(Tag)_GV_Cmd.ClsCmd S 0.5")
+    field(ZNAM, "None")
+    field(ONAM, "Retract")
+    field(ASG,  "EPSEXPERT")
+}

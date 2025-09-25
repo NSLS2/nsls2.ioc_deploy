@@ -1,0 +1,20 @@
+#
+# Generic analog output record for multi-use
+#
+
+# If a non-writeable readback of this output is desired,
+#   define a matching substitution line for plc1-ai.template
+
+record(ao, "$(Sys){$(Dev)}$(Sig)") {
+    field(DESC, "$(DESC)")
+    field(SCAN, "Passive")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLC) $(Tag) S $(Rate=1)")
+    field(LINR, "SLOPE")
+    field(ESLO, "$(ESLO)")
+    field(EGU,  "$(EGU)")
+    field(PREC, "$(PREC=3)")
+    field(EOFF, "$(EOFF=0)")
+    field(AOFF, "$(AOFF=0)")
+    field(ASG,  "$(ASG=DEFAULT)")
+}

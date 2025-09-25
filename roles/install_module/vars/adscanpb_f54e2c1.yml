@@ -1,0 +1,10 @@
+---
+
+adscanpb_f54e2c1:
+  name: ADScanPB
+  version: f54e2c1
+  url: https://github.com/NSLS2/ADScanPB.git
+  include_base_ad_config: true
+  executable: scanPBApp
+  module_deps:
+    - adcore_60080dc

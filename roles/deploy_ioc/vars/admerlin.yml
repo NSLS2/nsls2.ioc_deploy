@@ -1,0 +1,21 @@
+---
+
+deploy_ioc_use_ad_common: true
+deploy_ioc_required_module: admerlin_399508f
+deploy_ioc_as_dir_name: autosave
+deploy_ioc_template_root_path:
+  "{{ deploy_ioc_required_module_path }}/iocs/merlinIOC"
+
+deploy_ioc_device_specific_env:
+  ADMERLIN: "/epics/modules/ADMerlin"
+  PORT: "ML"
+  QSIZE: 20
+  XSIZE: 512
+  YSIZE: 512
+  NCHANS: 2048
+  CBUFFS: 500
+  MAX_THREADS: 8
+  EPICS_DB_INCLUDE_PATH: "$(ADCORE)/db:$(ADMERLIN)/db"
+  NELEMENTS: 5000000
+  COMMAND_PORT: "$(PORT)cmd"
+  DATA_PORT: "$(PORT)data"

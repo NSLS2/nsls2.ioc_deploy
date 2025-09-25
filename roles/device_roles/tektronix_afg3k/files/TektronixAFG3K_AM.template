@@ -1,0 +1,21 @@
+include "TektronixAFG3K_Modulation.template"
+
+record(ao, "$(P)$(R)$(SOURCE_NUM):$(MOD_TYPE):Depth") {
+    field(DESC, "AM mod Depth")
+    field(DTYP, "stream")
+    field(HIHI, "120")
+    field(LOLO, "0")
+    field(EGU, "%")
+    field(OUT, "@afg3k.proto setAMDepth($(SOURCE_NUM)) $(PORT)")
+    field(SCAN, "I/O Intr")
+}
+
+record(ai, "$(P)$(R)$(SOURCE_NUM):$(MOD_TYPE):Depth_RBV") {
+    field(DESC, "AM mod Depth Status")
+    field(DTYP, "stream")
+    field(HIHI, "120")
+    field(LOLO, "0")
+    field(EGU, "%")
+    field(SCAN, "1 second")
+    field(INP, "@afg3k.proto getAMDepthStatus($(SOURCE_NUM)")
+}

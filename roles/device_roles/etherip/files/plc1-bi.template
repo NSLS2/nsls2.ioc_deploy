@@ -1,0 +1,14 @@
+#
+# Generic binary input record for multi-use
+#
+
+record(bi, "$(Sys){$(Dev)}$(Sig)") {
+    field(DESC, "$(DESC)")
+    field(SCAN, "I/O Intr")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLC) $(Tag) S $(Rate=1)")
+    field(ZNAM, "$(ZNAM)")
+    field(ONAM, "$(ONAM)")
+    field(ZSV,  "$(ZSV=NO_ALARM)")
+    field(OSV,  "$(OSV=NO_ALARM)")
+}
