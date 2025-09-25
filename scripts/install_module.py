@@ -19,7 +19,7 @@ def main():
     parser.add_argument(
         "-p",
         "--playbook",
-        default="../ansible-roles-nsls2/deploy_ioc.yml",
+        default="../ansible-roles-nsls2/install_epics_module.yml",
         help="Path to deployment playbook",
     )
     args = parser.parse_args()
