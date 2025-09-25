@@ -16,7 +16,7 @@ file "$(MCS)/db/MCS2_Extra.db"
 pattern
 {{"{"}}P, M, ADDR, PORT, TIMEOUT{{"}"}}
 {% for axis in ioc.axes %}
-{{"{"}}"{{ ioc.environment.P }}", "{{"{"}}{{ ioc.environment.CTRL_NAME }}-Ax:{{ axis.name }}{{"}"}}", {{ axis.num }}, "{{ ioc.environment.PORT }}", 1.0{{"}"}}
+{{"{"}}"{{ ioc.environment.P }}", "{{"{"}}{{ ioc.environment.CTRL_NAME }}-Ax:{{ axis.name }}{{"}"}}", {{ axis.num - 1 }}, "{{ ioc.environment.PORT }}", 1.0{{"}"}}
 {% endfor %}
 {{"}"}}
 {% endif %}
