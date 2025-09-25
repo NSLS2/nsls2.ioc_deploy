@@ -11,7 +11,8 @@ mcs2-01:
     R: "{$(CTRL_NAME)}"
     NUM_AXES: 6 # Standard MCS2 benchtop controller has 2x3 axes
     # Use a bitmask to specify which axes are used. 1 = unused, 0 = used.
-    # This example only uses axis 4, so the mask for a 6-axis controller is 110111 = 0x37
+    # This example only uses axis 4, so the mask for a 6-axis controller
+    # is 110111 = 0x37
     AXES_MASK: 0x37
     ENGINEER: C. Engineer
 
