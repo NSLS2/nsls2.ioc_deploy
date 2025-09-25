@@ -30,3 +30,16 @@
   vars:
     deploy_ioc_updated_macro:
       "{ '{{ item }}': '{{ deploy_ioc_replaced_macros }}' }"
+
+
+# We need to recursively do this again and again until no macros remain
+- name: Find envvars that use macros
+  ansible.builtin.set_fact:
+    deploy_ioc_envvars_with_macros: "{{ deploy_ioc_merged_env | dict2items |
+                                      selectattr('value', 'search', '\\$\\(') |
+                                      map(attribute='key') |
+                                      list }}"
+
+- name: Expand all macros in value of {{ item }}
+  ansible.builtin.include_tasks: process-env.yml
+  with_items: "{{ deploy_ioc_envvars_with_macros }}"

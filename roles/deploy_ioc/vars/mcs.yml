@@ -1,0 +1,14 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_use_ad_common: false
+deploy_ioc_required_module: mcs_49f0f2b
+deploy_ioc_executable: mcs
+deploy_ioc_make_autosave_files: true
+deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
+deploy_ioc_device_specific_env:
+  PORT: "MCS2"
+  PREFIX: "$(P)$(R)"
+  MOVING_POLL_PERIOD: 50
+  IDLE_POLL_PERIOD: 1000
+  DISABLE_SPEED: 0

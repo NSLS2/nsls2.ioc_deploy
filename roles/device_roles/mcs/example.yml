@@ -1,0 +1,34 @@
+---
+
+mcs2-01:
+  type: mcs
+  model: 2
+  environment:
+    PORT: "MCS2"
+    CTRL_NAME: "MCS2:01"
+    CTRL_IP: "127.0.0.1"
+    P: "XF31ID1-ES"
+    R: "{$(CTRL_NAME)}"
+    NUM_AXES: 6 # Standard MCS2 benchtop controller has 2x3 axes
+    # Use a bitmask to specify which axes are used. 1 = unused, 0 = used.
+    # This example only uses axis 4, so the mask for a 6-axis controller
+    # is 110111 = 0x37
+    AXES_MASK: 0x37
+    ENGINEER: C. Engineer
+
+  # Define the individal motor axes here
+  axes:
+    - name: "X"
+      num: 4
+      desc: "X"
+      mres: 0.00001
+      egu: "mm"
+      dir: "Pos"
+      velo: 2.0
+
+  substitutions:
+    asynComm:
+      - filepath: "$(ASYN)/db/asynRecord.db"
+        pattern: ["P", "R", "ADDR", "PORT", "TIMEOUT", "IMAX", "OMAX"]
+        instances:
+          - ["$(P)", "$(R)AsynIO", "$(PORT)", "1", "0", "256", "256"]
