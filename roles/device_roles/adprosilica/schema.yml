@@ -1,0 +1,10 @@
+---
+
+type: enum("adprosilica")
+
+environment:
+  ENGINEER: str()
+  PREFIX: str()
+  XSIZE: int(min=1)
+  YSIZE: int(min=1)
+  CAMERA_ID: any(ip(), hostname())
