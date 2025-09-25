@@ -2,7 +2,6 @@
 # Variables for the sr570 role
 deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
 deploy_ioc_required_module: base_stream_ioc_093e6cf
-deploy_ioc_executable: baseStreamApp
 deploy_ioc_req_file_list:
   - name: SR570preamp_settings.req
     macros: "P=$(SYS), A=$(DEV)"

@@ -1,8 +1,7 @@
 ---
 deploy_ioc_use_common: false
 deploy_ioc_use_ad_common: true
-deploy_ioc_required_module: adcore_60080dc
-deploy_ioc_executable: axisApp
+deploy_ioc_required_module: adaxis_8c5a423
 deploy_ioc_device_specific_env:
   PORT: "AXIS1"
   QSIZE: 20

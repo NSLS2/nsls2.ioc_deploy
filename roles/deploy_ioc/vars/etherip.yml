@@ -3,4 +3,3 @@
 deploy_ioc_use_common: true
 deploy_ioc_use_ad_common: false
 deploy_ioc_required_module: ether_ip_b27350b
-deploy_ioc_executable: ether_ipApp
