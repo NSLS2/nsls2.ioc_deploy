@@ -1,9 +1,9 @@
 ---
 
-tpmac_3a50d15:
+tpmac_44274d1:
   name: "tpmac"
-  version: "3a50d15"
-  url: https://github.com/epics-modules/tpmac
+  version: "44274d1"
+  url: https://github.com/NSLS2/tpmac
   module_deps:
     - pmac_f811ee1
   overwrite_release: true
