@@ -6,12 +6,12 @@ dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable
 # Configure the low level communication port
 {% if ioc.model is not defined or ioc.model == 2 %}
 drvAsynIPPortConfigure("$(PORT)_ETH", "$(CTRL_IP):$(CTRL_PORT_NUM=55551)", 0, 0, 0)
-MCS2CreateController("$(PORT)", "$(PORT)_ETH", {{ ioc.axes | length }}, $(MOVING_POLL_PERIOD), $(IDLE_POLL_PERIOD), $(AXES_MASK))
+MCS2CreateController("$(PORT)", "$(PORT)_ETH", {{ ioc.environment.NUM_AXES }}, $(MOVING_POLL_PERIOD), $(IDLE_POLL_PERIOD), $(AXES_MASK))
 {% else %}
 
 drvAsynIPPortConfigure("$(PORT)_ETH", "$(CTRL_IP):$(CTRL_PORT_NUM=5000)", 0, 0, 0)
-smarActMCSCreateController("$(PORT)", "$(PORT)_ETH",  {{ ioc.axes | length }}, $(MOVING_POLL_PERIOD), $(IDLE_POLL_PERIOD), $(AXES_MASK))
-{% for i in range(ioc.axes | length) %}
+smarActMCSCreateController("$(PORT)", "$(PORT)_ETH",  {{ ioc.environment.NUM_AXES }}, $(MOVING_POLL_PERIOD), $(IDLE_POLL_PERIOD), $(AXES_MASK))
+{% for i in range(ioc.environment.NUM_AXES) %}
 smarActMCSCreateAxis("$(PORT)", {{ i }}, {{ i }})
 {% endfor %}
 {% endif %}

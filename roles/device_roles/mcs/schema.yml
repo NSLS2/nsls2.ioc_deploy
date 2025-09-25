@@ -13,6 +13,7 @@ environment:
   R: str()
   AXES_MASK: int()
   PORT: str()
+  NUM_AXES: int(min=1)
 
 axes: list(include("axis"), min=1)
 
