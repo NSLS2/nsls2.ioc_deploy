@@ -5,4 +5,5 @@ zebra_8e70cda:
   version: 8e70cda
   url: https://github.com/NSLS2/zebra-ioc
   include_base_ad_config: false
+  executable: zebra
   module_deps: []

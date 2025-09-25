@@ -3,7 +3,6 @@
 deploy_ioc_template_root_path:
   "{{ deploy_ioc_required_module_path }}iocs/uvcIOC"
 deploy_ioc_required_module: aduvc_86918b6
-deploy_ioc_executable: uvcApp
 deploy_ioc_use_ad_common: true
 deploy_ioc_req_file_list:
   - name: auto_settings.req

@@ -154,3 +154,9 @@
 - name: Set path of installed leaf module
   ansible.builtin.set_fact:
     install_module_leaf_module_path: "{{ install_module_dir }}"
+
+- name: If specified, set installed leaf module executable
+  ansible.builtin.set_fact:
+    install_module_leaf_executable: >
+      {{ install_module_config.executable }}
+  when: install_module_config.executable is defined
