@@ -1,9 +1,17 @@
 ---
 
+- name: Show env var to process
+  ansible.builtin.debug:
+    msg: "Processing {{ item }} with value {{ deploy_ioc_merged_env[item] }}"
+
 - name: Identify macros in envvar value
   ansible.builtin.set_fact:
     deploy_ioc_macros_in_var: "{{ deploy_ioc_merged_env[item] |
-                        regex_findall('\\$\\((.[^\\)]+)\\)') }}"
+                        regex_findall('\\$\\([A-Za-z_][A-Za-z0-9_]*\\)') }}"
+
+- name: Show macros found in var
+  ansible.builtin.debug:
+    msg: "Found macros {{ deploy_ioc_macros_in_var }} in {{ item }}"
 
 - name: Assign temporary replacement envvar
   ansible.builtin.set_fact:

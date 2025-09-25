@@ -30,7 +30,7 @@ jobs:
 
       - name: Run Module Config Validation
         run: |
-          pixi run validate tests/test_install_module_vars.py
+          pixi run tests tests/test_install_module_vars.py
 
   run_device_specific_role_validation:
     name: Validate Device Specific Roles
@@ -52,7 +52,7 @@ jobs:
 
       - name: Run Device Specific Config Validation
         run: |
-          pixi run validate tests/test_deploy_ioc_vars.py \
+          pixi run tests tests/test_deploy_ioc_vars.py \
           tests/test_device_roles.py
 
   run_validation_of_example_configs:
@@ -75,5 +75,5 @@ jobs:
 
       - name: Run Example Config Validation
         run: |
-          pixi run validate \
+          pixi run tests \
           tests/test_validate_ex_configs_against_schemas.py
