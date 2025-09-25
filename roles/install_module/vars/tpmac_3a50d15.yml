@@ -6,3 +6,5 @@ tpmac_3a50d15:
   url: https://github.com/epics-modules/tpmac
   module_deps:
     - pmac_f811ee1
+  overwrite_release: true
+  overwrite_config_site: true

@@ -24,7 +24,7 @@ def main():
     )
     args = parser.parse_args()
 
-    if not os.path.exists(Path(f"roles/install_module/{args.module}.yml")):
+    if not os.path.exists(Path(f"roles/install_module/vars/{args.module}.yml")):
         raise ValueError(f"Unknown module type: {args.module}")
 
     playbook_cmd = [
