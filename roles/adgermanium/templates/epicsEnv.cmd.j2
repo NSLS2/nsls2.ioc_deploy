@@ -1,0 +1,43 @@
+< /epics/common/{{ host_info_hostname }}-netsetup.cmd
+
+errlogInit(20000)
+
+{% for envvar in deploy_ioc_merged_env|dict2items %}
+{% set vars = {'deploy_ioc_expanded_envvar': envvar.value} %}
+{% if "$(" in envvar.key %}
+{% for macro in deploy_ioc_merged_env|dict2items %}
+{{ macro.key }}
+{% endfor %}
+{% endif %}
+epicsEnvSet("{{ envvar.key }}", "{{ vars.deploy_ioc_expanded_envvar }}")
+{% endfor %}
+
+#===============================================
+
+epicsEnvSet("DETECTOR_PORT", "GERM")
+epicsEnvSet("MCA_PORT",      "ARR_MCA")
+epicsEnvSet("TDC_PORT",      "ARR_TDC")
+epicsEnvSet("SPCT_PORT",     "ARR_SPCT")
+epicsEnvSet("INTENS_PORT",   "ARR_INTENS")
+
+epicsEnvSet("DETECTOR_ADDR", "0")
+epicsEnvSet("MCA_ADDR",      "1")
+epicsEnvSet("TDC_ADDR",      "2")
+epicsEnvSet("SPCT_ADDR",     "3")
+epicsEnvSet("INTENS_ADDR",   "4")
+
+epicsEnvSet("", "")
+epicsEnvSet("", "")
+epicsEnvSet("", "")
+epicsEnvSet("", "")
+epicsEnvSet("", "")
+epicsEnvSet("", "")
+epicsEnvSet("", "")
+epicsEnvSet("", "")
+
+epicsEnvSet("MCA_XSIZE",    "4096")
+epicsEnvSet("MCA_YSIZE",    "$(NELM)")
+epicsEnvSet("TDC_XSIZE",    "1024")
+epicsEnvSet("TDC_YSIZE",    "$(NELM)")
+epicsEnvSet("SPCT_XSIZE",   "$(MCA_XSIZE)")
+epicsEnvSet("INTENS_XSIZE", "$(NELM)")

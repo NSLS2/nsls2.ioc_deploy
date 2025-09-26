@@ -1,0 +1,41 @@
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# adgermanium specific commands
+
+germaniumConfig( "$(PORT)"
+               , "$(Detector_IP)"
+               , $(NELM)
+               , 2
+               , 512
+               , 100
+               , 10485760
+               , $(MCA_ADDR)
+               , $(TDC_ADDR)
+               , $(SPCT_ADDR)
+               , $(INTENS_ADDR)
+               )
+asynReport 5, "$(PORT)"
+
+dbLoadRecords( "$(ADGERMANIUM)/db/germanium.db", "P=$(PREFIX), R=, PORT=GERM, ADDR=0" )
+
+NDStdArraysConfigure("MCA",    20, 0, "GERM", $(MCA_ADDR),    0, 0, 0, 0)
+NDStdArraysConfigure("TDC",    20, 0, "GERM", $(TDC_ADDR),    0, 0, 0, 0)
+NDStdArraysConfigure("SPCT",   20, 0, "GERM", $(SPCT_ADDR),   0, 0, 0, 0)
+NDStdArraysConfigure("INTENS", 20, 0, "GERM", $(INTENS_ADDR), 0, 0, 0, 0)
+
+dbLoadRecords( "$(ADCORE)/db/NDStdArrays.template"
+             , "P=$(PREFIX), R=MCA:,    PORT=$(MCA_PORT),    ADDR=0, NDARRAY_PORT=$(DETECTOR_PORT)"
+             )
+
+dbLoadRecords( "$(ADCORE)/db/NDStdArrays.template"
+             , "P=$(PREFIX), R=TDC:,    PORT=$(TDC_PORT),    ADDR=0, NDARRAY_PORT=$(DETECTOR_PORT)"
+             )
+
+dbLoadRecords( "$(ADCORE)/db/NDStdArrays.template"
+             , "P=$(PREFIX), R=SPCT:,   PORT=$(SPCT_PORT),   ADDR=0, NDARRAY_PORT=$(DETECTOR_PORT)"
+             )
+
+dbLoadRecords( "$(ADCORE)/db/NDStdArrays.template"
+             , "P=$(PREFIX), R=INTENS:, PORT=$(INTENS_PORT), ADDR=0, NDARRAY_PORT=$(DETECTOR_PORT)"
+             )

@@ -1,0 +1,73 @@
+# common.cmd
+
+{% if ioc.substitutions is defined %}
+# Load any additional specified databases.
+{% for substitution in ioc.substitutions|dict2items %}
+{% if deploy_ioc_load_as_substitutions %}
+dbLoadTemplate("$(TOP)/db/{{ substitution.key }}.substitutions"
+{%- if substitution.value is not mapping or "template_macros" not in substitution.value %})
+{% else %}, "{{ substitution.value.template_macros }}")
+{% endif %}
+{% else %}
+{% for template in deploy_ioc_substitution_templates %}
+{% for instance in template.instances %}
+dbLoadRecords("{{ template.filepath }}", "
+{%- for macro in template.pattern %}
+{{ macro }}={{ instance[loop.index - 1] }}
+{%- if not loop.last %},
+{%- elif substitution.value is mapping and substitution.value.template_macros is defined%},{{ substitution.value.template_macros }}")
+{% else %}")
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if deploy_ioc_use_ad_common %}
+# Load base set of plugins using commonPlugins.cmd
+< $(ADCORE)/iocBoot/commonPlugins.cmd
+
+{% if deploy_ioc_merged_env.FFMPEGSERVER is defined and ioc.environment.FFMSTREAM_PORT is defined %}
+ffmpegServerConfigure("$(FFMSTREAM_PORT)", "{{ host_info_epics_intf_ip }}")
+ffmpegStreamConfigure("FfmStream1", $(QSIZE), 0, "$(PORT)", 0, -1, 0)
+dbLoadRecords("$(FFMPEGSERVER)/db/ffmpegStream.template", "P=$(PREFIX),R=ffmstream1:,PORT=FfmStream1,NDARRAY_PORT=$(PORT)")
+
+{% endif %}
+{% if deploy_ioc_merged_env.ADCOMPVISION is defined %}
+NDCVConfigure("CV1", $(QSIZE), 0, "$(PORT)", 0, 0, 0, 0, 0, $(MAX_THREADS=5))
+dbLoadRecords("$(ADCOMPVISION)/db/NDCV.template",  "P=$(PREFIX),R=CV1:, PORT=CV1,ADDR=0,TIMEOUT=1,NDARRAY_PORT=$(PORT)")
+set_requestfile_path("$(ADCOMPVISION)/db")
+
+{% endif %}
+{% if deploy_ioc_merged_env.ADPLUGINBAR is defined %}
+NDBarConfigure("BAR1", $(QSIZE), 0, "$(PORT)", 0, 0, 0, 0, 0, $(MAX_THREADS=5))
+dbLoadRecords("$(ADPLUGINBAR)/db/NDBar.template",  "P=$(PREFIX),R=Bar1:, PORT=BAR1,ADDR=0,TIMEOUT=1,NDARRAY_PORT=$(PORT)")
+set_requestfile_path("$(ADPLUGINBAR)/db")
+
+{% endif %}
+{% endif %}
+
+# Load additional records standard for each IOC
+{% if ioc.environment.IOC_PREFIX is defined %}
+dbLoadRecords("$(EPICS_BASE)/db/iocAdminSoft.db", "IOC=$(IOC_PREFIX)")
+dbLoadRecords("$(EPICS_BASE)/db/save_restoreStatus.db", "P=$(IOC_PREFIX)")
+dbLoadRecords("$(EPICS_BASE)/db/reccaster.db", "P=$(IOC_PREFIX)RecSync")
+{% elif ioc.environment.CT_PREFIX is defined %}
+dbLoadRecords("$(EPICS_BASE)/db/iocAdminSoft.db", "IOC=$(CT_PREFIX)")
+dbLoadRecords("$(EPICS_BASE)/db/save_restoreStatus.db", "P=$(CT_PREFIX)")
+dbLoadRecords("$(EPICS_BASE)/db/reccaster.db", "P=$(CT_PREFIX)RecSync")
+{% else %}
+dbLoadRecords("$(EPICS_BASE)/db/iocAdminSoft.db", "IOC=$(PREFIX)")
+dbLoadRecords("$(EPICS_BASE)/db/save_restoreStatus.db", "P=$(PREFIX)")
+dbLoadRecords("$(EPICS_BASE)/db/reccaster.db", "P=$(PREFIX)RecSync")
+{% endif %}
+
+save_restoreSet_Debug(0)
+save_restoreSet_IncompleteSetsOk(1)
+save_restoreSet_DatedBackupFiles(1)
+
+set_savefile_path("$(TOP)/{{ deploy_ioc_as_dir_name }}/save")
+set_requestfile_path("$(TOP)/{{ deploy_ioc_as_dir_name }}/req")
+set_requestfile_path("$(EPICS_BASE)/req")
