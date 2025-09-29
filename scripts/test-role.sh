@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Local IOC Development Script
+# EPICS container deployment script
 set -e
 
 # Change to script directory
