@@ -37,15 +37,15 @@ pip3 install --upgrade ansible-core > /dev/null 2>&1
 
 # Install collection (idempotent)
 echo "Installing ansible collection..."
-ansible-galaxy collection install $(pwd) -p ../ansible/collections --force > /dev/null 2>&1
-ansible-galaxy collection install community.docker > /dev/null 2>&1
+ansible-galaxy collection install $(pwd) -p ../ansible/collections --force
+ansible-galaxy collection install community.docker
 
 # Check if container is running, start if needed
 if ! docker ps --format 'table {{.Names}}' | grep -q epics-dev; then
     echo "Container not running, checking if image exists..."
     if ! docker images --format 'table {{.Repository}}:{{.Tag}}' | grep -q "$CONTAINER"; then
         echo "Pulling container image..."
-        docker login ghcr.io > /dev/null 2>&1
+        docker login ghcr.io
         docker pull "$CONTAINER"
     fi
     echo "Starting container..."
