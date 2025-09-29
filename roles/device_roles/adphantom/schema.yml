@@ -1,0 +1,6 @@
+---
+
+type: enum("adphantom")
+environment:
+  ENGINEER: str()
+  PREFIX: str()

@@ -1,0 +1,53 @@
+---
+
+- name: Install base startup script
+  ansible.builtin.template:
+    src: "templates/base.cmd.j2"
+    dest: "{{ iocs_directory }}/{{ ioc_name }}/iocBoot/base.cmd"
+    owner: "{{ softioc_user }}"
+    group: "{{ softioc_group }}"
+    mode: "0664"
+
+- name: Copy autosave req file
+  ansible.builtin.copy:
+    src: "files/auto_settings.req"
+    dest: "{{ iocs_directory }}/{{ ioc_name }}/auto_settings.req"
+    owner: "{{ softioc_user }}"
+    group: "{{ softioc_group }}"
+    mode: preserve
+
+- name: Copy postInit cmd
+  ansible.builtin.copy:
+    src: "files/postInit.cmd"
+    dest: "{{ iocs_directory }}/{{ ioc_name }}/iocBoot/postInit.cmd"
+    owner: "{{ softioc_user }}"
+    group: "{{ softioc_group }}"
+    mode: preserve
+
+- name: Configure local interface on target server if specified
+  when: ioc.local_intf_mac is defined and ioc.local_intf_ip is defined
+  block:
+    - name: Ensure specified MAC does not collide with SCI/CAM/INST interfaces
+      ansible.builtin.include_tasks: "validate_local_intf.yml"
+
+    - name: Print selected parameters
+      ansible.builtin.debug:
+        msg:
+          MAC: "{{ ioc.local_intf_mac }}"
+          IP: "{{ ioc.local_intf_ip }}"
+          NETMASK: "255.255.255.0"
+          MTU: "{{ _local_intf_mtu }}"
+          INTERFACE: "{{ _local_intf }}"
+
+    - name: Add config file for processing scripts
+      ansible.builtin.template:
+        src: ifcfg-interface.sh.j2
+        dest: "/etc/sysconfig/network-scripts/ifcfg-{{ _local_intf }}"
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Restart NetworkManager
+      ansible.builtin.service:
+        name: NetworkManager
+        state: restarted
