@@ -9,10 +9,8 @@ Any required EPICS modules can be automatically built by the `install_module` ro
 
 ## Local Testing
 
-Test IOC roles locally using the provided script:
+Test IOC role locally against an EPICS container:
 
 ```bash
 ./scripts/test-role.sh <role-name>
 ```
-
-Runs the role against a local EPICS container.
