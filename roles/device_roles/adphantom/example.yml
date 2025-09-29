@@ -1,7 +1,7 @@
 ---
 
 ADPhantom:
-  type: "ADPhantom"
+  type: "adphantom"
   # Two below are optional parameters to perform setup of
   # local interface that the detector will be connected to.
   local_intf_mac: "3c:a8:2a:13:66:87"
