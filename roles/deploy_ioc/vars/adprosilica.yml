@@ -9,4 +9,3 @@ deploy_ioc_req_file_list:
     macros: "P=$(PREFIX)"
 deploy_ioc_device_specific_env:
   PORT: "PS1"
-  EPICS_DB_INCLUDE_PATH: "$(ADCORE)/db:$(ADPROSILICA)/db"
