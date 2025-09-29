@@ -7,4 +7,4 @@ cam-sp1:
     ENGINEER: "J. Wlodek"
     XSIZE: 1280
     YSIZE: 720
-    CAMERA_ID: "xf31id1-cam1.nsls2.bnl.local" # We don't use the serial number option
+    CAMERA_ID: "xf31id1-cam1.nsls2.bnl.local" # We don't use the serial number
