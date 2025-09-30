@@ -54,7 +54,7 @@ fi
 
 # Install required Python packages in container
 echo "Installing Python packages in container..."
-docker exec -u root epics-dev yum install -y python39-requests python39-pyyaml python39-pip > /dev/null 2>&1
+docker exec -u root epics-dev yum install -y python3-requests python3-pyyaml python3-pip python3-dnf > /dev/null 2>&1
 docker exec -u root epics-dev yum install -y procServ git libxml2-devel libXext-devel zlib-devel libX11-devel > /dev/null 2>&1
 
 # Install development tools for compilation
@@ -90,4 +90,4 @@ docker exec -u root epics-dev chown epics:epics /epics/common /epics/modules
 # Test deployment
 echo "Testing role: $ROLE"
 cd ../ansible
-ansible-playbook -i epics-dev, -c docker -u root -e "ioc_type=$ROLE" -e "deploy_ioc_component=test" -e "deploy_ioc_target=test-ioc" -e "deploy_ioc_ioc_name=test-ioc" -e "ioc_name=test-ioc" -e '{"deploy_ioc_required_system_packages":[],"host_config":{"softioc_user":"epics","softioc_group":"epics","epics_interface":{"address":"127.0.0.1","broadcast":"127.255.255.255"},"test-ioc":{"type":"'$ROLE'","enabled":true,"environment":{"IOC_DIR":"/epics/iocs","TOP":"/epics/iocs/test-ioc"}}}}' --start-at-task "Deploy specified IOCs" deploy_ioc.yml
+ansible-playbook -i epics-dev, -c docker -u root -e "ioc_type=$ROLE" -e "deploy_ioc_component=test" -e "deploy_ioc_target=test-ioc" -e "deploy_ioc_ioc_name=test-ioc" -e "ioc_name=test-ioc" -e '{"install_module_default_pkg_deps":[],"deploy_ioc_required_system_packages":[],"host_config":{"softioc_user":"epics","softioc_group":"epics","epics_interface":{"address":"127.0.0.1","broadcast":"127.255.255.255"},"test-ioc":{"type":"'$ROLE'","enabled":true,"environment":{"IOC_DIR":"/epics/iocs","TOP":"/epics/iocs/test-ioc"}}}}' --start-at-task "Deploy specified IOCs" deploy_ioc.yml
