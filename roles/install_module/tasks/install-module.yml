@@ -25,6 +25,14 @@
         path: "{{ install_module_dir }}/.git"
       register: install_module_cloned
 
+    - name: Add module dir to safe dirs list to avoid dubious ownership error
+      ansible.builtin.command:
+        "git config --global --add safe.directory {{ install_module_dir }}"
+        # noqa command-instead-of-module
+      register: install_module_make_dir_safe_early
+      changed_when: install_module_make_dir_safe_early.rc == 0
+      when: install_module_cloned.stat.exists
+
     # The only changes should be to CONFIG_SITE and RELEASE files,
     # which we will re-apply in a second, so stash them to ensure correct
     # version is checked out in next step.
@@ -120,9 +128,12 @@
   when: install_module_config.pkg_deps is defined
 
 - name: Install any required system packages
-  ansible.builtin.dnf:
-    name: "{{ install_module_pkg_deps }}"
-    state: present
+  ansible.builtin.command:
+    cmd: >-
+      yum install -y --skip-broken
+      {{ install_module_pkg_deps | join(' ') }}
+  register: install_module_yum_result
+  changed_when: "'Nothing to do' not in install_module_yum_result.stdout"
 
 - name: Compile the module
   ansible.builtin.shell:

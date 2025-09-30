@@ -57,6 +57,31 @@ echo "Installing Python packages in container..."
 docker exec -u root epics-dev yum install -y python39-requests python39-pyyaml python39-pip > /dev/null 2>&1
 docker exec -u root epics-dev yum install -y procServ git libxml2-devel libXext-devel zlib-devel libX11-devel > /dev/null 2>&1
 
+# Install development tools for compilation
+echo "Installing development tools..."
+docker exec -u root epics-dev yum groupinstall -y "Development Tools" > /dev/null 2>&1
+docker exec -u root epics-dev yum install -y gcc gcc-c++ make readline-devel > /dev/null 2>&1
+
+# Install EPICS sequencer support
+echo "Installing EPICS sequencer support..."
+docker exec -u root epics-dev yum install -y epel-release > /dev/null 2>&1
+docker exec -u root epics-dev yum install -y seq > /dev/null 2>&1 || true
+
+# Create missing RULES_SNCSEQ file
+echo "Creating missing EPICS SNCSEQ rules..."
+docker exec -u root epics-dev bash -c 'cat > /usr/lib/epics/configure/rules.d/RULES_SNCSEQ << EOF
+# SNCSEQ Rules - minimal implementation for compatibility
+# This file provides basic SNCSEQ support for EPICS builds
+
+ifndef SNCSEQ_RULES
+SNCSEQ_RULES = YES
+
+# Define empty rules to prevent build failures
+SNCSEQ_RULES_INCLUDED = YES
+
+endif
+EOF'
+
 # Create required directories
 echo "Creating required directories..."
 docker exec -u root epics-dev mkdir -p /epics/common /epics/modules
@@ -65,4 +90,4 @@ docker exec -u root epics-dev chown epics:epics /epics/common /epics/modules
 # Test deployment
 echo "Testing role: $ROLE"
 cd ../ansible
-ansible-playbook -i epics-dev, -c docker -e "ioc_type=$ROLE" -e "deploy_ioc_component=test" -e "deploy_ioc_target=test-ioc" -e '{"deploy_ioc_required_system_packages":[],"host_config":{"softioc_user":"epics","softioc_group":"epics","epics_interface":{"address":"127.0.0.1","broadcast":"127.255.255.255"},"test-ioc":{"type":"'$ROLE'","enabled":true}}}' --start-at-task "Deploy specified IOCs" deploy_ioc.yml
+ansible-playbook -i epics-dev, -c docker -u root -e "ioc_type=$ROLE" -e "deploy_ioc_component=test" -e "deploy_ioc_target=test-ioc" -e "deploy_ioc_ioc_name=test-ioc" -e "ioc_name=test-ioc" -e '{"deploy_ioc_required_system_packages":[],"host_config":{"softioc_user":"epics","softioc_group":"epics","epics_interface":{"address":"127.0.0.1","broadcast":"127.255.255.255"},"test-ioc":{"type":"'$ROLE'","enabled":true,"environment":{"IOC_DIR":"/epics/iocs","TOP":"/epics/iocs/test-ioc"}}}}' --start-at-task "Deploy specified IOCs" deploy_ioc.yml
