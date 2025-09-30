@@ -9,6 +9,7 @@ Any required EPICS modules can be automatically built by the `install_module` ro
 
 ## Local Testing
 
+This requires a python environment with ansible installed, and docker or podman.
 Test IOC role locally against an EPICS container:
 
 ```bash
