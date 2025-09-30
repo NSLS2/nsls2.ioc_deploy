@@ -128,11 +128,9 @@
   when: install_module_config.pkg_deps is defined
 
 - name: Install any required system packages
-  ansible.builtin.command:
-    cmd: dnf install -y {{ install_module_pkg_deps | join(' ') }}
-  register: install_module_dnf_result
-  changed_when: "'Nothing to do' not in install_module_dnf_result.stdout"
-  when: install_module_pkg_deps | length > 0
+  ansible.builtin.dnf:
+    name: "{{ install_module_pkg_deps }}"
+    state: present
 
 - name: Compile the module
   ansible.builtin.shell:
