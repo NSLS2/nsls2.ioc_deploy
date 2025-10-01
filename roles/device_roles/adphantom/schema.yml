@@ -4,3 +4,5 @@ type: enum("adphantom")
 environment:
   ENGINEER: str()
   PREFIX: str()
+  CAMERA_IP: str()
+  NUM_CINES: int()

@@ -3,17 +3,17 @@
 - name: Install base startup script
   ansible.builtin.template:
     src: "templates/base.cmd.j2"
-    dest: "{{ iocs_directory }}/{{ ioc_name }}/iocBoot/base.cmd"
-    owner: "{{ softioc_user }}"
-    group: "{{ softioc_group }}"
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0664"
 
 - name: Copy autosave req file
   ansible.builtin.copy:
     src: "files/auto_settings.req"
-    dest: "{{ iocs_directory }}/{{ ioc_name }}/auto_settings.req"
-    owner: "{{ softioc_user }}"
-    group: "{{ softioc_group }}"
+    dest: "{{ deploy_ioc_as_directory }}/req/auto_settings.req"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: preserve
 
 
