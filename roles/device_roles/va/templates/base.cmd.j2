@@ -10,4 +10,3 @@ epicsEnvSet("STREAM_PROTOCOL_PATH", "${VA}/protocol")
 {% for device in ioc.environment.devices %}
 drvAsynIPPortConfigure({{ device.PORT }}, "{{ device.HOST }}:{{ device.IP_PORT }}")
 {% endfor %}
-
