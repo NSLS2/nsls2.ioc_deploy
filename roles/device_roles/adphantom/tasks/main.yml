@@ -16,13 +16,6 @@
     group: "{{ softioc_group }}"
     mode: preserve
 
-- name: Copy postInit cmd
-  ansible.builtin.copy:
-    src: "files/postInit.cmd"
-    dest: "{{ iocs_directory }}/{{ ioc_name }}/iocBoot/postInit.cmd"
-    owner: "{{ softioc_user }}"
-    group: "{{ softioc_group }}"
-    mode: preserve
 
 - name: Configure local interface on target server if specified
   when: ioc.local_intf_mac is defined and ioc.local_intf_ip is defined

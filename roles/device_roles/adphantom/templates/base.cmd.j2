@@ -28,8 +28,5 @@ dbLoadRecords("$(ADPHANTOM)/db/miroCine.template", "P=$(PREFIX),R=cam1:, CINE={{
 NDStdArraysConfigure("Image1", 3, 0, "$(PORT)", 0)
 dbLoadRecords("$(ADCORE)/db/NDStdArrays.template", "P=$(PREFIX),R=image1:,PORT=Image1,ADDR=0,NDARRAY_PORT=$(PORT),TIMEOUT=1,TYPE=Int16,FTVL=SHORT,NELEMENTS=6000000")
 
-#
-# Load all other plugins using commonPlugins.cmd
-< $(ADCORE)/iocBoot/commonPlugins.cmd
 
 set_requestfile_path("$(MIROCAMERA)/db")
