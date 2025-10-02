@@ -6,3 +6,12 @@ The `nsls2.ioc_deploy` collection expects to be used in tandem with two other re
 
 The collection includes several core central roles that are shared by all deployments, and then one role per type of IOC/hardware, found under `roles/`. Each IOC type also has a `vars` file for overriding default behaviors in `roles/deploy_ioc/vars/`.
 Any required EPICS modules can be automatically built by the `install_module` role. The configured modules can be seen at `roles/install_module/vars/`.
+
+## Local Testing
+
+This requires a python environment with ansible installed, and docker or podman.
+Test IOC role locally against an EPICS container:
+
+```bash
+./scripts/test-role.sh <role-name>
+```
