@@ -52,16 +52,6 @@ if ! docker ps --format 'table {{.Names}}' | grep -q epics-dev; then
     docker run -dit --name epics-dev "$CONTAINER"
 fi
 
-# Install required Python packages in container
-echo "Installing Python packages in container..."
-docker exec -u root epics-dev yum install -y python3-requests python3-pyyaml python3-pip python3-dnf > /dev/null 2>&1
-docker exec -u root epics-dev yum install -y procServ git libxml2-devel libXext-devel zlib-devel libX11-devel > /dev/null 2>&1
-
-# Install development tools for compilation
-echo "Installing development tools..."
-docker exec -u root epics-dev yum groupinstall -y "Development Tools" > /dev/null 2>&1
-docker exec -u root epics-dev yum install -y gcc gcc-c++ make readline-devel > /dev/null 2>&1
-
 # Install EPICS sequencer support
 echo "Installing EPICS sequencer support..."
 docker exec -u root epics-dev yum install -y epel-release > /dev/null 2>&1
@@ -81,11 +71,6 @@ SNCSEQ_RULES_INCLUDED = YES
 
 endif
 EOF'
-
-# Create required directories
-echo "Creating required directories..."
-docker exec -u root epics-dev mkdir -p /epics/common /epics/modules
-docker exec -u root epics-dev chown epics:epics /epics/common /epics/modules
 
 # Test deployment
 echo "Testing role: $ROLE"
