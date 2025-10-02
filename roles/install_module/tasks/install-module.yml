@@ -25,14 +25,6 @@
         path: "{{ install_module_dir }}/.git"
       register: install_module_cloned
 
-    - name: Add module dir to safe dirs list to avoid dubious ownership error
-      ansible.builtin.command:
-        "git config --global --add safe.directory {{ install_module_dir }}"
-        # noqa command-instead-of-module
-      register: install_module_make_dir_safe_early
-      changed_when: install_module_make_dir_safe_early.rc == 0
-      when: install_module_cloned.stat.exists
-
     # The only changes should be to CONFIG_SITE and RELEASE files,
     # which we will re-apply in a second, so stash them to ensure correct
     # version is checked out in next step.
