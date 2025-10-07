@@ -1,5 +1,6 @@
 ---
-
+local_intf_mac: str(required=False)
+local_intf_ip: any(ip(), hostname(), required=False)
 type: enum("adphantom")
 environment:
   ENGINEER: str()
