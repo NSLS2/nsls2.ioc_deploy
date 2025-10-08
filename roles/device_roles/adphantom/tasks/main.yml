@@ -15,32 +15,3 @@
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
     mode: preserve
-
-
-- name: Configure local interface on target server if specified
-  when: ioc.local_intf_mac is defined and ioc.local_intf_ip is defined
-  block:
-    - name: Ensure specified MAC does not collide with SCI/CAM/INST interfaces
-      ansible.builtin.include_tasks: "validate_local_intf.yml"
-
-    - name: Print selected parameters
-      ansible.builtin.debug:
-        msg:
-          MAC: "{{ ioc.local_intf_mac }}"
-          IP: "{{ ioc.local_intf_ip }}"
-          NETMASK: "255.255.255.0"
-          MTU: "{{ _local_intf_mtu }}"
-          INTERFACE: "{{ _local_intf }}"
-
-    - name: Add config file for processing scripts
-      ansible.builtin.template:
-        src: ifcfg-interface.sh.j2
-        dest: "/etc/sysconfig/network-scripts/ifcfg-{{ _local_intf }}"
-        owner: root
-        group: root
-        mode: "0644"
-
-    - name: Restart NetworkManager
-      ansible.builtin.service:
-        name: NetworkManager
-        state: restarted
