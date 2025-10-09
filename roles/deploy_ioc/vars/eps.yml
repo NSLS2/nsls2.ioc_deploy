@@ -1,6 +1,17 @@
 ---
-
+## Generated
 deploy_ioc_use_common: true
 deploy_ioc_use_ad_common: false
-deploy_ioc_required_module: eps_2b8896fc3dbbfedaabe151cde1decb40f2d07aff
+deploy_ioc_required_module: eps_f2d07aff
 deploy_ioc_executable: eps
+
+## Imported
+##  Do I need to add these to schema/device_specific_vars.yml?
+
+# deploy_ioc_standard_post_init: false
+# deploy_ioc_use_dbs_for_substitutions: false
+# deploy_ioc_autosave_directory_name: "as"
+# deploy_ioc_template_root_path: /epics/modules/eps
+# deploy_ioc_specific_default_environment:
+#   EPS: "/epics/modules/eps"
+#   EPICS_DB_INCLUDE_PATH: "$(EPS)/db"
