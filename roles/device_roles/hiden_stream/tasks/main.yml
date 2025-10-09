@@ -1,5 +1,16 @@
 ---
 
+- name: Check if pixi.toml exists
+  ansible.builtin.stat:
+    path: "{{ deploy_ioc_ioc_directory }}/pixi.toml"
+  register: pixi_toml_stat
+
+- name: Initialize Pixi
+  ansible.builtin.command:
+    cmd: "{{ ioc.pixi_executable_path | default(device_roles_hiden_stream_pixi_executable_path) }} init"
+    chdir: "{{ deploy_ioc_ioc_directory }}"
+  when: not pixi_toml_stat.stat.exists
+
 - name: Add hiden git repository as PyPI dependency via Pixi
   ansible.builtin.command:
     # yamllint disable-line rule:line-length
