@@ -1,7 +1,8 @@
 ---
 
 type: enum("hiden_stream")
-hiden_git_revision: str(required=False)
 pixi_executable_path: str(required=False)
+hiden_git_revision: str(required=False)
 environment:
   PREFIX: str()
+  ENGINEER: str(required=False)

@@ -1,8 +1,8 @@
 ---
-hiden_stream:
+hiden01:
   type: "hiden_stream"
-  hiden_git_revision: "main" # Use commit hash, tag, or branch name
-  pixi_executable_path: "pixi" # Assumed to be in the PATH by default
+  pixi_executable_path: "pixi"
+  hiden_git_revision: "main"
   environment:
     PREFIX: "XF:31ID1-ES{HIDEN:Dev-1}"
     ENGINEER: "C. Engineer"
