@@ -1,0 +1,7 @@
+---
+
+adphantom_fdff818:
+  name: ADPhantom
+  version: fdff818
+  url: https://github.com/jwlodek/ADPhantom
+  include_base_ad_config: True
