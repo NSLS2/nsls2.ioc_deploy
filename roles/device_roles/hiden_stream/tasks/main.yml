@@ -14,7 +14,9 @@
 - name: Add hiden git repository as PyPI dependency via Pixi
   ansible.builtin.command:
     # yamllint disable-line rule:line-length
-    cmd: "{{ ioc.pixi_executable_path | default(device_roles_hiden_stream_pixi_executable_path) }} add --pypi 'hiden @ git+https://github.com/NSLS2/hiden.git@{{ ioc.hiden_git_revision | default(device_roles_hiden_stream_hiden_git_revision) }}'"
+    cmd: >
+      "{{ ioc.pixi_executable_path | default(device_roles_hiden_stream_pixi_executable_path) }} add python"
+      "{{ ioc.pixi_executable_path | default(device_roles_hiden_stream_pixi_executable_path) }} add --pypi 'hiden @ git+https://github.com/NSLS2/hiden.git@{{ ioc.hiden_git_revision | default(device_roles_hiden_stream_hiden_git_revision) }}'"
     chdir: "{{ deploy_ioc_ioc_directory }}"
   changed_when: true
 
