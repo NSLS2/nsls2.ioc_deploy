@@ -8,4 +8,4 @@ export EPICS_CA_ADDR_LIST={{ epics_subnet }}
 export EPICS_CAS_BEACON_ADDR_LIST={{ epics_subnet }}
 
 # Start IOC here
-{{ pixi_executable_path }} run python -m hiden.cap2 --list-pvs --prefix='{{ ioc.environment.PREFIX }}'
+{{ host_config.pixi_executable_path }} run python -m hiden.cap2 --list-pvs --prefix='{{ ioc.environment.PREFIX }}'
