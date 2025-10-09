@@ -1,0 +1,11 @@
+
+#!/bin/bash
+
+# Configure EPICS network environment variables
+export EPICS_CA_AUTO_ADDR_LIST=NO
+export EPICS_CAS_AUTO_BEACON_ADDR_LIST=NO
+export EPICS_CA_ADDR_LIST={{ epics_subnet }}
+export EPICS_CAS_BEACON_ADDR_LIST={{ epics_subnet }}
+
+# Start IOC here
+{{ pixi_executable_path }} run python -m hiden.cap2 --list-pvs --prefix='{{ ioc.environment.PREFIX }}'
