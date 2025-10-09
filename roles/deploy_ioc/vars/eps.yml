@@ -1,0 +1,6 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_use_ad_common: false
+deploy_ioc_required_module: eps_2b8896fc3dbbfedaabe151cde1decb40f2d07aff
+deploy_ioc_executable: eps
