@@ -1,0 +1,9 @@
+---
+
+type: enum("hiden_stream")
+pixi_executable_path: str(required=False)
+hiden_git_revision: str(required=False)
+python_version: str(required=False)
+environment:
+  PREFIX: str()
+  ENGINEER: str(required=False)

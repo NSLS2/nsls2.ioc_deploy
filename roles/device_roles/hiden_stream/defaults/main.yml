@@ -1,0 +1,5 @@
+---
+
+device_roles_hiden_stream_hiden_git_revision: "v0.1.0"
+device_roles_hiden_stream_pixi_executable_path: "pixi"
+device_roles_hiden_stream_python_version: ">=3.10,<3.13"
