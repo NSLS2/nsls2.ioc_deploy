@@ -1,0 +1,12 @@
+---
+
+type: enum("hiden_rga")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
+  PORT: str()
+  HOST: any(ip(), hostname())
+  IP_PORT: int()
+  Sys: str()
+  Dev: str()
+  CntlSys: str()
