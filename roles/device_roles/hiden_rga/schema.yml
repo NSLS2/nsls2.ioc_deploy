@@ -1,0 +1,6 @@
+---
+
+type: enum("hiden_rga")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
