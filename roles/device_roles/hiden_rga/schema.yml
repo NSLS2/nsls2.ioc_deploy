@@ -6,6 +6,7 @@ environment:
   PREFIX: str()
   PORT: str()
   HOST: any(ip(), hostname())
+  IP_PORT: int()
   Sys: str()
   Dev: str()
   CntlSys: str()
