@@ -1,0 +1,10 @@
+---
+type: enum("xspress3")
+simulation: bool(required=False)
+environment:
+  ENGINEER: str()
+  PREFIX: str()
+  NUM_CHANNELS: int(min=1)
+  NUM_CARDS: int(min=1)
+  XSPRESS3_IP: any(ip(), hostname())
+  CALIBRATION_DIR: str()
