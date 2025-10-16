@@ -1,0 +1,6 @@
+---
+
+type: enum("eps")
+environment:
+  ENGINEER: str()
+  PREFIX: str()

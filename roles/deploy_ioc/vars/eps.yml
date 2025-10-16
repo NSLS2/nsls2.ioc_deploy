@@ -1,0 +1,7 @@
+---
+## Generated
+deploy_ioc_use_common: true
+deploy_ioc_use_ad_common: false
+deploy_ioc_required_module: eps_f2d07aff
+deploy_ioc_executable: eps
+deploy_ioc_make_autosave_files: true
