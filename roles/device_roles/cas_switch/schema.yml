@@ -1,0 +1,5 @@
+---
+type: enum("cas_switch")
+environment:
+  CT_PREFIX: str()
+  BEAMLINE: str()
