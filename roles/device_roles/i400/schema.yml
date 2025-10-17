@@ -3,4 +3,10 @@
 type: enum("i400")
 environment:
   ENGINEER: str()
-  PREFIX: str()
+  SYS: str()
+  DEV: str()
+  IOC_SYS: str()
+  IOC_DEV: str()
+  PORT: str()
+  HOST: str()
+  IP_PORT: int()
