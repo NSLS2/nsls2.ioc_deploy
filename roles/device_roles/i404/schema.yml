@@ -1,0 +1,6 @@
+---
+
+type: enum("i404")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
