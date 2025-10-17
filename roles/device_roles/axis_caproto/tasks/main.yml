@@ -20,7 +20,7 @@
     chdir: "{{ deploy_ioc_ioc_directory }}"
   changed_when: true
 
-- name: Add hiden git repository as PyPI dependency via Pixi
+- name: Add srx-caproto-iocs git repository as PyPI dependency via Pixi
   ansible.builtin.command:
     # yamllint disable-line rule:line-length
     cmd: "{{ ioc.pixi_executable_path | default(device_roles_axis_caproto_pixi_executable_path) }} add --pypi 'srx-caproto-iocs @ git+https://github.com/NSLS-II-SRX/srx-caproto-iocs.git@{{ ioc.axis_caproto_srx_caproto_iocs_git_revision | default(device_roles_axis_caproto_srx_caproto_iocs_git_revision) }}'"
