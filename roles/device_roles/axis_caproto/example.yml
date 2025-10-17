@@ -1,0 +1,10 @@
+---
+axis-caproto-01:
+  type: "axis_caproto"
+  pixi_executable_path: "pixi"
+  axis_caproto_srx_caproto_iocs_git_revision: "v0.1.0"
+  python_version: "=3.10"
+  environment:
+    PREFIX: "XF:31ID1-ES{AXIS-CAPROTO:01}"
+    ENGINEER: "C. Engineer"
+    CAMERA_HOST: "127.0.0.1"
