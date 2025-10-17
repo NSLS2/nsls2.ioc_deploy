@@ -4,7 +4,6 @@ i404-01:
   type: i404
   environment:
     ENGINEER: C. Engineer
-    PREFIX: XF:31ID1-ES{I404:01}
     SYS: XF:09IDB-BI
     DEV: "{i404:1}"
     IOC_SYS: XF:09IDB-CT
