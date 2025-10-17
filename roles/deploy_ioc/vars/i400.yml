@@ -1,0 +1,7 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_use_ad_common: false
+deploy_ioc_required_module: i400_0d69784
+deploy_ioc_executable: I400
+deploy_ioc_make_autosave_files: true

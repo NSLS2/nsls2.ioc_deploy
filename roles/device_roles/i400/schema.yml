@@ -1,0 +1,12 @@
+---
+
+type: enum("i400")
+environment:
+  ENGINEER: str()
+  SYS: str()
+  DEV: str()
+  IOC_SYS: str()
+  IOC_DEV: str()
+  PORT: str()
+  HOST: any(ip(), hostname())
+  IP_PORT: int()
