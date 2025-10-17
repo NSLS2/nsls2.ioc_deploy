@@ -1,0 +1,9 @@
+---
+
+type: enum("zebra_saver_caproto")
+pixi_executable_path: str(required=False)
+srx_caproto_iocs_git_revision: str(required=False)
+python_version: str(required=False)
+environment:
+  PREFIX: str()
+  ENGINEER: str(required=False)

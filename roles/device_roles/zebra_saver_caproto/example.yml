@@ -1,0 +1,9 @@
+---
+zebra-saver-caproto-01:
+  type: "zebra_saver_caproto"
+  srx_caproto_iocs_git_revision: "v0.1.0"
+  python_version: "=3.12"
+  pixi_executable_path: "pixi"
+  environment:
+    PREFIX: "XF:09IDA-ES{ZEBRA_SAVER:01}"
+    ENGINEER: "C. Engineer"
