@@ -1,0 +1,6 @@
+---
+
+type: enum("i400")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
