@@ -1,0 +1,7 @@
+record(bo, "$(CT_PREFIX){}Prmt:RemoteExp-Sel") {
+  field(DESC, "Allow write access for restricted PVs")
+  field(ZNAM, "Restricted")
+  field(ONAM, "Permitted")
+  field(ASG, "EXPERT")
+  field(VAL, 0)  # Initialize with 'Restricted' value
+}

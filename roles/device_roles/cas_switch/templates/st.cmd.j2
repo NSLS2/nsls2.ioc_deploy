@@ -1,0 +1,12 @@
+#!{{ deploy_ioc_template_root_path }}/bin/linux-x86_64/{{ deploy_ioc_executable }}
+
+epicsEnvSet("CT_PREFIX", "{{ ioc.environment.CT_PREFIX }}")
+epicsEnvSet("BEAMLINE", "{{ ioc.environment.BEAMLINE }}")
+
+< /epics/common/{{ inventory_hostname.split('.')[0] }}-netsetup.cmd
+
+dbLoadRecords("cas-switch.db", "CT_PREFIX=$(CT_PREFIX)")
+
+asSetFilename("/epics/common/bl-cas/bl-cas/$(BEAMLINE)/cas-switch.acf")
+
+iocInit()
