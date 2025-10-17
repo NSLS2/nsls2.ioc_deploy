@@ -1,0 +1,10 @@
+---
+
+type: enum("axis_caproto")
+pixi_executable_path: str(required=False)
+axis_caproto_srx_caproto_iocs_git_revision: str(required=False)
+python_version: str(required=False)
+environment:
+  PREFIX: str()
+  ENGINEER: str(required=False)
+  CAMERA_HOST: str()
