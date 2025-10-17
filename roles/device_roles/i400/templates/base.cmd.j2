@@ -16,4 +16,3 @@ dbLoadRecords("$(I400)/db/asyn.db", "Sys=$(SYS),Dev=$(DEV),PORT=$(PORT),ADDR=0")
 # PREFIX is used for autosave and devIoStat
 epicsEnvSet("PREFIX", "$(IOC_SYS)$(IOC_DEV)")
 
-dbLoadRecords("$(I400)/db/reccaster.db", "P=$(PREFIX)RecSync")
