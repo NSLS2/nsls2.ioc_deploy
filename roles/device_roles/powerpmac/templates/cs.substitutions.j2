@@ -7,7 +7,7 @@ file "$(PPMAC)/db/motor.db"
 pattern
 {{"{"}}P, M, MOTOR, PORT, ADDR, DESC, DTYP, MRES, EGU, PREC, ALIAS{{"}"}}
 {% for axis in ioc.virtual_axes %}
-{{"{"}}"{{ ioc.environment.SYS }}", "{{"{"}}{{ axis.component }}-Ax:{{ axis.name }}{{"}"}}Mtr", "CS{{ axis.cs }}", {{ axis.num }}, {{ axis.desc }}, asynMotor, {{ axis.mres }}, "{{ axis.egu }}", 4, ""{{"}"}}
+{{"{"}}"{{ deploy_ioc_merged_env.SYS }}", "{{"{"}}{{ axis.component }}-Ax:{{ axis.name }}{{"}"}}Mtr", "{{ deploy_ioc_merged_env.CTRL_PORT }}", "CS{{ axis.cs }}", {{ axis.num }}, "{{ axis.desc }}", asynMotor, {{ axis.mres }}, "{{ axis.egu }}", 4, ""{{"}"}}
 {% endfor %}
 {{"}"}}
 
@@ -17,6 +17,6 @@ file "$(PPMAC)/db/motor_in_cs.template"
 pattern
 {{"{"}}P, M, SPORT{{"}"}}
 {% for axis in ioc.axes %}
-{{"{"}}"{{ ioc.environment.SYS }}", "{{"{"}}{{ axis.component }}-Ax:{{ axis.name }}{{"}"}}Mtr", "$(SSH_PORT)"}
+{{"{"}}"{{ deploy_ioc_merged_env.SYS }}", "{{"{"}}{{ axis.component }}-Ax:{{ axis.name }}{{"}"}}Mtr", "{{ deploy_ioc_merged_env.SSH_PORT }}"{{"}"}}
 {% endfor %}
 {{"}"}}

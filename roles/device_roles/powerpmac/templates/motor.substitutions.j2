@@ -6,6 +6,6 @@ file "$(PPMAC)/db/motor.db"
 pattern
 {{"{"}}P, M, MOTOR, PORT, ADDR, DESC, DTYP, MRES, EGU, PREC, ALIAS{{"}"}}
 {% for axis in ioc.axes %}
-{{"{"}}"{{ ioc.environment.SYS }}", "{{"{"}}{{ axis.component }}-Ax:{{ axis.name }}{{"}"}}Mtr", "$(PORT)", {{ axis.num }}, {{ axis.desc }}, asynMotor, {{ axis.mres }}, "{{ axis.egu }}", 4, ""{{"}"}}
+{{"{"}}"{{ deploy_ioc_merged_env.SYS }}", "{{"{"}}{{ axis.component }}-Ax:{{ axis.name }}{{"}"}}Mtr", "{{ deploy_ioc_merged_env.CTRL_PORT }}", "{{ deploy_ioc_merged_env.SSH_PORT }}", {{ axis.num }}, "{{ axis.desc }}", asynMotor, {{ axis.mres }}, "{{ axis.egu }}", 4, ""{{"}"}}
 {% endfor %}
 {{"}"}}

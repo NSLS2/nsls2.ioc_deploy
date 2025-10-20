@@ -3,11 +3,13 @@ mc01:
   type: powerpmac
   environment:
     SYS: "XF:31ID1-ES"
-    PMAC: "MC:01"
-    DEV: "{$(PMAC)}"
+    CONTROLLER: "MC:01"
+    DEV: "{$(CONTROLLER)}"
     CT_SYS: "XF:31ID1-CT"
     NUM_AXES: 8 # Controller has 8 axes, even though only 4 are used
     ENGINEER: "J. Wlodek"
+    MOVING_POLL_PERIOD: 100
+    IDLE_POLL_PERIOD: 1000
     CONTROLLER_IP: "xf31id1-lab3-mc1.nsls2.bnl.local"
 
   disable_all_limits: false # Defaults to false. If true all limits are disabled

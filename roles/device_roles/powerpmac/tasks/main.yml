@@ -5,16 +5,16 @@
   ansible.builtin.template:
     src: "templates/base.cmd.j2"
     dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0664"
 
 - name: Install default list of substitution files
   ansible.builtin.template:
     src: "templates/{{ item }}.substitutions.j2"
     dest: "{{ deploy_ioc_ioc_directory }}/db/{{ item }}.substitutions"
-    owner: "{{ host_info_softioc_user }}"
-    group: "{{ host_info_softioc_group }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0664"
   with_items:
     - "autohome"

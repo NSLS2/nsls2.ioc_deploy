@@ -5,5 +5,5 @@ file "$(PPMAC)/db/ppmacStatus.db"
 {{"{"}}
 pattern
 {{"{"}}SYS, PMAC, VERSION, PLC, PORT, NAXES{{"}"}}
-{{"{"}}"{{ ioc.environment.CT_SYS }}", "{{ ioc.environment.PMAC }}", 1, 5, "$(SSH_PORT)", {{ ioc.environment.NUM_AXES }}{{"}"}}
+{{"{"}}"{{ deploy_ioc_merged_env.CT_SYS }}", "{{ deploy_ioc_merged_env.CONTROLLER }}", 1, 5, "{{ deploy_ioc_merged_env.SSH_PORT }}", {{ deploy_ioc_merged_env.NUM_AXES }}{{"}"}}
 {{"}"}}

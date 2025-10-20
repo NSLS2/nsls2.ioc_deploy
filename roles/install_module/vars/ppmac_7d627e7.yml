@@ -1,9 +1,9 @@
 ---
 
-ppmac_daa658d:
+ppmac_7d627e7:
   name: ppmac
   url: https://github.com/NSLS2/ppmac
-  version: daa658d
+  version: 7d627e7
   executable: "ppmac"
   module_deps:
     - pmac_f811ee1
