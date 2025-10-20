@@ -2,7 +2,7 @@
 mc01:
   type: powerpmac
   environment:
-    SYS: "XF:31ID1-ES"
+    SYS: "XF:31ID1-OP:1"
     CONTROLLER: "MC:01"
     DEV: "{$(CONTROLLER)}"
     CT_SYS: "XF:31ID1-CT"
@@ -24,33 +24,33 @@ mc01:
   axes:
     - name: "Rot"
       num: 1
-      component: Smpl:Trans
+      component: CMT:1
       desc: "Rotation"
-      mres: 0.0001
+      mres: 0.045
       egu: "deg"
       home_plc: 8
 
     - name: "X"
       num: 2
-      component: Smpl:Trans
+      component: CMT:1
       desc: "X translation"
-      mres: 0.0001
+      mres: 0.00005
       egu: "mm"
       home_plc: 9
 
     - name: "Y"
       num: 3
-      component: Smpl:Trans
+      component: CMT:1
       desc: "Y translation"
-      mres: 0.0001
+      mres: 0.00005
       egu: "mm"
       home_plc: 10
 
     - name: "Z"
       num: 4
-      component: Smpl:Trans
+      component: CMT:1
       desc: "Z translation"
-      mres: 0.0001
+      mres: 0.00005
       egu: "mm"
       home_plc: 11
 
@@ -58,8 +58,8 @@ mc01:
     - name: "Diag"
       num: 7
       cs: 2
-      component: Smpl:Trans
+      component: CMT:1
       desc: "X-Y Diagonal translation virtual axis"
-      mres: 0.0001
+      mres: 0.00001
       egu: "mm"
       home_plc: 17
