@@ -2,7 +2,6 @@
 germcaproto:
   type: "germcaproto"
   pixi_executable_path: "pixi"
-  hiden_git_revision: "main"
   python_version: "=3.10"
   environment:
     PREFIX: "XF:31ID1-ES{GERMCAPROTO:Dev-1}"
