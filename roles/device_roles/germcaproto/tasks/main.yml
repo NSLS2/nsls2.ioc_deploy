@@ -23,7 +23,7 @@
 - name: Add hextools dependency
   ansible.builtin.command:
     # yamllint disable-line rule:line-length
-    cmd: "{{ ioc.pixi_executable_path | default(device_roles_germcaproto_pixi_executable_path) }} add hextools"
+    cmd: "{{ ioc.pixi_executable_path | default(device_roles_germcaproto_pixi_executable_path) }} add --pypi hextools"
     chdir: "{{ deploy_ioc_ioc_directory }}"
   changed_when: true
 
