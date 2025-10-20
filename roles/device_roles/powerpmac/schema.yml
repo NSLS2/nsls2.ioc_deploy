@@ -12,7 +12,6 @@ environment:
   CONTROLLER_IP: any(ip(), hostname())
 
 disable_all_limits: bool(required=False)
-disable_lim_axes: list(int(min=1, max=8))
 
 coord_systems: list(include("coord_system"), required=False)
 axes: list(include("axis"), min=1, max=8)
