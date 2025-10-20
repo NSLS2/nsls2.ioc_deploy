@@ -1,0 +1,6 @@
+---
+cas-switch-01:
+  type: "cas_switch"
+  environment:
+    BEAMLINE: "31id1"
+    CT_PREFIX: "XF:31ID1-CT"

@@ -1,0 +1,12 @@
+---
+
+i404-01:
+  type: i404
+  environment:
+    ENGINEER: C. Engineer
+    SYS: XF:09IDB-BI
+    DEV: "{i404:1}"
+    IOC_SYS: XF:09IDB-CT
+    IOC_DEV: "{IOC:i404}"
+    HOST: 127.0.0.1
+    IP_PORT: 4001

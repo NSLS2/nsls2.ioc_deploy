@@ -157,6 +157,6 @@
 
 - name: If specified, set installed leaf module executable
   ansible.builtin.set_fact:
-    install_module_leaf_executable: >
-      {{ install_module_config.executable }}
+    install_module_leaf_executable:
+      "{{ install_module_config.executable }}"
   when: install_module_config.executable is defined

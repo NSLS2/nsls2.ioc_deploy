@@ -1,0 +1,32 @@
+dbLoadDatabase("{{ _ioc_template_root_path }}/dbd/miroApp.dbd")
+miroApp_registerRecordDeviceDriver(pdbbase)
+
+# Configure control and data TCP/IP socket connections. Default ports should be 7115 and 7116 respectively.
+drvAsynIPPortConfigure("CTRL", "$(CAMERA_IP):$(CTRL_PORT)", 100, 0, 0)
+drvAsynIPPortConfigure("DATA", "$(CAMERA_IP):$(DATA_PORT)", 100, 0, 0)
+
+# Configure the camera
+miroCameraConfig("$(PORT)", "CTRL", "DATA", 0, 0, 0, 0)
+
+# Enable debugging for certain functions
+#miroCameraDebug("$(PORT)", "readoutDataStream", 1);
+
+asynSetTraceIOMask($(PORT), 0, 2)
+#asynSetTraceMask($(PORT), 0, 0xff)
+
+# Load base camera records
+dbLoadRecords("$(ADPHANTOM)/db/miroCamera.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
+
+{% for i in range(0, ioc.environment.NUM_CINES)%}
+dbLoadRecords("$(ADPHANTOM)/db/miroCine.template", "P=$(PREFIX),R=cam1:, CINE={{ i + 1 }}, PORT=$(PORT),ADDR=0,TIMEOUT=1")
+{% endfor %}
+
+#
+# Create a standard arrays plugin, set it to get data from Driver.
+# int NDStdArraysConfigure(const char *portName, int queueSize, int blockingCallbacks, const char *NDArrayPort, int NDArrayAddr, int maxBuffers, size_t maxMemory,
+#                          int priority, int stackSize, int maxThreads)
+NDStdArraysConfigure("Image1", 3, 0, "$(PORT)", 0)
+dbLoadRecords("$(ADCORE)/db/NDStdArrays.template", "P=$(PREFIX),R=image1:,PORT=Image1,ADDR=0,NDARRAY_PORT=$(PORT),TIMEOUT=1,TYPE=Int16,FTVL=SHORT,NELEMENTS=6000000")
+
+
+set_requestfile_path("$(ADPHANTOM)/db")

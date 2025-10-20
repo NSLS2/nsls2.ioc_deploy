@@ -1,0 +1,16 @@
+
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# eps specific commands
+
+## Load PLC driver
+EIP_buffer_limit(492)
+drvEtherIP_init()
+drvEtherIP_define_PLC("$(PLC)","$(PLC_IP)",0)
+EIP_verbosity(6)
+
+## Restricted access for PV changes
+asSetFilename("$(ACF)")
+
+dbLoadRecords("${EPS}/db/reccaster.db", "P=${PREFIX}RecSync")

@@ -1,0 +1,10 @@
+---
+
+cam-sp1:
+  type: "adprosilica"
+  environment:
+    PREFIX: "XF:31ID1-ES{Sample-Cam:1}"
+    ENGINEER: "J. Wlodek"
+    XSIZE: 1280
+    YSIZE: 720
+    CAMERA_ID: "xf31id1-cam1.nsls2.bnl.local" # We don't use the serial number

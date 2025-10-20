@@ -1,0 +1,7 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_use_ad_common: false
+deploy_ioc_required_module: i404_4ea37d0
+deploy_ioc_executable: i404
+deploy_ioc_make_autosave_files: true

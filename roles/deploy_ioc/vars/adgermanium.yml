@@ -1,0 +1,6 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_use_ad_common: true
+deploy_ioc_required_module: adgermanium_0395fac
+deploy_ioc_executable: germanium

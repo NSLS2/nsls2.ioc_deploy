@@ -1,0 +1,10 @@
+---
+
+adprosilica_9abb772:
+  name: ADProsilica
+  executable: prosilicaApp
+  url: https://github.com/areaDetector/ADProsilica
+  include_base_ad_config: true
+  version: 9abb772
+  module_deps:
+    - adcore_60080dc

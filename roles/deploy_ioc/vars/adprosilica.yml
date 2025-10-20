@@ -1,0 +1,10 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_use_ad_common: true
+deploy_ioc_required_module: adprosilica_9abb772
+deploy_ioc_req_file_list:
+  - name: auto_settings.req
+    macros: "P=$(PREFIX)"
+deploy_ioc_device_specific_env:
+  PORT: "PS1"

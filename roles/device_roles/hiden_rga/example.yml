@@ -1,0 +1,13 @@
+---
+
+hiden_rga-01:
+  type: hiden_rga
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-VA{HIDEN_RGA:01}
+    PORT: "RGA1"
+    HOST: "127.0.0.1"
+    IP_PORT: 5025
+    Sys: "XF:31ID1-VA"
+    Dev: "{HIDEN_RGA:01}"
+    CntlSys: "XF:31ID1-CT"

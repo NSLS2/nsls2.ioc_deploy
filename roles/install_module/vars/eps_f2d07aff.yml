@@ -1,0 +1,10 @@
+---
+
+eps_f2d07aff:
+  name: eps
+  version: f2d07aff
+  url: https://github.com/NSLS2/eps-ioc
+  epics_deps:
+    EPICS_BASE: /usr/lib/epics
+  pkg_deps:
+    - epics-bundle

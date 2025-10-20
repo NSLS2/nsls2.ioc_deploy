@@ -1,0 +1,9 @@
+---
+
+ADPhantom:
+  type: "adphantom"
+  environment:
+    PREFIX: "XF:31ID1-ES{VEO:Cam-1}"
+    ENGINEER: "K. Barry"
+    CAMERA_IP: "100.100.214.107"
+    NUM_CINES: 16

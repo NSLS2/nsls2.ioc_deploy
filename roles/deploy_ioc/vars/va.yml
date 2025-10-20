@@ -1,0 +1,7 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_use_ad_common: false
+deploy_ioc_required_module: va_f4f62f6
+deploy_ioc_executable: va
+deploy_ioc_make_autosave_files: true

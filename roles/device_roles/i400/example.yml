@@ -1,0 +1,13 @@
+---
+
+i400-01:
+  type: i400
+  environment:
+    ENGINEER: C. Engineer
+    SYS: XF:09IDA-BI
+    DEV: "{i400:01}"
+    IOC_SYS: XF:09IDA-CT
+    IOC_DEV: "{IOC:i400}"
+    PORT: E1
+    HOST: 127.0.0.1
+    IP_PORT: 4001

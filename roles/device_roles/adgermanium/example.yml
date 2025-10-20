@@ -1,0 +1,9 @@
+---
+
+adgermanium-01:
+  type: adgermanium
+  environment:
+    ENGINEER: Ji Li
+    PREFIX: XF:31ID1-ES{ADGERMANIUM:01}
+    DETECTOR_IP: 172.16.0.1
+    NELM: 384

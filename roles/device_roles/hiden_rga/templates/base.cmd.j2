@@ -1,0 +1,13 @@
+
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# hiden_rga specific commands
+epicsEnvSet("STREAM_PROTOCOL_PATH", "$(HidenRGA)/protocol")
+drvAsynIPPortConfigure("$(PORT)", "$(HOST):$(IP_PORT)")
+dbLoadRecords("$(HidenRGA)/db/reccaster.db", "P=$(PREFIX)RecSync")
+dbLoadRecords("$(HidenRGA)/db/hiden_rga_global.template", "Sys=$(Sys),Dev=$(Dev),PORT=$(PORT)")
+dbLoadRecords("$(HidenRGA)/db/hiden_rga_bar.template", "Sys=$(Sys),Dev=$(Dev),PORT=$(PORT)")
+dbLoadRecords("$(HidenRGA)/db/hiden_rga_prfl.template", "Sys=$(Sys),Dev=$(Dev),PORT=$(PORT)")
+dbLoadRecords("$(HidenRGA)/db/hiden_rga_mid.template", "Sys=$(Sys),Dev=$(Dev),PORT=$(PORT)")
+dbLoadRecords("$(HidenRGA)/db/hiden_rga_degas.template", "Sys=$(Sys),Dev=$(Dev),PORT=$(PORT)")

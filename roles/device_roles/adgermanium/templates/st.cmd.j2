@@ -1,0 +1,22 @@
+#!{{ deploy_ioc_template_root_path }}/bin/linux-x86_64/{{ deploy_ioc_executable }}
+
+# Perform base environment setup and configuration
+< ./epicsEnv.cmd
+
+# Load IOC specific startup configuration
+< ./base.cmd
+
+{% if deploy_ioc_use_common or deploy_ioc_use_ad_common %}
+# Load any additional configured databases, prep autosave
+< ./common.cmd
+{% endif %}
+
+iocInit()
+
+# Perform standard IOC post-init actions
+< ./postInit.cmd
+
+dbl > $(TOP)/records.dbl
+date
+
+# IOC {{ deploy_ioc_ioc_name }} completed startup

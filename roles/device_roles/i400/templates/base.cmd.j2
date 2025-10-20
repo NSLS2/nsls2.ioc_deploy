@@ -1,0 +1,17 @@
+
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# i400 specific commands
+
+## User defined ENV variables
+epicsEnvSet("STREAM_PROTOCOL_PATH", "$(I400)/I400App/src/protocol-files/")
+
+drvAsynIPPortConfigure("$(PORT)", "$(HOST):$(IP_PORT)", 0, 0, 0)
+
+## Load records
+dbLoadTemplate("$(I400)/db/I400.substitutions", "Sys=$(SYS),Dev=$(DEV),Port=$(PORT)"))
+dbLoadRecords("$(I400)/db/asyn.db", "Sys=$(SYS),Dev=$(DEV),PORT=$(PORT),ADDR=0")
+
+# PREFIX is used for autosave and devIoStat
+epicsEnvSet("PREFIX", "$(IOC_SYS)$(IOC_DEV)")

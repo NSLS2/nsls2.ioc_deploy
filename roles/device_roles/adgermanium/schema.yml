@@ -1,0 +1,8 @@
+---
+
+type: enum("adgermanium")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
+  DETECTOR_IP: str()
+  NELM: int()
