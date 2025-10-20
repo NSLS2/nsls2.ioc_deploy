@@ -1,0 +1,8 @@
+---
+
+type: enum("germcaproto")
+pixi_executable_path: str(required=False)
+python_version: str(required=False)
+environment:
+  PREFIX: str()
+  ENGINEER: str(required=False)
