@@ -11,7 +11,7 @@ mc01:
     CONTROLLER_IP: "xf31id1-lab3-mc1.nsls2.bnl.local"
 
   disable_all_limits: false # Defaults to false. If true all limits are disabled
-  disable_lim_axes: [1, 4] # Disable limits for axes 1 and 4
+  disable_lim_axes: [1] # Disable limits for axis 1
 
   # Define a coordinate system
   coord_systems:

@@ -3,8 +3,9 @@ type: enum("powerpmac")
 environment:
   ENGINEER: str(required=False)
   SYS: str()
-  CT_SYS: str()
   PMAC: str()
+  DEV: str()
+  CT_SYS: str()
   NUM_AXES: int(min=1, max=8)
   CONTROLLER_IP: any(ip(), hostname())
 
