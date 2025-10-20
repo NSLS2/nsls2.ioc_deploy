@@ -6,7 +6,7 @@ file "${PPMAC}/db/autohome.db"
 pattern
 {{"{"}}SYS, DEV, PLC, PORT{{"}"}}
 {% for axis in ioc.axes %}
-{{"{"}}"{{ deploy_ioc_merged_env.SYS }}", "{{"{"}}{{ axis.component }}-Ax:{{ axis.name }}{{"}"}}", {{ axis.home_plc }}, "{{ deploy_ioc_merged_env.SSH_PORT }}"{{"}"}}
+{{"{"}}"{{ deploy_ioc_merged_env.SYS }}", "{{"{"}}{{ axis.component }}-Ax:{{ axis.name }}{{"}"}}", {{ axis.num + 7 }}, "{{ deploy_ioc_merged_env.SSH_PORT }}"{{"}"}}
 {% endfor %}
 {% if ioc.virtual_axes is defined %}
 {% for axis in ioc.virtual_axes %}

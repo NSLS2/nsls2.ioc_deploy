@@ -18,8 +18,10 @@ pmacCreateAxes("$(CTRL_PORT)", $(NUM_AXES))
 pmacDisableLimitsCheck("$(CTRL_PORT)", 0, 1)
 {% elif ioc.disable_lim_axes is defined %}
 # Disable the limits disabled check for axes {{ ioc.disable_lim_axes | join(", ") }}
-{% for disable_lim_axis in ioc.disable_lim_axes %}
-pmacDisableLimitsCheck("$(CTRL_PORT)", {{ disable_lim_axis }}, 0)
+{% for axis in ioc.axes %}
+{% if axis.disable_limits is defined and axis.disable_limits %}
+pmacDisableLimitsCheck("$(CTRL_PORT)", {{ axis.num }}, 0)
+{% endif %}
 {% endfor %}
 {% endif %}
 

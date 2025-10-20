@@ -13,7 +13,6 @@ mc01:
     CONTROLLER_IP: "xf31id1-lab3-mc1.nsls2.bnl.local"
 
   disable_all_limits: false # Defaults to false. If true all limits are disabled
-  disable_lim_axes: [1] # Disable limits for axis 1
 
   # Define a coordinate system
   coord_systems:
@@ -28,7 +27,7 @@ mc01:
       desc: "Rotation"
       mres: 0.045
       egu: "deg"
-      home_plc: 8
+      disable_limits: true
 
     - name: "X"
       num: 2
@@ -36,7 +35,6 @@ mc01:
       desc: "X translation"
       mres: 0.00005
       egu: "mm"
-      home_plc: 9
 
     - name: "Y"
       num: 3
@@ -44,7 +42,6 @@ mc01:
       desc: "Y translation"
       mres: 0.00005
       egu: "mm"
-      home_plc: 10
 
     - name: "Z"
       num: 4
@@ -52,7 +49,6 @@ mc01:
       desc: "Z translation"
       mres: 0.00005
       egu: "mm"
-      home_plc: 11
 
   virtual_axes:
     - name: "Diag"

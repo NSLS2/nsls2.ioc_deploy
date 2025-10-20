@@ -33,7 +33,7 @@ axis:
   desc: str()
   mres: num()
   egu: str()
-  home_plc: int(min=1, max=20)
+  disable_limits: bool(required=False)
 
 virtual_axis:
   name: str()
