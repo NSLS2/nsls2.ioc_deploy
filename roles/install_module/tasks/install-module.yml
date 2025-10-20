@@ -83,7 +83,7 @@
         install_module_config_dict:
           "{{ install_module_config_dict
           | combine(install_module_config.config) }}"
-      when: module.config is defined
+      when: install_module_config.config is defined
 
     - name: Find all EPICS configure directories for module
       ansible.builtin.find:

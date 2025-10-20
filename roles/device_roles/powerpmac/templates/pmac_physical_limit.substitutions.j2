@@ -1,0 +1,11 @@
+#
+# {{ ansible_managed }}
+#
+file "$(PPMAC)/db/pmac_physical_limit.db"
+{{"{"}}
+pattern
+{{"{"}}SYS, DEV, PORT{{"}"}}
+{% for axis in ioc.axes %}
+{{"{"}}"{{ deploy_ioc_merged_env.SYS }}", "{{"{"}}{{ axis.component }}-Ax:{{ axis.name }}{{"}"}}", "{{ deploy_ioc_merged_env.SSH_PORT }}"{{"}"}}
+{% endfor %}
+{{"}"}}

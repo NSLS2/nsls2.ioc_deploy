@@ -1,0 +1,61 @@
+---
+mc01:
+  type: powerpmac
+  environment:
+    SYS: "XF:31ID1-OP:1"
+    CONTROLLER: "MC:01"
+    DEV: "{$(CONTROLLER)}"
+    CT_SYS: "XF:31ID1-CT"
+    NUM_AXES: 8 # Controller has 8 axes, even though only 4 are used
+    ENGINEER: "J. Wlodek"
+    MOVING_POLL_PERIOD: 100
+    IDLE_POLL_PERIOD: 1000
+    CONTROLLER_IP: "xf31id1-lab3-mc1.nsls2.bnl.local"
+
+  disable_all_limits: false # Defaults to false. If true all limits are disabled
+
+  # Define a coordinate system
+  coord_systems:
+    - num: 2
+      motion_prog: 10
+      num_axes: 9
+
+  axes:
+    - name: "Rot"
+      num: 1
+      component: CMT:1
+      desc: "Rotation"
+      mres: 0.045
+      egu: "deg"
+      disable_limits: true
+
+    - name: "X"
+      num: 2
+      component: CMT:1
+      desc: "X translation"
+      mres: 0.00005
+      egu: "mm"
+
+    - name: "Y"
+      num: 3
+      component: CMT:1
+      desc: "Y translation"
+      mres: 0.00005
+      egu: "mm"
+
+    - name: "Z"
+      num: 4
+      component: CMT:1
+      desc: "Z translation"
+      mres: 0.00005
+      egu: "mm"
+
+  virtual_axes:
+    - name: "Diag"
+      num: 7
+      cs: 2
+      component: CMT:1
+      desc: "X-Y Diagonal translation virtual axis"
+      mres: 0.00001
+      egu: "mm"
+      home_plc: 17

@@ -1,0 +1,15 @@
+---
+deploy_ioc_use_common: true
+deploy_ioc_required_module: ppmac_7d627e7
+deploy_ioc_executable: ppmac
+deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
+deploy_ioc_make_autosave_files: true
+
+deploy_ioc_device_specific_env:
+  STREAM_PROTOCOL_PATH: "$(PMAC)/protocol:$(PPMAC)/protocol:$(TOP)/protocol"
+  CTRL_PORT: M0
+  SSH_PORT: P0
+  CT_PREFIX: "$(CT_SYS){$(CONTROLLER)}"
+  IOC_PREFIX: "$(CT_SYS){IOC-$(CONTROLLER)}"
+  MOVING_POLL_PERIOD: 100
+  IDLE_POLL_PERIOD: 1000
