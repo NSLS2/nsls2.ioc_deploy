@@ -23,14 +23,14 @@
 - name: Add hextools dependency
   ansible.builtin.command:
     # yamllint disable-line rule:line-length
-    cmd: "{{ ioc.pixi_executable_path | default(device_roles_germcaproto_pixi_executable_path) }} add --pypi hextools"
+    cmd: "{{ ioc.pixi_executable_path | default(device_roles_germcaproto_pixi_executable_path) }} add --pypi hextools>=0.2.3"
     chdir: "{{ deploy_ioc_ioc_directory }}"
   changed_when: true
 
 - name: Add caproto dependency
   ansible.builtin.command:
     # yamllint disable-line rule:line-length
-    cmd: "{{ ioc.pixi_executable_path | default(device_roles_germcaproto_pixi_executable_path) }} add caproto"
+    cmd: "{{ ioc.pixi_executable_path | default(device_roles_germcaproto_pixi_executable_path) }} add --pypi caproto<1.2.0"
     chdir: "{{ deploy_ioc_ioc_directory }}"
   changed_when: true
 
