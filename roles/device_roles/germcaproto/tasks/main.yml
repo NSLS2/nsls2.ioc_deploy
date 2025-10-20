@@ -1,0 +1,21 @@
+---
+
+- name: Check if pixi.toml exists
+  ansible.builtin.stat:
+    path: "{{ deploy_ioc_ioc_directory }}/pixi.toml"
+  register: pixi_toml_stat
+
+- name: Initialize Pixi
+  ansible.builtin.command:
+    # yamllint disable-line rule:line-length
+    cmd: "{{ ioc.pixi_executable_path | default(device_roles_germcaproto_pixi_executable_path) }} init"
+    chdir: "{{ deploy_ioc_ioc_directory }}"
+  when: not pixi_toml_stat.stat.exists
+  changed_when: not pixi_toml_stat.stat.exists
+
+- name: Add Python dependency
+  ansible.builtin.command:
+    # yamllint disable-line rule:line-length
+    cmd: "{{ ioc.pixi_executable_path | default(device_roles_germcaproto_pixi_executable_path) }} add 'python{{ ioc.python_version | default(device_roles_germcaproto_python_version) }}'"
+    chdir: "{{ deploy_ioc_ioc_directory }}"
+  changed_when: true
