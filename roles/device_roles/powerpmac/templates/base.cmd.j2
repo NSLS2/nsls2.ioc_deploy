@@ -1,0 +1,58 @@
+
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# powerpmac specific commands
+
+# Configure the low level communication port
+drvAsynPowerPMACPortConfigure("$(SSH_PORT)", "$(CONTROLLER_IP)", "root", "deltatau", "0", "0", "0")
+
+# Configure Model 3 Controller Driver (ControllerPort, LowLevelDriverPort, Address, Axes, MovingPoll, IdlePoll)
+pmacCreateController("$(CTRL_PORT)", "$(SSH_PORT)", 0, $(NUM_AXES), {{ deploy_ioc_merged_env.MOVING_POLL_PERIOD }}, {{ deploy_ioc_merged_env.IDLE_POLL_PERIOD }})
+
+# Configure Model 3 Axes Driver (Controler Port, Axis Count)
+pmacCreateAxes("$(CTRL_PORT)", $(NUM_AXES))
+
+{% if ioc.disable_all_limits %}
+# Disable limits check fo all axes
+pmacDisableLimitsCheck("$(CTRL_PORT)", 0, 1)
+{% elif ioc.disable_lim_axes is defined %}
+# Disable the limits disabled check for axes {{ ioc.disable_lim_axes | join(", ") }}
+{% for axis in ioc.axes %}
+{% if axis.disable_limits is defined and axis.disable_limits %}
+pmacDisableLimitsCheck("$(CTRL_PORT)", {{ axis.num }}, 0)
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if ioc.coord_systems is defined %}
+# Set up for running coordinate system
+#pmacCreateCS(coordinate_system_port, controller_port_name, coordinate_system_number, motion_program_number)
+{% for coord_system in ioc.coord_systems %}
+pmacCreateCS("CS{{ coord_system.num }}", "$(CTRL_PORT)", {{ coord_system.num }}, {{ coord_system.motion_prog }})
+
+# Create the coordinate system axes
+#pmacCreateCSAxes(coordinate_system_port, num_coordinate_system_axes)
+pmacCreateCSAxes("CS{{ coord_system.num }}", {{ coord_system.num_axes }})
+{% endfor %}
+
+{% if ioc.virtual_axes is defined %}
+# Define coordinate step resolution
+#pmacSetCoordStepsPerUnit(coordinate_system_port, cs_axis, counts_per_egu)
+{% for virtual_axis in ioc.virtual_axes %}
+pmacSetCoordStepsPerUnit("CS{{ virtual_axis.cs }}", {{ virtual_axis.num }}, {{ (1 / virtual_axis.mres) | int }})
+{% endfor %}
+{% endif %}
+{% endif %}
+
+
+dbLoadTemplate("$(TOP)/db/motor.substitutions")
+dbLoadTemplate("$(TOP)/db/motorstatus.substitutions")
+dbLoadTemplate("$(TOP)/db/pmacStatus.substitutions")
+dbLoadTemplate("$(TOP)/db/pmac_asyn_motor.substitutions")
+dbLoadTemplate("$(TOP)/db/pmacaux.substitutions")
+dbLoadTemplate("$(TOP)/db/pmac_physical_limit.substitutions")
+dbLoadTemplate("$(TOP)/db/autohome.substitutions")
+dbLoadTemplate("$(TOP)/db/cs.substitutions")
+dbLoadRecords("$(PPMAC)/db/kill_all.db","Sys=$(SYS),Dev=$(DEV),Port=$(SSH_PORT)")
+dbLoadRecords("$(PPMAC)/db/asynComm.db", "P=$(CT_SYS)$(DEV), PORT=$(SSH_PORT), ADDR=0")

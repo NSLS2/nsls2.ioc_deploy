@@ -1,0 +1,20 @@
+#
+# {{ ansible_managed }}
+#
+file "$(PPMAC)/db/ppmac_motorstatus.db"
+{{"{"}}
+pattern
+{{"{"}}SYS, DEV, PORT, AXIS{{"}"}}
+{% for axis in ioc.axes %}
+{{"{"}}"{{ deploy_ioc_merged_env.SYS }}", "{{"{"}}{{ axis.component }}-Ax:{{ axis.name }}{{"}"}}", "{{ deploy_ioc_merged_env.SSH_PORT }}", {{ axis.num }}{{"}"}}
+{% endfor %}
+{{"}"}}
+
+file "$(PPMAC)/db/ppmacStatusAxis.db"
+{{"{"}}
+pattern
+{{"{"}}SYS, DEV, PORT, AXIS{{"}"}}
+{% for axis in ioc.axes %}
+{{"{"}}"{{ deploy_ioc_merged_env.CT_SYS }}", "{{"{"}}{{ deploy_ioc_merged_env.CONTROLLER }}-Ax:{{ axis.num }}{{"}"}}", "{{ deploy_ioc_merged_env.SSH_PORT }}", {{ axis.num }}{{"}"}}
+{% endfor %}
+{{"}"}}

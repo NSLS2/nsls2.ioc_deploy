@@ -50,16 +50,18 @@ set_requestfile_path("$(ADPLUGINBAR)/db")
 {% endif %}
 
 # Load additional records standard for each IOC
-{% if ioc.environment.IOC_PREFIX is defined %}
+{% if deploy_ioc_merged_env.IOC_PREFIX is defined %}
 dbLoadRecords("$(EPICS_BASE)/db/iocAdminSoft.db", "IOC=$(IOC_PREFIX)")
-dbLoadRecords("$(EPICS_BASE)/db/save_restoreStatus.db", "P=$(IOC_PREFIX)")
-dbLoadRecords("$(EPICS_BASE)/db/reccaster.db", "P=$(IOC_PREFIX)RecSync")
-{% elif ioc.environment.CT_PREFIX is defined %}
+{% elif deploy_ioc_merged_env.CT_PREFIX is defined %}
 dbLoadRecords("$(EPICS_BASE)/db/iocAdminSoft.db", "IOC=$(CT_PREFIX)")
+{% else %}
+dbLoadRecords("$(EPICS_BASE)/db/iocAdminSoft.db", "IOC=$(PREFIX)")
+{% endif %}
+
+{% if deploy_ioc_merged_env.CT_PREFIX is defined %}
 dbLoadRecords("$(EPICS_BASE)/db/save_restoreStatus.db", "P=$(CT_PREFIX)")
 dbLoadRecords("$(EPICS_BASE)/db/reccaster.db", "P=$(CT_PREFIX)RecSync")
 {% else %}
-dbLoadRecords("$(EPICS_BASE)/db/iocAdminSoft.db", "IOC=$(PREFIX)")
 dbLoadRecords("$(EPICS_BASE)/db/save_restoreStatus.db", "P=$(PREFIX)")
 dbLoadRecords("$(EPICS_BASE)/db/reccaster.db", "P=$(PREFIX)RecSync")
 {% endif %}

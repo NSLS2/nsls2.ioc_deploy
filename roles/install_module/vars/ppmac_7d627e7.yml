@@ -1,9 +1,9 @@
 ---
 
-ppmac_4752c2f:
+ppmac_7d627e7:
   name: ppmac
-  url: https://github.com/NSLS-II/ppmac
-  version: 4752c2f
+  url: https://github.com/NSLS2/ppmac
+  version: 7d627e7
   executable: "ppmac"
   module_deps:
     - pmac_f811ee1
