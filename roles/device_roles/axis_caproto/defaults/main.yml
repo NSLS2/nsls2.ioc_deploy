@@ -1,0 +1,5 @@
+---
+
+device_roles_axis_caproto_pixi_executable_path: "pixi"
+device_roles_axis_caproto_python_version: ">=3.10,<3.13"
+device_roles_axis_caproto_srx_caproto_iocs_git_revision: "v0.1.0"
