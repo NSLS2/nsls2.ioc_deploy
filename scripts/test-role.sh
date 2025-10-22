@@ -30,11 +30,6 @@ if [[ ! -d "../ioc_host_vars" ]]; then
     exit 1
 fi
 
-# Setup (idempotent)
-echo "Install python deps..."
-pip install -r requirements.txt > /dev/null 2>&1 || true
-pip3 install --upgrade ansible-core > /dev/null 2>&1
-
 # Install collection (idempotent)
 echo "Installing ansible collection..."
 ansible-galaxy collection install $(pwd) -p ../ansible/collections --force
