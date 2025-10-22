@@ -31,31 +31,34 @@ jobs:
         id: set-roles
         run: |
           # Get list of modified roles
-          ROLES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD \
+          ROLES=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD" \
             | grep "^roles/device_roles/" \
             | cut -d'/' -f3 \
             | sort -u \
             | jq -R -s -c 'split("\n")[:-1]')
 
-          echo "roles=$ROLES" >> $GITHUB_OUTPUT
+          echo "roles=$ROLES" >> "$GITHUB_OUTPUT"
 
           # Check if any roles were modified
           if [ "$ROLES" = "[]" ]; then
-            echo "has-changes=false" >> $GITHUB_OUTPUT
+            echo "has-changes=false" >> "$GITHUB_OUTPUT"
             echo "No roles modified in this PR"
-            echo "## Role Testing Summary" >> $GITHUB_STEP_SUMMARY
-            echo "No device roles were modified in this PR." \
-              >> $GITHUB_STEP_SUMMARY
+            {
+              echo "## Role Testing Summary"
+              echo "No device roles were modified in this PR."
+            } >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "has-changes=true" >> $GITHUB_OUTPUT
+            echo "has-changes=true" >> "$GITHUB_OUTPUT"
             echo "Modified roles: $ROLES"
 
             # Create summary
-            echo "## Role Testing Summary" >> $GITHUB_STEP_SUMMARY
-            echo "The following roles will be tested:" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "$ROLES" | jq -r '.[]' | while read role; do
-              echo "- \`$role\`" >> $GITHUB_STEP_SUMMARY
+            {
+              echo "## Role Testing Summary"
+              echo "The following roles will be tested:"
+              echo ""
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "$ROLES" | jq -r '.[]' | while read -r role; do
+              echo "- \`$role\`" >> "$GITHUB_STEP_SUMMARY"
             done
           fi
 
@@ -90,7 +93,7 @@ jobs:
       - name: Login to GitHub Container Registry
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | \
-            docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            docker login ghcr.io -u "${{ github.actor }}" --password-stdin
 
       - name: Get Container Digest
         id: digest
@@ -98,7 +101,7 @@ jobs:
           DIGEST=$(docker manifest inspect \
             ghcr.io/nsls2/epics-alma8:latest --verbose \
             | jq -r '.Descriptor.digest')
-          echo "digest=$DIGEST" >> $GITHUB_OUTPUT
+          echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
           echo "Container digest: $DIGEST"
 
       - name: Cache Docker Image
