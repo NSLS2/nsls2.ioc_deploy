@@ -48,7 +48,7 @@ fi
 
 # Install required packages
 echo "Installing required packages..."
-docker exec -u root epics-dev yum install -y python3-dnf > /dev/null 2>&1
+docker exec -u root epics-dev yum install -y python3-dnf
 docker exec -u root epics-dev yum install -y epel-release > /dev/null 2>&1
 docker exec -u root epics-dev yum install -y seq > /dev/null 2>&1 || true
 
