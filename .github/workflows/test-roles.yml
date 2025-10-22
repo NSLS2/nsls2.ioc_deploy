@@ -34,7 +34,8 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             # Manual run: test all roles
             echo "Manual run: testing all roles"
-            ROLES=$(ls -1 roles/device_roles/ \
+            ROLES=$(find roles/device_roles/ -mindepth 1 -maxdepth 1 \
+              -type d -exec basename {} \; \
               | jq -R -s -c 'split("\n")[:-1]')
             echo "roles=$ROLES" >> "$GITHUB_OUTPUT"
             echo "has-changes=true" >> "$GITHUB_OUTPUT"
