@@ -15,20 +15,9 @@ if [ -z "$ROLE" ]; then
     exit 1
 fi
 
-# Check required repositories exist
-echo "Checking required repositories..."
-if [[ ! -d "../ansible" ]]; then
-    echo "Missing ../ansible - run: git clone https://github.com/nsls2/ansible"
-    exit 1
-fi
-if [[ ! -d "../ioc_host_vars" ]]; then
-    echo "Missing ../ioc_host_vars - run: git clone https://github.com/nsls2/ioc_host_vars"
-    exit 1
-fi
-
 # Install collection (idempotent)
 echo "Installing ansible collection..."
-ansible-galaxy collection install $(pwd) -p ../ansible/collections --force
+ansible-galaxy collection install $(pwd) --force
 ansible-galaxy collection install community.docker
 
 # Verify container is running
@@ -89,7 +78,6 @@ grep -v "^---" "$EXAMPLE_FILE" | sed 's/^/  /' >> "$TEMP_CONFIG"
 
 # Test deployment
 echo "Testing role: $ROLE with IOC: $IOC_NAME"
-cd ../ansible
 
 ansible-playbook -i epics-dev, -c docker -u root \
   -e "deploy_ioc_ioc_name=$IOC_NAME" \
@@ -97,4 +85,4 @@ ansible-playbook -i epics-dev, -c docker -u root \
   -e "install_module_default_pkg_deps=[]" \
   -e "@$TEMP_CONFIG" \
   --start-at-task "Deploy specified IOCs" \
-  deploy_ioc.yml
+  scripts/deploy_ioc.yml
