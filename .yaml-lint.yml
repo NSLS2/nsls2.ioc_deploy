@@ -1,5 +1,8 @@
 ---
 
+ignore: |
+  scripts/deploy_ioc.yml
+
 rules:
   braces:
     level: warning
