@@ -14,6 +14,7 @@ This requires a python environment with ansible installed, and docker or podman.
 To get the latest EPICS container for local testing:
 
 ```bash
+docker login ghcr.io
 docker pull ghcr.io/nsls2/epics-alma8:latest
 docker run -dit --name epics-dev ghcr.io/nsls2/epics-alma8:latest
 ```

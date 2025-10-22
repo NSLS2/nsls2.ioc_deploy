@@ -46,8 +46,9 @@ if [ -z "$(docker ps -q -f name=epics-dev)" ]; then
     exit 1
 fi
 
-# Install EPICS sequencer support
-echo "Installing EPICS sequencer support..."
+# Install required packages
+echo "Installing required packages..."
+docker exec -u root epics-dev yum install -y python3-dnf > /dev/null 2>&1
 docker exec -u root epics-dev yum install -y epel-release > /dev/null 2>&1
 docker exec -u root epics-dev yum install -y seq > /dev/null 2>&1 || true
 
@@ -66,7 +67,20 @@ SNCSEQ_RULES_INCLUDED = YES
 endif
 EOF'
 
+# Get example.yml for the role
+EXAMPLE_FILE="../nsls2.ioc_deploy/roles/device_roles/$ROLE/example.yml"
+
+# Get the first IOC name from example.yml
+IOC_NAME=$(grep -E "^[a-zA-Z0-9_-]+:" "$EXAMPLE_FILE" | head -1 | sed 's/://')
+
 # Test deployment
-echo "Testing role: $ROLE"
+echo "Testing role: $ROLE with IOC: $IOC_NAME"
 cd ../ansible
-ansible-playbook -i epics-dev, -c docker -u root -e "ioc_type=$ROLE" -e "deploy_ioc_component=test" -e "deploy_ioc_target=test-ioc" -e "deploy_ioc_ioc_name=test-ioc" -e "ioc_name=test-ioc" -e '{"install_module_default_pkg_deps":[],"deploy_ioc_required_system_packages":[],"host_config":{"softioc_user":"epics","softioc_group":"epics","epics_interface":{"address":"127.0.0.1","broadcast":"127.255.255.255"},"test-ioc":{"type":"'$ROLE'","enabled":true,"environment":{"IOC_DIR":"/epics/iocs","TOP":"/epics/iocs/test-ioc"}}}}' --start-at-task "Deploy specified IOCs" deploy_ioc.yml
+
+ansible-playbook -i epics-dev, -c docker -u root \
+  -e "deploy_ioc_ioc_name=$IOC_NAME" \
+  -e "deploy_ioc_target=$IOC_NAME" \
+  -e '{"host_config":{"softioc_user":"softioc-tst","softioc_group":"softioc-tst","epics_interface":{"address":"127.0.0.1","broadcast":"127.255.255.255"}}}' \
+  -e "@$EXAMPLE_FILE" \
+  --start-at-task "Deploy specified IOCs" \
+  deploy_ioc.yml
