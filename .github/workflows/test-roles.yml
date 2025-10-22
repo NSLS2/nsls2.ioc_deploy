@@ -73,12 +73,16 @@ jobs:
           frozen: true
 
       - name: Login to GitHub Container Registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | \
+            docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Get Container Digest
         id: digest
         run: |
-          DIGEST=$(docker manifest inspect ghcr.io/nsls2/epics-alma8:latest --verbose | jq -r '.Descriptor.digest')
+          DIGEST=$(docker manifest inspect \
+            ghcr.io/nsls2/epics-alma8:latest --verbose \
+            | jq -r '.Descriptor.digest')
           echo "digest=$DIGEST" >> $GITHUB_OUTPUT
           echo "Container digest: $DIGEST"
 

@@ -6,17 +6,8 @@ set -e
 # Change to script directory
 cd "$(dirname "$0")/.."
 
-# Default values
-CONTAINER="ghcr.io/nsls2/epics-alma8:latest"
-ROLE=""
-
 # Parse arguments
-while [[ $# -gt 0 ]]; do
-    case $1 in
-        --container) CONTAINER="$2"; shift 2 ;;
-        *) ROLE="$1"; shift ;;
-    esac
-done
+ROLE="$1"
 
 
 # Check required repositories exist
