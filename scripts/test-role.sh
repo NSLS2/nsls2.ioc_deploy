@@ -43,7 +43,7 @@ fi
 
 # Install required packages
 echo "Installing required packages..."
-docker exec -u root epics-dev yum install -y python3-dnf
+docker exec -u root epics-dev yum install -y python3-dnf wget
 docker exec -u root epics-dev yum install -y epel-release > /dev/null 2>&1
 docker exec -u root epics-dev yum install -y seq > /dev/null 2>&1 || true
 
@@ -68,6 +68,22 @@ EXAMPLE_FILE="../nsls2.ioc_deploy/roles/device_roles/$ROLE/example.yml"
 # Get the first IOC name from example.yml
 IOC_NAME=$(grep -E "^[a-zA-Z0-9_-]+:" "$EXAMPLE_FILE" | head -1 | sed 's/://')
 
+# Create merged config with host_config wrapping the IOC config
+TEMP_CONFIG=$(mktemp)
+trap "rm -f $TEMP_CONFIG" EXIT
+
+cat > "$TEMP_CONFIG" << EOF
+host_config:
+  softioc_user: softioc-tst
+  softioc_group: softioc-tst
+  epics_interface:
+    address: 127.0.0.1
+    broadcast: 127.255.255.255
+EOF
+
+# Append IOC config from example.yml indented under host_config (skip --- line)
+grep -v "^---" "$EXAMPLE_FILE" | sed 's/^/  /' >> "$TEMP_CONFIG"
+
 # Test deployment
 echo "Testing role: $ROLE with IOC: $IOC_NAME"
 cd ../ansible
@@ -75,7 +91,7 @@ cd ../ansible
 ansible-playbook -i epics-dev, -c docker -u root \
   -e "deploy_ioc_ioc_name=$IOC_NAME" \
   -e "deploy_ioc_target=$IOC_NAME" \
-  -e '{"host_config":{"softioc_user":"softioc-tst","softioc_group":"softioc-tst","epics_interface":{"address":"127.0.0.1","broadcast":"127.255.255.255"}}}' \
-  -e "@$EXAMPLE_FILE" \
+  -e "install_module_default_pkg_deps=[]" \
+  -e "@$TEMP_CONFIG" \
   --start-at-task "Deploy specified IOCs" \
   deploy_ioc.yml
