@@ -7,7 +7,7 @@ set -e
 cd "$(dirname "$0")/.."
 
 # Default values
-CONTAINER="ghcr.io/nsls2/epics-rpm-config:latest"
+CONTAINER="ghcr.io/nsls2/epics-alma8:latest"
 ROLE=""
 
 # Parse arguments
@@ -40,16 +40,10 @@ echo "Installing ansible collection..."
 ansible-galaxy collection install $(pwd) -p ../ansible/collections --force
 ansible-galaxy collection install community.docker
 
-# Check if container is running, start if needed
-if ! docker ps --format 'table {{.Names}}' | grep -q epics-dev; then
-    echo "Container not running, checking if image exists..."
-    if ! docker images --format 'table {{.Repository}}:{{.Tag}}' | grep -q "$CONTAINER"; then
-        echo "Pulling container image..."
-        docker login ghcr.io
-        docker pull "$CONTAINER"
-    fi
-    echo "Starting container..."
-    docker run -dit --name epics-dev "$CONTAINER"
+# Verify container is running
+if [ -z "$(docker ps -q -f name=epics-dev)" ]; then
+    echo "Error: Container 'epics-dev' is not running."
+    exit 1
 fi
 
 # Install EPICS sequencer support
