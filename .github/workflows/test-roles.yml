@@ -98,9 +98,17 @@ jobs:
       - name: Get Container Digest
         id: digest
         run: |
+          set -e
           DIGEST=$(docker manifest inspect \
             ghcr.io/nsls2/epics-alma8:latest --verbose \
-            | jq -r '.Descriptor.digest')
+            | jq -r '.Descriptor.digest') || {
+            echo "Failed to retrieve container digest" >&2
+            exit 1
+          }
+          if [ -z "$DIGEST" ] || [ "$DIGEST" = "null" ]; then
+            echo "Invalid container digest: $DIGEST" >&2
+            exit 1
+          fi
           echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
           echo "Container digest: $DIGEST"
 

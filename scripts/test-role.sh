@@ -38,6 +38,7 @@ if [ -z "$(docker ps -q -f name=epics-dev)" ]; then
 fi
 
 # Install required packages
+# Note: root access required for package installation and system file modification
 echo "Installing required packages..."
 docker exec -u root epics-dev yum install -y python3-dnf wget > /dev/null 2>&1
 docker exec -u root epics-dev yum install -y epel-release > /dev/null 2>&1
@@ -68,7 +69,7 @@ if [ ! -f "$EXAMPLE_FILE" ]; then
 fi
 
 # Get the first IOC name from example.yml
-IOC_NAME=$(grep -E "^[a-zA-Z0-9_-]+:" "$EXAMPLE_FILE" | head -1 | sed 's/://')
+IOC_NAME=$(grep -E "^\s*[a-zA-Z0-9_-]+:" "$EXAMPLE_FILE" | head -1 | sed 's/^[[:space:]]*//' | sed 's/://')
 
 # Create merged config with host_config wrapping the IOC config
 TEMP_CONFIG=$(mktemp)
