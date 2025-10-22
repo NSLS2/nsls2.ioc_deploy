@@ -9,6 +9,11 @@ cd "$(dirname "$0")/.."
 # Parse arguments
 ROLE="$1"
 
+# Validate arguments
+if [ -z "$ROLE" ]; then
+    echo "Error: Role name required"
+    exit 1
+fi
 
 # Check required repositories exist
 echo "Checking required repositories..."
@@ -34,7 +39,7 @@ fi
 
 # Install required packages
 echo "Installing required packages..."
-docker exec -u root epics-dev yum install -y python3-dnf wget
+docker exec -u root epics-dev yum install -y python3-dnf wget > /dev/null 2>&1
 docker exec -u root epics-dev yum install -y epel-release > /dev/null 2>&1
 docker exec -u root epics-dev yum install -y seq > /dev/null 2>&1 || true
 
@@ -55,6 +60,12 @@ EOF'
 
 # Get example.yml for the role
 EXAMPLE_FILE="../nsls2.ioc_deploy/roles/device_roles/$ROLE/example.yml"
+
+# Validate example.yml exists
+if [ ! -f "$EXAMPLE_FILE" ]; then
+    echo "Error: No example.yml found for role '$ROLE'"
+    exit 1
+fi
 
 # Get the first IOC name from example.yml
 IOC_NAME=$(grep -E "^[a-zA-Z0-9_-]+:" "$EXAMPLE_FILE" | head -1 | sed 's/://')

@@ -8,6 +8,10 @@ permissions:
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'roles/device_roles/**'
+      - 'scripts/test-role.sh'
+      - '.github/workflows/test-roles.yml'
 
 jobs:
   detect-changes:
@@ -39,9 +43,20 @@ jobs:
           if [ "$ROLES" = "[]" ]; then
             echo "has-changes=false" >> $GITHUB_OUTPUT
             echo "No roles modified in this PR"
+            echo "## Role Testing Summary" >> $GITHUB_STEP_SUMMARY
+            echo "No device roles were modified in this PR." \
+              >> $GITHUB_STEP_SUMMARY
           else
             echo "has-changes=true" >> $GITHUB_OUTPUT
             echo "Modified roles: $ROLES"
+
+            # Create summary
+            echo "## Role Testing Summary" >> $GITHUB_STEP_SUMMARY
+            echo "The following roles will be tested:" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "$ROLES" | jq -r '.[]' | while read role; do
+              echo "- \`$role\`" >> $GITHUB_STEP_SUMMARY
+            done
           fi
 
   test-roles:
