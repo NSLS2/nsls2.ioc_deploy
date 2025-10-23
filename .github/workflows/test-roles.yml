@@ -33,22 +33,12 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             # Manual run: test all roles
-            echo "Manual run: testing all roles"
             ROLES=$(find roles/device_roles/ -mindepth 1 -maxdepth 1 \
               -type d -exec basename {} \; \
               | jq -R -s -c 'split("\n")[:-1]')
             echo "roles=$ROLES" >> "$GITHUB_OUTPUT"
             echo "has-changes=true" >> "$GITHUB_OUTPUT"
-
-            # Create summary
-            {
-              echo "## Role Testing Summary"
-              echo "Manual run - testing all roles:"
-              echo ""
-            } >> "$GITHUB_STEP_SUMMARY"
-            echo "$ROLES" | jq -r '.[]' | while read -r role; do
-              echo "- \`$role\`" >> "$GITHUB_STEP_SUMMARY"
-            done
+            echo "Manual run: testing all roles"
           else
             # PR: test only modified roles
             ROLES=$(git diff --name-only \
@@ -57,30 +47,14 @@ jobs:
               | cut -d'/' -f3 \
               | sort -u \
               | jq -R -s -c 'split("\n")[:-1]')
-
             echo "roles=$ROLES" >> "$GITHUB_OUTPUT"
 
-            # Check if any roles were modified
             if [ "$ROLES" = "[]" ]; then
               echo "has-changes=false" >> "$GITHUB_OUTPUT"
               echo "No roles modified in this PR"
-              {
-                echo "## Role Testing Summary"
-                echo "No device roles were modified in this PR."
-              } >> "$GITHUB_STEP_SUMMARY"
             else
               echo "has-changes=true" >> "$GITHUB_OUTPUT"
               echo "Modified roles: $ROLES"
-
-              # Create summary
-              {
-                echo "## Role Testing Summary"
-                echo "The following roles will be tested:"
-                echo ""
-              } >> "$GITHUB_STEP_SUMMARY"
-              echo "$ROLES" | jq -r '.[]' | while read -r role; do
-                echo "- \`$role\`" >> "$GITHUB_STEP_SUMMARY"
-              done
             fi
           fi
 
