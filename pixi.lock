@@ -7,6 +7,7 @@ environments:
       linux-64:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/linux-64/_openmp_mutex-4.5-2_gnu.tar.bz2
+      - conda: https://conda.anaconda.org/conda-forge/noarch/ansible-8.5.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/ansible-compat-24.10.0-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/ansible-core-2.15.5-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/ansible-lint-6.22.2-pyhd8ed1ab_0.conda
@@ -104,6 +105,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstandard-0.25.0-py312h5253ce2_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb8e6e7a_2.conda
       osx-64:
+      - conda: https://conda.anaconda.org/conda-forge/noarch/ansible-8.5.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/ansible-compat-24.10.0-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/ansible-core-2.15.5-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/ansible-lint-6.22.2-pyhd8ed1ab_0.conda
@@ -194,6 +196,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstandard-0.25.0-py312h01f6755_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h8210216_2.conda
       osx-arm64:
+      - conda: https://conda.anaconda.org/conda-forge/noarch/ansible-8.5.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/ansible-compat-24.10.0-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/ansible-core-2.15.5-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/ansible-lint-6.22.2-pyhd8ed1ab_0.conda
@@ -304,6 +307,17 @@ packages:
   license_family: BSD
   size: 23621
   timestamp: 1650670423406
+- conda: https://conda.anaconda.org/conda-forge/noarch/ansible-8.5.0-pyhd8ed1ab_0.conda
+  sha256: 739d47cb66d4e1910f94a7e28be691b07e9680cae386af912c7b020e17265e87
+  md5: 418aba288d323bc6c35af0a6d0016ea0
+  depends:
+  - __unix
+  - ansible-core >=2.15.2,<2.16
+  - python >=3.9
+  license: GPL-3.0-only
+  license_family: GPL
+  size: 21770349
+  timestamp: 1697042457463
 - conda: https://conda.anaconda.org/conda-forge/noarch/ansible-compat-24.10.0-pyhd8ed1ab_1.conda
   sha256: bc9a3d1fbc2ca521e829fb4847e734b75388a8b29d64eead2da52b689abfa414
   md5: 9b8fd8efb61fde220dce28b324a9e2a4

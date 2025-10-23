@@ -8,3 +8,5 @@ exclude_paths:
   # Be more flexible for install module vars, since they are based
   # on epics module names
   - "roles/install_module/vars/"
+  # Exclude copied playbook - uses nsls2.general collection
+  - "scripts/deploy_ioc.yml"

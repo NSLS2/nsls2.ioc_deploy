@@ -1,0 +1,65 @@
+- name: Deploy Specified IOCs
+  hosts: all
+  tasks:
+    - name: Ensure job is running against a single host
+      ansible.builtin.fail:
+        msg: Refusing to run on more than one host
+      when: ansible_play_hosts | length > 1
+
+    - name: Default to main branch of config repo if no override set
+      ansible.builtin.set_fact:
+        deploy_ioc_config_branch: "main"
+      when: deploy_ioc_config_branch is not defined
+
+    - name: If component is not set, use beamline_acronym if defined
+      ansible.builtin.set_fact:
+        deploy_ioc_component: "{{ beamline_acronym | lower }}"
+      when: deploy_ioc_component is not defined and beamline_acronym is defined
+
+    - name: Prepend xf to component if running against a beamline host
+      ansible.builtin.set_fact:
+        deploy_ioc_component: "xf/{{ deploy_ioc_component }}"
+      when: beamline_acronym is defined and deploy_ioc_component not in ['acc', 'devel']
+
+    - name: Show source of configuration
+      ansible.builtin.debug:
+        msg: "Loading host configuration for: {{ deploy_ioc_component }}/{{ inventory_hostname }}"
+
+    - name: Load host configuration
+      nsls2.general.github_vars_facts:
+        path: "{{ deploy_ioc_component }}/{{ inventory_hostname }}"
+        owner: "nsls2"
+        repo: "ioc_host_vars"
+        branch: "{{ deploy_ioc_config_branch }}"
+        token: "{{ nsls2_ioc_deploy_token }}"
+        varname: "host_config"
+        recursive: true
+
+    - name: Set EPICS interface to localhost in case none are found
+      ansible.builtin.set_fact:
+        _epics_interface: "127.0.0.1"
+
+    - name: Find EPICS interface among host interfaces
+      ansible.builtin.set_fact:
+        _epics_interface: "{{ ansible_facts[item]['ipv4'] }}"
+      when: >
+        'ipv4' in ansible_facts[item]
+        and ansible_facts[item]['ipv4']['address'] | nsls2.general.nsls2network_find('subnet') == 'epics'
+      with_items: "{{ ansible_interfaces }}"
+
+    - name: Find softioc user and group
+      ansible.builtin.set_fact:
+        _softioc_user: "softioc{{ ('-' + (beamline_acronym | lower)) if beamline_acronym is defined else '' }}"
+
+    - name: Update host configuration with EPICS interface and softioc user and group
+      ansible.builtin.set_fact:
+        host_config: "{{ host_config |
+          combine({'epics_interface': _epics_interface,
+                   'softioc_user': _softioc_user,
+                   'softioc_group': _softioc_user}) }}"
+
+    - name: Deploy specified IOCs
+      ansible.builtin.include_role:
+        name: nsls2.ioc_deploy.deploy_ioc
+      vars:
+        deploy_ioc_gh_token: "{{ nsls2_ioc_deploy_token }}"
