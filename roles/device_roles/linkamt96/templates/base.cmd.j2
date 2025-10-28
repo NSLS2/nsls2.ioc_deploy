@@ -4,7 +4,7 @@ dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable
 
 # linkamt96 specific commands
 
-{% if SERIAL_PORT in ioc.environment %}
+{% if ioc.environment.get('SERIAL_PORT') %}
 Linkam3ConnectSerial("$(PORT)", "$(SERIAL_PORT)", "$(LINKAM3_LICENSE_PATH)", "$(LINKAM3_LOG_PATH)")
 {% else %}
 Linkam3ConnectUSB("$(PORT)", "$(VENDOR_ID)", "$(PRODUCT_ID)", "$(LINKAM3_LICENSE_PATH)", "$(LINKAM3_LOG_PATH)")
