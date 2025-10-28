@@ -1,0 +1,6 @@
+---
+
+type: enum("f460")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
