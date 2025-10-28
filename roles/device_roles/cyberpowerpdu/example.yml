@@ -3,5 +3,10 @@
 cyberpowerpdu-01:
   type: cyberpowerpdu
   environment:
-    ENGINEER: C. Engineer
-    PREFIX: XF:31ID1-ES{CYBERPOWERPDU:01}
+    SYS: "XF:31ID-CT"
+    DEV: "{PDU:3}"
+    IP: "127.0.0.1"
+    PREFIX: XF:31ID1-ES{PDU:3}
+    CT_PREFIX: $(SYS)$(DEV)
+    ENGINEER: "J. Wlodek"
+  num_outlets: 8
