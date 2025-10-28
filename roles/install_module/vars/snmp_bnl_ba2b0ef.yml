@@ -1,0 +1,6 @@
+---
+
+snmp_bnl_ba2b0ef:
+  name: snmp_bnl
+  version: ba2b0ef
+  url: https://github.com/NSLS2/snmp-bnl

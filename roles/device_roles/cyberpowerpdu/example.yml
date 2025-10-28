@@ -1,0 +1,7 @@
+---
+
+cyberpowerpdu-01:
+  type: cyberpowerpdu
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{CYBERPOWERPDU:01}

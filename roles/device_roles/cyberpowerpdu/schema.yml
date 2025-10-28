@@ -1,0 +1,6 @@
+---
+
+type: enum("cyberpowerpdu")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
