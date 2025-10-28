@@ -4,3 +4,10 @@ type: enum("linkamt96")
 environment:
   ENGINEER: str()
   PREFIX: str()
+  PORT: str()  # asyn port
+  SERIAL_PORT: str(required=False)
+  VENDOR_ID: str(required=False)
+  PRODUCT_ID: str(required=False)
+  LINKAM3_LICENSE_PATH: str()
+  LINKAM3_LOG_PATH: str()
+  LINKAM3: str()
