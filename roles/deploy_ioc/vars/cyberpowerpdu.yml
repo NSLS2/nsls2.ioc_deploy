@@ -1,0 +1,10 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_use_ad_common: false
+deploy_ioc_make_autosave_files: true
+deploy_ioc_required_module: snmp_bnl_ba2b0ef
+deploy_ioc_executable: snmp
+deploy_ioc_template_root_path: "/epics/modules/snmp-bnl"
+deploy_ioc_device_specific_env:
+  SNMP: "/epics/modules/snmp-bnl"

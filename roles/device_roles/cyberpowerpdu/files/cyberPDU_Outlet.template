@@ -1,0 +1,81 @@
+# Database for APC PDU
+
+# Set/Get the outlet name
+record(stringout, "$(SYS)$(DEV)Sw:Name$(NUM)-SP")
+{
+        field(DESC, "Set Outlet$(NUM) Name")
+        field(DTYP, "Snmp")
+        field(OUT,  "@$(IP) private CPS-MIB::ePDUOutletControlOutletName.$(NUM) STRING")
+        field(SCAN, "Passive")
+        field(FLNK, "$(SYS)$(DEV)Sw:Name$(NUM)-RB")
+        field(VAL,  "Outlet $(NUM)")
+        info(autosaveFields, "VAL")
+        field(PINI, "1")
+}
+
+record(stringin, "$(SYS)$(DEV)Sw:Name$(NUM)-RB")
+{
+        field(DESC, "Outlet$(NUM) Name")
+        field(DTYP, "Snmp")
+        field(INP,  "@$(IP) private CPS-MIB::ePDUOutletControlOutletName.$(NUM) STRING")
+        field(SCAN, "10 second")
+}
+
+# Operate the outlet
+record(mbbo, "$(SYS)$(DEV)Sw:$(NUM)-Sel")
+{
+        field(DESC, "Set Outlet$(NUM) Mode")
+        field(ZRST, "Off")
+        field(ONST, "On")
+        field(TWST, "Reboot")
+        field(THST, "OnWithDelay")
+        field(FRST, "OffWithDelay")
+        field(FVST, "RebootWithDelay")
+        field(ZRVL, "2")
+        field(ONVL, "1")
+        field(TWVL, "3")
+        field(THVL, "4")
+        field(FRVL, "5")
+        field(FVVL, "6")
+        field(FLNK,  "$(SYS)$(DEV)Sw:$(NUM)-SP")
+}
+
+record (longout,"$(SYS)$(DEV)Sw:$(NUM)-SP")
+{
+        field(DESC, "Setting Outlet$(NUM) State")
+        field(DTYP, "Snmp")
+        field(DOL,  "$(SYS)$(DEV)Sw:$(NUM)-Sel.RVAL")
+        field(OMSL, "closed_loop")
+        field(SCAN, "Passive")
+        field(OUT,  "@$(IP) private CPS-MIB::ePDUOutletControlOutletCommand.$(NUM) ( 100 i")
+        field(FLNK, "$(SYS)$(DEV)Sw:$(NUM)-RB")
+}
+
+# Get outlet status
+record (longin,"$(SYS)$(DEV)Sw:$(NUM)-RB")
+{
+        field(DESC, "Raw Outlet$(NUM) Sts")
+        field(DTYP, "Snmp")
+        field(INP,  "@$(IP) private CPS-MIB::ePDUOutletControlOutletCommand.$(NUM) ( 100 i")
+        field(SCAN, "2 second")
+        field(FLNK, "$(SYS)$(DEV)Sw:$(NUM)-Sts")
+}
+
+record(mbbi, "$(SYS)$(DEV)Sw:$(NUM)-Sts")
+{
+        field(DTYP, "Raw Soft Channel")
+        field(DESC, "Outlet$(NUM) Sts")
+        field(INP,  "$(SYS)$(DEV)Sw:$(NUM)-RB")
+        field(ZRST, "Off")
+        field(ONST, "On")
+        field(TWST, "Reboot")
+        field(THST, "OnWithDelay")
+        field(FRST, "OffWithDelay")
+        field(FVST, "RebootWithDelay")
+        field(ZRVL, "2")
+        field(ONVL, "1")
+        field(TWVL, "3")
+        field(THVL, "4")
+        field(FRVL, "5")
+        field(FVVL, "6")
+}

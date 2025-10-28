@@ -1,0 +1,10 @@
+epicsEnvSet("MIBDIRS", "$(TOP)/mibs:/var/lib/snmp/mibs/ietf:/var/lib/snmp/mibs/iana:/usr/share/snmp/mibs")
+
+SNMP_DRV_DEBUG(0)
+
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# cyberpowerpdu specific commands
+dbLoadTemplate("$(TOP)/db/cyberpdu.substitutions")
+dbLoadTemplate("$(TOP)/db/cyberpdu_outlet.substitutions")

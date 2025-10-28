@@ -1,0 +1,46 @@
+---
+
+- name: Install CyberPower PDU database files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ deploy_ioc_ioc_directory }}/db"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+  with_fileglob: "files/*.template"
+
+- name: Create mibs directory
+  ansible.builtin.file:
+    state: directory
+    path: "{{ deploy_ioc_ioc_directory }}/mibs"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0775"
+
+- name: Install CyberPower PDU MIB files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ deploy_ioc_ioc_directory }}/mibs"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+  with_fileglob: "files/mibs/*"
+
+- name: Copy base.cmd
+  ansible.builtin.template:
+    src: "templates/base.cmd.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Copy substitutions files
+  ansible.builtin.template:
+    src: "templates/{{ item }}.substitutions.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/db/{{ item }}.substitutions"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+  with_items:
+    - "cyberpdu"
+    - "cyberpdu_outlet"

@@ -1,0 +1,11 @@
+---
+
+type: enum("cyberpowerpdu")
+environment:
+  SYS: str()
+  DEV: str()
+  IP: str()
+  PREFIX: str()
+  CT_PREFIX: str()
+  ENGINEER: str()
+num_outlets: int()

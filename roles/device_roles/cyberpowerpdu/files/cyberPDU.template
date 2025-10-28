@@ -1,0 +1,61 @@
+# Database for Cyber PDU
+
+record(ai,"$(SYS)$(DEV)I-I_")
+{
+        field(DTYP,"Snmp")
+        field(INP, "@$(IP) private CPS-MIB::ePDULoadStatusLoad.1 Gauge32: 100")
+        field(SCAN,"1 second")
+        field(FLNK,"$(SYS)$(DEV)I-I")
+}
+
+record(calc,"$(SYS)$(DEV)I-I")
+{
+        field(INPA, "$(SYS)$(DEV)I-I_")
+        field(DESC, "Load (Current)")
+        field(CALC, "A*0.1")
+        field(EGU , "Amps")
+        field(HIGH, "8")
+        field(HIHI, "10")
+        field(HHSV, "MAJOR")
+        field(HSV,  "MINOR")
+        field(HOPR, "15")
+        field(LOPR, "0")
+}
+
+
+record(longin, "$(SYS)$(DEV)Pwr-Sts_")
+{
+        field(DTYP,"Snmp")
+        field(INP ,"@$(IP) private CPS-MIB::ePDULoadStatusLoadState.1 ( 100")
+        field(SCAN,"1 second")
+        field(FLNK,"$(SYS)$(DEV)Pwr-Sts")
+}
+
+record(mbbi,"$(SYS)$(DEV)Pwr-Sts")
+{
+        field(DESC,"Load Status")
+        field(INP, "$(SYS)$(DEV)Pwr-Sts_")
+        field(ONST,"Normal")
+        field(TWST,"Low")
+        field(THST,"NearOverload")
+        field(FRST,"Overload")
+        field(ONSV,"NO_ALARM")
+        field(TWSV,"NO_ALARM")
+        field(THSV,"MINOR")
+        field(FRST,"MAJOR")
+}
+
+record(ai,"$(SYS)$(DEV)Pwr-I")
+{
+        field(DESC,"Load (Power)")
+        field(DTYP,"Snmp")
+        field(INP,"@$(IP) private CPS-MIB::ePDULoadStatusActivePower.1 ( 100")
+        field(SCAN,"1 second")
+        field(EGU, "Watts")
+        field(LOPR,"0")
+        field(HOPR,"2000")
+        field(HIGH,"960")
+        field(HIHI,"1200")
+        field(HHSV, "MAJOR")
+        field(HSV,  "MINOR")
+}
