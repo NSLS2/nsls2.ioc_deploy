@@ -1,0 +1,6 @@
+---
+
+type: enum("lakeshore331")
+environment:
+  ENGINEER: str()
+  PREFIX: str()

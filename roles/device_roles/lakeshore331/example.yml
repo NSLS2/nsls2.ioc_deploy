@@ -1,0 +1,7 @@
+---
+
+lakeshore331-01:
+  type: lakeshore331
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{LAKESHORE331:01}
