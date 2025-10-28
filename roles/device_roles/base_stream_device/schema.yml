@@ -1,22 +1,10 @@
 ---
-
-type: enum("lakeshore336")
+type: enum("base_stream_device")
 environment:
   ENGINEER: str()
-  PREFIX: str()
-  PORT: str()
-  P: str()
-  R: str()
-  CT_PREFIX: str()
 connections: map(include('connection'), key=str())
-channels: list(include('name_scan_pair'))
-loops: list(include('name_scan_pair'))
 
 ---
-name_scan_pair:
-  name: str()
-  scan: str()
-
 connection:
   type: enum("IP", "Serial")
   connection: str()

@@ -1,0 +1,101 @@
+Terminator = CR LF;
+
+readFloat {
+  out "\$1 \$2";
+  in  "%f";
+}
+writeFloat {
+  out "\$1 \$2,%f";
+}
+writeFloat3 {
+  out "\$1 \$2,%(A)f,%(B)f,%(C)f";
+}
+readInt {
+  out "\$1 \$2";
+  in  "%d";
+}
+writeInt {
+  out "\$1 \$2,%d";
+}
+writeInt3 {
+  out "\$1 \$2,%(A)d,%(B)d,%(C)d";
+}
+writeIntFloat {
+  out "\$1 \$2,%(A)d,%(B)f";
+}
+readIntFloat_1 {
+  out "\$1 \$2";
+  in  "%d,%*f";
+}
+readIntFloat_2 {
+  out "\$1 \$2";
+  in  "%*d,%f";
+}
+writeIntFloatFloat {
+  out "\$1 \$2,%(A)d,%(B)f,%(C)f";
+}
+readIntFloatFloat_1 {
+  out "\$1 \$2";
+  in  "%d,%*f,%*f";
+}
+readIntFloatFloat_2 {
+  out "\$1 \$2";
+  in  "%*d,%f,%*f";
+}
+readIntFloatFloat_3 {
+  out "\$1 \$2";
+  in  "%*d,%*f,%f";
+}
+readIntInt_1 {
+  out "\$1 \$2";
+  in  "%d,%*d";
+}
+readIntInt_2 {
+  out "\$1 \$2";
+  in  "%*d,%d";
+}
+readInt3_1 {
+  out "\$1 \$2";
+  in  "%d,%*d,%*d";
+}
+readInt3_2 {
+  in  "%*d,%d,%*d";
+}
+readInt3_3 {
+  in  "%*d,%*d,%d";
+}
+readFloat3_1 {
+  out "\$1 \$2";
+  in  "%f,%*f,%*f";
+}
+readFloat3_2 {
+  out "\$1 \$2";
+  in  "%*f,%f,%*f";
+}
+readFloat3_3 {
+  out "\$1 \$2";
+  in  "%*f,%*f,%f";
+}
+readString {
+  out "\$1 \$2";
+  in "%#s";
+}
+writeString {
+  out "\$1 \$2,%s";
+}
+readIntIntFloatInt_1 {
+  out "\$1 \$2";
+  in  "%d,%*d,%*f,%*d";
+}
+readIntIntFloatInt_2 {
+  in  "%*d,%d,%*f,%*d";
+}
+readIntIntFloatInt_3 {
+  in  "%*d,%*d,%f,%*d";
+}
+readIntIntFloatInt_4 {
+  in  "%*d,%*d,%*f,%d";
+}
+writeIntIntFloatInt {
+  out "\$1 \$2,%(A)d,%(B)d,%(C)f,%(D)d";
+}

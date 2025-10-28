@@ -1,7 +1,31 @@
 ---
-
 lakeshore336-01:
-  type: lakeshore336
+  type: "lakeshore336"
   environment:
-    ENGINEER: C. Engineer
-    PREFIX: XF:31ID1-ES{LAKESHORE336:01}
+    ENGINEER: "C. Engineer"
+    PORT: LS336
+    P: "XF:31ID1-ES"
+    R: "{LS336:1}"
+    PREFIX: "$(P)$(R)"
+    CT_PREFIX: "XF:31ID1-CT{LS336:1}"
+  connections:
+    LS336: # Should match port name in environment
+      type: "IP"
+      # Connection to controller, LS336 uses port 7777
+      connection: "127.0.0.1:7777"
+      output_eos: "\\r\\n"
+      input_eos: "\\r\\n"
+  channels:
+    - name: "A"
+      scan: "1 second"
+    - name: "B"
+      scan: "1 second"
+    - name: "C"
+      scan: "1 second"
+    - name: "D"
+      scan: "1 second"
+  loops:
+    - name: "1"
+      scan: "1 second"
+    - name: "2"
+      scan: "1 second"

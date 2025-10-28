@@ -1,0 +1,26 @@
+---
+base_stream_device-01:
+  type: "base_stream_device"
+  connections:
+    STREAM1:
+      type: "IP"
+      connection: "127.0.0.1:8000"
+      output_eos: "\r\n"
+      input_eos: "\n"
+    STREAM2:
+      type: "Serial"
+      connection: "/dev/tty00"
+      output_eos: "\r\n"
+      input_eos: "\n"
+      serial_settings:
+        baud: 9600
+        bits: 8
+        parity: none
+        stop: 1
+        clocal: Y
+        crtscts: N
+        ixon: N
+        ixoff: N
+        ixany: N
+  environment:
+    ENGINEER: "C. Engineer"
