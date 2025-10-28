@@ -2,6 +2,7 @@
 
 type: enum("tetramm")
 deploy_ioc_template_root_path: str()
+deploy_ioc_required_module: str()
 
 environment:
   QUADEM: str()

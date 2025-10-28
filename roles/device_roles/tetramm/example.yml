@@ -1,11 +1,9 @@
 ---
 
 tetramm:
-  required_module: "quadEM"
-  type: "TetrAMM"
-
-  ioc_template_root_path: /epics/modules/quadEM
-
+  type: "tetramm"
+  deploy_ioc_required_module: "quadEM"
+  deploy_ioc_template_root_path: /epics/modules/quadEM
   environment:
 
     QUADEM: "/epics/modules/quadEM"
