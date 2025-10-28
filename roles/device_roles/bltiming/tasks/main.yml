@@ -1,0 +1,17 @@
+---
+
+- name: Install EPICS environment file
+  ansible.builtin.template:
+    src: templates/epicsEnv.cmd.j2
+    dest: "{{ deploy_ioc_ioc_directory }}/epicsEnv.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Install base startup script
+  ansible.builtin.template:
+    src: "templates/st.cmd.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/st.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0775"
