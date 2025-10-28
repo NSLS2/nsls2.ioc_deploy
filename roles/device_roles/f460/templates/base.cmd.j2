@@ -3,3 +3,20 @@ dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable
 {{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
 
 # F460 specific commands
+
+## User defined ENV variables
+epicsEnvSet("STREAM_PROTOCOL_PATH", "${F460}/F460App/src")
+
+drvAsynIPPortConfigure("$(PORT)", ${HOST})
+
+## Load records
+dbLoadRecords("${F460}/db/F460.db", "Sys=$(SYS),Dev=$(DEV),PORT=$(PORT),PINI=YES,BUFSZ=12,PREC=9")
+dbLoadRecords("${F460}/db/asyn.db", "Sys=$(SYS),Dev=$(DEV),PORT=$(PORT),ADDR=0")
+
+# asynSetTraceMask("$(PORT)",0,9)
+# asynSetTraceIOMask("$(PORT)",0,9)
+
+# PREFIX is used for autosave and devIoStat
+epicsEnvSet("PREFIX", "${IOC_SYS}${IOC_DEV}")
+
+dbLoadRecords("${F460}/db/reccaster.db", "P=${PREFIX}RecSync")
