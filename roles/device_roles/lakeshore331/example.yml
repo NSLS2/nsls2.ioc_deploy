@@ -4,4 +4,14 @@ lakeshore331-01:
   type: lakeshore331
   environment:
     ENGINEER: C. Engineer
-    PREFIX: XF:31ID1-ES{LAKESHORE331:01}
+    PORT: LS331
+    P: XF:31ID1-ES
+    R: "{LS331:1}"
+    PREFIX: "$(P)$(R)"
+    CT_PREFIX: "XF:31ID1-CT{LS331:1}"
+  connections:
+    LS331:
+      type: "IP"
+      connection: "127.0.0.1:8000"
+      output_eos: "\\r\\n"
+      input_eos: "\\r\\n"

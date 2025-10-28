@@ -1,10 +1,13 @@
 ---
 # Tasks for lakeshore331 role
+- name: Include base_stream_device role
+  ansible.builtin.include_role:
+    name: base_stream_device
 
-- name: Install base.cmd
-  ansible.builtin.template:
-    src: templates/base.cmd.j2
-    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+- name: Copy databases file for specified controller model num
+  ansible.builtin.copy:
+    src: "files/Lakeshore331.db"
+    dest: "{{ iocs_directory }}/{{ ioc_name }}/db/Lakeshore331.template"
+    owner: "{{ softioc_user }}"
+    group: "{{ softioc_group }}"
     mode: "0664"
-    owner: "{{ host_config.softioc_user }}"
-    group: "{{ host_config.softioc_group }}"

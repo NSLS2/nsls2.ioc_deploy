@@ -5,6 +5,19 @@
   ansible.builtin.include_role:
     name: base_stream_device
 
+- name: Append lakeshore336 specific commands to base.cmd
+  ansible.builtin.blockinfile:
+    path: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    block: |
+      # lakeshore336 specific commands
+      dbLoadTemplate("$(TOP)/db/lakeshore336.substitutions")
+      dbLoadTemplate("$(TOP)/db/lakeshore336_chan.substitutions")
+      dbLoadTemplate("$(TOP)/db/lakeshore336_loop.substitutions")
+    marker: "# {mark} LAKESHORE336 CONFIGURATION"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
 - name: Copy database file for Lakeshore336 controller
   ansible.builtin.copy:
     src: "{{ item }}"

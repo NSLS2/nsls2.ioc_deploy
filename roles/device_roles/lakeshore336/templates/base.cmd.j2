@@ -1,8 +1,0 @@
-
-dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
-{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
-
-# lakeshore336 specific commands
-dbLoadTemplate("$(TOP)/db/lakeshore336.substitutions")
-dbLoadTemplate("$(TOP)/db/lakeshore336_chan.substitutions")
-dbLoadTemplate("$(TOP)/db/lakeshore336_loop.substitutions")
