@@ -1,0 +1,6 @@
+---
+
+type: enum("linkamt96")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
