@@ -1,3 +1,0 @@
----
-deploy_ioc_executable: streamApp
-deploy_ioc_make_autosave_files: true

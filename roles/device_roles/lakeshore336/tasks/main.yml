@@ -1,9 +1,21 @@
 ---
 # Tasks for lakeshore336 role
 
-- name: Include base_stream_device role
-  ansible.builtin.include_role:
-    name: base_stream_device
+- name: Create protocol directory
+  ansible.builtin.file:
+    path: "{{ deploy_ioc_ioc_directory }}/protocol"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    state: directory
+    mode: "0775"
+
+- name: Install base.cmd file for Lakeshore336
+  ansible.builtin.template:
+    src: "templates/base.cmd.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
 
 - name: Append lakeshore336 specific commands to base.cmd
   ansible.builtin.blockinfile:
