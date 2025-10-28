@@ -10,4 +10,3 @@ environment:
   PRODUCT_ID: str(required=False)
   LINKAM3_LICENSE_PATH: str()
   LINKAM3_LOG_PATH: str()
-  LINKAM3: str()
