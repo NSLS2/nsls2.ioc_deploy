@@ -1,0 +1,7 @@
+---
+
+mdrive-01:
+  type: mdrive
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{MDRIVE:01}

@@ -1,0 +1,6 @@
+---
+
+type: enum("mdrive")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
