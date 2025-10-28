@@ -1,0 +1,12 @@
+---
+
+type: enum("tetramm")
+deploy_ioc_template_root_path: str()
+
+environment:
+  QUADEM: str()
+  SYS: str()
+  DEV: str()
+  IOC_PREFIX: str()
+  ENGINEER: str()
+  DEVICE_IP: str()
