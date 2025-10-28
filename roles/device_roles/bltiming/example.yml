@@ -1,0 +1,33 @@
+---
+bltiming-01:
+  type: "bltiming"
+  # Override default ioc_template root path (defauilt /epics/modules/BL-Timing)
+  ioc_template_root_path: "/epics/iocs/epics-mrf-master"
+  has_rear_transition_board: false
+  mode: "EVG" # EVG|EVR
+  environment:
+    ENGINEER: "R. Rainer"
+    CELL: "XF31"
+    # IOC Modules
+    AC: "#" # Access Control Enabled
+    AS: "#" # AutoSave Enabled
+    AS0: "#" # AutoSave Enabled
+    AS1: "#" # AutoSave Enabled
+    ASR: "#"  # AutoSave Enabled
+    caputLog: "#" # caputLog Enabled
+    dbl: "" # dbl Enabled
+
+    # Network Information
+    MAC: "00:0e:b2:00:08:e3"
+    IP: "10.69.58.27"
+    NET: "LOB1-LAB3"
+    PORT: "26"
+    LOC: "Controls Lab 03"
+    RACK: "DET POOL"
+
+    # Device Presets
+    TYPE: "EVG"
+    P: "XF:$(CELL)"
+    R: "{EVG}"
+    D: "EVG"
+    PREFIX: "$(P)$(R)"

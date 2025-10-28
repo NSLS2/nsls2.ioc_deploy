@@ -1,0 +1,14 @@
+
+< /epics/common/{{ hostname }}-netsetup.cmd
+
+errlogInit(20000)
+
+{% for envvar in _merged_ioc_environment|dict2items %}
+{% set vars = {'_expanded_envvar': envvar.value} %}
+{% if "$(" in envvar.key %}
+{% for macro in _merged_ioc_environment|dict2items %}
+{{ macro.key }}
+{% endfor %}
+{% endif %}
+epicsEnvSet("{{ envvar.key }}", "{{ vars._expanded_envvar }}")
+{% endfor %}
