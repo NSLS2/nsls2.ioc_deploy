@@ -19,37 +19,37 @@ IMPORTS
 -- commented by MIB Extraction:                   "DESCRIPTION" Text
 -- commented by MIB Extraction:                   ReferPart
 -- commented by MIB Extraction:                   "SYNTAX" Syntax
--- commented by MIB Extraction: 
+-- commented by MIB Extraction:
 -- commented by MIB Extraction:     VALUE NOTATION ::=
 -- commented by MIB Extraction:                    value(VALUE Syntax)       adapted ASN.1
--- commented by MIB Extraction: 
+-- commented by MIB Extraction:
 -- commented by MIB Extraction:     DisplayPart ::=
 -- commented by MIB Extraction:                   "DISPLAY-HINT" Text
 -- commented by MIB Extraction:                 | empty
--- commented by MIB Extraction: 
+-- commented by MIB Extraction:
 -- commented by MIB Extraction:     Status ::=
 -- commented by MIB Extraction:                   "current"
 -- commented by MIB Extraction:                 | "deprecated"
 -- commented by MIB Extraction:                 | "obsolete"
--- commented by MIB Extraction: 
+-- commented by MIB Extraction:
 -- commented by MIB Extraction:     ReferPart ::=
 -- commented by MIB Extraction:                   "REFERENCE" Text
 -- commented by MIB Extraction:                 | empty
--- commented by MIB Extraction: 
+-- commented by MIB Extraction:
 -- commented by MIB Extraction:      a character string as defined in [2]
 -- commented by MIB Extraction:     Text ::= value(IA5String)
--- commented by MIB Extraction: 
+-- commented by MIB Extraction:
 -- commented by MIB Extraction:     Syntax ::=    Must be one of the following:
 -- commented by MIB Extraction:                         a base type (or its refinement), or
 -- commented by MIB Extraction:                         a BITS pseudo-type
 -- commented by MIB Extraction:                   type
 -- commented by MIB Extraction:                 | "BITS" "{" NamedBits "}"
--- commented by MIB Extraction: 
+-- commented by MIB Extraction:
 -- commented by MIB Extraction:     NamedBits ::= NamedBit
 -- commented by MIB Extraction:                 | NamedBits "," NamedBit
--- commented by MIB Extraction: 
+-- commented by MIB Extraction:
 -- commented by MIB Extraction:     NamedBit ::=  identifier "(" number ")"  number is nonnegative
--- commented by MIB Extraction: 
+-- commented by MIB Extraction:
 -- commented by MIB Extraction: END
 
 
