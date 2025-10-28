@@ -4,3 +4,5 @@ mdrive_8bc9a09:
   name: mdrive
   version: 8bc9a09
   url: https://github.com/NSLS2/mdrive-ioc
+  module_deps:
+    - ims_2aeddf7
