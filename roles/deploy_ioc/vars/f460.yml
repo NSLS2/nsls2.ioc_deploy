@@ -5,9 +5,3 @@ deploy_ioc_use_ad_common: false
 deploy_ioc_required_module: f460_e24199e
 deploy_ioc_executable: F460
 deploy_ioc_make_autosave_files: true
-deploy_ioc_standard_post_init: true
-deploy_ioc_autosave_directory_name: "as"
-deploy_ioc_ioc_template_root_path: /epics/modules/F460
-deploy_ioc_ioc_specific_default_environment:
-  F460: "/epics/modules/F460"
-  EPICS_DB_INCLUDE_PATH: "$(F460)/db"
