@@ -9,7 +9,7 @@ dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable
 drvAsyn{{ connection.value.type }}PortConfigure("{{ connection.key }}", "{{ connection.value.connection }}")
 {% if connection.value.serial_settings is defined %}
 {% for serial_setting in connection.value.serial_settings %}
-asynSetOption("{{ connection.key }}", 0, "{{ serial_setting }}", "{{ serial_settings[serial_setting] }}")
+asynSetOption("{{ connection.key }}", 0, "{{ serial_setting }}", "{{ connection.value.serial_settings[serial_setting] }}")
 {% endfor %}
 {% endif %}
 {% if connection.value.output_eos is defined %}
