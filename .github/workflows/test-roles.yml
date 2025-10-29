@@ -1,0 +1,143 @@
+---
+
+name: Test Modified Roles
+permissions:
+  contents: read
+  packages: read
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'roles/device_roles/**'
+      - 'scripts/test-role.sh'
+      - '.github/workflows/test-roles.yml'
+  workflow_dispatch:
+
+jobs:
+  detect-changes:
+    name: Detect Modified Roles
+    runs-on: ubuntu-latest
+    outputs:
+      roles: ${{ steps.set-roles.outputs.roles }}
+      has-changes: ${{ steps.set-roles.outputs.has-changes }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Detect Modified Roles
+        id: set-roles
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            # Manual run: test all roles
+            ROLES=$(find roles/device_roles/ -mindepth 1 -maxdepth 1 \
+              -type d -exec basename {} \; \
+              | jq -R -s -c 'split("\n")[:-1]')
+            echo "roles=$ROLES" >> "$GITHUB_OUTPUT"
+            echo "has-changes=true" >> "$GITHUB_OUTPUT"
+            echo "Manual run: testing all roles"
+          else
+            # PR: test only modified roles
+            ROLES=$(git diff --name-only \
+              "origin/${{ github.base_ref }}...HEAD" \
+              | grep "^roles/device_roles/" \
+              | cut -d'/' -f3 \
+              | sort -u \
+              | jq -R -s -c 'split("\n")[:-1]')
+            echo "roles=$ROLES" >> "$GITHUB_OUTPUT"
+
+            if [ "$ROLES" = "[]" ]; then
+              echo "has-changes=false" >> "$GITHUB_OUTPUT"
+              echo "No roles modified in this PR"
+            else
+              echo "has-changes=true" >> "$GITHUB_OUTPUT"
+              echo "Modified roles: $ROLES"
+            fi
+          fi
+
+  prepare-image:
+    name: Prepare Container Image
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.has-changes == 'true'
+    outputs:
+      digest: ${{ steps.digest.outputs.digest }}
+    steps:
+      - name: Login to GitHub Container Registry
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | \
+            docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Get Container Digest
+        id: digest
+        run: |
+          set -e
+          DIGEST=$(docker manifest inspect \
+            ghcr.io/nsls2/epics-alma8:latest --verbose \
+            | jq -r '.[0].Descriptor.digest') || {
+            echo "Failed to retrieve container digest" >&2
+            exit 1
+          }
+          if [ -z "$DIGEST" ] || [ "$DIGEST" = "null" ]; then
+            echo "Invalid container digest: $DIGEST" >&2
+            exit 1
+          fi
+          echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
+          echo "Container digest: $DIGEST"
+
+      - name: Cache Docker Image
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /tmp/epics-alma8.tar
+          key: epics-alma8-${{ steps.digest.outputs.digest }}
+
+      - name: Pull and Save Container Image
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          echo "Pulling fresh image..."
+          docker pull ghcr.io/nsls2/epics-alma8:latest
+          docker save ghcr.io/nsls2/epics-alma8:latest -o /tmp/epics-alma8.tar
+
+  test-roles:
+    name: Test Role - ${{ matrix.role }}
+    runs-on: ubuntu-latest
+    needs: [detect-changes, prepare-image]
+    if: needs.detect-changes.outputs.has-changes == 'true'
+    strategy:
+      matrix:
+        role: ${{ fromJson(needs.detect-changes.outputs.roles) }}
+      fail-fast: false
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Pixi
+        uses: prefix-dev/setup-pixi@8ca4608ef7f4daeb54f5205b20d0b7cb42f11143
+        with:
+          pixi-version: v0.55.0
+          cache: false
+          frozen: true
+
+      - name: Restore Cached Docker Image
+        uses: actions/cache/restore@v4
+        with:
+          path: /tmp/epics-alma8.tar
+          key: epics-alma8-${{ needs.prepare-image.outputs.digest }}
+          fail-on-cache-miss: true
+
+      - name: Load Container Image
+        run: |
+          echo "Loading cached image..."
+          docker load -i /tmp/epics-alma8.tar
+
+      - name: Start EPICS Container
+        run: docker run -dit --name epics-dev ghcr.io/nsls2/epics-alma8:latest
+
+      - name: Test Role
+        run: pixi run test-role ${{ matrix.role }}
