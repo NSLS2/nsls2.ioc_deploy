@@ -1,0 +1,7 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_use_ad_common: false
+deploy_ioc_required_module: f460_e24199e
+deploy_ioc_executable: F460
+deploy_ioc_make_autosave_files: true
