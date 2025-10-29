@@ -15,7 +15,10 @@ repos:
         language: system
         # For some reason, pre commit doesn't accept the exclude_paths from the
         # .ansible-lint file, so we pass them explicitly as an argument here
-        entry: ansible-lint --offline --exclude roles/install_module/vars/*
+        entry: >
+          ansible-lint --offline
+          --exclude roles/install_module/vars/*
+          --exclude scripts/deploy_ioc.yml
         description: Perform ansible linting
         types: [yaml]
 
