@@ -3,7 +3,7 @@ deploy_ioc_standard_st_cmd: false
 deploy_ioc_executable: "quadEMTestApp"
 deploy_ioc_autosave_as_dir_name: "autosave"
 deploy_ioc_template_root_path: /epics/modules/quadEM
-deploy_ioc_required_module: quadEM
+deploy_ioc_required_module: quadem_f5ab1e9
 deploy_ioc_use_common: false
 deploy_ioc_specific_env:
   QUADEM: "/epics/modules/quadEM"
