@@ -91,7 +91,7 @@ jobs:
           set -e
           DIGEST=$(docker manifest inspect \
             ghcr.io/nsls2/epics-alma8:latest --verbose \
-            | jq -r '.Descriptor.digest') || {
+            | jq -r '.[0].Descriptor.digest') || {
             echo "Failed to retrieve container digest" >&2
             exit 1
           }
