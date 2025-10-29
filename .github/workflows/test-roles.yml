@@ -133,13 +133,8 @@ jobs:
 
       - name: Load Container Image
         run: |
-          if [ -f /tmp/epics-alma8.tar ]; then
-            echo "Loading cached image..."
-            docker load -i /tmp/epics-alma8.tar
-          else
-            echo "Image file not found" >&2
-            exit 1
-          fi
+          echo "Loading cached image..."
+          docker load -i /tmp/epics-alma8.tar
 
       - name: Start EPICS Container
         run: docker run -dit --name epics-dev ghcr.io/nsls2/epics-alma8:latest
