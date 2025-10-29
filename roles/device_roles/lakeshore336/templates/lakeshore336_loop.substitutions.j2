@@ -1,0 +1,12 @@
+#
+# {{ ansible_managed }}
+#
+file "$(TOP)/db/Lakeshore336_loop.template"
+{{"{"}}
+pattern
+{{"{"}}P, R, PORT, CHAN, SCAN{{"}"}}
+{% for loop_item in loops -%}
+{% set loopR = environment.R | regex_replace('\{([^}]+)\}', '\\1-Out:' + loop_item.name) -%}
+{{"{"}}"{{ environment.P }}", "{{ loopR }}", "{{ environment.PORT }}", "{{ loop_item.name }}", "{{ loop_item.scan }}"{{"}"}}
+{% endfor -%}
+{{"}"}}

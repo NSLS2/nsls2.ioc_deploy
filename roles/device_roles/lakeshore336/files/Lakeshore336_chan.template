@@ -1,0 +1,170 @@
+record(fanout, "$(P)$(R)FOut"){
+  field(SELM, "All")
+  field(LNK1, "$(P)$(R)T-I")
+  field(LNK2, "$(P)$(R)T:C-I")
+  field(LNK3, "$(P)$(R)Val:Sens-I")
+  field(LNK4, "$(P)$(R)T-Sts")
+  field(LNK5, "$(P)$(R)Alrm:High-Sts")
+  field(LNK6, "$(P)$(R)Alrm:Low-Sts")
+  field(SCAN, "Passive")
+}
+
+record(ai, "$(P)$(R)T-I"){
+  field(DESC, "Temperature")
+  field(EGU,  "K")
+  field(PREC, "3")
+  field(DTYP, "stream")
+  field(SDIS, "$(P)$(R)T-Sts NPP MS")
+  field(DISA, "16")
+  field(INP,  "@Lakeshore336.proto readFloat(KRDG?,$(CHAN)) $(PORT)")
+}
+
+record(ai, "$(P)$(R)T:C-I"){
+  field(DESC, "Temperature")
+  field(EGU,  "degC")
+  field(PREC, "3")
+  field(DTYP, "stream")
+  field(SDIS, "$(P)$(R)Alrm-Calc_ NPP MS")
+  field(DISA, "16")
+  field(INP,  "@Lakeshore336.proto readFloat(CRDG?,$(CHAN)) $(PORT)")
+}
+
+record(ai, "$(P)$(R)Val:Sens-I"){
+  field(DESC, "Sensor Reading")
+  field(DTYP, "stream")
+  field(SDIS, "$(P)$(R)T-Sts NPP MS")
+  field(DISA, "16")
+  field(INP,  "@Lakeshore336.proto readFloat(SRDG?,$(CHAN)) $(PORT)")
+  field(PREC, "5")
+}
+
+record(calc, "$(P)$(R)Alrm-Calc_"){
+  field(INPA, "$(P)$(R)Alrm:High-Sts NPP MS")
+  field(INPB, "$(P)$(R)Alrm:Low-Sts NPP MS")
+  field(INPC, "$(P)$(R)T-Sts NPP MS")
+  field(CALC, "0")
+}
+
+record(bi, "$(P)$(R)Alrm:High-Sts"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readIntInt_1(ALARMST?,$(CHAN)) $(PORT)")
+  field(ZNAM, "OK")
+  field(ONAM, "ALARM")
+  field(ZSV,  "NO_ALARM")
+  field(OSV,  "MAJOR")
+  field(FLNK, "$(P)$(R)Alrm-Calc_")
+}
+
+record(bi, "$(P)$(R)Alrm:Low-Sts"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readIntInt_2(ALARMST?,$(CHAN)) $(PORT)")
+  field(ZNAM, "OK")
+  field(ONAM, "ALARM")
+  field(ZSV,  "NO_ALARM")
+  field(OSV,  "MAJOR")
+  field(FLNK, "$(P)$(R)Alrm-Calc_")
+}
+
+record(mbbi, "$(P)$(R)T-Sts"){
+  field(DESC, "Sensor Status")
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readInt(RDGST?,$(CHAN)) $(PORT)")
+  field(ZRVL, "0")
+  field(ONVL, "1")
+  field(TWVL, "16")
+  field(THVL, "32")
+  field(FRVL, "64")
+  field(FVVL, "128")
+  field(ZRST, "OK")
+  field(ONST, "INVALID")
+  field(TWST, "UNDERRANGE")
+  field(THST, "OVERRANGE")
+  field(FRST, "SENSOR ZERO")
+  field(FVST, "SENSOR OVERRANGE")
+  field(ZRSV, "NO_ALARM")
+  field(ONSV, "MAJOR")
+  field(TWSV, "MAJOR")
+  field(THSV, "MAJOR")
+  field(FRSV, "MAJOR")
+  field(FVSV, "MAJOR")
+  field(FLNK, "$(P)$(R)Alrm-Calc_")
+}
+
+record(ai, "$(P)$(R)T:Lim-RB"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readFloat(TLIMIT?,$(CHAN)) $(PORT)")
+  field(SCAN, "$(SCAN)")
+  field(EGU,  "K")
+}
+
+record(ao, "$(P)$(R)T:Lim-SP"){
+  field(DTYP, "stream")
+  field(OUT,  "@Lakeshore336.proto writeFloat(TLIMIT,$(CHAN)) $(PORT)")
+  field(FLNK, "$(P)$(R)T:Lim-RB")
+  field(EGU,  "K")
+  info(autosaveFields, "VAL")
+}
+
+record(calcout, "$(P)$(R)Cmd:Fltr-Calc_"){
+  field(DTYP, "stream")
+  field(OUT,  "@Lakeshore336.proto writeIntFloatFloat(FILTER,$(CHAN)) $(PORT)")
+  field(CALC, "0")
+  field(FLNK, "$(P)$(R)Cmd:Fltr-Sts")
+  field(INPA, "$(P)$(R)Cmd:Fltr-Sel")
+  field(INPB, "$(P)$(R)Val:FltrP-SP")
+  field(INPC, "$(P)$(R)Val:FltrW-SP")
+}
+
+record(bo, "$(P)$(R)Cmd:Fltr-Sel"){
+  field(ZNAM, "OFF")
+  field(ONAM, "ON")
+  field(FLNK, "$(P)$(R)Cmd:Fltr-Calc_")
+  info(autosaveFields, "VAL")
+}
+
+record(ao, "$(P)$(R)Val:FltrP-SP"){
+  field(DRVL, "2")
+  field(DRVH, "64")
+  field(FLNK, "$(P)$(R)Cmd:Fltr-Calc_")
+  info(autosaveFields, "VAL")
+}
+
+record(ao, "$(P)$(R)Val:FltrW-SP"){
+  field(DRVL, "1")
+  field(DRVH, "10")
+  field(FLNK, "$(P)$(R)Cmd:Fltr-Calc_")
+  info(autosaveFields, "VAL")
+}
+
+record(bi, "$(P)$(R)Cmd:Fltr-Sts"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readIntFloatFloat_1(FILTER?,$(CHAN)) $(PORT)")
+  field(ZNAM, "OFF")
+  field(ONAM, "ON")
+  field(SCAN, "$(SCAN)")
+}
+
+record(ai, "$(P)$(R)Val:FltrP-RB"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readIntFloatFloat_2(FILTER?,$(CHAN)) $(PORT)")
+  field(SCAN, "$(SCAN)")
+}
+
+record(ai, "$(P)$(R)Val:FltrW-RB"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readIntFloatFloat_3(FILTER?,$(CHAN)) $(PORT)")
+  field(SCAN, "$(SCAN)")
+}
+
+record(stringout, "$(P)$(R)T:Name-SP"){
+  field(DTYP, "stream")
+  field(OUT,  "@Lakeshore336.proto writeString(INNAME,$(CHAN)) $(PORT)")
+  field(FLNK, "$(P)$(R)T:Name-RB")
+  info(autosaveFields, "VAL")
+}
+
+record(stringin, "$(P)$(R)T:Name-RB"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readString(INNAME?,$(CHAN)) $(PORT)")
+  field(SCAN, "$(SCAN)")
+}

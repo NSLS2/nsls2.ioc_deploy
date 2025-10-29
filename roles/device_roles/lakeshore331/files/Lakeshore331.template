@@ -1,0 +1,539 @@
+#
+# DO NOT EDIT LOCALLY
+#
+# Edit upstream: https://github.com/NSLS2/ioc-deploy-roles/blob/main/roles/Lakeshore/files/Lakeshore331.db
+#
+
+#
+# LakeShore 331 Database. Based on database available in https://github.com/epics-modules/ip
+#
+# Edited by Jakub Wlodek
+#
+
+#
+# Initalization fanout records
+#
+
+grecord(dfanout,"$(P)$(R):INIT") {
+    field(SCAN,"1 second")
+    field(OUTA,"$(P)$(R):INPUT_SEL.PROC  PP NMS")
+    field(OUTB,"$(P)$(R):UNITS_SEL.PROC  PP NMS")
+    field(OUTC,"$(P)$(R):HEAT_RNG.PROC  PP NMS")
+    field(OUTD,"$(P)$(R):P.PROC  PP NMS")
+    field(OUTE,"$(P)$(R):I.PROC  PP NMS")
+    field(OUTF,"$(P)$(R):D.PROC  PP NMS")
+    field(OUTG,"$(P)$(R):RAMP_RATE.PROC  PP NMS")
+    field(OUTH,"$(P)$(R):INIT_B.PROC  PP NMS")
+}
+
+grecord(dfanout,"$(P)$(R):INIT_B") {
+    field(SCAN,"Passive")
+    field(OUTA,"$(P)$(R):RAMP.PROC  PP NMS")
+    field(OUTB,"$(P)$(R):SP.PROC  PP NMS")
+    field(OUTC,"$(P)$(R):READ.PROC  PP NMS")
+    field(OUTD,"$(P)$(R):READ_PID.PROC  PP NMS")
+    field(OUTE,"$(P)$(R):INIT.SCAN CA NMS")
+}
+
+
+#
+# PID records (Gain, Reset, Rate)
+#
+
+record(ao, "$(P)$(R):P") {
+    field(DTYP, "Soft Channel")
+    field(FLNK, "$(P)$(R):SET_P.VAL  PP MS")
+    field(PREC, "0")
+}
+
+record(ao, "$(P)$(R):I") {
+    field(DTYP, "Soft Channel")
+    field(FLNK, "$(P)$(R):SET_I.VAL  PP MS")
+    field(PREC, "0")
+}
+
+record(ao, "$(P)$(R):D") {
+    field(DTYP, "Soft Channel")
+    field(FLNK, "$(P)$(R):SET_D.VAL  PP MS")
+    field(PREC, "0")
+}
+
+
+#
+# Ramp Rate and Set point
+#
+
+record(ao, "$(P)$(R):RAMP_RATE") {
+    field(DTYP, "Soft Channel")
+    field(FLNK, "$(P)$(R):SET_RAMP.VAL  PP MS")
+    field(PREC, "1")
+}
+
+record(ao, "$(P)$(R):SP") {
+    field(DTYP, "Soft Channel")
+    field(FLNK, "$(P)$(R):SP_SCALC.VAL  PP MS")
+    field(PREC, "3")
+}
+
+
+#
+# Heater Range
+#
+
+record(mbbi, "$(P)$(R):HEAT_RNG_RBV") {
+    field(DTYP, "Soft Channel")
+    field(INP, "$(P)$(R):RANGE.VAL  NPP MS")
+    field(ZRST, "OFF")
+    field(ZRVL, "0")
+    field(ONST, "Low (0.5 W)")
+    field(ONVL, "1")
+    field(TWST, "Medium (5 W)")
+    field(TWVL, "2")
+    field(THST, "High (50 W)")
+    field(THVL, "3")
+}
+
+record(mbbo, "$(P)$(R):HEAT_RNG") {
+    field(DTYP, "Soft Channel")
+    field(FLNK, "$(P)$(R):SET_HEAT.VAL  PP MS")
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "2")
+    field(THVL, "3")
+    field(FRVL, "0")
+    field(FVVL, "0")
+    field(ZRST, "OFF")
+    field(ONST, "100 mA")
+    field(TWST, "300 mA")
+    field(THST, "1 A")
+}
+
+
+
+#
+# Units/Inputs Selection PVs
+#
+
+record(mbbo, "$(P)$(R):INPUT_SEL") {
+    field(DTYP, "Soft Channel")
+    field(FLNK, "$(P)$(R):SET_CTRL.VAL  NPP MS")
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "0")
+    field(THVL, "0")
+    field(ZRST, "A")
+    field(ONST, "B")
+}
+
+record(mbbo, "$(P)$(R):UNITS_SEL") {
+    field(DTYP, "Soft Channel")
+    field(FLNK, "$(P)$(R):SET_CTRL.VAL  NPP MS")
+    field(ZRVL, "1")
+    field(ONVL, "2")
+    field(TWVL, "0")
+    field(THVL, "0")
+    field(ZRST, "K")
+    field(ONST, "C")
+}
+
+
+# Ramp State
+
+record(mbbi, "$(P)$(R):RAMP_RBV") {
+    field(DTYP, "Soft Channel")
+    field(INP, "$(P)$(R):RAMP_SCALC.VAL  NPP MS")
+    field(ZRST, "OFF")
+    field(ONST, "ON")
+}
+
+
+record(mbbo, "$(P)$(R):RAMP") {
+    field(DTYP, "Soft Channel")
+    field(FLNK, "$(P)$(R):SET_RAMP.PROC  PP MS")
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "0")
+    field(THVL, "0")
+    field(ZRST, "OFF")
+    field(ONST, "ON")
+}
+
+record(seq, "$(P)$(R):READ_PID") {
+    field(PREC, "1")
+    field(DLY1, ".05")
+    field(LNK1, "$(P)$(R):READ_P.PROC  PP MS")
+    field(DLY2, ".05")
+    field(LNK2, "$(P)$(R):READ_I.PROC  PP MS")
+    field(DLY3, ".05")
+    field(LNK3, "$(P)$(R):READ_D.PROC  PP MS")
+    field(DLY4, ".05")
+    field(LNK4, "$(P)$(R):READ_RAMP.PROC  PP MS")
+}
+
+record(seq, "$(P)$(R):READ") {
+    field(PREC, "1")
+    field(DLY1, ".05")
+    field(LNK1, "$(P)$(R):READ_CTRL_SCALC.PROC  PP MS")
+    field(DLY2, ".05")
+    field(LNK2, "$(P)$(R):READ_RDAT_SCALC.PROC  PP MS")
+    field(DLY3, ".05")
+    field(LNK3, "$(P)$(R):READ_SPLA_SCALC.PROC  PP MS")
+    field(DLY4, ".05")
+    field(LNK4, "$(P)$(R):READ_SPLB_SCALC.PROC  PP MS")
+    field(DLY5, ".05")
+    field(LNK5, "$(P)$(R):READ_HEATER_PWR.PROC  PP MS")
+    field(DLY6, ".05")
+    field(LNK6, "$(P)$(R):READ_SP_STR.PROC  PP MS")
+}
+
+#
+# Read PID records
+#
+
+record(stringout, "$(P)$(R):READ_P") {
+    field(DTYP, "Soft Channel")
+    field(FLNK, "0")
+    field(VAL, "GAIN?")
+    field(OUT, "$(P)$(R):WRITE_READ_P.AOUT  PP MS")
+}
+
+record(stringout, "$(P)$(R):READ_I") {
+    field(DTYP, "Soft Channel")
+    field(FLNK, "0")
+    field(VAL, "RSET?")
+    field(OUT, "$(P)$(R):WRITE_READ_I.AOUT  PP MS")
+}
+
+record(stringout, "$(P)$(R):READ_D") {
+    field(DTYP, "Soft Channel")
+    field(FLNK, "0")
+    field(VAL, "RATE?")
+    field(OUT, "$(P)$(R):WRITE_READ_D.AOUT  PP MS")
+}
+
+
+
+record(stringout, "$(P)$(R):READ_RAMP") {
+    field(DTYP, "Soft Channel")
+    field(FLNK, "0")
+    field(VAL, "RAMP?")
+    field(OUT, "$(P)$(R):WRITE_READ_RAMP.AOUT  PP MS")
+}
+
+record(stringout, "$(P)$(R):READ_SP_STR") {
+    field(DTYP, "Soft Channel")
+    field(FLNK, "0")
+    field(VAL, "SETP?")
+    field(OUT, "$(P)$(R):READ_SP.AOUT  PP MS")
+}
+
+
+
+#
+# PID Write/Read records
+#
+
+record(asyn, "$(P)$(R):WRITE_READ_P") {
+    field(FLNK, "$(P)$(R):P_RBV.VAL  PP MS")
+    field(PORT, "$(PORT)")
+}
+
+record(asyn, "$(P)$(R):WRITE_READ_I") {
+    field(FLNK, "$(P)$(R):I_RBV.VAL  PP MS")
+    field(PORT, "$(PORT)")
+}
+
+record(asyn, "$(P)$(R):WRITE_READ_D") {
+    field(FLNK, "$(P)$(R):D_RBV.VAL  PP MS")
+    field(PORT, "$(PORT)")
+}
+
+
+
+record(asyn, "$(P)$(R):READ_CTRL") {
+    field(FLNK, "$(P)$(R):CONTROL.VAL  PP MS")
+    field(PORT, "$(PORT)")
+}
+
+record(asyn, "$(P)$(R):READ_CTRL_PARAMS") {
+    field(FLNK, "$(P)$(R):CTRL_INPUT.PROC  PP MS")
+    field(PORT, "$(PORT)")
+}
+
+record(asyn, "$(P)$(R):READ_HEATER_PWR") {
+    field(FLNK, "$(P)$(R):HEATER_PWR.VAL  PP MS")
+    field(PORT, "$(PORT)")
+    field(AOUT, "HTR?")
+}
+
+record(asyn, "$(P)$(R):WRITE_SP") {
+    field(PORT, "$(PORT)")
+}
+
+record(asyn, "$(P)$(R):READ_SP") {
+    field(FLNK, "$(P)$(R):SP_RBV.VAL  PP MS")
+    field(PORT, "$(PORT)")
+}
+
+record(asyn, "$(P)$(R):READ_SAMPLE_A") {
+    field(FLNK, "$(P)$(R):SAMPLE_A.VAL  PP MS")
+    field(PORT, "$(PORT)")
+}
+
+record(asyn, "$(P)$(R):READ_SAMPLE_B") {
+    field(FLNK, "$(P)$(R):SAMPLE_B.VAL  PP MS")
+    field(PORT, "$(PORT)")
+}
+
+record(asyn, "$(P)$(R):SERIAL") {
+    field(PORT, "$(PORT)")
+}
+
+record(asyn, "$(P)$(R):WRITE_READ_HTR") {
+    field(FLNK, "$(P)$(R):RANGE.VAL  PP MS")
+    field(PORT, "$(PORT)")
+}
+
+record(asyn, "$(P)$(R):WRITE_READ_RAMP") {
+    field(FLNK, "$(P)$(R):RAMP_SCALC.VAL  PP MS")
+    field(PORT, "$(PORT)")
+}
+
+#
+# PID Set records
+#
+
+record(scalcout, "$(P)$(R):SET_P") {
+    field(DESC, "Format string for PID input")
+    field(CALC, "$P('GAIN %d;GAIN?',A)")
+    field(INPA, "$(P)$(R):P.VAL  NPP MS")
+    field(OUT, "$(P)$(R):WRITE_READ_P.AOUT  PP MS")
+    field(PREC, "1")
+}
+
+record(scalcout, "$(P)$(R):SET_I") {
+    field(DESC, "Format string for PID input")
+    field(CALC, "$P('RSET %d;RSET?',A)")
+    field(INPA, "$(P)$(R):I.VAL  NPP MS")
+    field(OUT, "$(P)$(R):WRITE_READ_I.AOUT  PP MS")
+    field(PREC, "1")
+}
+
+record(scalcout, "$(P)$(R):SET_D") {
+    field(DESC, "Format string for PID input")
+    field(CALC, "$P('RATE %d;RATE?',A)")
+    field(INPA, "$(P)$(R):D.VAL  NPP MS")
+    field(OUT, "$(P)$(R):WRITE_READ_D.AOUT  PP MS")
+    field(PREC, "1")
+}
+
+
+
+record(scalcout, "$(P)$(R):RAMP_SCALC") {
+    field(FLNK, "$(P)$(R):RAMP_RATE_RBV.PROC  PP MS")
+    field(CALC, "INT(AA)")
+    field(INAA, "$(P)$(R):WRITE_READ_RAMP.AINP  NPP MS")
+    field(PREC, "1")
+}
+
+record(scalcout, "$(P)$(R):RAMP_RATE_RBV") {
+    field(FLNK, "$(P)$(R):RAMP_RBV.PROC  PP MS")
+    field(CALC, "AA[2,10]")
+    field(INAA, "$(P)$(R):WRITE_READ_RAMP.AINP  NPP MS")
+    field(PREC, "1")
+}
+
+record(scalcout, "$(P)$(R):P_RBV") {
+    field(CALC, "INT(AA)")
+    field(INAA, "$(P)$(R):WRITE_READ_P.AINP  NPP MS")
+    field(PREC, "0")
+}
+
+record(scalcout, "$(P)$(R):I_RBV") {
+    field(CALC, "INT(AA)")
+    field(INAA, "$(P)$(R):WRITE_READ_I.AINP  NPP MS")
+    field(PREC, "0")
+}
+
+record(scalcout, "$(P)$(R):D_RBV") {
+    field(CALC, "INT(AA)")
+    field(INAA, "$(P)$(R):WRITE_READ_D.AINP  NPP MS")
+    field(PREC, "0")
+}
+
+record(scalcout, "$(P)$(R):CONTROL") {
+    field(DESC, "Format string for Ctl query")
+    field(CALC, "DBL(AA)")
+    field(INAA, "$(P)$(R):READ_CTRL.AINP  NPP MS")
+    field(INEE, "0")
+    field(PREC, "3")
+}
+
+record(scalcout, "$(P)$(R):HEATER_PWR") {
+    field(DESC, "Format string for Ctl query")
+    field(CALC, "DBL(AA)")
+    field(INAA, "$(P)$(R):READ_HEATER_PWR.AINP  NPP MS")
+    field(INEE, "0")
+    field(PREC, "0")
+}
+
+record(scalcout, "$(P)$(R):RANGE") {
+    field(DESC, "Format string for Ctl query")
+    field(FLNK, "$(P)$(R):HEAT_RNG_RBV.PROC  PP MS")
+    field(CALC, "INT(AA)")
+    field(INAA, "$(P)$(R):WRITE_READ_HTR.AINP  NPP MS")
+    field(INEE, "0")
+    field(PREC, "2")
+}
+
+record(scalcout, "$(P)$(R):SP_RBV") {
+    field(DESC, "Format string for Ctl query")
+    field(CALC, "DBL(AA)")
+    field(INAA, "$(P)$(R):READ_SP.AINP  NPP MS")
+    field(INEE, "0")
+    field(PREC, "3")
+}
+
+record(scalcout, "$(P)$(R):SP_SCALC") {
+    field(DESC, "Format string for Ctl query")
+    field(FLNK, "$(P)$(R):READ_SP_STR.PROC  PP MS")
+    field(CALC, "$P('SETP 1,%6.3f',A)")
+    field(INPA, "$(P)$(R):SP.VAL  NPP MS")
+    field(INEE, "0")
+    field(OUT, "$(P)$(R):WRITE_SP.AOUT  PP MS")
+    field(PREC, "3")
+}
+
+record(scalcout, "$(P)$(R):SAMPLE_A") {
+    field(DESC, "Convt str fror SplA query")
+    field(CALC, "DBL(AA)")
+    field(INAA, "$(P)$(R):READ_SAMPLE_A.AINP  PP MS")
+    field(INEE, "0")
+    field(PREC, "3")
+}
+
+record(scalcout, "$(P)$(R):SAMPLE_B") {
+    field(DESC, "Convrt str from SplB query")
+    field(CALC, "DBL(AA)")
+    field(INAA, "$(P)$(R):READ_SAMPLE_B.AINP  PP MS")
+    field(INEE, "0")
+    field(PREC, "3")
+}
+
+record(scalcout, "$(P)$(R):CTRL_INPUT") {
+    field(DESC, "Parse string for Ctl Input")
+    field(FLNK, "$(P)$(R):CTRL_UNITS.PROC  PP MS")
+    field(CALC, "AA[0,0]")
+    field(INAA, "$(P)$(R):READ_CTRL_PARAMS.AINP  NPP MS")
+    field(PREC, "1")
+    field(AA, "A")
+}
+
+record(scalcout, "$(P)$(R):CTRL_UNITS") {
+    field(DESC, "Parse string for Ctl Unit")
+    field(FLNK, "$(P)$(R):CTRL_UNITS_STR.PROC  PP MS")
+    field(CALC, "INT(AA[2,2])")
+    field(INAA, "$(P)$(R):READ_CTRL_PARAMS.AINP  NPP MS")
+    field(PREC, "1")
+    field(AA, "A,2")
+}
+
+record(scalcout, "$(P)$(R):CTRL_UNITS_STR") {
+    field(DESC, "Make Ctl Input string")
+    field(CALC, "A=1?BB:CC")
+    field(INPA, "$(P)$(R):CTRL_UNITS.VAL  NPP MS")
+    field(PREC, "1")
+    field(A, "1")
+    field(BB, "K")
+    field(CC, "C")
+}
+
+record(scalcout, "$(P)$(R):SET_CTRL") {
+    field(DESC, "Format string for Ctl Set")
+    field(FLNK, "$(P)$(R):READ.PROC  PP MS")
+    field(CALC, "AA+(B?FF:EE)+','+STR(C)[0,0]+DD")
+    field(INAA, "")
+    field(INBB, "$(P)$(R):INPUT_SEL.VAL  PP MS")
+    field(INPB, "$(P)$(R):INPUT_SEL.VAL  PP MS")
+    field(INPC, "$(P)$(R):UNITS_SEL.RVAL  PP MS")
+    field(INDD, "")
+    field(OUT, "$(P)$(R):READ_CTRL_PARAMS.AOUT  PP MS")
+    field(PREC, "1")
+    field(AA, "CSET 1,")
+    field(BB, "A")
+    field(B, "0")
+    field(C, "1")
+    field(DD, ",0,1;CSET?")
+    field(EE, "A")
+    field(FF, "B")
+}
+
+record(scalcout, "$(P)$(R):READ_CTRL_SCALC") {
+    field(DESC, "Format string for Ctl query")
+    field(CALC, "AA")
+    field(INAA, "0")
+    field(OUT, "$(P)$(R):READ_CTRL_PARAMS.AOUT  PP MS")
+    field(PREC, "1")
+    field(AA, "CSET?")
+}
+
+record(scalcout, "$(P)$(R):SET_HEAT") {
+    field(CALC, "AA+BB+CC")
+    field(INAA, "0")
+    field(INBB, "$(P)$(R):HEAT_RNG.RVAL  NPP MS")
+    field(OUT, "$(P)$(R):WRITE_READ_HTR.AOUT  PP MS")
+    field(PREC, "1")
+    field(AA, "RANGE ")
+    field(BB, "0")
+    field(CC, ";RANGE?")
+}
+
+record(scalcout, "$(P)$(R):READ_SPLA_SCALC") {
+    field(DESC, "Format str for A query")
+    field(CALC, "AA+BB")
+    field(INAA, "$(P)$(R):CTRL_UNITS_STR.SVAL  PP MS")
+    field(INBB, "0")
+    field(OUT, "$(P)$(R):READ_SAMPLE_A.AOUT  PP MS")
+    field(PREC, "1")
+    field(AA, "K")
+    field(BB, "RDG? A")
+}
+
+record(scalcout, "$(P)$(R):READ_SPLB_SCALC") {
+    field(DESC, "Format str for B query")
+    field(CALC, "AA+BB")
+    field(INAA, "$(P)$(R):CTRL_UNITS_STR.SVAL  PP MS")
+    field(INBB, "0")
+    field(OUT, "$(P)$(R):READ_SAMPLE_B.AOUT  PP MS")
+    field(PREC, "1")
+    field(AA, "K")
+    field(BB, "RDG? B")
+}
+
+record(scalcout, "$(P)$(R):READ_RDAT_SCALC") {
+    field(DESC, "Format str for rd query")
+    field(CALC, "A=2?EE+BB+CC:DD+BB+CC")
+    field(INPA, "$(P)$(R):CTRL_UNITS.VAL  NPP MS")
+    field(INBB, "0")
+    field(INCC, "$(P)$(R):CTRL_INPUT.SVAL  NPP MS")
+    field(INDD, "0")
+    field(INEE, "0")
+    field(OUT, "$(P)$(R):READ_CTRL.AOUT  PP MS")
+    field(PREC, "1")
+    field(A, "1")
+    field(BB, "RDG? ")
+    field(DD, "K")
+    field(EE, "C")
+}
+
+record(scalcout, "$(P)$(R):SET_RAMP") {
+    field(DESC, "Format string for PID input")
+    field(CALC, "AA+$P('%d',A)+','+$P('%5.1f',B)+BB")
+    field(INPA, "$(P)$(R):RAMP.RVAL  NPP MS")
+    field(INPB, "$(P)$(R):RAMP_RATE.VAL  NPP MS")
+    field(OUT, "$(P)$(R):WRITE_READ_RAMP.AOUT  PP MS")
+    field(PREC, "1")
+    field(AA, "RAMP 1,")
+    field(BB, ";RAMP?")
+    field(CC, "0")
+}

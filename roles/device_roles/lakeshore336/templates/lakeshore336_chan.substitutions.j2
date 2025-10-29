@@ -1,0 +1,12 @@
+#
+# {{ ansible_managed }}
+#
+file "$(TOP)/db/Lakeshore336_chan.template"
+{{"{"}}
+pattern
+{{"{"}}P, R, PORT, CHAN, SCAN{{"}"}}
+{% for channel in channels -%}
+{% set chanR = environment.R | regex_replace('\{([^}]+)\}', '\\1-Chan:' + channel.name) -%}
+{{"{"}}"{{ environment.P }}", "{{ chanR }}", "{{ environment.PORT }}", "{{ channel.name }}", "{{ channel.scan }}"{{"}"}}
+{% endfor -%}
+{{"}"}}

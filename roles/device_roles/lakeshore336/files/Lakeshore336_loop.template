@@ -1,0 +1,342 @@
+record(fanout, "$(P)$(R)FOut"){
+  field(LNK1, "$(P)$(R)T-RB")
+  field(LNK2, "$(P)$(R)Sts:Ramp-Sts")
+  field(LNK3, "$(P)$(R)Out-I")
+  field(LNK4, "$(P)$(R)Err:Htr-Sts")
+  field(LNK5, "$(P)$(R)Val:Range-Sts")
+  field(LNK6, "$(P)$(R)Alrm-Calc_")
+  field(SELM, "All")
+  field(SCAN, "Passive")
+}
+
+record(ao, "$(P)$(R)T-SP"){
+  field(DTYP, "stream")
+  field(OUT,  "@Lakeshore336.proto writeFloat(SETP,$(CHAN)) $(PORT)")
+  field(FLNK, "$(P)$(R)T-RB")
+  info(autosaveFields, "VAL")
+}
+
+record(ai, "$(P)$(R)T-RB"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readFloat(SETP?,$(CHAN)) $(PORT)")
+  field(SDIS, "$(P)$(R)Alrm-Calc_ NPP MS")
+  field(DISA, "1")
+}
+
+record(calc, "$(P)$(R)Alrm-Calc_"){
+  field(CALC, "0")
+  field(INPA, "$(P)$(R)Val:Range-Sts NPP MS")
+  field(INPB, "$(P)$(R)Err:Htr-Sts NPP MS")
+}
+
+record(mbbo, "$(P)$(R)Mode-Sel"){
+  field(ZRST, "OFF")
+  field(ONST, "PID")
+  field(TWST, "ZONE")
+  field(THST, "OPEN LOOP")
+  field(FRST, "MONITOR")
+  field(FVST, "WARMUP")
+  field(FLNK, "$(P)$(R)Mode-Calc_")
+  info(autosaveFields, "VAL")
+}
+
+record(calcout, "$(P)$(R)Mode-Calc_"){
+  field(DTYP, "stream")
+  field(OUT,  "@Lakeshore336.proto writeInt3(OUTMODE,$(CHAN)) $(PORT)")
+  field(CALC, "0")
+  field(FLNK, "$(P)$(R)Mode-Sts")
+  field(INPA, "$(P)$(R)Mode-Sel")
+  field(INPB, "$(P)$(R)Out-Sel")
+  field(INPC, "$(P)$(R)Enbl-Sel")
+}
+
+record(mbbo, "$(P)$(R)Out-Sel"){
+  field(ZRST, "NONE")
+  field(ONST, "A")
+  field(TWST, "B")
+  field(THST, "C")
+  field(FRST, "D")
+  field(FLNK, "$(P)$(R)Mode-Calc_")
+  info(autosaveFields, "VAL")
+}
+
+record(mbbo, "$(P)$(R)Enbl-Sel"){
+  field(ZRST, "OFF")
+  field(ONST, "ON")
+  field(FLNK, "$(P)$(R)Mode-Calc_")
+  info(autosaveFields, "VAL")
+}
+
+record(mbbi, "$(P)$(R)Mode-Sts"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readInt3_1(OUTMODE?,$(CHAN)) $(PORT)")
+  field(ZRST, "OFF")
+  field(ONST, "PID")
+  field(TWST, "ZONE")
+  field(THST, "OPEN LOOP")
+  field(FRST, "MONITOR")
+  field(FVST, "WARMUP")
+  field(SCAN, "$(SCAN)")
+}
+
+record(mbbi, "$(P)$(R)Out-Sts"){
+  field(DTYP, "stream")
+  field(SCAN, "I/O Intr")
+  field(INP,  "@Lakeshore336.proto readInt3_2(OUTMODE?,$(CHAN)) $(PORT)")
+  field(ZRST, "NONE")
+  field(ONST, "A")
+  field(TWST, "B")
+  field(THST, "C")
+  field(FRST, "D")
+}
+
+record(mbbi, "$(P)$(R)Enbl-Sts"){
+  field(DTYP, "stream")
+  field(SCAN, "I/O Intr")
+  field(INP,  "@Lakeshore336.proto readInt3_3(OUTMODE?,$(CHAN)) $(PORT)")
+  field(ZRST, "OFF")
+  field(ONST, "ON")
+}
+
+record(calcout, "$(P)$(R)Gain-Calc_"){
+  field(DTYP, "stream")
+  field(OUT,  "@Lakeshore336.proto writeFloat3(PID,$(CHAN)) $(PORT)")
+  field(CALC, "0")
+  field(FLNK, "$(P)$(R)Gain:P-RB")
+  field(INPA, "$(P)$(R)Gain:P-SP")
+  field(INPB, "$(P)$(R)Gain:I-SP")
+  field(INPC, "$(P)$(R)Gain:D-SP")
+}
+
+record(ao, "$(P)$(R)Gain:P-SP"){
+  field(FLNK, "$(P)$(R)Gain-Calc_")
+  info(autosaveFields, "VAL")
+}
+
+record(ao, "$(P)$(R)Gain:I-SP"){
+  field(FLNK, "$(P)$(R)Gain-Calc_")
+  info(autosaveFields, "VAL")
+}
+
+record(ao, "$(P)$(R)Gain:D-SP"){
+  field(FLNK, "$(P)$(R)Gain-Calc_")
+  info(autosaveFields, "VAL")
+}
+
+record(ai, "$(P)$(R)Gain:P-RB"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readFloat3_1(PID?,$(CHAN)) $(PORT)")
+  field(SCAN, "$(SCAN)")
+}
+
+record(ai, "$(P)$(R)Gain:I-RB"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readFloat3_2(PID?,$(CHAN)) $(PORT)")
+  field(SCAN, "$(SCAN)")
+}
+
+record(ai, "$(P)$(R)Gain:D-RB"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readFloat3_3(PID?,$(CHAN)) $(PORT)")
+  field(SCAN, "$(SCAN)")
+}
+
+record(bi, "$(P)$(R)Sts:Ramp-Sts"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readInt(RAMPST?,$(CHAN)) $(PORT)")
+  field(ZNAM, "IDLE")
+  field(ONAM, "RAMPING")
+}
+
+record(calcout, "$(P)$(R)Enbl:Ramp-Calc_"){
+  field(DTYP, "stream")
+  field(OUT,  "@Lakeshore336.proto writeIntFloat(RAMP,$(CHAN)) $(PORT)")
+  field(CALC, "0")
+  field(FLNK, "$(P)$(R)Enbl:Ramp-Sts")
+  field(INPB, "$(P)$(R)Val:Ramp-SP")
+  field(INPA, "$(P)$(R)Enbl:Ramp-Sel")
+}
+
+record(bo, "$(P)$(R)Enbl:Ramp-Sel"){
+  field(ZNAM, "OFF")
+  field(ONAM, "ON")
+  field(FLNK, "$(P)$(R)Enbl:Ramp-Calc_")
+  info(autosaveFields, "VAL")
+}
+
+record(ao, "$(P)$(R)Val:Ramp-SP"){
+  field(FLNK, "$(P)$(R)Enbl:Ramp-Calc_")
+  info(autosaveFields, "VAL")
+}
+
+record(bi, "$(P)$(R)Enbl:Ramp-Sts"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readIntFloat_1(RAMP?,$(CHAN)) $(PORT)")
+  field(ZNAM, "OFF")
+  field(ONAM, "ON")
+  field(SCAN, "$(SCAN)")
+}
+
+record(ai, "$(P)$(R)Val:Ramp-RB"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readIntFloat_2(RAMP?,$(CHAN)) $(PORT)")
+  field(SCAN, "$(SCAN)")
+}
+
+record(mbbo, "$(P)$(R)Val:Range-Sel"){
+  field(DTYP, "stream")
+  field(OUT,  "@Lakeshore336.proto writeInt(RANGE,$(CHAN)) $(PORT)")
+  field(ZRST, "OFF")
+  field(ONST, "RANGE 1")
+  field(TWST, "RANGE 2")
+  field(THST, "RANGE 3")
+  field(FRST, "RANGE 4")
+  field(FVST, "RANGE 5")
+  field(ZRSV, "MINOR")
+  field(FLNK, "$(P)$(R)Val:Range-Sts")
+  info(autosaveFields, "VAL")
+}
+
+record(mbbi, "$(P)$(R)Val:Range-Sts"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readInt(RANGE?,$(CHAN)) $(PORT)")
+  field(ZRST, "OFF")
+  field(ONST, "RANGE 1")
+  field(TWST, "RANGE 2")
+  field(THST, "RANGE 3")
+  field(FRST, "RANGE 4")
+  field(FVST, "RANGE 5")
+  field(ZRSV, "MINOR")
+}
+
+record(mbbo, "$(P)$(R)Mode:ATune-Sel"){
+  field(DTYP, "stream")
+  field(OUT,  "@Lakeshore336.proto writeInt(ATUNE,$(CHAN)) $(PORT)")
+  field(ZRST, "P")
+  field(ONST, "PI")
+  field(TWST, "PID")
+  info(autosaveFields, "VAL")
+}
+
+record(mbbi, "$(P)$(R)Mode:ATune-Sts"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readInt(ATUNE?,$(CHAN)) $(PORT)")
+  field(ZRST, "P")
+  field(ONST, "PI")
+  field(TWST, "PID")
+}
+
+record(ai, "$(P)$(R)Out-I"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readFloat(HTR?,$(CHAN)) $(PORT)")
+  field(EGU, "%")
+  field(SDIS, "$(P)$(R)Alrm-Calc_ NPP MS")
+  field(DISA, "1")
+}
+
+record(mbbi, "$(P)$(R)Err:Htr-Sts"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readInt(HTRST?,$(CHAN)) $(PORT)")
+  field(ZRST, "OK")
+  field(ONST, "OPEN LOAD")
+  field(TWST, "SHORTED")
+  field(THST, "COMPLIENCE")
+  field(ZRSV, "NO_ALARM")
+  field(ONSV, "MAJOR")
+  field(TWSV, "MAJOR")
+  field(THSV, "MAJOR")
+}
+
+record(ao, "$(P)$(R)Out:Man-SP"){
+  field(DTYP, "stream")
+  field(OUT,  "@Lakeshore336.proto writeFloat(MOUT,$(CHAN)) $(PORT)")
+  field(FLNK, "$(P)$(R)Out:Man-RB")
+}
+
+record(ai, "$(P)$(R)Out:Man-RB"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readFloat(MOUT?,$(CHAN)) $(PORT)")
+  field(SCAN, "$(SCAN)")
+}
+
+record(mbbi, "$(P)$(R)Out:R-RB"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readIntIntFloatInt_1(HTRSET?,$(CHAN)) $(PORT)")
+  field(ZRST, "25 OHM")
+  field(ONST, "50 OHM")
+  field(ZRVL, "1")
+  field(ONVL, "2")
+  field(SCAN, "$(SCAN)")
+}
+
+record(mbbi, "$(P)$(R)Out:Max-RB"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readIntIntFloatInt_2(HTRSET?,$(CHAN)) $(PORT)")
+  field(ZRST, "USER")
+  field(ONST, "0.707 A")
+  field(TWST, "1 A")
+  field(THST, "1.414 A")
+  field(FRST, "2 A")
+  field(SCAN, "I/O Intr")
+}
+
+record(ai, "$(P)$(R)Out:MaxI-RB"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readIntIntFloatInt_3(HTRSET?,$(CHAN)) $(PORT)")
+  field(SCAN, "I/O Intr")
+  field(EGU,  "AMPS")
+}
+
+record(mbbi, "$(P)$(R)Out:Disp-RB"){
+  field(DTYP, "stream")
+  field(INP,  "@Lakeshore336.proto readIntIntFloatInt_4(HTRSET?,$(CHAN)) $(PORT)")
+  field(ZRST, "CURRENT")
+  field(ONST, "POWER")
+  field(ZRVL, "1")
+  field(ONVL, "2")
+  field(SCAN, "I/O Intr")
+}
+
+record(calcout, "$(P)$(R)Out:R-Calc_"){
+  field(DTYP, "stream")
+  field(OUT,  "@Lakeshore336.proto writeIntIntFloatInt(HTRSET,$(CHAN)) $(PORT)")
+  field(FLNK, "$(P)$(R)Out:R-RB")
+  field(INPA, "$(P)$(R)Out:R-SP")
+  field(INPB, "$(P)$(R)Out:Max-SP")
+  field(INPC, "$(P)$(R)Out:MaxI-SP")
+  field(INPD, "$(P)$(R)Out:Disp-SP")
+}
+
+record(mbbo, "$(P)$(R)Out:R-SP"){
+  field(ZRST, "25 OHM")
+  field(ONST, "50 OHM")
+  field(ZRVL, "1")
+  field(ONVL, "2")
+  field(FLNK, "$(P)$(R)Out:R-Calc_")
+  info(autosaveFields, "VAL")
+}
+
+record(mbbo, "$(P)$(R)Out:Max-SP"){
+  field(ZRST, "USER")
+  field(ONST, "0.707 A")
+  field(TWST, "1 A")
+  field(THST, "1.414 A")
+  field(FRST, "2 A")
+  field(FLNK, "$(P)$(R)Out:R-Calc_")
+  info(autosaveFields, "VAL")
+}
+
+record(ao, "$(P)$(R)Out:MaxI-SP"){
+  field(EGU,  "AMPS")
+  field(FLNK, "$(P)$(R)Out:R-Calc_")
+  info(autosaveFields, "VAL")
+}
+
+record(mbbo, "$(P)$(R)Out:Disp-SP"){
+  field(ZRST, "CURRENT")
+  field(ONST, "POWER")
+  field(ZRVL, "1")
+  field(ONVL, "2")
+  field(FLNK, "$(P)$(R)Out:R-Calc_")
+  info(autosaveFields, "VAL")
+}

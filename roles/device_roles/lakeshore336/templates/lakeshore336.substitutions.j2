@@ -1,0 +1,11 @@
+#
+# {{ ansible_managed }}
+#
+file "$(TOP)/db/Lakeshore336.template"
+{{"{"}}
+pattern
+{{"{"}}P, R{% for i in range(1, (channels | length) + (loops | length) + 1) %}, LNK{{ i }}{% endfor %}{{"}"}}
+{% set channel_prefix = environment.R | regex_replace('\{([^}]+)\}', '\\1-Chan:') -%}
+{% set loop_prefix = environment.R | regex_replace('\{([^}]+)\}', '\\1-Out:') -%}
+{{"{"}}"{{ environment.P }}", "{{ environment.R }}"{% for channel in channels %}, "{{ channel_prefix }}{{ channel.name }}"{% endfor %}{% for loop_item in loops %}, "{{ loop_prefix }}{{ loop_item.name }}"{% endfor %}{{"}"}}
+{{"}"}}

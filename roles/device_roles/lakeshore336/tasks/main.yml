@@ -1,0 +1,60 @@
+---
+# Tasks for lakeshore336 role
+
+- name: Create protocol directory
+  ansible.builtin.file:
+    path: "{{ deploy_ioc_ioc_directory }}/protocol"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    state: directory
+    mode: "0775"
+
+- name: Install base.cmd file for Lakeshore336
+  ansible.builtin.template:
+    src: "templates/base.cmd.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Append lakeshore336 specific commands to base.cmd
+  ansible.builtin.blockinfile:
+    path: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    block: |
+      # lakeshore336 specific commands
+      dbLoadTemplate("$(TOP)/db/lakeshore336.substitutions")
+      dbLoadTemplate("$(TOP)/db/lakeshore336_chan.substitutions")
+      dbLoadTemplate("$(TOP)/db/lakeshore336_loop.substitutions")
+    marker: "# {mark} LAKESHORE336 CONFIGURATION"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Copy database file for Lakeshore336 controller
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ deploy_ioc_ioc_directory }}/db"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+  with_fileglob: "files/*.template"
+
+- name: Copy protocol file for Lakeshore336 controller
+  ansible.builtin.copy:
+    src: "files/Lakeshore336.proto"
+    dest: "{{ deploy_ioc_ioc_directory }}/protocol/lakeshore336.proto"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Install default list of substitution files
+  ansible.builtin.template:
+    src: "templates/{{ item }}.substitutions.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/db/{{ item }}.substitutions"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+  with_items:
+    - "lakeshore336"
+    - "lakeshore336_chan"
+    - "lakeshore336_loop"
