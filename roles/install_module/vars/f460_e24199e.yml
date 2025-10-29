@@ -4,15 +4,3 @@ f460_e24199e:
   name: F460
   version: e24199e
   url: https://github.com/NSLS2/F460-ioc
-  epics_deps:
-    EPICS_BASE: /usr/lib/epics
-    STREAM: /usr/lib/epics
-    ASYN: /usr/lib/epics
-    GENERICSCAN: /usr/lib/epics
-    RECCASTER: /usr/lib/epics
-    DEVIOCSTATS: /usr/lib/epics
-    AUTOSAVE: /usr/lib/epics
-    SUPPORT: /epics/support
-    F460: /epics/modules/F460
-  pkg_deps:
-    - epics-bundle

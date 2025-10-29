@@ -5,7 +5,6 @@ f460-01:
   ioc_template_root_path: /epics/modules/F460
   environment:
     ENGINEER: K. Barry
-    PREFIX: XF:31ID1-ES{F460:01}
     SYS: XF:31ID-ES
     DEV: "{F460:1}"
     IOC_SYS: XF:31ID-CT

@@ -3,7 +3,6 @@
 type: enum("f460")
 environment:
   ENGINEER: str()
-  PREFIX: str()
   SYS: str()
   DEV: str()
   IOC_SYS: str()
