@@ -1,0 +1,6 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_use_ad_common: false
+deploy_ioc_required_module: linkam3_1093365
+deploy_ioc_executable: linkamT96App

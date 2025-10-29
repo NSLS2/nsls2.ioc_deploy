@@ -1,0 +1,13 @@
+---
+
+linkamt96-01:
+  type: linkamt96
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{LINKAMT96:01}
+    PORT: "LINK3"
+    SERIAL_PORT: "/dev/ttyUSB0"
+    VENDOR_ID: "1234"
+    PRODUCT_ID: "5678"
+    LINKAM3_LICENSE_PATH: "/path/to/linkamt96_license.txt"
+    LINKAM3_LOG_PATH: "/path/to/linkamt96_log.txt"
