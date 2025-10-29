@@ -58,28 +58,14 @@ jobs:
             fi
           fi
 
-  test-roles:
-    name: Test Role - ${{ matrix.role }}
+  prepare-image:
+    name: Prepare Container Image
     runs-on: ubuntu-latest
     needs: detect-changes
     if: needs.detect-changes.outputs.has-changes == 'true'
-    strategy:
-      matrix:
-        role: ${{ fromJson(needs.detect-changes.outputs.roles) }}
-      fail-fast: false
+    outputs:
+      digest: ${{ steps.digest.outputs.digest }}
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-
-      - name: Setup Pixi
-        uses: prefix-dev/setup-pixi@8ca4608ef7f4daeb54f5205b20d0b7cb42f11143
-        with:
-          pixi-version: v0.55.0
-          cache: false
-          frozen: true
-
       - name: Login to GitHub Container Registry
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | \
@@ -109,16 +95,46 @@ jobs:
           path: /tmp/epics-alma8.tar
           key: epics-alma8-${{ steps.digest.outputs.digest }}
 
-      - name: Load or Pull Container Image
+      - name: Pull and Save Container Image
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          if [ -f /tmp/epics-alma8.tar ]; then
-            echo "Loading cached image..."
-            docker load -i /tmp/epics-alma8.tar
-          else
-            echo "Pulling fresh image..."
-            docker pull ghcr.io/nsls2/epics-alma8:latest
-            docker save ghcr.io/nsls2/epics-alma8:latest -o /tmp/epics-alma8.tar
-          fi
+          echo "Pulling fresh image..."
+          docker pull ghcr.io/nsls2/epics-alma8:latest
+          docker save ghcr.io/nsls2/epics-alma8:latest -o /tmp/epics-alma8.tar
+
+  test-roles:
+    name: Test Role - ${{ matrix.role }}
+    runs-on: ubuntu-latest
+    needs: [detect-changes, prepare-image]
+    if: needs.detect-changes.outputs.has-changes == 'true'
+    strategy:
+      matrix:
+        role: ${{ fromJson(needs.detect-changes.outputs.roles) }}
+      fail-fast: false
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Pixi
+        uses: prefix-dev/setup-pixi@8ca4608ef7f4daeb54f5205b20d0b7cb42f11143
+        with:
+          pixi-version: v0.55.0
+          cache: false
+          frozen: true
+
+      - name: Restore Cached Docker Image
+        uses: actions/cache/restore@v4
+        with:
+          path: /tmp/epics-alma8.tar
+          key: epics-alma8-${{ needs.prepare-image.outputs.digest }}
+          fail-on-cache-miss: true
+
+      - name: Load Container Image
+        run: |
+          echo "Loading cached image..."
+          docker load -i /tmp/epics-alma8.tar
 
       - name: Start EPICS Container
         run: docker run -dit --name epics-dev ghcr.io/nsls2/epics-alma8:latest
