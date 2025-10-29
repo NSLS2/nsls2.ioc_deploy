@@ -10,4 +10,4 @@ f460-01:
     IOC_SYS: XF:31ID-CT
     IOC_DEV: "{IOC:F460}"  # Used for IOC-specific PVs
     PORT: E1
-    HOST: xf31id1-lab3-tsrv1.nsls2.bnl.local:4008
+    HOST: xf31id1-lab3-tsrv1.nsls2.bnl.local
