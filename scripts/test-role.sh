@@ -17,6 +17,7 @@ fi
 
 # Install collection (idempotent)
 echo "Installing ansible collection..."
+ansible-galaxy collection install -r collections/requirements.yml
 ansible-galaxy collection install $(pwd) --force
 ansible-galaxy collection install community.docker
 
