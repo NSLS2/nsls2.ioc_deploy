@@ -3,5 +3,5 @@ keithley428_0000000:
   name: Keithley428
   url: https://github.com/NSLS-II/Keithley428
   # TODO: Replace with actual commit hash when repo is available
-  version: "0000000"
+  version: "PLACEHOLDER"
   executable: "Keithley428"
