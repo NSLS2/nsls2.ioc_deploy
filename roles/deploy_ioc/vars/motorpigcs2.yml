@@ -1,0 +1,8 @@
+---
+# Variables for the motorpigcs2 role
+deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
+deploy_ioc_required_module: motorpigcs2_ioc_a0bdeae
+deploy_ioc_device_specific_env:
+  PORT: GCS2
+  ASYN_PORT: GCS2_ETH
+  CONTROLLER_PORT: 50000

@@ -1,0 +1,27 @@
+record(motor,"$(P)$(M)")
+{
+        field(DESC, "$(DESC)")
+        field(DTYP, "$(DTYP)")
+        field(OUT,  "@asyn($(PORT),$(ADDR))")
+
+        field(RTRY, $(RTRY="0"))        # Max Retries
+
+        # Use of MRES is deliberate on the following line.
+        # This sets the retry deadband to the smallest possible size.
+        field(RDBD, $(MRES="1"))        # Retry Deadband
+        field(MRES, $(MRES="1"))        # Motor Step Size (EGU) MRES=SREV/UREV
+        field(EGU,  $(EGU="None"))      # Engineering Units
+        field(PREC, $(PREC="0"))        # Precision
+
+        field(VBAS, $(VBAS="0.01"))     # EGU/sec
+        field(VELO, $(VELO="0.1"))      # EGU/sec
+        field(VMAX, $(VMAX="0.5"))      # EGU/sec
+        field(ACCL, $(ACCL="0.1"))      # seconds
+        field(BDST, $(BDST="0"))        # backlash dist
+        field(BVEL, $(BVEL="0.1"))      # EGU/sec
+        field(BACC, $(BACC="0.2"))      # seconds
+
+        info(autosaveFields_pass0, "DVAL DIR DHLM DLLM TWV SREV MRES ERES RRES VBAS VELO VMAX ACCL BDST BVEL BACC RDBD DESC EGU RTRY UEIP URIP DLY RDBL PREC DISA DISP FOFF OFF FRAC OMSL JVEL JAR PCOF ICOF DCOF HVEL NTM NTMF")
+
+        info(autosaveFields, "DIR DHLM DLLM TWV SREV MRES ERES RRES VBAS VELO VMAX ACCL BDST BVEL BACC RDBD DESC EGU RTRY UEIP URIP DLY RDBL PREC DISA DISP FOFF OFF FRAC OMSL JVEL JAR PCOF ICOF DCOF HVEL NTM NTMF")
+}

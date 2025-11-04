@@ -1,0 +1,25 @@
+## Register all support components
+dbLoadDatabase("$(TEMPLATE_TOP)/dbd/pigcs2.dbd",0,0)
+{{ deploy_ioc_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+
+## motorUtil (allstop & alldone)
+dbLoadRecords("$(MOTOR)/db/motorUtil.db", "P=$(P)")
+
+## PI GCS2 support
+# dbLoadTemplate("$(TOP)/db/PI_GCS2.substitutions")
+
+drvAsynIPPortConfigure("$(ASYN_PORT)","$(CONTROLLER_IP):$(CONTROLLER_PORT)",0,0,0)
+# Turn on asyn trace
+asynSetTraceMask("$(ASYN_PORT)",0,3)
+asynSetTraceIOMask("$(ASYN_PORT)",0,1)
+
+# PI_GCS2_CreateController(portName, asynPort, numAxes, priority, stackSize, movingPollingRate, idlePollingRate)
+PI_GCS2_CreateController("$(PORT)", "$(ASYN_PORT)", 3, 0, 0, 100, 1000)
+
+# Turn off asyn trace
+asynSetTraceMask("$(ASYN_PORT)",0,1)
+asynSetTraceIOMask("$(ASYN_PORT)",0,0)
+
+# asyn record for troubleshooting
+dbLoadRecords("$(ASYN)/db/asynRecord.db","P=$(CT_PREFIX),R=Asyn,PORT=$(ASYN_PORT),ADDR=0,OMAX=256,IMAX=256")

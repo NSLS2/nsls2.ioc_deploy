@@ -1,0 +1,47 @@
+---
+
+motorpigcs2-01:
+  type: motorpigcs2
+  environment:
+    ENGINEER: "J. MA"
+    PORT: "GCS2"
+    ASYN_PORT: "GCS2_ETH"
+    P: "XF:31ID-ES"
+    R: "{GCS2:1}"
+    PREFIX: "$(P)$(R)"
+    CT_PREFIX: "XF:31ID-CT{GCS2:1}"
+    CONTROLLER_IP: "10.66.xx.xx"
+    CONTROLLER_PORT: 50000
+  substitutions:
+    pigcs2:
+      - filepath: "$(TOP)/db/motorgcs2.template"
+        pattern:
+          - "P"
+          - "M"
+          - "DTYP"
+          - "PORT"
+          - "ADDR"
+          - "DESC"
+          - "EGU"
+          - "DIR"
+          - "VELO"
+          - "VBAS"
+          - "ACCL"
+          - "BDST"
+          - "BVEL"
+          - "BACC"
+          - "MRES"
+          - "PREC"
+          - "DHLM"
+          - "DLLM"
+          - "INIT"
+        instances:
+          - ["$(P)", "{Gon:1-Ax:XP}Mtr", "asynMotor", "$(PORT)", "0",
+             "Fine Motion X", "um", "Pos", "5", "0", ".2", "0", "1",
+             ".2", "0.0001", "4", "0.0", "0.0", ""]
+          - ["$(P)", "{Gon:1-Ax:YP}Mtr", "asynMotor", "$(PORT)", "1",
+             "Fine Motion Y", "um", "Pos", "5", "0", ".2", "0", "1",
+             ".2", "0.0001", "4", "0.0", "0.0", ""]
+          - ["$(P)", "{Gon:1-Ax:ZP}Mtr", "asynMotor", "$(PORT)", "2",
+             "Fine Motion Z", "um", "Pos", "5", "0", ".2", "0", "1",
+             ".2", "0.0001", "4", "0.0", "0.0", ""]
