@@ -197,7 +197,7 @@ record(fanout, "$(P)$(R)Treadback")
 }
 record(ai, "$(P)$(R)Temp1")
 {
-    field(DESC, "Temperarature sensor 1")
+    field(DESC, "Temperature sensor 1")
     field(DTYP, "Snmp")
     field(INP,  "@$(CRATE) %(WCR_PREF)sensorTemperature.temp1 INTEGER: 100")
     field(EGU,  "degrees C")
@@ -207,7 +207,7 @@ record(ai, "$(P)$(R)Temp1")
 }
 record(ai, "$(P)$(R)Temp2")
 {
-    field(DESC, "Temperarature sensor 2")
+    field(DESC, "Temperature sensor 2")
     field(DTYP, "Snmp")
     field(INP,  "@$(CRATE) %(WCR_PREF)sensorTemperature.temp2 INTEGER: 100")
     field(EGU,  "degrees C")
@@ -217,7 +217,7 @@ record(ai, "$(P)$(R)Temp2")
 }
 record(ai, "$(P)$(R)Temp3")
 {
-    field(DESC, "Temperarature sensor 3")
+    field(DESC, "Temperature sensor 3")
     field(DTYP, "Snmp")
     field(INP,  "@$(CRATE) %(WCR_PREF)sensorTemperature.temp3 INTEGER: 100")
     field(EGU,  "degrees C")

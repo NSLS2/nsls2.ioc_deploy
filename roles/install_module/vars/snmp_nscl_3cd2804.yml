@@ -8,4 +8,5 @@ snmp_nscl_3cd2804:
   executable: snmp
   module_deps: []
   pkg_deps:
+    - net-snmp
     - net-snmp-devel
