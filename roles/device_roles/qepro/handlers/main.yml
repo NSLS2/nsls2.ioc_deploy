@@ -1,0 +1,13 @@
+---
+
+- name: Reload udev rules
+  ansible.builtin.command: udevadm control --reload-rules
+  changed_when: true
+  when: ansible_virtualization_type not in ["docker", "podman", "container"]
+  notify: Trigger udev rules
+
+
+- name: Trigger udev rules
+  ansible.builtin.command: udevadm trigger
+  changed_when: true
+  when: ansible_virtualization_type not in ["docker", "podman", "container"]

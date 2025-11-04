@@ -1,0 +1,7 @@
+---
+
+type: enum("qepro")
+
+environment:
+  PREFIX: str()
+  PORT: str()
