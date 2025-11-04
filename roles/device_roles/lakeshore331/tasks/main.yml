@@ -1,0 +1,9 @@
+---
+
+- name: Copy database file for Lakeshore 331 controller
+  ansible.builtin.copy:
+    src: "Lakeshore331.template"
+    dest: "{{ deploy_ioc_ioc_directory }}/db/Lakeshore331.template"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"

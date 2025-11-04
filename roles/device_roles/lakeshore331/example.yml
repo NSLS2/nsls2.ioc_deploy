@@ -1,0 +1,22 @@
+---
+lakeshore331:
+  type: lakeshore331
+  environment:
+    ENGINEER: "J. Wlodek"
+    PORT: LS331
+    P: "XF:31ID-ES"
+    R: "{LS331:1}"
+    PREFIX: "$(P)$(R)"
+    CT_PREFIX: "XF:31ID-CT{LS331:1}"
+  connections:
+    LS331: # Should match port name in environment
+      type: "IP"
+      connection: "127.0.0.1:8000" # Connection to MOXA tsrv
+      output_eos: "\\r\\n"
+      input_eos: "\\n"
+  substitutions:
+    Lakeshore331:
+      - filepath: "$(TOP)/db/Lakeshore331.template"
+        pattern: ["PORT", "P", "R"]
+        instances:
+          - ["LS331", "{LS331:1}", "{LS331:1}"]

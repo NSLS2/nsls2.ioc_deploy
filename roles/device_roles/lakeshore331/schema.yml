@@ -1,0 +1,10 @@
+---
+
+type: enum("lakeshore331")
+environment:
+  ENGINEER: str(required=True)
+  PORT: str(required=True)
+  P: str(required=True)
+  R: str(required=True)
+  PREFIX: str(required=True)
+  CT_PREFIX: str(required=True)

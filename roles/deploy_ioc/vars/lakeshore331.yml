@@ -1,0 +1,13 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_required_module: base_stream_ioc_093e6cf
+deploy_ioc_req_file_list: []
+deploy_ioc_template_root_path:
+  "{{ deploy_ioc_required_module_path }}"
+deploy_ioc_device_specific_env:
+  PORT: "LS331"
+  P: "XF:31ID-ES"
+  R: "{LS331:1}"
+  PREFIX: "$(P)$(R)"
+  CT_PREFIX: "XF:31ID-CT{LS331:1}"
