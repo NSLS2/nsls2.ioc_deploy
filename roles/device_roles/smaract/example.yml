@@ -23,13 +23,13 @@ SmarAct:
           instances:
             - ["$(PREFIX)", 1, "{MCS2-Ax:1}Mtr", "asynMotor",
                "$(PORT)", 0, "mm", "Pos", 0, 0, 0, 0, 1, 0.2,
-               0.000001, 6, 0, 0, ""]
+               0.000001, 6, 0, 0, "", ""]
             - ["$(PREFIX)", 2, "{MCS2-Ax:2}Mtr", "asynMotor",
                "$(PORT)", 1, "mm", "Pos", 0, 0, 0, 0, 1, 0.2,
-               0.000001, 6, 0, 0, ""]
+               0.000001, 6, 0, 0, "", ""]
             - ["$(PREFIX)", 3, "{MCS2-Ax:3}Mtr", "asynMotor",
                "$(PORT)", 2, "mm", "Pos", 0, 0, 0, 0, 1, 0.2,
-               0.000001, 6, 0, 0, ""]
+               0.000001, 6, 0, 0, "", ""]
         - filepath: "$(SMARACT)/db/MCS2_Extra.db"
           pattern: ["P", "N", "M", "PORT", "ADDR", "TIMEOUT"]
           instances:
