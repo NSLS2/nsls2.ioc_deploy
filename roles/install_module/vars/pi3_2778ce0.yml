@@ -1,0 +1,6 @@
+---
+
+pi3_2778ce0:
+  name: Pi3
+  url: https://github.com/NSLS2/pi3
+  version: 2778ce0
