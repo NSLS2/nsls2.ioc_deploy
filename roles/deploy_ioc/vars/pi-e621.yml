@@ -1,0 +1,11 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_required_module: pie621_043ec8f
+deploy_ioc_req_file_list:
+  - name: info_settings.req
+    macros: ""
+  - name: info_positions.req
+    macros: ""
+deploy_ioc_device_specific_env:
+  PI_PORT: "PI_VMS"
