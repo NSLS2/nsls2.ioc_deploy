@@ -1,0 +1,38 @@
+---
+
+SmarAct:
+  type: "smaract"
+  model: "MCS2"
+  num_axes: 3
+  environment:
+    PREFIX: "XF:31ID1-ES{SMARACT:Dev-1}"
+    ENGINEER: "C. Engineer"
+    CONTROLLER_IP: "192.168.1.100"
+    PORT: "SMARACT"
+    MODEL: "MCS2"
+    NUM_AXES: 3
+    AXES_MASK: "0x7"
+  substitutions:
+    smaract:
+      templates:
+        - filepath: "$(MOTOR)/db/basic_asyn_motor.db"
+          pattern: ["P", "N", "M", "DTYP", "PORT", "ADDR", "DESC",
+                    "EGU", "DIR", "VELO", "VBAS", "ACCL", "BDST",
+                    "BVEL", "BACC", "MRES", "PREC", "DHLM", "DLLM",
+                    "INIT"]
+          instances:
+            - ["$(PREFIX)", 1, "{MCS2-Ax:1}Mtr", "asynMotor",
+               "$(PORT)", 0, "mm", "Pos", 0, 0, 0, 0, 1, 0.2,
+               0.000001, 6, 0, 0, ""]
+            - ["$(PREFIX)", 2, "{MCS2-Ax:2}Mtr", "asynMotor",
+               "$(PORT)", 1, "mm", "Pos", 0, 0, 0, 0, 1, 0.2,
+               0.000001, 6, 0, 0, ""]
+            - ["$(PREFIX)", 3, "{MCS2-Ax:3}Mtr", "asynMotor",
+               "$(PORT)", 2, "mm", "Pos", 0, 0, 0, 0, 1, 0.2,
+               0.000001, 6, 0, 0, ""]
+        - filepath: "$(SMARACT)/db/MCS2_Extra.db"
+          pattern: ["P", "N", "M", "PORT", "ADDR", "TIMEOUT"]
+          instances:
+            - ["$(PREFIX)", 1, "{MCS2-Ax:1}Mtr", "$(PORT)", 0, 1.0]
+            - ["$(PREFIX)", 2, "{MCS2-Ax:2}Mtr", "$(PORT)", 1, 1.0]
+            - ["$(PREFIX)", 3, "{MCS2-Ax:3}Mtr", "$(PORT)", 2, 1.0]
