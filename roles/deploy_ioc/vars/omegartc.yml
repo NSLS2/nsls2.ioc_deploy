@@ -1,0 +1,14 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_required_module: omegartc_764faf1
+deploy_ioc_as_dir_name: as
+
+deploy_ioc_device_specific_env:
+  EPICS_DB_INCLUDE_PATH: "$(OMEGA_RTC)/db"
+
+deploy_ioc_req_file_list:
+  - name: "info_settings.req"
+    macros: ""
+  - name: "info_positions.req"
+    macros: ""
