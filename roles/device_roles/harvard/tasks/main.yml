@@ -24,7 +24,7 @@
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
     mode: "0664"
-  with_fileglob: "files/{{ deploy_ioc_merged_env.model }}*.db"
+  with_fileglob: "files/{{ ioc.model }}*.db"
 
 - name: Copy protocol files for specified model
   ansible.builtin.copy:
@@ -33,7 +33,7 @@
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
     mode: "0664"
-  with_fileglob: "files/{{ deploy_ioc_merged_env.model }}*.proto"
+  with_fileglob: "files/{{ ioc.model }}*.proto"
 
 - name: Generate custom postInit cmd file for pump33dds models
   ansible.builtin.template:
@@ -42,4 +42,4 @@
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
     mode: "0664"
-  when: deploy_ioc_merged_env.model == "pump33dds"
+  when: ioc.model == "pump33dds"
