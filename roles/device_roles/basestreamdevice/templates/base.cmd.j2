@@ -1,0 +1,28 @@
+epicsEnvSet("STREAM_PROTOCOL_PATH", "$(EPICS_BASE)/protocol:$(TOP):$(TOP)/protocol:$(TEMPLATE_TOP)/protocol")
+
+dbLoadDatabase("{{ deploy_ioc_required_module_path }}/dbd/{{ deploy_ioc_executable }}.dbd", 0, 0)
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# Configure all asyn port connections
+{% if deploy_ioc_config.connections is defined %}
+{% for connection in deploy_ioc_config.connections|dict2items %}
+drvAsyn{{ connection.value.type }}PortConfigure("{{ connection.key }}", "{{ connection.value.connection }}")
+{% if connection.value.serial_settings is defined %}
+{% for serial_setting, serial_value in connection.value.serial_settings.items() %}
+asynSetOption("{{ connection.key }}", 0, "{{ serial_setting }}", "{{ serial_value }}")
+{% endfor %}
+{% endif %}
+{% if connection.value.output_eos is defined %}
+asynOctetSetOutputEos("{{ connection.key }}", 0, "{{ connection.value.output_eos }}")
+{% endif %}
+{% if connection.value.input_eos is defined %}
+asynOctetSetInputEos("{{ connection.key }}", 0, "{{ connection.value.input_eos }}")
+{% endif %}
+{% endfor %}
+{% endif %}
+
+# Autosave machinery
+set_savefile_path("$(TOP)/autosave","/save")
+set_requestfile_path("$(TOP)/autosave","/req")
+set_pass0_restoreFile("info_positions.sav")
+set_pass1_restoreFile("info_settings.sav")

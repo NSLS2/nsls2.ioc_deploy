@@ -1,0 +1,29 @@
+---
+
+type: enum("basestreamdevice")
+
+connections: map(str(), include('connection_config'))
+
+---
+connection_config:
+  type: enum("IP", "Serial")
+  connection: str()
+  output_eos: str(required=False)
+  input_eos: str(required=False)
+  serial_settings: include('serial_config', required=False)
+
+---
+serial_config:
+  baud: int(required=False)
+  bits: str(required=False)
+  parity: str(required=False)
+  stop: str(required=False)
+  clocal: str(required=False)
+  crtscts: str(required=False)
+  ixon: str(required=False)
+  ixoff: str(required=False)
+  ixany: str(required=False)
+
+---
+environment:
+  ENGINEER: str()

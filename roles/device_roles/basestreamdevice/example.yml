@@ -1,0 +1,29 @@
+---
+
+example-stream-device:
+  type: basestreamdevice
+
+  connections:
+    STREAM1:
+      type: "IP"
+      connection: "127.0.0.1:8000"
+      output_eos: "\r\n"
+      input_eos: "\n"
+    STREAM2:
+      type: "Serial"
+      connection: "/dev/tty00"
+      output_eos: "\r\n"
+      input_eos: "\n"
+      serial_settings:
+        baud: 9600
+        bits: "8|7|6|5"
+        parity: "none|even|odd"
+        stop: "1|2"
+        clocal: "Y|N"
+        crtscts: "N|Y"
+        ixon: "N|Y"
+        ixoff: "N|Y"
+        ixany: "N|Y"
+
+  environment:
+    ENGINEER: "J. Wlodek"
