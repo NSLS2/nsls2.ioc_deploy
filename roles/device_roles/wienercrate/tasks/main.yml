@@ -1,0 +1,51 @@
+---
+
+# Tasks for wienercrate role
+
+- name: Create mibs directory
+  ansible.builtin.file:
+    path: "{{ deploy_ioc_ioc_directory }}/mibs"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    state: directory
+    mode: "0775"
+
+- name: Copy MIB file
+  ansible.builtin.copy:
+    src: "WIENER-CRATE-MIB.txt"
+    dest: "{{ deploy_ioc_ioc_directory }}/mibs"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Copy databases file (wienerCrate.db)
+  ansible.builtin.copy:
+    src: "wienerCrate.db"
+    dest: "{{ deploy_ioc_ioc_directory }}/db"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Copy databases file (supplies.db)
+  ansible.builtin.copy:
+    src: "supplies.db"
+    dest: "{{ deploy_ioc_ioc_directory }}/db"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Install base startup script
+  ansible.builtin.template:
+    src: "base.cmd.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Copy custom postInit.cmd
+  ansible.builtin.template:
+    src: "postInit.cmd.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/postInit.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"

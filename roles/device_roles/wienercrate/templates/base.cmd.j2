@@ -1,0 +1,12 @@
+
+
+devSnmpSetParam("DebugLevel", 0)
+
+## Register all support components
+dbLoadDatabase "{{ deploy_ioc_required_module_path }}/dbd/snmp.dbd"
+snmp_registerRecordDeviceDriver pdbbase
+
+###############################################################################
+# Load record instances
+dbLoadRecords("$(TOP)/db/wienerCrate.db","P=$(SYS),R={$(DEV)},CRATE=$(WIENER_IP)")
+dbLoadTemplate("$(TOP)/db/supplies.substitutions")

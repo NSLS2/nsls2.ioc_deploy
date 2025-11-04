@@ -1,0 +1,125 @@
+record(ai, "$(P)$(R)V-Sense")
+{
+    field(DESC, "$(TYPE) $(CHAN) voltage sense")
+    field(DTYP, "Snmp")
+    field(INP,  "@$(CRATE) %(WCR_PREF)outputMeasurementSenseVoltage.$(CHAN) Float: 100")
+    field(EGU,  "V")
+    field(PREC, "3")
+    field(SCAN, "$(SCAN)")
+}
+
+record(ai, "$(P)$(R)V-TermSense")
+{
+    field(DESC, "$(TYPE) $(CHAN) voltage terminal sense")
+    field(DTYP, "Snmp")
+    field(INP,  "@$(CRATE) %(WCR_PREF)outputMeasurementTerminalVoltage.$(CHAN) Float: 100")
+    field(EGU,  "V")
+    field(PREC, "3")
+    field(SCAN, "$(SCAN)")
+}
+
+record(ao, "$(P)$(R)V-RiseRate")
+{
+    field(DESC, "$(TYPE) $(CHAN) voltage ramp rate up")
+    field(DTYP, "Snmp")
+    field(OUT,  "@$(CRATE) %(WCR_PREF)outputVoltageRiseRate.$(CHAN) Float: 100 F")
+    field(EGU,  "V/s")
+    field(PREC, "3")
+    field(SCAN, "Passive")
+}
+
+record(ao, "$(P)$(R)V-FallRate")
+{
+    field(DESC, "$(TYPE) $(CHAN) voltage ramp rate down")
+    field(DTYP, "Snmp")
+    field(OUT,  "@$(CRATE) %(WCR_PREF)outputVoltageFallRate.$(CHAN) Float: 100 F")
+    field(EGU,  "V/s")
+    field(PREC, "3")
+    field(SCAN, "Passive")
+}
+
+record(ao, "$(P)$(R)V-Set")
+{
+    field(DESC, "$(TYPE) $(CHAN) voltage")
+    field(DTYP, "Snmp")
+    field(OUT,  "@$(CRATE) %(WCR_PREF)outputVoltage.$(CHAN) Float: 100 F")
+    field(EGU,  "V")
+    field(PREC, "3")
+    field(SCAN, "Passive")
+}
+
+record(ai, "$(P)$(R)I-Sense")
+{
+    field(DESC, "$(TYPE) $(CHAN) current sense")
+    field(DTYP, "Snmp")
+    field(INP,  "@$(CRATE) %(WCR_PREF)outputMeasurementCurrent.$(CHAN) Float: 100")
+    field(EGU,  "A")
+    field(PREC, "9")
+    field(SCAN, "$(SCAN)")
+#    field(LOPR, "0")
+#    field(HOPR, "33")
+}
+
+record(ao, "$(P)$(R)I-SetLimit")
+{
+    field(DESC, "$(TYPE) $(CHAN) current limit")
+    field(DTYP, "Snmp")
+    field(OUT,  "@$(CRATE) %(WCR_PREF)outputCurrent.$(CHAN) Float: 100 F")
+    field(EGU,  "A")
+    field(PREC, "3")
+    field(SCAN, "Passive")
+}
+
+record(longout, "$(P)$(R)Switch")
+{
+    field(DESC, "$(TYPE) $(CHAN) off/on control")
+    field(DTYP, "Snmp")
+    field(OUT,  "@$(CRATE) %(WCR_PREF)outputSwitch.$(CHAN) ( 100 i")
+    field(LOPR, "0")
+    field(HOPR, "1")
+}
+
+record(ai, "$(P)$(R)Temperature")
+{
+    field(DESC, "$(TYPE) $(CHAN) temp sense")
+    field(DTYP, "Snmp")
+    field(INP,  "@$(CRATE) %(WCR_PREF)outputMeasurementTemperature.$(CHAN) INTEGER: 100")
+    field(EGU,  "C")
+    field(PREC, "0")
+    field(SCAN, "$(SCAN)")
+}
+
+record(longin, "$(P)$(R)Status")
+{
+    field(DESC, "$(TYPE) $(CHAN) off/on status")
+    field(DTYP, "Snmp")
+    field(INP,  "@$(CRATE) %(WCR_PREF)outputStatus.$(CHAN) BITS: 100 i")
+    field(FLNK, "$(P)$(R)StatusDec.PROC")
+    field(SCAN, "$(SCAN)")
+}
+
+record(calcout, "$(P)$(R)StatusDec"){
+    field(SCAN, "Passive")
+    field(INPA, "$(P)$(R)Status.VAL PP")
+    field(CALC, "(FLOOR(A/10) * 16) + (A - (FLOOR(A/10)*10))")
+    field(OOPT, "On Change")
+    field(DOPT, "Use CALC")
+}
+
+
+#record(bi, "$(P)$(R)StatusOn")
+#{
+#    field(DESC, "$(TYPE) $(CHAN) off/on status")
+#    field(INP,  "$(P)$(R)Status.VAL PP")
+#    field(MASK, "80")
+#    field(SCAN, "Passive")
+#}
+
+
+# Macros:
+# $(P) = "XF:08IDB-OP"
+# $(R) = "{WPS:01-$(TYPE):$(CHAN)}"
+# $(TYPE) = "HV" OR "LV"
+# $(CHAN) = "u300"
+# $(CRATE) = IP
+# $(SCAN) = "1 second" OR ".5 second"

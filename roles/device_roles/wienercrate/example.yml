@@ -1,0 +1,22 @@
+---
+
+wps1:
+  type: wienercrate
+
+  # NOTE: the PVs for installed power supply cards are defined in the
+  # substitution file in Db/<ioc-name> directory. The file may be either
+  # regular substitution file 'supplies.substitutions' or Jinja template
+  # 'supplies.substitution.j2'. The rows of the file depend on the number
+  # and types of the installed cards. Look for the installed IOC to find
+  # examples of the template.
+
+  # SYS and DEV: used to generate prefix for each device
+  # WIENER_IP may be an IP address or host name
+  environment:
+    SYS: "XF:18IDB-OP"
+    DEV: "WPS:01"
+    WIENER_IP: "10.66.138.60"
+
+    # PREFIX is used for common IOC PVs
+    PREFIX: $(SYS){IOC:SNMP}
+    ENGINEER: "D. Gavrilov"
