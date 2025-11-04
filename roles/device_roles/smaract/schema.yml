@@ -22,7 +22,7 @@ substitutions:
                           enum("BDST"), enum("BVEL"), enum("BACC"),
                           enum("MRES"), enum("PREC"), enum("DHLM"),
                           enum("DLLM"), enum("INIT")))
-        instances: list(list(min=19, max=19))
+        instances: list(list(min=20, max=20))
       - filepath: enum("$(SMARACT)/db/MCS2_Extra.db")
         pattern: list(any(enum("P"), enum("N"), enum("M"),
                           enum("PORT"), enum("ADDR"), enum("TIMEOUT")))
