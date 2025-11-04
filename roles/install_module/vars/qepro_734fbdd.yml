@@ -1,0 +1,12 @@
+---
+
+qepro_734fbdd:
+  name: QEPro
+  executable: QEProApp
+  url: https://github.com/NSLS-II/QEPro
+  version: 734fbdd
+  compilation_command: >-
+    git clone https://github.com/jwlodek/SeaBreeze
+    QEProSupport/SeaBreeze && make -sj -C QEProSupport/SeaBreeze && make -sj
+  pkg_deps:
+    - libusb-devel

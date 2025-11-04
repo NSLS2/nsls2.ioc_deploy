@@ -1,0 +1,7 @@
+---
+
+deploy_ioc_use_common: false
+deploy_ioc_required_module: qepro_734fbdd
+deploy_ioc_device_specific_env:
+  QEPRO: "/epics/modules/QEPro"
+  PORT: "QEPRO"

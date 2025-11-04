@@ -1,0 +1,8 @@
+---
+
+qepro-01:
+  type: qepro
+
+  environment:
+    PREFIX: "XF:31ID1-ES{QEPro:Spec-1}"
+    PORT: "QEPRO"
