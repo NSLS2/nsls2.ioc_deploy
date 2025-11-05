@@ -5,3 +5,5 @@ environment:
   PREFIX: str()
   CAMERA_IP: str()
   NUM_CINES: int()
+  MAC_ADDR: str()
+  INTF: str()
