@@ -1,3 +1,4 @@
+---
 adphantom_329598e:
   name: ADPhantom
   executable: phantomApp
@@ -7,4 +8,4 @@ adphantom_329598e:
   module_deps:
     - adcore_60080dc
   pkg_deps:
-  - libpcap-devel
+    - libpcap-devel
