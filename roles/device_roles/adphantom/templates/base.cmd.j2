@@ -1,5 +1,5 @@
-dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deplot_ioc_executable }}.dbd")
-{{ deplot_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
 
 set_requestfile_path("$(ADCORE)/db:$(ADPHANTOM)/db")
 
