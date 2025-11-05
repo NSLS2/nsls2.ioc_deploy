@@ -1,0 +1,8 @@
+---
+
+adphantom_d46484e:
+  name: ADPhantom
+  executable: "phantomApp"
+  version: d46484e
+  url: https://github.com/DiamondLightSource/ADPhantom
+  include_base_ad_config: True
