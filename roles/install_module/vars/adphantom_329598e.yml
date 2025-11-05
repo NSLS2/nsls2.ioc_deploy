@@ -4,5 +4,7 @@ adphantom_329598e:
   version: 329598e
   url: https://github.com/jwlodek/ADPhantom
   include_base_ad_config: true
+  module_deps:
+    - adcore_60080dc
   pkg_deps:
   - libpcap-devel
