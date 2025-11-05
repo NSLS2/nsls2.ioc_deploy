@@ -4,7 +4,8 @@ adphantom_d46484e:
   name: ADPhantom
   executable: "phantomApp"
   version: d46484e
-  url: https://github.com/DiamondLightSource/ADPhantom
+  # url: https://github.com/DiamondLightSource/ADPhantom
+  url: https://github.com/jwlodek/ADPhantom
   include_base_ad_config: True
   pkg_deps:
     - libpcap-devel
