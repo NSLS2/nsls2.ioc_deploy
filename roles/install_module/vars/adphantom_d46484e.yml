@@ -6,3 +6,5 @@ adphantom_d46484e:
   version: d46484e
   url: https://github.com/DiamondLightSource/ADPhantom
   include_base_ad_config: True
+  pkg_deps:
+    - libpcap-devel
