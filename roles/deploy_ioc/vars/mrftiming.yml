@@ -1,6 +1,23 @@
 ---
 
-deploy_ioc_use_common: true
-deploy_ioc_use_ad_common: false
 deploy_ioc_required_module: mrftiming_3bb9fcf
 deploy_ioc_executable: MRFTiming
+deploy_ioc_use_common: true
+deploy_ioc_make_autosave_files: true
+deploy_ioc_ioc_specific_default_environment:
+  MRF: "/epics/modules/epics-mrf"
+  MRFTiming: "/epics/modules/MRFTiming"
+  EPICS_DB_INCLUDE_PATH: "$(EPICS_BASE)/db:$(MRF)/db"
+  R: "{EVR1}"
+  UO_01: "1"
+  UO_23: "1"
+  UO_01FD: "1"
+  UO_23FD: "1"
+  TB_01: "1"
+  TB_23: "1"
+  TB_45: "1"
+  TB_67: "1"
+  TB_89: "1"
+  TB_1011: "1"
+  TB_1213: "1"
+  TB_1415: "1"

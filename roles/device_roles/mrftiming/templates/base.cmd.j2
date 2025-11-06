@@ -3,3 +3,18 @@ dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable
 {{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
 
 # MRFTiming specific commands
+
+mrfUdpIpEvrDevice("EVR01", "$(IP)")
+
+## Load record instances
+dbLoadRecords("$(MRF)/db/vme-evr-230rf.db","P=$(P), R=$(R), DEVICE=EVR01, UNIV_OUT_0_1_INSTALLED=$(UO_01), UNIV_OUT_2_3_INSTALLED=$(UO_23), UNIV_OUT_0_1_FD_AVAILABLE=$(UO_01FD), UNIV_OUT_2_3_FD_AVAILABLE=$(UO_23FD), TB_UNIV_OUT_0_1_INSTALLED=$(TB_01), TB_UNIV_OUT_2_3_INSTALLED=$(TB_23), TB_UNIV_OUT_4_5_INSTALLED=$(TB_45), TB_UNIV_OUT_6_7_INSTALLED=$(TB_67), TB_UNIV_OUT_8_9_INSTALLED=$(TB_89), TB_UNIV_OUT_10_11_INSTALLED=$(TB_1011), TB_UNIV_OUT_12_13_INSTALLED=$(TB_1213), TB_UNIV_OUT_14_15_INSTALLED=$(TB_1415)")
+
+dbLoadRecords("$(MRF)/db/mrf-autosave-menu.db","P=$(P),R=$(R),CONFIG_PV_PREFIX=Presets:,CONFIG_NAME=evr01_preset")
+dbLoadRecords("$(MRF)/db/mrf-write-all-settings-with-status.db","P=$(P), R=$(R)")
+
+dbLoadTemplate("$(MRFTiming)/db/misc.substitutions", "P=$(P), R=$(R)")
+
+dbLoadRecords("$(EPICS_BASE)/db/reccaster.db", "P=OP{$(IOCNAME)}RecSync")
+dbLoadRecords("$(EPICS_BASE)/db/iocAdminSoft.db", "IOC=OP{$(IOCNAME)}"
+
+< ./AutoSave.cmd
