@@ -1,0 +1,10 @@
+---
+
+type: enum("wienercrate")
+
+environment:
+  SYS: str()
+  DEV: str()
+  WIENER_IP: any(ip(), hostname())
+  PREFIX: str()
+  ENGINEER: str()
