@@ -1,0 +1,44 @@
+#!{{ deploy_ioc_template_root_path }}/bin/linux-x86_64/{{ deploy_ioc_executable }}
+
+< ./epicsEnv.cmd
+
+{% if ioc.mode == "EVG" %}
+# EVG Mode
+epicsEnvSet("EVG-Mode", "")
+epicsEnvSet("EVR-Mode", "# NO EVR!!! ")
+epicsEnvSet("TYPE", "EVG")
+{% else %}
+# EVR Mode
+epicsEnvSet("EVG-Mode", "# NO EVG!!! ")
+epicsEnvSet("EVR-Mode", "")
+epicsEnvSet("TYPE", "EVR")
+{% endif %}
+
+{% if not ioc.has_rear_transition_board %}
+epicsEnvSet("HAS_REAR_TRANSITION_BOARD", "0")
+{% else %}
+epicsEnvSet("HAS_REAR_TRANSITION_BOARD", "1")
+{% endif %}
+
+epicsEnvSet("UO_01", "$(HAS_REAR_TRANSITION_BOARD)")		#
+epicsEnvSet("UO_23", "$(HAS_REAR_TRANSITION_BOARD)")		#
+epicsEnvSet("UO_01FD", "$(HAS_REAR_TRANSITION_BOARD)")		#
+epicsEnvSet("UO_23FD", "$(HAS_REAR_TRANSITION_BOARD)")		#
+epicsEnvSet("UI_01", "$(HAS_REAR_TRANSITION_BOARD)")		#
+epicsEnvSet("UI_23", "$(HAS_REAR_TRANSITION_BOARD)")		#
+epicsEnvSet("UI_01FD", "$(HAS_REAR_TRANSITION_BOARD)")		#
+epicsEnvSet("UI_23FD", "$(HAS_REAR_TRANSITION_BOARD)")		#
+epicsEnvSet("TB_01", "$(HAS_REAR_TRANSITION_BOARD)")		# Rear Transition Board
+epicsEnvSet("TB_23", "$(HAS_REAR_TRANSITION_BOARD)")		# is NOT installed. Therefore,
+epicsEnvSet("TB_45", "$(HAS_REAR_TRANSITION_BOARD)")		# these are all 0.
+epicsEnvSet("TB_67", "$(HAS_REAR_TRANSITION_BOARD)")		#
+epicsEnvSet("TB_89", "$(HAS_REAR_TRANSITION_BOARD)")		#
+epicsEnvSet("TB_1011", "$(HAS_REAR_TRANSITION_BOARD)")		#
+epicsEnvSet("TB_1213", "$(HAS_REAR_TRANSITION_BOARD)")		#
+epicsEnvSet("TB_1415", "$(HAS_REAR_TRANSITION_BOARD)")		#
+
+# Load the commonSt.cmd file
+< {{ deploy_ioc_template_root_path }}/commonSt.cmd
+
+# Load the commonInit.cmd file
+< {{ deploy_ioc_template_root_path }}/commonInitWithAutoSave.cmd

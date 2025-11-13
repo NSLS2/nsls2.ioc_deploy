@@ -1,0 +1,5 @@
+---
+
+deploy_ioc_executable: "top"
+deploy_ioc_standard_st_cmd: false
+deploy_ioc_required_module: elauncher_21dede8
