@@ -1,0 +1,6 @@
+---
+
+deploy_ioc_required_module: mrftiming_3bb9fcf
+deploy_ioc_executable: MRFTiming
+deploy_ioc_use_common: true
+deploy_ioc_make_autosave_files: true

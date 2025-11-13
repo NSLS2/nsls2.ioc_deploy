@@ -1,0 +1,6 @@
+---
+
+type: enum("mrftiming")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
