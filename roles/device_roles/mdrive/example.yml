@@ -1,0 +1,30 @@
+---
+
+mdrive-01:
+  type: mdrive
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: "XF:31ID1-CT{IOC:MDrive}"
+    SYS: "XF:31ID1-OP"
+    SYS_IOC: "XF:31ID1-CT"
+    MRES: 1.953125e-5
+    EGU: "Rev"
+  devices:
+    - host: "127.0.0.1"
+      ip_port: 503
+      io_port: P1
+    - host: "127.0.0.1"
+      ip_port: 504
+      io_port: P2
+    - host: "127.0.0.1"
+      ip_port: 505
+      io_port: P3
+    - host: "127.0.0.1"
+      ip_port: 506
+      io_port: P4
+    - host: "127.0.0.1"
+      ip_port: 507
+      io_port: P5
+    - host: "127.0.0.1"
+      ip_port: 508
+      io_port: P6

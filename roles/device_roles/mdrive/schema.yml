@@ -1,0 +1,19 @@
+---
+
+type: enum("mdrive")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
+  SYS: str()
+  SYS_IOC: str()
+  MRES: num()
+  EGU: str()
+
+devices: list(include('device'), min=1)
+
+---
+
+device:
+  host: any(ip(), hostname())
+  ip_port: int()
+  io_port: regex("^P\\d+$")
