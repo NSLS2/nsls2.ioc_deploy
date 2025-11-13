@@ -1,0 +1,19 @@
+
+## Register all support components
+dbLoadDatabase("$(OMEGA_RTC)/dbd/omegaCNi32.dbd",0,0)
+omegaCNi32_registerRecordDeviceDriver(pdbbase)
+
+## Streamdevice Protocol Path
+epicsEnvSet ("STREAM_PROTOCOL_PATH", "$(OMEGA_RTC)/protocols")
+
+## Load record instances
+{% for device in ioc.devices %}
+drvAsynIPPortConfigure("{{ device.PORT }}", "{{ device.HOST }}")
+## Load record instances
+dbLoadRecords("$(OMEGA_RTC)/db/omegaCNi32_temp.db","Sys={{ device.SYS }},Dev={{ device.DEV }},Chan={{ "01" if (device.COMM is defined) and (device.COMM == "RS-485") else "" }},PORT={{ device.PORT }}")
+dbLoadRecords("$(OMEGA_RTC)/db/asynRecord.db","P={{ device.SYS }},R={{ device.DEV }}Asyn,PORT={{ device.PORT }},ADDR=0,IMAX=256,OMAX=256")
+
+{% endfor %}
+
+#dbLoadRecords("$(OMEGA_RTC)/db/iocAdminSoft.db", "IOC={{ deploy_ioc_merged_env.PREFIX }}")
+#dbLoadRecords("$(OMEGA_RTC)/db/save_restoreStatus.db", "P={{ deploy_ioc_merged_env.PREFIX }}")
