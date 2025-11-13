@@ -1,0 +1,13 @@
+---
+
+type: enum("pi-e621")
+environment:
+  ENGINEER: str(required=True)
+  HOST: str(required=True)
+  PI_PORT: str(required=True)
+  SYS: str(required=True)
+  IOC_SYS: str(required=True)
+  IOC_DEV: str(required=True)
+  ASYN_DEV: str(required=True)
+  IOC_PREFIX: str(required=True)
+  ASYN_PREFIX: str(required=True)

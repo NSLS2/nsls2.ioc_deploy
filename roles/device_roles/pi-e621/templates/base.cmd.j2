@@ -1,0 +1,12 @@
+## Register all support components
+dbLoadDatabase("$(PIE621)/dbd/pie621.dbd",0,0)
+pie621_registerRecordDeviceDriver(pdbbase)
+
+drvAsynIPPortConfigure("$(PI_PORT)_ASYN", $(HOST))
+# asynSetTraceMask("$(PI_PORT)_ASYN", -1, 0x9)
+# asynSetTraceIOMask("$(PI_PORT)_ASYN", -1, 0x2)
+
+E816CreateController("$(PI_PORT)", "$(PI_PORT)_ASYN", 1, 50)
+
+## Load record instances
+dbLoadRecords("$(PIE621)/db/asynComm.db","P=$(ASYN_PREFIX),PORT=$(PI_PORT)_ASYN,ADDR=0")
