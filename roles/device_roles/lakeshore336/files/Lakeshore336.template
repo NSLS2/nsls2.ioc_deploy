@@ -1,0 +1,35 @@
+record(fanout, "$(P)$(R)FOut"){
+    field(SELM, "All")
+    field(LNK1, "$(P)$(LNK1)FOut")
+    field(LNK2, "$(P)$(LNK2)FOut")
+    field(LNK3, "$(P)$(LNK3)FOut")
+    field(LNK4, "$(P)$(LNK4)FOut")
+    field(LNK5, "$(P)$(LNK5)FOut")
+    field(LNK6, "$(P)$(R)FOut2")
+    field(SCAN, "2 second")
+    info(autosaveFields, "SCAN")
+}
+
+record(fanout, "$(P)$(R)FOut2"){
+    field(SELM, "All")
+    field(LNK1, "$(P)$(LNK6)FOut")
+    field(LNK2, "$(P)$(LNK7)FOut")
+    field(LNK3, "$(P)$(LNK8)FOut")
+    field(LNK4, "$(P)$(LNK9)FOut")
+    field(LNK5, "$(P)$(LNK10)FOut")
+    field(LNK6, "$(P)$(R)FOut3")
+    field(SCAN, "2 second")
+    info(autosaveFields, "SCAN")
+}
+
+record(fanout, "$(P)$(R)FOut3"){
+    field(SELM, "All")
+    field(LNK1, "$(P)$(LNK11)FOut")
+    field(LNK2, "$(P)$(LNK12)FOut")
+    field(LNK3, "$(P)$(LNK13)FOut")
+    field(LNK4, "$(P)$(LNK14)FOut")
+    field(LNK5, "$(P)$(LNK15)FOut")
+    field(LNK6, "$(P)$(LNK16)FOut")
+    field(SCAN, "2 second")
+    info(autosaveFields, "SCAN")
+}
