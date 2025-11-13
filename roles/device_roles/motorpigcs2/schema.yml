@@ -1,0 +1,26 @@
+---
+
+type: enum("motorpigcs2")
+
+environment:
+  ENGINEER: str()
+  PORT: str()
+  ASYN_PORT: str()
+  P: str()
+  R: str()
+  PREFIX: str()
+  CT_PREFIX: str()
+  CONTROLLER_IP: any(ip(), hostname())
+  CONTROLLER_PORT: int(min=1, max=65535, default=50000)
+
+substitutions:
+  pigcs2:
+    - filepath: enum("$(TOP)/db/motorgcs2.template")
+      pattern: list(
+        any(
+          enum("P"), enum("M"), enum("DTYP"), enum("PORT"),
+          enum("ADDR"), enum("DESC"), enum("EGU"), enum("DIR"),
+          enum("VELO"), enum("VBAS"), enum("ACCL"), enum("BDST"),
+          enum("BVEL"), enum("BACC"), enum("MRES"), enum("PREC"),
+          enum("DHLM"), enum("DLLM"), enum("INIT")))
+      instances: list(list(min=19, max=19))
