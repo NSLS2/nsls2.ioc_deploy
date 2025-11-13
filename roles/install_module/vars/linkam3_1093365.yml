@@ -1,0 +1,9 @@
+---
+
+linkam3_1093365:
+  name: linkam3
+  version: "1093365"
+  url: https://github.com/jwlodek/linkam3
+  pkg_deps:
+    - libusb-devel
+    - libusbx-devel
