@@ -5,7 +5,7 @@ rbd9103-01:
   environment:
     PREFIX: "XF:31ID1-ES{RBD9103-AMM:1}"
     ENGINEER: "J. Wlodek"
-    SERIAL_NUMBER: "AQ01SPJH"
+    SERIAL_NUMBER: "AQ01SDRE"
     PORT: "RBD"
     SERIAL_PORT: "RBD_TTY"
   substitutions:
@@ -13,7 +13,7 @@ rbd9103-01:
       - filepath: "$(RBD9103)/db/rbd9103.template"
         pattern: ["P", "R", "PORT"]
         instances:
-          - ["XF:31ID1-ES", "{RBD9103-AMM:1}", "RBD9103"]
+          - ["XF:31ID1-ES", "{RBD9103-AMM:1}", "RBD"]
       - filepath: "$(RBD9103)/db/rbd9103_recording.template"
         pattern: ["P", "R", "PORT"]
         instances:
