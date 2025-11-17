@@ -12,6 +12,25 @@ motorpigcs2-01:
     CT_PREFIX: "XF:31ID-CT{GCS2:1}"
     CONTROLLER_IP: "10.66.xx.xx"
     CONTROLLER_PORT: 50000
+  axes:
+    - suffix: "{Gon:1-Ax:XP}Mtr"
+      desc: "Fine Motion X"
+      egu: "um"
+      velo: 5
+      vbas: 0
+      accl: 0.2
+      bdst: 0
+      bvel: 1
+      bacc: 0.2
+      mres: 0.0001
+      prec: 4 
+      dhlm: 0
+      dllm: 0
+      init: ""
+    - suffix: "{Gon:1-Ax:YP}Mtr"
+      desc: "Fine Motion Y"
+      egu: "um"
+
   substitutions:
     pigcs2:
       - filepath: "$(TOP)/db/motorgcs2.template"

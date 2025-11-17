@@ -1,8 +1,0 @@
----
-motorpigcs2_ioc_a0bdeae:
-  name: MotorPIGCS2IOC
-  url: https://github.com/epics-motor/motorPIGCS2
-  version: a0bdeae
-  executable: pigcs2
-  module_deps:
-    - motorpigcs2_a0bdeae
