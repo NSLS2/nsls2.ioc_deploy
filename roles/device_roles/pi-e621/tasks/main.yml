@@ -8,10 +8,12 @@
     group: "{{ host_config.softioc_group }}"
     mode: "0664"
 
-- name: Copy custom postInit.cmd
+- name: Install substitutions files
   ansible.builtin.template:
-    src: "postInit.cmd.j2"
-    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/postInit.cmd"
+    src: "templates/{{ item }}.substitutions.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/db/{{ item }}.substitutions"
+    mode: "0664"
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
-    mode: "0664"
+  with_items:
+    - "asyn_motor"

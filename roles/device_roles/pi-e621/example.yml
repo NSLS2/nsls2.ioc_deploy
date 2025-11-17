@@ -13,54 +13,16 @@ pi-e621:
     IOC_PREFIX: $(IOC_SYS){$(IOC_DEV)}
     ASYN_PREFIX: $(IOC_SYS){$(ASYN_DEV)}
     ENGINEER: "C. Engineer"
-
-  substitutions:
-    motors:
-      - filepath: "$(PIE621)/db/asyn_motor.db"
-        template_macros: "_P=$(SYS),_PI_PORT=$(PI_PORT)"
-        pattern:
-          [
-            "P",
-            "PORT",
-            "ADDR",
-            "DTYP",
-            "ALIAS",
-            "DESC",
-            "EGU",
-            "DIR",
-            "TWV",
-            "VELO",
-            "VBAS",
-            "ACCL",
-            "BDST",
-            "BVEL",
-            "BACC",
-            "MRES",
-            "PREC",
-            "DHLM",
-            "DLLM",
-            "INIT",
-          ]
-        instances:
-          - [
-            "$(_P){Mono:HDCM-Ax:FP}",
-            "$(_PI_PORT)",
-            "0",
-            "asynMotor",
-            "vms_pf",
-            "vms_pf",
-            "urad",
-            "Pos",
-            "1",
-            "5.",
-            "2.0",
-            "0.1",
-            "0",
-            "1",
-            ".2",
-            "0.000001",
-            "3",
-            "0",
-            "0",
-            ""
-          ]
+    EGU: "urad"
+    TWV: "1"
+    VELO: "5."
+    VBAS: "2.0"
+    ACCL: "0.1"
+    BDST: "0"
+    BVEL: "1"
+    BACC: ".2"
+    MRES: "0.000001"
+    PREC: "3"
+    DHLM: "0"
+    DLLM: "0"
+    INIT: ""
