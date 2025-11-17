@@ -1,0 +1,19 @@
+---
+
+- name: Copy base.cmd
+  ansible.builtin.template:
+    src: "base.cmd.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Install substitutions files
+  ansible.builtin.template:
+    src: "templates/{{ item }}.substitutions.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/db/{{ item }}.substitutions"
+    mode: "0664"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+  with_items:
+    - "asyn_motor"

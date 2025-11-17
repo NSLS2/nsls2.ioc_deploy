@@ -1,0 +1,5 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_required_module: pie621_043ec8f
+deploy_ioc_make_autosave_files: true
