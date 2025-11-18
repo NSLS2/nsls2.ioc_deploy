@@ -1,0 +1,11 @@
+---
+
+tetramm:
+  type: "tetramm"
+  environment:
+    SYS: "XF:09IDC-BI"
+    DEV: "{BPM:1}"
+    IOC_PREFIX: "$(SYS)$(DEV)"
+    ENGINEER: "C. Engineer"
+    DEVICE_IP: "127.0.0.1"
+    DEVICE_IP_PORT: 10001

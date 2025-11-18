@@ -1,0 +1,10 @@
+---
+
+type: enum("tetramm")
+environment:
+  SYS: str()
+  DEV: str()
+  IOC_PREFIX: str()
+  ENGINEER: str()
+  DEVICE_IP: any(ip(), hostname())
+  DEVICE_IP_PORT: int()

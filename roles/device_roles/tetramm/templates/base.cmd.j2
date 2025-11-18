@@ -1,0 +1,40 @@
+
+errlogInit(20000)
+
+epicsEnvSet("PREFIX", "$(IOC_PREFIX)")
+epicsEnvSet("RECORD", "")
+
+dbLoadDatabase("$(QUADEM)/dbd/quadEMTestApp.dbd")
+quadEMTestApp_registerRecordDeviceDriver(pdbbase)
+
+drvAsynIPPortConfigure("IP_$(PORT)", "$(DEVICE_IP):$(DEVICE_IP_PORT)", 0, 0, 0)
+asynOctetSetInputEos("IP_$(PORT)",  0, "\r\n")
+asynOctetSetOutputEos("IP_$(PORT)", 0, "\r")
+
+# Set both TRACE_IO_ESCAPE (for ASCII command/response) and TRACE_IO_HEX (for binary data)
+asynSetTraceIOMask("IP_$(PORT)", 0, 6)
+#asynSetTraceFile("IP_$(PORT)",   0, "AHxxx.out")
+#asynSetTraceMask("IP_$(PORT)",   0,  9)
+asynSetTraceIOTruncateSize("IP_$(PORT)", 0, 4000)
+
+# Load asynRecord record
+dbLoadRecords("$(ASYN)/db/asynRecord.db", "P=$(PREFIX), R=asyn1, PORT=IP_$(PORT), ADDR=0, OMAX=256, IMAX=256")
+
+drvTetrAMMConfigure("$(PORT)", "IP_$(PORT)", $(RING_SIZE))
+
+# cd "$(QUADEM)/db"
+dbLoadRecords("$(QUADEM)/db/$(TEMPLATE).template", "P=$(SYS), R=$(DEV), PORT=$(PORT), ADDR=0, TIMEOUT=1")
+# cd "$(TOP)"
+
+# Additional records for the IOC
+dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db", "IOC=$(PREFIX)")
+dbLoadRecords("$(AUTOSAVE)/db/save_restoreStatus.db", "P=$(PREFIX)")
+
+asynSetTraceIOMask("$(PORT)", 0, 2)
+# Enable ASYN_TRACE_ERROR and ASYN_TRACE_WARNING
+#asynSetTraceMask("$(PORT)",  0, 0x21)
+
+< $(QUADEM)/iocBoot/commonPlugins.cmd
+< $(QUADEM)/iocBoot/saveRestore.cmd
+
+< ./AutoSave.cmd
