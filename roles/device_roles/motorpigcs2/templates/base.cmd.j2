@@ -23,3 +23,6 @@ asynSetTraceIOMask("$(ASYN_PORT)",0,0)
 
 # asyn record for troubleshooting
 dbLoadRecords("$(ASYN)/db/asynRecord.db","P=$(CT_PREFIX),R=Asyn,PORT=$(ASYN_PORT),ADDR=0,OMAX=256,IMAX=256")
+
+# Load motor substitutions
+dbLoadTemplate("$(TOP)/db/motorgcs2.substitutions")

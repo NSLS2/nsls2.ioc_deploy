@@ -14,6 +14,7 @@ motorpigcs2-01:
     CONTROLLER_PORT: 50000
   axes:
     - suffix: "{Gon:1-Ax:XP}Mtr"
+      addr: 0
       desc: "Fine Motion X"
       egu: "um"
       velo: 5
@@ -23,14 +24,40 @@ motorpigcs2-01:
       bvel: 1
       bacc: 0.2
       mres: 0.0001
-      prec: 4 
+      prec: 4
       dhlm: 0
       dllm: 0
       init: ""
     - suffix: "{Gon:1-Ax:YP}Mtr"
+      addr: 1
       desc: "Fine Motion Y"
       egu: "um"
-
+      velo: 5
+      vbas: 0
+      accl: 0.2
+      bdst: 0
+      bvel: 1
+      bacc: 0.2
+      mres: 0.0001
+      prec: 4
+      dhlm: 0
+      dllm: 0
+      init: ""
+    - suffix: "{Gon:1-Ax:ZP}Mtr"
+      addr: 2
+      desc: "Fine Motion Z"
+      egu: "um"
+      velo: 5
+      vbas: 0
+      accl: 0.2
+      bdst: 0
+      bvel: 1
+      bacc: 0.2
+      mres: 0.0001
+      prec: 4
+      dhlm: 0
+      dllm: 0
+      init: ""
   substitutions:
     pigcs2:
       - filepath: "$(TOP)/db/motorgcs2.template"
