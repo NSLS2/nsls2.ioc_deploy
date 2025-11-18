@@ -2,14 +2,10 @@
 
 tetramm:
   type: "tetramm"
-  deploy_ioc_required_module: "quadem_f5ab1e9.yml"
-  deploy_ioc_template_root_path: /epics/modules/quadEM
   environment:
-
-    QUADEM: "/epics/modules/quadEM"
     SYS: "XF:09IDC-BI"
     DEV: "{BPM:1}"
     IOC_PREFIX: "$(SYS)$(DEV)"
-
     ENGINEER: "C. Engineer"
-    DEVICE_IP: "xf09id1-bpm100.nsls2.bnl.gov:10001"
+    DEVICE_IP: "127.0.0.1"
+    DEVICE_IP_PORT: "10001"

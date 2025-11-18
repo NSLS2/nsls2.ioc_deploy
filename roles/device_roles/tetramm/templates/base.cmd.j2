@@ -7,7 +7,7 @@ epicsEnvSet("RECORD", "")
 dbLoadDatabase("$(QUADEM)/dbd/quadEMTestApp.dbd")
 quadEMTestApp_registerRecordDeviceDriver(pdbbase)
 
-drvAsynIPPortConfigure("IP_$(PORT)", "$(DEVICE_IP)", 0, 0, 0)
+drvAsynIPPortConfigure("IP_$(PORT)", "$(DEVICE_IP):$(DEVICE_IP_PORT)", 0, 0, 0)
 asynOctetSetInputEos("IP_$(PORT)",  0, "\r\n")
 asynOctetSetOutputEos("IP_$(PORT)", 0, "\r")
 

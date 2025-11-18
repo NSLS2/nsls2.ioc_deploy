@@ -6,12 +6,10 @@ deploy_ioc_template_root_path: /epics/modules/quadEM
 deploy_ioc_required_module: quadem_f5ab1e9
 deploy_ioc_use_common: false
 deploy_ioc_device_specific_env:
-  QUADEM: "/epics/modules/quadEM"
   TEMPLATE: "TetrAMM"
   PORT: "TetrAMM"
   QSIZE: 20
   RING_SIZE: 10000
   TSPOINTS: 10000
   MAX_THREADS: 8
-  EPICS_DB_INCLUDE_PATH: "$(QUADEM)/db:$(ADCORE)/db:$(EPICS_BASE)/db"
   EPICS_CA_MAX_ARRAY_BYTES: 5000000
