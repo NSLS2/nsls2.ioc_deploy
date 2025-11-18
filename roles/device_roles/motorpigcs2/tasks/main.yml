@@ -1,0 +1,37 @@
+---
+
+- name: Deploy base startup script
+  ansible.builtin.template:
+    src: base.cmd.j2
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Copy databases file for pigcs2 controller
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ deploy_ioc_ioc_directory }}/db"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+  with_fileglob: "files/*.template"
+
+- name: Copy Makefile for pigcs2 ioc
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ deploy_ioc_required_module_path }}/pigcs2App/src"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+  with_fileglob: "files/Makefile"
+
+- name: Install default list of substitution files
+  ansible.builtin.template:
+    src: "templates/{{ item }}.substitutions.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/db/{{ item }}.substitutions"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+  with_items:
+    - "motorgcs2"

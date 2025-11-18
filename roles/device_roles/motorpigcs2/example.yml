@@ -1,0 +1,93 @@
+---
+
+motorpigcs2-01:
+  type: motorpigcs2
+  environment:
+    ENGINEER: "J. MA"
+    PORT: "GCS2"
+    ASYN_PORT: "GCS2_ETH"
+    P: "XF:31ID-ES"
+    R: "{GCS2:1}"
+    PREFIX: "$(P)$(R)"
+    CT_PREFIX: "XF:31ID-CT{GCS2:1}"
+    CONTROLLER_IP: "10.66.xx.xx"
+    CONTROLLER_PORT: 50000
+  axes:
+    - suffix: "{Gon:1-Ax:XP}Mtr"
+      addr: 0
+      desc: "Fine Motion X"
+      egu: "um"
+      velo: 5
+      vbas: 0
+      accl: 0.2
+      bdst: 0
+      bvel: 1
+      bacc: 0.2
+      mres: 0.0001
+      prec: 4
+      dhlm: 0
+      dllm: 0
+      init: ""
+    - suffix: "{Gon:1-Ax:YP}Mtr"
+      addr: 1
+      desc: "Fine Motion Y"
+      egu: "um"
+      velo: 5
+      vbas: 0
+      accl: 0.2
+      bdst: 0
+      bvel: 1
+      bacc: 0.2
+      mres: 0.0001
+      prec: 4
+      dhlm: 0
+      dllm: 0
+      init: ""
+    - suffix: "{Gon:1-Ax:ZP}Mtr"
+      addr: 2
+      desc: "Fine Motion Z"
+      egu: "um"
+      velo: 5
+      vbas: 0
+      accl: 0.2
+      bdst: 0
+      bvel: 1
+      bacc: 0.2
+      mres: 0.0001
+      prec: 4
+      dhlm: 0
+      dllm: 0
+      init: ""
+  substitutions:
+    pigcs2:
+      - filepath: "$(TOP)/db/motorgcs2.template"
+        pattern:
+          - "P"
+          - "M"
+          - "DTYP"
+          - "PORT"
+          - "ADDR"
+          - "DESC"
+          - "EGU"
+          - "DIR"
+          - "VELO"
+          - "VBAS"
+          - "ACCL"
+          - "BDST"
+          - "BVEL"
+          - "BACC"
+          - "MRES"
+          - "PREC"
+          - "DHLM"
+          - "DLLM"
+          - "INIT"
+        instances:
+          - ["$(P)", "{Gon:1-Ax:XP}Mtr", "asynMotor", "$(PORT)", "0",
+             "Fine Motion X", "um", "Pos", "5", "0", ".2", "0", "1",
+             ".2", "0.0001", "4", "0.0", "0.0", ""]
+          - ["$(P)", "{Gon:1-Ax:YP}Mtr", "asynMotor", "$(PORT)", "1",
+             "Fine Motion Y", "um", "Pos", "5", "0", ".2", "0", "1",
+             ".2", "0.0001", "4", "0.0", "0.0", ""]
+          - ["$(P)", "{Gon:1-Ax:ZP}Mtr", "asynMotor", "$(PORT)", "2",
+             "Fine Motion Z", "um", "Pos", "5", "0", ".2", "0", "1",
+             ".2", "0.0001", "4", "0.0", "0.0", ""]

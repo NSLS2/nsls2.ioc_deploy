@@ -1,0 +1,11 @@
+#
+# {{ ansible_managed }}
+#
+file "$(TOP)/db/motorgcs2.template"
+{{"{"}}
+pattern
+{{"{"}}P, M, DTYP, PORT, ADDR, DESC, EGU, DIR, VELO, VBAS, ACCL, BDST, BVEL, BACC, MRES, PREC, DHLM, DLLM, INIT{{"}"}}
+{% for axis in ioc.axes -%}
+{{"{"}}"{{ environment.P }}", "{{ axis.suffix }}", "asynMotor", "{{ environment.PORT }}", "{{ axis.addr }}", "{{ axis.desc }}", "{{ axis.egu }}", "{{ axis.dir }}", "{{ axis.velo }}", "{{ axis.vbas }}", "{{ axis.accl }}", "{{ axis.bdst }}", "{{ axis.bvel }}", "{{ axis.bacc }}", "{{ axis.mres }}", "{{ axis.prec }}", "{{ axis.dhlm }}", "{{ axis.dllm }}", "{{ axis.init }}"{{"}"}}
+{% endfor -%}}
+{{"}"}}

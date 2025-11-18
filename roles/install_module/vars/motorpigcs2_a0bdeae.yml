@@ -1,0 +1,8 @@
+---
+
+motorpigcs2_a0bdeae:
+  name: motorpigcs2
+  url: https://github.com/epics-motor/motorPIGCS2
+  version: a0bdeae
+  config:
+    BUILD_IOCS: "YES"

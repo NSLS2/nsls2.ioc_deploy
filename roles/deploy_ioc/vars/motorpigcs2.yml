@@ -1,0 +1,8 @@
+---
+
+deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
+deploy_ioc_required_module: motorpigcs2_a0bdeae
+deploy_ioc_make_autosave_files: true
+deploy_ioc_executable: pigcs2
+deploy_ioc_device_specific_env:
+  MOTOR_PIGCS2: "/epics/modules/motorPIGCS2"
