@@ -127,17 +127,17 @@ advimba_34686fe:
   name: ADVimba
   url: https://github.com/areaDetector/ADVimba
   version: 34686fe
-  
+
   # Area Detector module - include standard AD configuration
   include_base_ad_config: true
-  
+
   # Depends on ADGenICam (which will be built if not already installed)
   module_deps:
     - adgenicam_5d08a11
-  
+
   # Will use epics-bundle for base EPICS modules (inherited from defaults)
   # Will compile with "make -sj" (inherited from defaults)
-  
+
   # Specify the executable path for IOC deployment
   executable: "vimbaApp"
 ```
@@ -149,7 +149,7 @@ motorsim_d1d0eb8:
   name: MotorSim
   url: https://github.com/epics-motor/motorMotorSim
   version: d1d0eb8
-  
+
   # Uses all defaults:
   # - epics-bundle for dependencies
   # - Standard compilation command
@@ -289,23 +289,23 @@ adnewcamera_abc1234:
   name: ADNewCamera
   url: https://github.com/areaDetector/ADNewCamera
   version: abc1234
-  
+
   # Enable Area Detector configuration
   include_base_ad_config: true
-  
+
   # Depends on ADGenICam and ADSupport
   module_deps:
     - adgenicam_5d08a11
-  
+
   # Requires vendor SDK from system packages
   pkg_deps:
     - vendor-camera-sdk-devel
-  
+
   # Custom configuration for vendor SDK paths
   config:
     VENDOR_SDK_LIB: /usr/lib64
     VENDOR_SDK_INCLUDE: /usr/include/vendor-camera
-  
+
   # Executable for IOC deployment
   executable: "newCameraApp"
 ```
