@@ -112,7 +112,7 @@ See `schemas/install_module.yml` for the complete validation schema.
 - Example: `cd subdir && make -sj`
 
 **`executable`** (string, optional)
-- Path to the IOC executable within the compiled module
+- Name of the IOC executable within the compiled module
 - Used when the module includes a runnable IOC application
 - Example: `"vimbaApp"`
 
@@ -293,7 +293,7 @@ adnewcamera_abc1234:
   # Enable Area Detector configuration
   include_base_ad_config: true
 
-  # Depends on ADGenICam and ADSupport
+  # Depends on ADGenICam
   module_deps:
     - adgenicam_5d08a11
 
