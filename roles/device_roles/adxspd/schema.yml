@@ -10,5 +10,6 @@ environment:
   IP: any(hostname(), ip())
   PORT_NUM: int()
 
-  # Optional device identifier. If not specified, first device discovered will be used.
+  # Optional device identifier.
+  # If not specified, first device discovered will be used.
   DEVICE_ID: str(required=False)
