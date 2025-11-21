@@ -1,0 +1,12 @@
+---
+
+adxspd_latest:
+  name: ADXSPD
+  version: latest
+  url: https://github.com/NSLS2/ADXSPD
+  include_base_ad_config: True
+  executable: xspdApp
+  module_deps:
+    - adcompvision_9750d13
+    - adcore_60080dc
+    - ffmpeg_server_07c570f

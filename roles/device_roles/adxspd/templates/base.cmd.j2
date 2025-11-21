@@ -1,0 +1,17 @@
+
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# adxspd specific commands
+{% if ioc.DEVICE_ID is defined %}
+ADXSPDConfig("$(PORT)", "$(IP):$(PORT_NUM)", "$(DEVICE_ID)")
+{% else %}
+ADXSPDConfig("$(PORT)", "$(IP):$(PORT_NUM)")
+{% endif %}
+
+dbLoadRecords("$(ADXSPD)/db/ADXSPD.template","P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
+{% for module_index in range(1, ioc.NUM_MODULES + 1) %}
+dbLoadRecords("$(ADXSPD)/db/ADXSPDModule.template", "P=$(PREFIX), R=mod{{ module_index }}:,PORT=$(PORT)_MOD{{ module_index }},ADDR=0,TIMEOUT=1")
+{% endfor %}
+
+set_requestfile_path("$(ADXSPD)/xspdApp/Db")
