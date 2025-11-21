@@ -14,7 +14,7 @@ role:
 
 module:
 	@if [ -z "${TARGET}" ]; then \
-		pixi run make-module \
+		pixi run make-module; \
 	else \
 		pixi run $(TARGET)-module; \
 	fi
