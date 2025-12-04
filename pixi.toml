@@ -34,13 +34,14 @@ ruff = "*"
 import-linter = "*"
 pip = "*"
 pytest = "*"
-pyyaml = "*"
+pyyaml = ">=6.0.3,<7"
 yamllint = "*"
 
 ansible = "*"
 ansible-compat = "==24.10.0"
 ansible-core = "==2.15.5"
 ansible-lint = "==6.22.2"
+python = "3.12.*"
 
 [tasks.reinstall-collection]
 args = [

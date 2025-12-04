@@ -9,3 +9,4 @@ cam-sim1:
     XSIZE: 1024
     YSIZE: 1024
     FFMSTREAM_PORT: 8080
+
