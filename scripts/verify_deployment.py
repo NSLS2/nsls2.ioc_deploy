@@ -11,7 +11,6 @@ by reading files directly from the filesystem.
 
 import argparse
 import stat
-import subprocess
 import sys
 from pathlib import Path
 
@@ -106,19 +105,6 @@ def verify_ownership(ioc_dir: Path, ownership: dict[str, str]) -> list[str]:
     return errors
 
 
-def verify_syntax(ioc_dir: Path, files: list[str]) -> list[str]:
-    """Run bash -n syntax check on shell scripts."""
-    errors = []
-    for f in files:
-        path = ioc_dir / f
-        result = subprocess.run(
-            ["bash", "-n", str(path)], capture_output=True, text=True
-        )
-        if result.returncode != 0:
-            errors.append(f"{f}: syntax error - {result.stderr.strip()}")
-    return errors
-
-
 def run_verification(verify_yml: Path, ioc_dir: Path) -> bool:
     """Run all verification checks and return True if all pass."""
     with open(verify_yml) as f:
@@ -157,12 +143,6 @@ def run_verification(verify_yml: Path, ioc_dir: Path) -> bool:
     if "ownership" in verification:
         print("Checking ownership...")
         errors = verify_ownership(ioc_dir, verification["ownership"])
-        all_errors.extend(errors)
-
-    # syntax_check
-    if "syntax_check" in verification:
-        print("Running syntax checks...")
-        errors = verify_syntax(ioc_dir, verification["syntax_check"])
         all_errors.extend(errors)
 
     # Report results

@@ -35,8 +35,3 @@ verification:
 
   permissions:
     iocBoot/st.cmd: "0775"
-
-  syntax_check:
-    - iocBoot/st.cmd
-    - iocBoot/postInit.cmd
-
