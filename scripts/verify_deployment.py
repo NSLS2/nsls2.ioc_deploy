@@ -10,12 +10,11 @@ by reading files directly from the filesystem.
 """
 
 import argparse
+import grp
+import pwd
 import stat
 import sys
 from pathlib import Path
-import grp
-import pwd
-
 
 import yaml
 
