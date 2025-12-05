@@ -177,6 +177,11 @@ The following variables can be overridden to customize the installation behavior
 - **Default**: `false`
 - **Description**: Whether to force reinstallation even if the module already exists. When true, performs a hard reset of the git repository.
 
+**`install_module_skip_compilation`**
+- **Type**: boolean
+- **Default**: `false`
+- **Description**: Whether to skip module compilation. Useful for CI testing of roles that require proprietary SDKs not available in the test environment.
+
 ### Package Dependencies
 
 **`install_module_default_pkg_deps`**

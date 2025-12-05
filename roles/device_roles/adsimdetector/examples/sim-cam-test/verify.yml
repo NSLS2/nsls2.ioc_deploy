@@ -1,6 +1,9 @@
 ---
 # Verification schema for adsimdetector sim-cam-test example
 
+# Set to true to skip module compilation (for roles requiring proprietary SDKs)
+skip_compilation: false
+
 verification:
   files_must_exist:
     # Standard IOC boot files (created by deploy_ioc)

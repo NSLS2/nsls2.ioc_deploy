@@ -110,18 +110,18 @@ declare -a FAILED_EXAMPLES=()
 for i in "${!EXAMPLES[@]}"; do
     EXAMPLE="${EXAMPLES[$i]}"
     CONFIG_FILE="${CONFIG_FILES[$i]}"
-    
+
     echo ""
     echo "========================================"
     echo "Testing example: $EXAMPLE"
     echo "========================================"
-    
+
     # Get the first IOC name from config file
     IOC_NAME=$(grep -E "^\s*[a-zA-Z0-9_-]+:" "$CONFIG_FILE" | head -1 | sed 's/^[[:space:]]*//' | sed 's/://')
-    
+
     # Create merged config with host_config wrapping the IOC config
     TEMP_CONFIG=$(mktemp)
-    
+
     cat > "$TEMP_CONFIG" << EOF
 host_config:
   softioc_user: softioc-tst
@@ -130,19 +130,30 @@ host_config:
     address: 127.0.0.1
     broadcast: 127.255.255.255
 EOF
-    
+
     # Append IOC config from config file indented under host_config (skip --- line)
     grep -v "^---" "$CONFIG_FILE" | sed 's/^/  /' >> "$TEMP_CONFIG"
-    
+
     echo "Deploying IOC: $IOC_NAME"
 
     # Clean up any existing deployment for this IOC
     docker exec -u root epics-dev rm -rf "/epics/iocs/$IOC_NAME"
-    
+
+    # Check if verify.yml specifies skip_compilation
+    SKIP_COMPILATION="false"
+    VERIFY_FILE="$EXAMPLES_DIR/$EXAMPLE/verify.yml"
+    if [ "$EXAMPLE" != "legacy" ] && [ -f "$VERIFY_FILE" ]; then
+        if grep -q "skip_compilation: true" "$VERIFY_FILE"; then
+            SKIP_COMPILATION="true"
+            echo "Skipping module compilation (skip_compilation: true in verify.yml)"
+        fi
+    fi
+
     if ! ansible-playbook -i epics-dev, -c docker -u root \
         -e "deploy_ioc_ioc_name=$IOC_NAME" \
         -e "deploy_ioc_target=$IOC_NAME" \
         -e "install_module_default_pkg_deps=[]" \
+        -e "install_module_skip_compilation=$SKIP_COMPILATION" \
         -e "@$TEMP_CONFIG" \
         --start-at-task "Deploy specified IOCs" \
         scripts/deploy_ioc.yml; then
@@ -151,23 +162,18 @@ EOF
         rm -f "$TEMP_CONFIG"
         continue
     fi
-    
+
     rm -f "$TEMP_CONFIG"
-    
+
     # Run verification if verify.yml exists (only for new-style examples)
-    VERIFY_FILE="$EXAMPLES_DIR/$EXAMPLE/verify.yml"
     if [ "$EXAMPLE" != "legacy" ] && [ -f "$VERIFY_FILE" ]; then
         echo ""
         echo "Running deployment verification..."
-        
+
         # Copy verification script and verify.yml to container, then run inside
         docker cp scripts/verify_deployment.py epics-dev:/tmp/
         docker cp "$VERIFY_FILE" epics-dev:/tmp/verify.yml
 
-        docker exec -u root epics-dev pixi info
-        docker exec -u root epics-dev cat /home/epics/pixi.toml
-        docker exec -u root epics-dev pixi list
-        
         # Run verification inside the container using Pixi Python
         if ! docker exec -u root epics-dev pixi run python /tmp/verify_deployment.py \
             /tmp/verify.yml "/epics/iocs/$IOC_NAME"; then

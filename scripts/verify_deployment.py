@@ -167,7 +167,7 @@ def main():
     verify_yml = Path(args.verify_yml)
     ioc_dir = Path(args.ioc_dir)
 
-    print(f"Verifying deployment:")
+    print("Verifying deployment:")
     print(f"  Schema: {verify_yml}")
     print(f"  IOC Directory: {ioc_dir}\n")
 
