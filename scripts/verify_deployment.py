@@ -13,6 +13,9 @@ import argparse
 import stat
 import sys
 from pathlib import Path
+import grp
+import pwd
+
 
 import yaml
 
@@ -88,9 +91,6 @@ def verify_ownership(ioc_dir: Path, ownership: dict[str, str]) -> list[str]:
     for path_str, expected_owner in ownership.items():
         full_path = ioc_dir / path_str
         try:
-            import grp
-            import pwd
-
             st = full_path.stat()
             user = pwd.getpwuid(st.st_uid).pw_name
             group = grp.getgrgid(st.st_gid).gr_name
