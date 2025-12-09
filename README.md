@@ -23,7 +23,7 @@ You can then add this module to the `module_deps` of any device role.
 
 ### Adding a new device role
 
-If you have a new EPICS module that you also plan to deploy as an IOC, then you can add make a device role. This will also
+If you have a new EPICS module that you also plan to deploy as an IOC, then you can make a device role. This will also
 prompt you to make the installable module.
 
 ```bash
