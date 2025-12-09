@@ -53,7 +53,7 @@ You can update the module by running:
 pixi run update-module
 ```
 
-> **Note**
+> [!NOTE]
 > Maintainers of this repository will periodically update important installable modules to keep up with version changes. Please submit an issue if you notice we are behind.
 
 ## Local testing
