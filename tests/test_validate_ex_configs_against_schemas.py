@@ -41,6 +41,22 @@ def get_example_configs(device_role: str) -> list[Path]:
     return configs
 
 
+def get_verify_files(device_role: str) -> list[Path]:
+    """Find all verify.yml files for a device role."""
+    role_path = Path("roles/device_roles") / device_role
+    verify_files = []
+
+    examples_dir = role_path / "examples"
+    if examples_dir.is_dir():
+        for example_dir in examples_dir.iterdir():
+            if example_dir.is_dir():
+                verify_file = example_dir / "verify.yml"
+                if verify_file.exists():
+                    verify_files.append(verify_file)
+
+    return verify_files
+
+
 class HostnameValidator(yamale.validators.Validator):
     tag = "hostname"
 
@@ -141,4 +157,24 @@ def test_ensure_example_validates_with_role_specific_schema(device_role):
             pytest.fail(
                 f"Example {config_path} for {device_role} role "
                 f"doesn't conform to the schema: {e}"
+            )
+
+
+def test_verify_yml_validates_with_schema(device_role):
+    verify_files = get_verify_files(device_role)
+
+    if not verify_files:
+        pytest.skip(f"No verify.yml found for {device_role}")
+
+    schema = yamale.make_schema("schemas/verify.yml")
+
+    for verify_path in verify_files:
+        data = yamale.make_data(verify_path)
+
+        try:
+            yamale.validate(schema, data, strict=False)
+        except yamale.YamaleError as e:
+            pytest.fail(
+                f"verify.yml at {verify_path} for {device_role} role "
+                f"doesn't conform to schemas/verify.yml: {e}"
             )
