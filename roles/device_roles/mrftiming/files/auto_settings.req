@@ -1,2 +1,1 @@
 file "vme-evr-230rf.req",       P=$(P),  R=$(R)
-#$(P)$(R)Presets:Intrnl:Menu:currDesc
