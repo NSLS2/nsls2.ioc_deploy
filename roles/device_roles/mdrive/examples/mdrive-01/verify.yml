@@ -10,6 +10,8 @@ verification:
     - iocBoot/postInit.cmd
     # Role-specific files
     - iocBoot/base.cmd
+    - db/motor.substitutions
+    - db/asynRecord.substitutions
 
   file_must_contain:
     iocBoot/st.cmd:
@@ -39,6 +41,12 @@ verification:
       - "{{"
       - "}}"
     iocBoot/epicsEnv.cmd:
+      - "{{"
+      - "}}"
+    db/motor.substitutions:
+      - "{{"
+      - "}}"
+    db/asynRecord.substitutions:
       - "{{"
       - "}}"
 
