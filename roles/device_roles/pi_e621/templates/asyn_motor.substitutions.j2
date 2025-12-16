@@ -5,5 +5,7 @@ file "$(PIE621)/db/asyn_motor.db"
 {{"{"}}
 pattern
 {{"{"}}P, PORT, ADDR, DTYP, ALIAS, DESC, EGU, DIR, TWV, VELO, VBAS, ACCL, BDST, BVEL, BACC, MRES, PREC, DHLM, DLLM, INIT{{"}"}}
-{{"{"}}"{{ environment.SYS }}{{"{"}}Mono:HDCM-Ax:FP{{"}"}}", "$(environment.PI_PORT)", "0", "asynMotor", "vms_pf", "vms_pf", "$(environment.EGU)", "Pos", "$(environment.TWV)", "$(environment.VELO)", "$(environment.VBAS)", "$(environment.ACCL)", "$(environment.BDST)", "$(environment.BVEL)", "$(environment.BACC)", "$(environment.MRES)", "$(environment.PREC)", "$(environment.DHLM)", "$(environment.DLLM)", "$(environment.INIT)"{{"}"}}
+{% for motor in ioc.motors -%}
+{{"{"}}"{{ motor.prefix }}{{ motor.suffix }}", "$(PI_PORT)", "{{ motor.addr }}", "asynMotor", "{{ motor.alias }}", "{{ motor.desc }}", "$(EGU)", "Pos", "$(TWV)", "$(VELO)", "$(VBAS)", "$(ACCL)", "$(BDST)", "$(BVEL)", "$(BACC)", "$(MRES)", "$(PREC)", "$(DHLM)", "$(DLLM)", "$(INIT)"{{"}"}}
+{% endfor -%}
 {{"}"}}

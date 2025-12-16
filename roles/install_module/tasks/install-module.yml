@@ -132,7 +132,7 @@
     chdir: "{{ install_module_dir }}"
   register: install_module_compile_result
   changed_when: install_module_compile_result.rc == 0
-  when: not install_module_skip_compilation
+  when: not (install_module_skip_compilation | bool)
 
 - name: Ensure proper ownership of module files
   ansible.builtin.command:
