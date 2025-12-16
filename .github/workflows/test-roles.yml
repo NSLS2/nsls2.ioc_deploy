@@ -40,12 +40,15 @@ jobs:
             echo "has-changes=true" >> "$GITHUB_OUTPUT"
             echo "Manual run: testing all roles"
           else
-            # PR: test only modified roles
+            # PR: test only modified roles (excluding deleted roles)
             ROLES=$(git diff --name-only \
               "origin/${{ github.base_ref }}...HEAD" \
               | grep "^roles/device_roles/" \
               | cut -d'/' -f3 \
               | sort -u \
+              | while read -r role; do
+                  [ -d "roles/device_roles/$role" ] && echo "$role"
+                done \
               | jq -R -s -c 'split("\n")[:-1]')
             echo "roles=$ROLES" >> "$GITHUB_OUTPUT"
 
