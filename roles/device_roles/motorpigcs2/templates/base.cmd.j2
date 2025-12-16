@@ -14,7 +14,7 @@ drvAsynIPPortConfigure("$(ASYN_PORT)","$(CONTROLLER_IP):$(CONTROLLER_PORT)",0,0,
 asynSetTraceMask("$(ASYN_PORT)",0,3)
 asynSetTraceIOMask("$(ASYN_PORT)",0,1)
 
-# PI_GCS2_CreateController(portName, asynPort, numAxes, priority, stackSize, movingPollingRate, idlePollingRate)
+# (portName, asynPort, numAxes, priority, stackSize, movingPollingRate, idlePollingRate)
 PI_GCS2_CreateController("$(PORT)", "$(ASYN_PORT)", 3, 0, 0, 100, 1000)
 
 # Turn off asyn trace
