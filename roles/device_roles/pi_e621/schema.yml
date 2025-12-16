@@ -1,6 +1,6 @@
 ---
 
-type: enum("pi-e621")
+type: enum("pi_e621")
 environment:
   ENGINEER: str()
   HOST: str()
