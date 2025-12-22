@@ -8,3 +8,11 @@
     mode: "0664"
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
+
+- name: Install auto_settings.req
+  ansible.builtin.copy:
+    src: "files/auto_settings.req"
+    dest: "{{ deploy_ioc_as_directory }}/req/auto_settings.req"
+    mode: "0664"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
