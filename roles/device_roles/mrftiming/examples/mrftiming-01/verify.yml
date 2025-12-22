@@ -24,7 +24,6 @@ verification:
       - "mrf-autosave-menu.db"
       - "mrf-write-all-settings-with-status.db"
       - "misc.substitutions"
-      - "iocAdminSoft.db"
     as/req/auto_settings.req:
       - "vme-evr-230rf.req"
 
