@@ -7,4 +7,4 @@ E816CreateController("$(PI_PORT)", "$(PI_PORT)_ASYN", 1, 50)
 
 ## Load record instances
 dbLoadRecords("$(PIE621)/db/asynComm.db","P=$(ASYN_PREFIX),PORT=$(PI_PORT)_ASYN,ADDR=0")
-dbLoadTemplate("$(PIE621)/db/asyn_motor.substitutions")
+dbLoadTemplate("$(TOP)/db/asyn_motor.substitutions")
