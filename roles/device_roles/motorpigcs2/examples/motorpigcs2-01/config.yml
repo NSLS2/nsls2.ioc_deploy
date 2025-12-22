@@ -17,6 +17,7 @@ motorpigcs2-01:
       addr: 0
       desc: "Fine Motion X"
       egu: "um"
+      dir: "Pos"
       velo: 5
       vbas: 0
       accl: 0.2
@@ -32,6 +33,7 @@ motorpigcs2-01:
       addr: 1
       desc: "Fine Motion Y"
       egu: "um"
+      dir: "Pos"
       velo: 5
       vbas: 0
       accl: 0.2
@@ -47,6 +49,7 @@ motorpigcs2-01:
       addr: 2
       desc: "Fine Motion Z"
       egu: "um"
+      dir: "Pos"
       velo: 5
       vbas: 0
       accl: 0.2
@@ -58,36 +61,3 @@ motorpigcs2-01:
       dhlm: 0
       dllm: 0
       init: ""
-  substitutions:
-    pigcs2:
-      - filepath: "$(TOP)/db/motorgcs2.template"
-        pattern:
-          - "P"
-          - "M"
-          - "DTYP"
-          - "PORT"
-          - "ADDR"
-          - "DESC"
-          - "EGU"
-          - "DIR"
-          - "VELO"
-          - "VBAS"
-          - "ACCL"
-          - "BDST"
-          - "BVEL"
-          - "BACC"
-          - "MRES"
-          - "PREC"
-          - "DHLM"
-          - "DLLM"
-          - "INIT"
-        instances:
-          - ["$(P)", "{Gon:1-Ax:XP}Mtr", "asynMotor", "$(PORT)", "0",
-             "Fine Motion X", "um", "Pos", "5", "0", ".2", "0", "1",
-             ".2", "0.0001", "4", "0.0", "0.0", ""]
-          - ["$(P)", "{Gon:1-Ax:YP}Mtr", "asynMotor", "$(PORT)", "1",
-             "Fine Motion Y", "um", "Pos", "5", "0", ".2", "0", "1",
-             ".2", "0.0001", "4", "0.0", "0.0", ""]
-          - ["$(P)", "{Gon:1-Ax:ZP}Mtr", "asynMotor", "$(PORT)", "2",
-             "Fine Motion Z", "um", "Pos", "5", "0", ".2", "0", "1",
-             ".2", "0.0001", "4", "0.0", "0.0", ""]
