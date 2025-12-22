@@ -20,4 +20,4 @@ export EPICS_PVAS_BEACON_ADDR_LIST={{ host_config.epics_interface.broadcast }}
 export EPICS_PVAS_INTF_ADDR_LIST={{ host_config.epics_interface.address }}
 
 
-{{ deploy_ioc_ioc_directory }}/venv/bin/pandablocks-ioc softioc --screens-dir="$OPI_DIR" --clear-bobfiles {{ ioc.environment.PANDA_IP }} {{ ioc.environment.PREFIX }}
+{{ deploy_ioc_ioc_directory }}/venv/bin/pandablocks-ioc softioc --screens-dir="$OPI_DIR" --clear-bobfiles '{{ ioc.environment.PANDA_IP }}' '{{ ioc.environment.PREFIX }}'
