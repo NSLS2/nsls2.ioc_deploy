@@ -1,0 +1,43 @@
+---
+skip_compilation: false
+
+verification:
+  files_must_exist:
+    # Standard IOC boot files (created by deploy_ioc)
+    - iocBoot/st.cmd
+    - iocBoot/epicsEnv.cmd
+    - iocBoot/postInit.cmd
+    # Role-specific files
+    - iocBoot/base.cmd
+    - db/dg645_outputs.template
+    - db/dg645_delay.template
+    - db/dg645_trigger.template
+    - protocol/dg645.proto
+
+  file_must_contain:
+    iocBoot/st.cmd:
+      - "iocInit"
+    iocBoot/base.cmd:
+      - "dbLoadDatabase"
+      - "drvAsynIPPortConfigure"
+    iocBoot/postInit.cmd:
+      - "makeAutosaveFiles"
+      - "create_monitor_set"
+
+  file_must_not_contain:
+    iocBoot/st.cmd:
+      - "{{"  # No unrendered jinja
+      - "}}"
+    iocBoot/base.cmd:
+      - "{{"
+      - "}}"
+    iocBoot/epicsEnv.cmd:
+      - "{{"
+      - "}}"
+
+  permissions:
+    iocBoot/st.cmd: "0775"
+    db/dg645_outputs.template: "0664"
+    db/dg645_delay.template: "0664"
+    db/dg645_trigger.template: "0664"
+    protocol/dg645.proto: "0664"
