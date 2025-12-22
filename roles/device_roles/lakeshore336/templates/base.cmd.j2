@@ -22,6 +22,7 @@ asynOctetSetOutputEos("{{ connection.key }}", 0, "{{ connection.value.output_eos
 asynOctetSetOutputEos("{{ connection.key }}", 0, "{{ connection.value.input_eos }}")
 {% endif %}
 {% endfor %}
+{% endif %}
 
 # ============================ LAKESHORE 336 CONFIGURATION ============================
 dbLoadTemplate("$(TOP)/db/lakeshore336.substitutions")
