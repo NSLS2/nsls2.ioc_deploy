@@ -21,7 +21,7 @@ verification:
       - "drvAsynIPPortConfigure"
       - "asynOctetSetInputEos"
       - "asynOctetSetOutputEos"
-      - 'dbLoadRecords("$(QUADEM)/db/$(TEMPLATE).template", "P=$(SYS), R=$(DEV), PORT=$(PORT), ADDR=0")' # yamllint disable-line rule:line-length
+      - 'dbLoadRecords("$(QUADEM)/db/$(TEMPLATE).template", "P=$(SYS), R=$(DEV), PORT=$(PORT), ADDR=0' # yamllint disable-line rule:line-length
     autosave/req/auto_settings.req:
       - "quadEM_settings.req"
       - "quadEM_Plugin_settings.req"
