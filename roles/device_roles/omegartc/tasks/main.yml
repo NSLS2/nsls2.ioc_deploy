@@ -8,10 +8,3 @@
     group: "{{ host_config.softioc_group }}"
     mode: "0664"
 
-- name: Copy custom postInit.cmd
-  ansible.builtin.template:
-    src: "postInit.cmd.j2"
-    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/postInit.cmd"
-    owner: "{{ host_config.softioc_user }}"
-    group: "{{ host_config.softioc_group }}"
-    mode: "0664"

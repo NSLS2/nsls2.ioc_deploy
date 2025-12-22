@@ -8,8 +8,4 @@ deploy_ioc_device_specific_env:
   OMEGA_RTC: "{{ deploy_ioc_required_module_path }}"
   EPICS_DB_INCLUDE_PATH: "$(OMEGA_RTC)/db"
 
-deploy_ioc_req_file_list:
-  - name: "info_settings.req"
-    macros: ""
-  - name: "info_positions.req"
-    macros: ""
+deploy_ioc_make_autosave_files: true
