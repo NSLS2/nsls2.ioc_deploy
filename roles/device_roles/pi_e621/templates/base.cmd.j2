@@ -1,5 +1,5 @@
 ## Register all support components
-dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/pie621.dbd")
 {{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
 
 drvAsynIPPortConfigure("$(PI_PORT)_ASYN", "$(HOST):$(HOST_PORT)")
