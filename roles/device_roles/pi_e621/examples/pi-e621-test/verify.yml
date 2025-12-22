@@ -20,7 +20,7 @@ verification:
       - "drvAsynIPPortConfigure"
       - "E816CreateController"
       - "dbLoadRecords"
-      - 'dbLoadTemplate("$(PIE621)/db/asyn_motor.substitutions")'
+      - 'dbLoadTemplate("$(TOP)/db/asyn_motor.substitutions")'
 
   file_must_not_contain:
     iocBoot/st.cmd:
