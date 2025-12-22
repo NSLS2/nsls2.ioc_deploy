@@ -5,3 +5,15 @@ deploy_ioc_use_ad_common: true
 deploy_ioc_required_module: adpicam_0d86fae
 deploy_ioc_template_root_path:
   "{{ deploy_ioc_required_module_path }}/iocs/PICamIOC"
+deploy_ioc_as_dir_name: autosave
+deploy_ioc_req_file_list:
+  - name: auto_settings.req
+    macros: "P=$(PREFIX)"
+deploy_ioc_device_specific_env:
+  PORT: "PIC1"
+  QSIZE: 20
+  NCHANS: 2048
+  CBUFFS: 500
+  MAX_THREADS: 8
+  XSIZE: 2048
+  YSIZE: 2048

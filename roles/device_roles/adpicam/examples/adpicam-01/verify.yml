@@ -1,0 +1,48 @@
+---
+# Set to true to skip module compilation (for roles requiring proprietary SDKs)
+# TODO: Compilation error in the module?
+skip_compilation: true
+
+verification:
+  files_must_exist:
+    # Standard IOC boot files (created by deploy_ioc)
+    - iocBoot/st.cmd
+    - iocBoot/epicsEnv.cmd
+    - iocBoot/postInit.cmd
+    # Role-specific files
+    - iocBoot/base.cmd
+    - autosave/req/auto_settings.req
+    - /etc/udev/rules.d/80-picam.rules
+
+  file_must_contain:
+    iocBoot/st.cmd:
+      - "iocInit"
+    iocBoot/base.cmd:
+      - "dbLoadDatabase"
+      - "ADPICamApp_registerRecordDeviceDriver"
+      - "PICamConfig"
+      - 'dbLoadRecords("$(ADPICAM)/db/PICam.template","P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0'
+    autosave/req/auto_settings.req:
+      - "PICam_settings.req"
+      - "NDStdArrays_settings.req"
+      - "commonPlugin_settings.req"
+
+  file_must_not_contain:
+    iocBoot/st.cmd:
+      - "{{"  # No unrendered jinja
+      - "}}"
+    iocBoot/base.cmd:
+      - "{{"
+      - "}}"
+    iocBoot/epicsEnv.cmd:
+      - "{{"
+      - "}}"
+    autosave/req/auto_settings.req:
+      - "{{"
+      - "}}"
+
+  permissions:
+    iocBoot/st.cmd: "0775"
+    /etc/udev/rules.d/80-picam.rules: "0644"
+    /opt/PrincetonInstruments: "0755"
+    /opt/pleora: "0755"
