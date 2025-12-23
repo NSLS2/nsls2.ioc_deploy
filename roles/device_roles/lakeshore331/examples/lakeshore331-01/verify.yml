@@ -1,0 +1,46 @@
+---
+# Set to true to skip module compilation (for roles requiring proprietary SDKs)
+skip_compilation: false
+
+verification:
+  files_must_exist:
+    # Standard IOC boot files (created by deploy_ioc)
+    - iocBoot/st.cmd
+    - iocBoot/epicsEnv.cmd
+    - iocBoot/postInit.cmd
+    # Role-specific files
+    - iocBoot/base.cmd
+    - db/Lakeshore331.template
+    - db/lakeshore331.substitutions
+
+  file_must_contain:
+    iocBoot/st.cmd:
+      - "iocInit"
+    iocBoot/base.cmd:
+      - "dbLoadDatabase"
+      - 'drvAsynIPPortConfigure("LS331", "127.0.0.1:8000")'
+      - 'asynOctetSetOutputEos("LS331", 0, "\r\n")'
+      - 'asynOctetSetInputEos("LS331", 0, "\r\n")'
+      - 'dbLoadTemplate("$(TOP)/db/lakeshore331.substitutions")'
+    db/lakeshore331.substitutions:
+      - 'file "$(TOP)/db/Lakeshore331.template"'
+      - '{ PORT, P, R }'
+      - '{ "LS331", "XF:31ID1-ES", "{LS331:1}" }'
+
+  file_must_not_contain:
+    iocBoot/st.cmd:
+      - "{{"  # No unrendered jinja
+      - "}}"
+    iocBoot/base.cmd:
+      - "{{"
+      - "}}"
+      - 'asynSetOption'
+    iocBoot/epicsEnv.cmd:
+      - "{{"
+      - "}}"
+    db/lakeshore331.substitutions:
+      - "{{"
+      - "}}"
+
+  permissions:
+    iocBoot/st.cmd: "0775"

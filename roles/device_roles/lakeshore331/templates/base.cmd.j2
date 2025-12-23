@@ -19,9 +19,10 @@ asynSetOption("{{ connection.key }}", 0, "{{ serial_setting }}", "{{ serial_sett
 asynOctetSetOutputEos("{{ connection.key }}", 0, "{{ connection.value.output_eos }}")
 {% endif %}
 {% if connection.value.input_eos is defined %}
-asynOctetSetOutputEos("{{ connection.key }}", 0, "{{ connection.value.input_eos }}")
+asynOctetSetInputEos("{{ connection.key }}", 0, "{{ connection.value.input_eos }}")
 {% endif %}
 {% endfor %}
+{% endif %}
 
 # ============================ LAKESHORE 331 CONFIGURATION ============================
 dbLoadTemplate("$(TOP)/db/lakeshore331.substitutions")
