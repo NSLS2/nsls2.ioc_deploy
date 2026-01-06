@@ -9,4 +9,3 @@ environment:
   NUM_PS: int()
   XSIZE: int()
   YSIZE: int()
-
