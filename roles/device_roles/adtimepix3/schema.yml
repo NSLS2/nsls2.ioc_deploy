@@ -1,0 +1,12 @@
+---
+
+type: enum("adtimepix3")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
+  SERVER_URL: str()
+  NUM_CHIPS: int()
+  NUM_PS: int()
+  XSIZE: int()
+  YSIZE: int()
+

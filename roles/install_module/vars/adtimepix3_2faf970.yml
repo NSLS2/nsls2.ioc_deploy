@@ -1,0 +1,11 @@
+---
+
+adtimepix3_2faf970:
+  name: ADTimePix3
+  version: 2faf970
+
+  url: https://github.com/areaDetector/ADTimePix3
+  include_base_ad_config: True
+  module_deps:
+    - adcore_60080dc
+    - adsupport_6acf83f
