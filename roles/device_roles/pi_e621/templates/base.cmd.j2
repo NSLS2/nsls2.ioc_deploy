@@ -1,0 +1,10 @@
+## Register all support components
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/pie621.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+drvAsynIPPortConfigure("$(PI_PORT)_ASYN", "$(HOST):$(HOST_PORT)")
+E816CreateController("$(PI_PORT)", "$(PI_PORT)_ASYN", 1, 50)
+
+## Load record instances
+dbLoadRecords("$(PIE621)/db/asynComm.db","P=$(ASYN_PREFIX),PORT=$(PI_PORT)_ASYN,ADDR=0")
+dbLoadTemplate("$(TOP)/db/asyn_motor.substitutions")

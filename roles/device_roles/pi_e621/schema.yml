@@ -1,9 +1,10 @@
 ---
 
-type: enum("pi-e621")
+type: enum("pi_e621")
 environment:
   ENGINEER: str()
-  HOST: str()
+  HOST: any(ip(), hostname())
+  HOST_PORT: int(min=1, max=65535)
   PI_PORT: str()
   SYS: str()
   IOC_SYS: str()
@@ -24,3 +25,25 @@ environment:
   DHLM: str(required=False)
   DLLM: str(required=False)
   INIT: str(required=False)
+motors: list(include('motor'), min=1)
+
+---
+motor:
+  prefix: str()
+  suffix: str()
+  addr: int()
+  alias: str()
+  desc: str()
+  egu: str()
+  twv: str()
+  velo: str()
+  vbas: str()
+  accl: str()
+  bdst: str()
+  bvel: str()
+  bacc: str()
+  mres: str()
+  prec: str()
+  dhlm: str()
+  dllm: str()
+  init: str()
