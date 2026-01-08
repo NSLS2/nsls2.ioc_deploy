@@ -1,0 +1,29 @@
+
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# adtimepix3 specific commands
+
+ADTimePixConfig("$(PORT)", "$(SERVER_URL)", 0, 0, 0, 0)
+epicsThreadSleep(2)
+
+asynSetTraceIOMask($(PORT), 0, 2)
+
+dbLoadRecords("$(ADTIMEPIX3)/db/TimePix3Base.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
+dbLoadRecords("$(ADTIMEPIX3)/db/ADTimePix3.template","P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
+{% for i in range(ioc.environment.NUM_CHIPS) %}
+dbLoadRecords("$(ADTIMEPIX3)/db/Chips.template","P=$(PREFIX),R=cam1:,C=CHIP{{ i }},PORT=$(PORT),ADDR={{ i }},TIMEOUT=1")
+{% endfor %}
+dbLoadRecords("$(ADTIMEPIX3)/db/File.template","P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
+dbLoadRecords("$(ADTIMEPIX3)/db/Server.template","P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
+dbLoadRecords("$(ADTIMEPIX3)/db/Measurement.template","P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
+dbLoadRecords("$(ADTIMEPIX3)/db/Dashboard.template","P=$(PREFIX),R=cam1:,S=Stats5:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
+
+# One chip mask, below 4-chip mask
+#dbLoadRecords("$(ADTIMEPIX3)/db/MaskBPC.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1,TYPE=Int32,FTVL=LONG,NELEMENTS=65536")
+dbLoadRecords("$(ADTIMEPIX3)/db/MaskBPC.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1,TYPE=Int32,FTVL=LONG,NELEMENTS=262144")
+{% for i in range(ioc.environment.NUM_PS) %}
+dbLoadRecords("$(ADTIMEPIX3)/db/OperatingVoltage.template","P=$(PREFIX),R=cam1:,C=Pwr{{ i }},PORT=$(PORT),ADDR={{ i }},TIMEOUT=1")
+{% endfor %}
+
+set_requestfile_path("$(ADTIMEPIX3)/tpx3App/Db")

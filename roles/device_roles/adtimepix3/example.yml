@@ -1,0 +1,12 @@
+---
+
+adtimepix3-01:
+  type: adtimepix3
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{ADTIMEPIX3:01}
+    SERVER_URL: http://localhost:8081
+    NUM_CHIPS: 4
+    NUM_PS: 3
+    XSIZE: 512
+    YSIZE: 512
