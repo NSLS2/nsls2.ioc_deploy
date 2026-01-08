@@ -8,7 +8,7 @@ dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable
 epicsEnvSet("STREAM_PROTOCOL_PATH", "$(I404)/i404App/Db")
 epicsEnvSet("PORT", "COM1")  # The port MUST be COM1 (it is hard coded in the IOC)
 
-drvAsynIPPortConfigure("$(PORT)", "$(HOST):$(IP_PORT)")
+drvAsynIPPortConfigure("$(PORT)", "$(IP):$(IP_PORT)")
 
 ## Load records
 dbLoadRecords("$(I404)/db/I404.db")
