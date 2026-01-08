@@ -18,8 +18,16 @@
 
 - name: Copy databases file for specified controller model num
   ansible.builtin.copy:
-    src: "files/Lakeshore331.db"
-    dest: "{{ iocs_directory }}/{{ ioc_name }}/db/Lakeshore331.template"
-    owner: "{{ softioc_user }}"
-    group: "{{ softioc_group }}"
+    src: "files/Lakeshore331.template"
+    dest: "{{ deploy_ioc_ioc_directory }}/db/Lakeshore331.template"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Install lakeshore331 substitution file
+  ansible.builtin.template:
+    src: "templates/lakeshore331.substitutions.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/db/lakeshore331.substitutions"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
     mode: "0664"

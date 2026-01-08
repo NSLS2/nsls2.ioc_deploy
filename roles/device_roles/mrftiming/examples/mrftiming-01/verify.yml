@@ -1,0 +1,42 @@
+---
+# Set to true to skip module compilation (for roles requiring proprietary SDKs)
+# TODO: See if this is fixable
+skip_compilation: true
+
+verification:
+  files_must_exist:
+    # Standard IOC boot files (created by deploy_ioc)
+    - iocBoot/st.cmd
+    - iocBoot/epicsEnv.cmd
+    - iocBoot/postInit.cmd
+    # Role-specific files
+    - iocBoot/base.cmd
+    - as/req/auto_settings.req
+
+  file_must_contain:
+    iocBoot/st.cmd:
+      - "iocInit"
+    iocBoot/base.cmd:
+      - "dbLoadDatabase"
+      - "registerRecordDeviceDriver"
+      - "mrfUdpIpEvrDevice"
+      - "dbLoadRecords"
+      - "mrf-autosave-menu.db"
+      - "mrf-write-all-settings-with-status.db"
+      - "misc.substitutions"
+    as/req/auto_settings.req:
+      - "vme-evr-230rf.req"
+
+  file_must_not_contain:
+    iocBoot/st.cmd:
+      - "{{"  # No unrendered jinja
+      - "}}"
+    iocBoot/base.cmd:
+      - "{{"
+      - "}}"
+    iocBoot/epicsEnv.cmd:
+      - "{{"
+      - "}}"
+
+  permissions:
+    iocBoot/st.cmd: "0775"

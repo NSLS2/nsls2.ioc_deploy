@@ -1,10 +1,13 @@
 ---
-deploy_ioc_standard_st_cmd: false
+deploy_ioc_standard_st_cmd: true
 deploy_ioc_executable: "quadEMTestApp"
 deploy_ioc_as_dir_name: autosave
 deploy_ioc_template_root_path: /epics/modules/quadEM
 deploy_ioc_required_module: quadem_f5ab1e9
-deploy_ioc_use_common: false
+deploy_ioc_use_common: true
+deploy_ioc_req_file_list:
+  - name: auto_settings.req
+    macros: "P=$(PREFIX)"
 deploy_ioc_device_specific_env:
   TEMPLATE: "TetrAMM"
   PORT: "TetrAMM"

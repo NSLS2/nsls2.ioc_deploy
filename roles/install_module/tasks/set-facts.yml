@@ -42,7 +42,7 @@
 - name: If specified, add any module specific epics dep overrides
   ansible.builtin.set_fact:
     install_module_epics_deps:
-      "{{ install_module_epics_deps |
+      "{{ install_module_epics_deps
       | combine(install_module_config.epics_deps) }}"
   when: install_module_config.epics_deps is defined
 

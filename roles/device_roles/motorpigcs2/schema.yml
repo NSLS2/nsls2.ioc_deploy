@@ -22,6 +22,7 @@ axis:
   addr: int()
   desc: str()
   egu: str()
+  dir: str()
   velo: num()
   vbas: num()
   accl: num()

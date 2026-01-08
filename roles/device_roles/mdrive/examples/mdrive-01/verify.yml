@@ -1,0 +1,54 @@
+---
+# Set to true to skip module compilation (for roles requiring proprietary SDKs)
+skip_compilation: false
+
+verification:
+  files_must_exist:
+    # Standard IOC boot files (created by deploy_ioc)
+    - iocBoot/st.cmd
+    - iocBoot/epicsEnv.cmd
+    - iocBoot/postInit.cmd
+    # Role-specific files
+    - iocBoot/base.cmd
+    - db/motor.substitutions
+    - db/asynRecord.substitutions
+
+  file_must_contain:
+    iocBoot/st.cmd:
+      - "iocInit"
+    iocBoot/base.cmd:
+      - "dbLoadDatabase"
+      - 'drvAsynIPPortConfigure("P1", "127.0.0.1:503")'
+      - 'drvAsynIPPortConfigure("P2", "127.0.0.1:504")'
+      - 'drvAsynIPPortConfigure("P3", "127.0.0.1:505")'
+      - 'drvAsynIPPortConfigure("P4", "127.0.0.1:506")'
+      - 'drvAsynIPPortConfigure("P5", "127.0.0.1:507")'
+      - 'drvAsynIPPortConfigure("P6", "127.0.0.1:508")'
+      - 'ImsMDrivePlusCreateController("P1_Mtr", "P1", "", "100", "1000")'
+      - 'ImsMDrivePlusCreateController("P2_Mtr", "P2", "", "100", "1000")'
+      - 'ImsMDrivePlusCreateController("P3_Mtr", "P3", "", "100", "1000")'
+      - 'ImsMDrivePlusCreateController("P4_Mtr", "P4", "", "100", "1000")'
+      - 'ImsMDrivePlusCreateController("P5_Mtr", "P5", "", "100", "1000")'
+      - 'ImsMDrivePlusCreateController("P6_Mtr", "P6", "", "100", "1000")'
+      - 'dbLoadTemplate("$(TOP)/db/motor.substitutions")'
+      - 'dbLoadTemplate("$(TOP)/db/asynRecord.substitutions")'
+
+  file_must_not_contain:
+    iocBoot/st.cmd:
+      - "{{"  # No unrendered jinja
+      - "}}"
+    iocBoot/base.cmd:
+      - "{{"
+      - "}}"
+    iocBoot/epicsEnv.cmd:
+      - "{{"
+      - "}}"
+    db/motor.substitutions:
+      - "{{"
+      - "}}"
+    db/asynRecord.substitutions:
+      - "{{"
+      - "}}"
+
+  permissions:
+    iocBoot/st.cmd: "0775"

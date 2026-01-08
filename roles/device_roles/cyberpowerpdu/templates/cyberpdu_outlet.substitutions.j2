@@ -5,7 +5,7 @@ file "$(TOP)/db/cyberPDU_Outlet.template"
 {{"{"}}
 pattern
 {{"{"}}"SYS", "DEV", "NUM", "DESC", "IP"{{"}"}}
-{% for num in range(1, num_outlets + 1) -%}
-{{"{"}}"{{ environment.SYS }}", "{{ environment.DEV }}", {{ num }}, "PDU Outlet {{ num }}", "{{ environment.IP }}"{{"}"}}
+{% for num in range(1, ioc.num_outlets + 1) -%}
+{{"{"}}"{{ ioc.environment.SYS }}", "{{ ioc.environment.DEV }}", {{ num }}, "PDU Outlet {{ num }}", "{{ ioc.environment.IP }}"{{"}"}}
 {% endfor -%}
 {{"}"}}

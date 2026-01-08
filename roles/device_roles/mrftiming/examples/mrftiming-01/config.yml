@@ -1,0 +1,7 @@
+---
+
+mrftiming-01:
+  type: mrftiming
+  environment:
+    IP: "10.70.11.26"
+    P: "C29-TST"

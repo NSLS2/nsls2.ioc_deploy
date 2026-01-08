@@ -1,7 +1,0 @@
----
-
-mrftiming-01:
-  type: mrftiming
-  environment:
-    ENGINEER: K. Barry
-    PREFIX: XF:31ID1-ES{MRFTIMING:01}
