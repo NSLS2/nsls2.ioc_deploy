@@ -7,7 +7,7 @@ dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable
 ## User defined ENV variables
 epicsEnvSet("STREAM_PROTOCOL_PATH", "${F460}/F460App/src")
 
-drvAsynIPPortConfigure("$(PORT)", $(HOST))
+drvAsynIPPortConfigure("$(PORT)", $(IP):$(IP_PORT))
 
 ## Load records
 dbLoadRecords("${F460}/db/F460.db", "Sys=$(SYS),Dev=$(DEV),PORT=$(PORT),PINI=YES,BUFSZ=12,PREC=9")

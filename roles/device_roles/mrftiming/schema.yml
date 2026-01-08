@@ -2,5 +2,6 @@
 
 type: enum("mrftiming")
 environment:
-  ENGINEER: str()
-  PREFIX: str()
+  IP: any(ip(), hostname())
+  P: str()  # Base PV prefix
+  ENGINEER: str(required=False)

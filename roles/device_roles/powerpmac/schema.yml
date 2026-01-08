@@ -14,7 +14,7 @@ environment:
 disable_all_limits: bool(required=False)
 
 coord_systems: list(include("coord_system"), required=False)
-axes: list(include("axis"), min=1, max=8)
+axes: list(include("axis"), min=1, max=8, required=False)
 virtual_axes: list(include("virtual_axis"), required=False)
 poll_periods: list(include("poll_period"), required=False)
 
