@@ -2,6 +2,6 @@
 
 deploy_ioc_use_common: true
 deploy_ioc_use_ad_common: true
-deploy_ioc_required_module: adphantom_329598e
+deploy_ioc_required_module: adphantom_afefafc
 deploy_ioc_template_root_path:
   "{{ deploy_ioc_required_module_path }}/iocs/phantomIOC"
