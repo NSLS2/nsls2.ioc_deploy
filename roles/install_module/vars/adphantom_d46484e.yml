@@ -7,5 +7,10 @@ adphantom_d46484e:
   # url: https://github.com/DiamondLightSource/ADPhantom
   url: https://github.com/jwlodek/ADPhantom
   include_base_ad_config: True
+  module_deps:
+    - adcore_60080dc
+    - adcompvision_9750d13
+    - adpluginbar_448d96b
+    - ffmpeg_server_07c570f
   pkg_deps:
     - libpcap-devel
