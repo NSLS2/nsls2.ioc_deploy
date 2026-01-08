@@ -20,7 +20,6 @@
     mode: '0755'
     recurse: true
 
-
 - name: Copy base.cmd
   ansible.builtin.template:
     src: "templates/base.cmd.j2"
@@ -32,7 +31,7 @@
 - name: Copy autosave req file
   ansible.builtin.template:
     src: "templates/auto_settings.req.j2"
-    dest: "{{ deploy_ioc_ioc_directory }}/req/auto_settings.req"
+    dest: "{{ deploy_ioc_as_directory }}/req/auto_settings.req"
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
     mode: "0664"
