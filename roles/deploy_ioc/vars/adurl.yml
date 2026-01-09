@@ -5,7 +5,7 @@ deploy_ioc_use_ad_common: true
 deploy_ioc_required_module: adurl_1c725ed
 deploy_ioc_executable: URLDriverApp
 deploy_ioc_template_root_path:
-  "{{ deploy_ioc_required_module_path }}iocs/urlIOC"
+  "{{ deploy_ioc_required_module_path }}/iocs/urlIOC"
 deploy_ioc_req_file_list:
   - name: auto_settings.req
     macros: "P=$(PREFIX)"
