@@ -14,6 +14,6 @@ deploy_ioc_device_specific_env:
   MAX_THREADS: 8
   EPICS_DB_INCLUDE_PATH: "$(ADCORE)/db"
   NELEMENTS: 5000000
-  PORT: PH1
+  PORT: "PH1"
   CTRL_PORT: 7115
   DATA_PORT: 7116
