@@ -3,7 +3,7 @@ type: enum("adphantom")
 environment:
   ENGINEER: str()
   PREFIX: str()
-  CAMERA_IP: str()
+  CAMERA_IP: any(ip(), hostname())
   NUM_CINES: int()
   MAC_ADDR: str()
   INTF: str()
