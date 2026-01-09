@@ -1,0 +1,13 @@
+---
+
+adurl_1c725ed:
+  name: ADURL
+  version: 1c725ed
+  url: https://github.com/areaDetector/ADURL
+  include_base_ad_config: True
+  module_deps:
+    - adsupport_6acf83f
+    - adcompvision_9750d13
+    - adcore_60080dc
+    - adpluginbar_448d96b
+    - ffmpeg_server_07c570f
