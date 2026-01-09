@@ -7,3 +7,8 @@ environment:
   NUM_CINES: int()
   MAC_ADDR: str()
   INTF: str()
+  XSIZE: int(required=False)
+  YSIZE: int(required=False)
+  CTRL_PORT: int(required=False)
+  DATA_PORT: int(required=False)
+  PORT: str(required=False)
