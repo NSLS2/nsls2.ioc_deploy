@@ -1,0 +1,7 @@
+---
+
+adurl-01:
+  type: adurl
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{ADURL:01}

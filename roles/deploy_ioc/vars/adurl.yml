@@ -1,0 +1,21 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_use_ad_common: true
+deploy_ioc_required_module: adurl_1c725ed
+deploy_ioc_executable: URLDriverApp
+deploy_ioc_template_root_path:
+  "{{ deploy_ioc_required_module_path }}iocs/urlIOC"
+deploy_ioc_req_file_list:
+  - name: auto_settings.req
+    macros: "P=$(PREFIX)"
+deploy_ioc_device_specific_env:
+  CBUFFS: 500
+  MAX_THREADS: 8
+  NCHANS: 2048
+  PORT: URL1
+  QSIZE: 20
+  XSIZE: 1920
+  YSIZE: 1080
+  NELEMENTS: 500000
+  EPICS_DB_INCLUDE_PATH: "$(ADCORE)/db"
