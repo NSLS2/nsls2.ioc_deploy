@@ -5,3 +5,15 @@ deploy_ioc_use_ad_common: true
 deploy_ioc_required_module: adphantom_afefafc
 deploy_ioc_template_root_path:
   "{{ deploy_ioc_required_module_path }}/iocs/phantomIOC"
+deploy_ioc_device_specific_env:
+  QSIZE: 20
+  XSIZE: 1280
+  YSIZE: 960
+  NCHANS: 1280
+  CBUFFS: 100
+  MAX_THREADS: 8
+  EPICS_DB_INCLUDE_PATH: "$(ADCORE)/db"
+  NELEMENTS: 5000000
+  PORT: "PH1"
+  CTRL_PORT: 7115
+  DATA_PORT: 7116
