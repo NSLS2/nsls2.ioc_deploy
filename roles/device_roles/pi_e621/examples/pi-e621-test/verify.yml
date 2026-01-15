@@ -1,0 +1,37 @@
+---
+# Set to true to skip module compilation (for roles requiring proprietary SDKs)
+# TODO: Revisit this once the module is deployed
+skip_compilation: true
+
+verification:
+  files_must_exist:
+    # Standard IOC boot files (created by deploy_ioc)
+    - iocBoot/st.cmd
+    - iocBoot/epicsEnv.cmd
+    - iocBoot/postInit.cmd
+    # Role-specific files
+    - iocBoot/base.cmd
+    - db/asyn_motor.substitutions
+
+  file_must_contain:
+    iocBoot/st.cmd:
+      - "iocInit"
+    iocBoot/base.cmd:
+      - "drvAsynIPPortConfigure"
+      - "E816CreateController"
+      - "dbLoadRecords"
+      - 'dbLoadTemplate("$(TOP)/db/asyn_motor.substitutions")'
+
+  file_must_not_contain:
+    iocBoot/st.cmd:
+      - "{{"  # No unrendered jinja
+      - "}}"
+    iocBoot/base.cmd:
+      - "{{"
+      - "}}"
+    iocBoot/epicsEnv.cmd:
+      - "{{"
+      - "}}"
+
+  permissions:
+    iocBoot/st.cmd: "0775"
