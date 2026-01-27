@@ -49,3 +49,7 @@ deploy_ioc_default_env:
 
 deploy_ioc_required_system_packages:
   - procServ
+
+# For python-based IOCs, we use `pixi` to init the environments. By default,
+# assume it's in the PATH on the target machine. This can be overridden.
+deploy_ioc_pixi_executable_path: pixi
