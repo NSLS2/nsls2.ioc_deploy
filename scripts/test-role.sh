@@ -149,7 +149,7 @@ EOF
         fi
     fi
 
-    if ! ansible-playbook -i epics-dev, -c docker -u root \
+    if ! ansible-playbook -vv -i epics-dev, -c docker -u root \
         -e "deploy_ioc_ioc_name=$IOC_NAME" \
         -e "deploy_ioc_target=$IOC_NAME" \
         -e "install_module_default_pkg_deps=[]" \
