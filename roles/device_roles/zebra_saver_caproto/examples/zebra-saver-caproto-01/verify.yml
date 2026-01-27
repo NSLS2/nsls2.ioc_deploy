@@ -8,12 +8,12 @@ verification:
     - st.cmd
   file_must_contain:
     st.cmd:
-    - "export EPICS_CA_AUTO_ADDR_LIST"
-    - "export EPICS_CAS_AUTO_BEACON_ADDR_LIST"
-    - "export EPICS_CA_ADDR_LIST"
-    - "export EPICS_CAS_BEACON_ADDR_LIST"
-    - "pixi run python -m srx caproto iocs.zebra.caproto_ioc"
-    - "--prefix='XF:09IDA-ES{{ZEBRA_SAVER:01}}'"
+      - "export EPICS_CA_AUTO_ADDR_LIST"
+      - "export EPICS_CAS_AUTO_BEACON_ADDR_LIST"
+      - "export EPICS_CA_ADDR_LIST"
+      - "export EPICS_CAS_BEACON_ADDR_LIST"
+      - "pixi run python -m srx caproto iocs.zebra.caproto_ioc"
+      - "--prefix='XF:09IDA-ES{{ZEBRA_SAVER:01}}'"
 
   permissions:
     st.cmd: "0775"
