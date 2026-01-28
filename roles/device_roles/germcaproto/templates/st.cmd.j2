@@ -10,4 +10,4 @@ export EPICS_CAS_BEACON_ADDR_LIST={{ host_config.epics_interface.broadcast }}
 {% if '{' in ioc.environment.PREFIX or '}' in ioc.environment.PREFIX %}
 # Caproto requires curly braces to be escaped, i.e. doubled up.
 {% endif %}
-{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} run python -m srx_caproto_iocs.germcaproto.caproto_ioc --list-pvs --prefix='{{ioc.environment.PREFIX | replace('{', '{{') | replace('}', '}}')}}'
+{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} run python -m hextools.germ.caproto_ioc --list-pvs --prefix='{{ioc.environment.PREFIX | replace('{', '{{') | replace('}', '}}')}}'
