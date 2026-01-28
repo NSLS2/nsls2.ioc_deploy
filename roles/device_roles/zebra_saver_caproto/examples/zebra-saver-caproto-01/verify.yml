@@ -1,0 +1,27 @@
+---
+# Set to true to skip module compilation (for roles requiring proprietary SDKs)
+skip_compilation: false
+
+verification:
+  files_must_exist:
+    # Standard IOC boot files (created by deploy_ioc)
+    - st.cmd
+  file_must_contain:
+    st.cmd:
+      # Make sure EPICS networking env vars get set
+      - "export EPICS_CA_AUTO_ADDR_LIST"
+      - "export EPICS_CAS_AUTO_BEACON_ADDR_LIST"
+      - "export EPICS_CA_ADDR_LIST"
+      - "export EPICS_CAS_BEACON_ADDR_LIST"
+
+      # Make sure we run the correct exec
+      - "pixi run python -m srx_caproto_iocs.zebra.caproto_ioc"
+
+      # Make sure prefix is set correctly
+      - "--prefix='XF:09IDA-ES{{ZEBRA_SAVER:01}}'"
+
+      # Make sure comment exists as expected.
+      - "Caproto requires curly braces to be escaped"
+
+  permissions:
+    st.cmd: "0775"
