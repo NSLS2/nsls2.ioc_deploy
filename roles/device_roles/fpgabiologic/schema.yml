@@ -1,9 +1,0 @@
----
-
-type: enum("fpgabiologic")
-pixi_executable_path: str(required=False)
-python_version: str(required=False)
-environment:
-  PANDA_PREFIX: str()
-  PREFIX: str()
-  ENGINEER: str(required=False)
