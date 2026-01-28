@@ -1,4 +1,3 @@
 ---
 
-device_roles_germcaproto_pixi_executable_path: "pixi"
 device_roles_germcaproto_python_version: ">=3.10,<3.13"
