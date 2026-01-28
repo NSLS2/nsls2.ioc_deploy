@@ -6,5 +6,8 @@ export EPICS_CAS_AUTO_BEACON_ADDR_LIST=NO
 export EPICS_CA_ADDR_LIST="{{ host_config.epics_interface.broadcast }}"
 export EPICS_CAS_BEACON_ADDR_LIST="{{ host_config.epics_interface.broadcast }}"
 
-# Start IOC here.{%  if '{' in ioc.environment.PREFIX or '}' in ioc.environment.PREFIX %} Caproto requires curly braces to be escaped, i.e. doubled up. {% endif %}
+# Start IOC here.
+{%  if '{' in ioc.environment.PREFIX or '}' in ioc.environment.PREFIX %}
+# Caproto requires curly braces to be escaped, i.e. doubled up.
+{% endif %}
 {{ ioc.pixi_executable_path | default(device_roles_zebra_saver_caproto_pixi_executable_path) }} run python -m srx_caproto_iocs.zebra.caproto_ioc --list-pvs --prefix='{{ ioc.environment.PREFIX | replace('{', '{{') | replace('}', '}}')}}'
