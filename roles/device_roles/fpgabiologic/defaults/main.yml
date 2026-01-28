@@ -1,4 +1,0 @@
----
-
-device_roles_fpgabiologic_pixi_executable_path: "pixi"
-device_roles_fpgabiologic_python_version: ">=3.10,<3.13"

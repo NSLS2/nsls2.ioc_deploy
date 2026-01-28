@@ -1,9 +1,0 @@
----
-fpgabiologic:
-  type: "fpgabiologic"
-  pixi_executable_path: "pixi"
-  python_version: "=3.10"
-  environment:
-    PANDA_PREFIX: "XF:31ID1-ES{PANDA:1}"
-    PREFIX: "XF:31ID1-ES{FPGABIOLOGIC:Dev-1}"
-    ENGINEER: "C. Engineer"
