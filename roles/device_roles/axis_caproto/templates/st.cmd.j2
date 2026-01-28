@@ -8,3 +8,9 @@ export EPICS_CAS_BEACON_ADDR_LIST={{ host_config.epics_interface.broadcast }}
 
 # Start IOC here
 {{ ioc.pixi_executable_path | default(device_roles_axis_caproto_pixi_executable_path) }} run python -m srx_caproto_iocs.axis.caproto_ioc --list-pvs --prefix='{{ ioc.environment.PREFIX }}' -c '{{ ioc.environment.CAMERA_HOST }}'
+
+# Start IOC here
+{% if '{' in ioc.environment.PREFIX or '}' in ioc.environment.PREFIX %}
+# Caproto requires curly braces to be escaped, i.e. doubled up.
+{% endif %}
+{{ ioc.pixi_executable_path | default(device_roles_axis_caproto_pixi_executable_path) }} run python -m srx_caproto_iocs.zebra.caproto_ioc --list-pvs --prefix='{{ioc.environment.PREFIX | replace('{', '{{') | replace('}', '}}')}}'
