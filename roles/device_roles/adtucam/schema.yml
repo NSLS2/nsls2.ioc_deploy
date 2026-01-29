@@ -1,5 +1,5 @@
 ---
-type: enum("adaxis")
+type: enum("adtucam")
 environment:
   ENGINEER: str()
   PREFIX: str()

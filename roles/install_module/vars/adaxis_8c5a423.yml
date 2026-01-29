@@ -1,9 +1,0 @@
----
-adaxis_8c5a423:
-  name: adaxis
-  url: https://github.com/NSLS2/ADAxis  # currently private
-  include_base_ad_config: true
-  version: 8c5a423
-  executable: axisApp
-  module_deps:
-    - adcore_60080dc
