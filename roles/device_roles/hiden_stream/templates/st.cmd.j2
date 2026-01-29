@@ -14,4 +14,3 @@ export EPICS_CAS_BEACON_ADDR_LIST={{ host_config.epics_interface.broadcast }}
 # Caproto requires curly braces to be escaped, i.e. doubled up.
 {% endif %}
 {{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} run python -m hiden.cap2 --list-pvs --prefix='{{ioc.environment.PREFIX | replace('{', '{{') | replace('}', '}}')}}'
-
