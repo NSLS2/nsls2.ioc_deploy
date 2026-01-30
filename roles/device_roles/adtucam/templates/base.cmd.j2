@@ -2,8 +2,8 @@
 dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
 {{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
 
-ADAxisConfig("$(PORT)", 0)
-dbLoadRecords("$(ADAXIS)/db/ADAxis.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
+ADTucamConfig("$(PORT)", 0)
+dbLoadRecords("$(ADTUCAM)/db/ADTucam.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
 
 epicsThreadSleep(3.0)
 

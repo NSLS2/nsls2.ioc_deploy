@@ -1,0 +1,9 @@
+---
+adtucam_0c04e68:
+  name: adtucam
+  url: https://github.com/NSLS2/ADTucam
+  include_base_ad_config: true
+  version: 0c04e68
+  executable: tucamApp
+  module_deps:
+    - adcore_60080dc

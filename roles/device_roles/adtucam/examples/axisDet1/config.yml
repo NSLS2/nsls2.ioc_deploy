@@ -1,9 +1,9 @@
 ---
-adaxis-01:
-  type: adaxis
+axisDet1:
+  type: adtucam
   environment:
     ENGINEER: T. Hopkins
-    PREFIX: XF:31ID1-ES{ADAXIS:01}
+    PREFIX: XF:31ID1-ES{AXIS:01}
     PORT: "AXIS1"  # Port name for AD plugin
     QSIZE: 20  # Queue size for the AD plugins
     XSIZE: 4096  # X size of the image
