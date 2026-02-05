@@ -22,6 +22,7 @@ deploy_ioc_os_env_exports:
 req_file:
   name: str()
   macros: str()
+  pre_ioc_init: bool(required=False, default=True)
 
 dbpf:
   pv: str()
