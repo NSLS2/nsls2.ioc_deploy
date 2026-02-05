@@ -84,9 +84,10 @@ set_pass1_restoreFile("info_settings.sav")
 
 {% endif %}
 {% for req_file in deploy_ioc_req_file_list %}
-{% if req_file.pre_ioc_init | default(true) %}
+{% if req_file.before_ioc_init | default(true) %}
 set_pass0_restoreFile("{{ req_file.name | replace('.req', '.sav') }}")
-{% else %}
+{% endif %}
+{% if req_file.after_ioc_init | default(true) %}
 set_pass1_restoreFile("{{ req_file.name | replace('.req', '.sav') }}")
 {% endif %}
 
