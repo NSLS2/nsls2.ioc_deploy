@@ -61,7 +61,10 @@ dbLoadRecords("$(EPICS_BASE)/db/iocAdminSoft.db", "IOC=$(PREFIX)")
 {% if deploy_ioc_merged_env.CT_PREFIX is defined %}
 dbLoadRecords("$(EPICS_BASE)/db/save_restoreStatus.db", "P=$(CT_PREFIX)")
 dbLoadRecords("$(EPICS_BASE)/db/reccaster.db", "P=$(CT_PREFIX)RecSync")
-{% else %}
+{% elif deploy_ioc_merged_env.IOC_PREFIX is defined %}
+dbLoadRecords("$(EPICS_BASE)/db/save_restoreStatus.db", "P=$(IOC_PREFIX)")
+dbLoadRecords("$(EPICS_BASE)/db/reccaster.db", "P=$(IOC_PREFIX)RecSync")
+{% elif deploy_ioc_merged_env.PREFIX is defined %}
 dbLoadRecords("$(EPICS_BASE)/db/save_restoreStatus.db", "P=$(PREFIX)")
 dbLoadRecords("$(EPICS_BASE)/db/reccaster.db", "P=$(PREFIX)RecSync")
 {% endif %}
