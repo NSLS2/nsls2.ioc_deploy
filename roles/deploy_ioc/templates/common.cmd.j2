@@ -61,7 +61,10 @@ dbLoadRecords("$(EPICS_BASE)/db/iocAdminSoft.db", "IOC=$(PREFIX)")
 {% if deploy_ioc_merged_env.CT_PREFIX is defined %}
 dbLoadRecords("$(EPICS_BASE)/db/save_restoreStatus.db", "P=$(CT_PREFIX)")
 dbLoadRecords("$(EPICS_BASE)/db/reccaster.db", "P=$(CT_PREFIX)RecSync")
-{% else %}
+{% elif deploy_ioc_merged_env.IOC_PREFIX is defined %}
+dbLoadRecords("$(EPICS_BASE)/db/save_restoreStatus.db", "P=$(IOC_PREFIX)")
+dbLoadRecords("$(EPICS_BASE)/db/reccaster.db", "P=$(IOC_PREFIX)RecSync")
+{% elif deploy_ioc_merged_env.PREFIX is defined %}
 dbLoadRecords("$(EPICS_BASE)/db/save_restoreStatus.db", "P=$(PREFIX)")
 dbLoadRecords("$(EPICS_BASE)/db/reccaster.db", "P=$(PREFIX)RecSync")
 {% endif %}
@@ -73,3 +76,26 @@ save_restoreSet_DatedBackupFiles(1)
 set_savefile_path("$(TOP)/{{ deploy_ioc_as_dir_name }}/save")
 set_requestfile_path("$(TOP)/{{ deploy_ioc_as_dir_name }}/req")
 set_requestfile_path("$(EPICS_BASE)/req")
+
+{% if deploy_ioc_make_autosave_files %}
+set_pass0_restoreFile("info_positions.sav")
+set_pass0_restoreFile("info_settings.sav")
+set_pass1_restoreFile("info_settings.sav")
+
+{% endif %}
+{% for req_file in deploy_ioc_req_file_list %}
+{% if req_file.before_ioc_init | default(true) %}
+set_pass0_restoreFile("{{ req_file.name | replace('.req', '.sav') }}")
+{% endif %}
+{% if req_file.after_ioc_init | default(true) %}
+set_pass1_restoreFile("{{ req_file.name | replace('.req', '.sav') }}")
+{% endif %}
+
+{% endfor %}
+{% if deploy_ioc_merged_env.CT_PREFIX is defined %}
+save_restoreSet_status_prefix("$(CT_PREFIX)")
+{% elif deploy_ioc_merged_env.IOC_PREFIX is defined %}
+save_restoreSet_status_prefix("$(IOC_PREFIX)")
+{% elif deploy_ioc_merged_env.PREFIX is defined %}
+save_restoreSet_status_prefix("$(PREFIX)")
+{% endif %}
