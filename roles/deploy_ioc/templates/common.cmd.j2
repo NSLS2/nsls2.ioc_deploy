@@ -76,3 +76,21 @@ save_restoreSet_DatedBackupFiles(1)
 set_savefile_path("$(TOP)/{{ deploy_ioc_as_dir_name }}/save")
 set_requestfile_path("$(TOP)/{{ deploy_ioc_as_dir_name }}/req")
 set_requestfile_path("$(EPICS_BASE)/req")
+
+{% if deploy_ioc_make_autosave_files %}
+set_pass0_restoreFile("info_positions.sav")
+set_pass0_restoreFile("info_settings.sav")
+set_pass1_restoreFile("info_settings.sav")
+
+{% endif %}
+{% for req_file in deploy_ioc_req_file_list %}
+set_pass0_restoreFile("{{ req_file.name | replace('.req', '.sav') }}")
+
+{% endfor %}
+{% if deploy_ioc_merged_env.CT_PREFIX is defined %}
+save_restoreSet_status_prefix("$(CT_PREFIX)")
+{% elif deploy_ioc_merged_env.IOC_PREFIX is defined %}
+save_restoreSet_status_prefix("$(IOC_PREFIX)")
+{% elif deploy_ioc_merged_env.PREFIX is defined %}
+save_restoreSet_status_prefix("$(PREFIX)")
+{% endif %}
