@@ -64,6 +64,24 @@ cmd = "scripts/install_module.py {{ module }} {{ limit }}"
 
 [tasks.test-role]
 args = [
+    "limit",
     "role"
 ]
-cmd = "scripts/test-role.sh {{ role }}"
+cmd = "scripts/deploy_local_config.py {{ limit }} -t {{ role }} --container"
+
+[tasks.test-config]
+args = [
+    "limit",
+    "paths"
+]
+cmd = "scripts/deploy_local_config.py {{ limit }} -c {{ paths }}"
+
+[tasks.test-example]
+args = [
+    "limit",
+    "role"
+]
+cmd = "scripts/test-role.sh {{ limit }} -t {{ role }} -i"
+
+[tasks.install-nsls2network]
+cmd = "pip install git+https://github.com/NSLS2/nsls2network"

@@ -20,6 +20,11 @@
 - name: Get IOC type specific default vars
   ansible.builtin.include_vars: "vars/{{ ioc.type }}.yml"
 
+- name: Check to make sure IOC can be deployed on this host
+  ansible.builtin.fail:
+    msg: "IOC with name {{ deploy_ioc_ioc_name }} cannot be deployed on this host due to unsupported EL version"
+  when: deploy_ioc_supported_el_versions is defined and ansible_distribution == "RedHat" and ansible_distribution_major_version | int not in deploy_ioc_supported_el_versions
+
 - name: Handle any module requirements
   when: deploy_ioc_required_module is defined or ioc.required_module is defined
   block:

@@ -90,21 +90,6 @@ docker exec -u root epics-dev bash -c '
     pixi add python=3.12 pyyaml
 '
 
-# Create missing RULES_SNCSEQ file
-echo "Creating missing EPICS SNCSEQ rules..."
-docker exec -u root epics-dev bash -c 'cat > /usr/lib/epics/configure/rules.d/RULES_SNCSEQ << EOF
-# SNCSEQ Rules - minimal implementation for compatibility
-# This file provides basic SNCSEQ support for EPICS builds
-
-ifndef SNCSEQ_RULES
-SNCSEQ_RULES = YES
-
-# Define empty rules to prevent build failures
-SNCSEQ_RULES_INCLUDED = YES
-
-endif
-EOF'
-
 # Test each example
 declare -a FAILED_EXAMPLES=()
 for i in "${!EXAMPLES[@]}"; do
