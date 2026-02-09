@@ -11,8 +11,8 @@
     mode: "0664"
 
 - name: Copy autosave req file
-  ansible.builtin.copy:
-    src: "files/auto_settings.req"
+  ansible.builtin.template:
+    src: "templates/auto_settings.req.j2"
     dest: "{{ deploy_ioc_as_directory }}/req/auto_settings.req"
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
@@ -29,6 +29,12 @@
         state: directory
         mode: "0775"
 
+    - name: Check to see if DCU is accessible
+      ansible.builtin.command:
+        cmd: "ping -c 1 {{ ioc.environment.PILATUS_DCU_IP }}"
+      register: dcu_ping_result
+      changed_when: dcu_ping_result.rc == 0
+
     - name: Initialize ramdisk mount on IOC server
       ansible.posix.mount:
         src: "{{ ioc.environment.PILATUS_DCU_IP }}:{{ ioc.ramdisk_path }}"
@@ -36,3 +42,4 @@
         fstype: nfs
         state: mounted
         opts: defaults,noac,lookupcache=none
+      when: dcu_ping_result.rc == 0
