@@ -16,8 +16,9 @@ deploy_ioc_os_env_exports: {}
 deploy_ioc_req_file_list: []
 deploy_ioc_dbpf_list: []
 
-# List supported EL versions. By default, support EL 8, 9, and 10
-deploy_ioc_supported_el_versions: [8, 9, 10]
+# List supported EL versions. By default, support EL 8 and 9.
+# Support EL 10 pending https://github.com/ralphlange/procServ/issues/71
+deploy_ioc_supported_el_versions: [8, 9]
 
 # Autosave directory configuration
 deploy_ioc_as_dir_name: "as"

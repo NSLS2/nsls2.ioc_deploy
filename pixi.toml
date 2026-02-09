@@ -20,6 +20,10 @@ lint-changes = "pre-commit"
 lint = "pre-commit run --all-files"
 ruff-fix = "ruff check --fix"
 tests = "pytest"
+deployment = "scripts/deploy_local_config.py"
+
+# Package should not be in pixi lock file, but instead manually installed when on NSLS2 systems
+install-nsls2network = "pip install --upgrade git+https://github.com/NSLS2/nsls2network"
 
 [build-dependencies]
 make = "*"
@@ -41,47 +45,3 @@ ansible = "*"
 ansible-compat = "==24.10.0"
 ansible-core = "==2.15.5"
 ansible-lint = "==6.22.2"
-
-[tasks.reinstall-collection]
-args = [
-    { arg = "path", default = "$PWD/../ansible-roles-nsls2" }, # Path into which to install collection
-]
-cmd = "echo Installing collection to {{ path }} && ansible-galaxy collection install $PWD -p {{ path }}/collections --force"
-
-[tasks.deploy-example]
-args = [
-    "type",
-    "limit"
-]
-cmd = "scripts/deploy_example.py {{ type }} {{ limit }}"
-
-[tasks.install-module]
-args = [
-    "module",
-    "limit"
-]
-cmd = "scripts/install_module.py {{ module }} {{ limit }}"
-
-[tasks.test-role]
-args = [
-    "limit",
-    "role"
-]
-cmd = "scripts/deploy_local_config.py {{ limit }} -t {{ role }} --container"
-
-[tasks.test-config]
-args = [
-    "limit",
-    "paths"
-]
-cmd = "scripts/deploy_local_config.py {{ limit }} -c {{ paths }}"
-
-[tasks.test-example]
-args = [
-    "limit",
-    "role"
-]
-cmd = "scripts/test-role.sh {{ limit }} -t {{ role }} -i"
-
-[tasks.install-nsls2network]
-cmd = "pip install git+https://github.com/NSLS2/nsls2network"

@@ -9,7 +9,7 @@ version = "0.1.0"
 args = [
     "ioc_name"
 ]
-cmd = "/tmp/verify_deployment.py /tmp/verify.yml /epics/iocs/{{ ioc_name }}"
+cmd = "./verify_deployment.py verify.yml /epics/iocs/{{ ioc_name }}"
 
 [dependencies]
 python = "3.13.*"

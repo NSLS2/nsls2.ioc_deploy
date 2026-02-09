@@ -159,16 +159,25 @@ def deploy_configs(options: DeploymentOptions):
 
         with open(path, "r") as fp:
             config_data = yaml.safe_load(fp)
-        
+
         if "deploy_ioc_supported_el_versions" in config_data and options.el_version not in config_data["deploy_ioc_supported_el_versions"]:
             logger.warning(f"Skipping deployment of {ioc_name} for EL version {options.el_version} as it is not supported")
             continue
+
+        example_skip_compilation = False
 
         playbook_cmd = [
             "ansible-playbook",
             "--diff",
         ]
         if options.container:
+            if ioc_name in options.verification_files:
+                with open(options.verification_files[ioc_name], "r") as fp:
+                    verification_data = yaml.safe_load(fp)
+                    if verification_data["skip_compilation"]:
+                        logger.info("Skipping module compilation(s) as indicated in verification file")
+                        example_skip_compilation = True
+            
             logger.info("Using a local container for the deployment")
             playbook_cmd.extend([
                 "-i", f"{options.hostname},",
@@ -187,7 +196,7 @@ def deploy_configs(options: DeploymentOptions):
             "-e",
             f"deploy_ioc_nsls2network_available={NSLS2NETWORK_PKG_AVAILABLE}",
         ])
-        if options.skip_compilation:
+        if options.skip_compilation or (options.container and example_skip_compilation):
             logger.info("Skipping any module compilations")
             playbook_cmd.extend(["-e", "install_module_skip_compilation=true"])
         if options.verbose:
@@ -211,8 +220,8 @@ def deploy_configs(options: DeploymentOptions):
         if ioc_name in options.verification_files:
             logger.info(f"Verifying deployment of {ioc_name}")
             try:
-                subprocess.run(["docker", "cp", options.verification_files[ioc_name], f"{options.hostname}:/tmp/verify.yml"], check=True)
-                subprocess.run(["docker", "exec", "-u", "root", f"{options.hostname}", "pixi", "run", "verification", ioc_name], check=True)
+                subprocess.run(["docker", "cp", options.verification_files[ioc_name], f"{options.hostname}:verify.yml"], check=True)
+                subprocess.run(["docker", "exec", f"{options.hostname}", "pixi", "run", "verification", ioc_name], check=True)
             except subprocess.CalledProcessError as e:
                 logger.error(f"Verification of {ioc_name} failed with exit code {e.returncode}")
                 deployment_summary[ioc_name] = (path, False)
@@ -220,11 +229,15 @@ def deploy_configs(options: DeploymentOptions):
 
         deployment_summary[ioc_name] = (path, True)
 
-    return deployment_summary
+    overall_success = all(success for _, success in deployment_summary.values())
+    return overall_success, deployment_summary
 
 def main():
     parser = argparse.ArgumentParser(description="Deploy specified local IOC configuration")
-    parser.add_argument("hostname", help="Target hostname")
+
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("-l", "--limit", help="Target hostname onto which to deploy the IOCs")
+    group.add_argument("--container", action="store_true", help="Use a local container for the deployment")
     parser.add_argument("-t", "--type", help="Type of IOC to deploy")
     parser.add_argument("-c", "--configs", nargs="+", help="Path to local IOC configuration files to deploy")
     parser.add_argument("-e", "--examples", nargs="+", help="Which examples to deploy")
@@ -235,8 +248,9 @@ def main():
         "-d", "--dry-run", action="store_true", help="Perform a dry run"
     )
     parser.add_argument("--skip_compilation", action="store_true", help="Skip compilation step")
-    parser.add_argument("--container", action="store_true", help="Use a local container for the deployment")
-    parser.add_argument("-m", "--matrix", nargs="+", type=int, choices=[8, 9, 10], default=[8], help="Specify the EL matrix version(s)")
+
+    # TODO: Enable el10 support.
+    parser.add_argument("-m", "--matrix", nargs="+", type=int, choices=[8, 9], default=[8], help="Specify the EL matrix version(s)")
     parser.add_argument("-i", "--interactive", action="store_true", help="Enable interactive mode")
 
     args = parser.parse_args()
@@ -257,8 +271,9 @@ def main():
     logger.debug(f"Changed working directory to {Path(__file__).parent.parent.absolute()}")
 
     logger.info("Installing ansible collection requirements")
-    install_galaxy_collection("collections/requirements.yml", is_req_file=True)
-    install_galaxy_collection(".", force=True)
+    install_galaxy_collection(str(Path("collections/requirements.yml").absolute()), is_req_file=True)
+    install_galaxy_collection(str(Path(__file__).parent.parent.absolute()), force=True)
+
     if args.container:
         install_galaxy_collection("community.docker")
 
@@ -301,12 +316,13 @@ def main():
 
     running_deployment_summary: dict[int, dict[str, tuple[Path, bool]]] = {}
 
+    overall_success = True
     if args.container:
         logger.info(f"Executing containerized local deployment(s) for EL matrix versions: {args.matrix}")
         for el_version in args.matrix:
             logger.info(f"Executing deployment for EL version: {el_version}")
-            deployment_summary = deploy_configs(DeploymentOptions(
-                hostname=args.hostname,
+            el_version_success, deployment_summary = deploy_configs(DeploymentOptions(
+                hostname=f"nsls2_ioc_deploy_el{el_version}",
                 configs=configs_to_deploy,
                 verification_files=verification_files,
                 dry_run=args.dry_run,
@@ -315,11 +331,12 @@ def main():
                 container=args.container,
                 el_version=el_version
             ))
+            overall_success = overall_success and el_version_success
             running_deployment_summary[el_version] = deployment_summary
     else:
         logger.info("Executing deployment(s) for specified configs")
-        running_deployment_summary = deploy_configs(DeploymentOptions(
-            hostname=args.hostname,
+        overall_success, running_deployment_summary = deploy_configs(DeploymentOptions(
+            hostname=args.limit,
             configs=configs_to_deploy,
             verification_files=verification_files,
             dry_run=args.dry_run,
@@ -339,6 +356,12 @@ def main():
     else:
         for ioc_name, (path, success) in running_deployment_summary.items():
             print(f"  {ioc_name} | {path.absolute()}: {EscapeCodes.GREEN.value if success else EscapeCodes.RED.value}{'Success' if success else 'Failed'}{EscapeCodes.RESET.value}")
+
+    # Exit with 0 code on success, otherwise 1
+    if overall_success:
+        exit(0)
+    else:
+        exit(1)
 
 if __name__ == "__main__":
     main()
