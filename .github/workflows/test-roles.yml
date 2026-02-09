@@ -68,6 +68,9 @@ jobs:
     if: needs.detect-changes.outputs.has-changes == 'true'
     outputs:
       digest: ${{ steps.digest.outputs.digest }}
+    strategy:
+      matrix:
+        rhel_version: [8, 9]
     steps:
       - name: Login to GitHub Container Registry
         run: |
@@ -79,7 +82,7 @@ jobs:
         run: |
           set -e
           DIGEST=$(docker manifest inspect \
-            ghcr.io/nsls2/epics-alma8:latest --verbose \
+            ghcr.io/nsls2/epics-alma${{ matrix.rhel_version }}:latest --verbose \
             | jq -r '.[0].Descriptor.digest') || {
             echo "Failed to retrieve container digest" >&2
             exit 1
@@ -95,24 +98,25 @@ jobs:
         id: cache
         uses: actions/cache@v4
         with:
-          path: /tmp/epics-alma8.tar
-          key: epics-alma8-${{ steps.digest.outputs.digest }}
+          path: /tmp/epics-alma${{ matrix.rhel_version }}.tar
+          key: epics-alma${{ matrix.rhel_version }}-${{ steps.digest.outputs.digest }}
 
       - name: Pull and Save Container Image
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           echo "Pulling fresh image..."
-          docker pull ghcr.io/nsls2/epics-alma8:latest
-          docker save ghcr.io/nsls2/epics-alma8:latest -o /tmp/epics-alma8.tar
+          docker pull ghcr.io/nsls2/epics-alma${{ matrix.rhel_version }}:latest
+          docker save ghcr.io/nsls2/epics-alma${{ matrix.rhel_version }}:latest -o /tmp/epics-alma${{ matrix.rhel_version }}.tar
 
   test-roles:
-    name: Test Role - ${{ matrix.role }}
+    name: Test Role - ${{ matrix.role }} on EL${{ matrix.rhel_version }}
     runs-on: ubuntu-latest
     needs: [detect-changes, prepare-image]
     if: needs.detect-changes.outputs.has-changes == 'true'
     strategy:
       matrix:
         role: ${{ fromJson(needs.detect-changes.outputs.roles) }}
+        rhel_version: [8, 9]
       fail-fast: false
     steps:
       - name: Checkout Code
@@ -130,17 +134,17 @@ jobs:
       - name: Restore Cached Docker Image
         uses: actions/cache/restore@v4
         with:
-          path: /tmp/epics-alma8.tar
-          key: epics-alma8-${{ needs.prepare-image.outputs.digest }}
+          path: /tmp/epics-alma${{ matrix.rhel_version }}.tar
+          key: epics-alma${{ matrix.rhel_version }}-${{ needs.prepare-image.outputs.digest }}
           fail-on-cache-miss: true
 
       - name: Load Container Image
         run: |
           echo "Loading cached image..."
-          docker load -i /tmp/epics-alma8.tar
+          docker load -i /tmp/epics-alma${{ matrix.rhel_version }}.tar
 
       - name: Start EPICS Container
-        run: docker run -dit --name epics-dev ghcr.io/nsls2/epics-alma8:latest
+        run: docker run -dit --name nsls2_ioc_deploy_el${{ matrix.rhel_version }} ghcr.io/nsls2/epics-alma${{ matrix.rhel_version }}:latest
 
       - name: Test Role
-        run: pixi run test-role ${{ matrix.role }}
+        run: pixi run deployment -t ${{ matrix.role }} --container -m ${{ matrix.rhel_version }}

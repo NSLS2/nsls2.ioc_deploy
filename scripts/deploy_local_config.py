@@ -8,6 +8,7 @@ import subprocess
 import tempfile
 import uuid
 from pathlib import Path
+
 # import questionary
 import sys
 
@@ -18,18 +19,20 @@ import logging
 
 try:
     import nsls2network
-    NSLS2NETWORK_PKG_AVAILABLE=True
+
+    NSLS2NETWORK_PKG_AVAILABLE = True
 except ImportError:
-    NSLS2NETWORK_PKG_AVAILABLE=False
+    NSLS2NETWORK_PKG_AVAILABLE = False
 
-# Pixi version pin, used if running in 
-PIXI_VERSION="v0.55.0"
-PIXI_SHA256="cb733205ae1a02986071bcbeff47c60460bfb92d1cd9565d40f4dea5448c86a5"
+# Pixi version pin, used if running in
+PIXI_VERSION = "v0.55.0"
+PIXI_SHA256 = "cb733205ae1a02986071bcbeff47c60460bfb92d1cd9565d40f4dea5448c86a5"
 
-BASE_CONTAINER_IMAGE="ghcr.io/nsls2/epics-alma"
+BASE_CONTAINER_IMAGE = "ghcr.io/nsls2/epics-alma"
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("nsls2.ioc_deploy")
+
 
 class EscapeCodes(str, Enum):
     RESET = "\033[0m"
@@ -41,6 +44,7 @@ class EscapeCodes(str, Enum):
     CYAN = "\033[36m"
     WHITE = "\033[37m"
     WHITE_ON_RED = "\033[41;97m"
+
 
 class ColorFormatter(logging.Formatter):
     """ANSI color formatter for warnings and errors."""
@@ -64,9 +68,7 @@ class ColorFormatter(logging.Formatter):
             original_levelname = record.levelname
             # Pad to 8 characters (length of "CRITICAL") for consistent alignment
             padded_levelname = original_levelname.ljust(8)
-            record.levelname = (
-                f"{self.COLOR_MAP[record.levelno].value}{padded_levelname}{self.RESET.value}"
-            )
+            record.levelname = f"{self.COLOR_MAP[record.levelno].value}{padded_levelname}{self.RESET.value}"
             base = super().format(record)
             # Restore the original levelname
             record.levelname = original_levelname
@@ -84,8 +86,9 @@ use_color = sys.stderr.isatty()
 fmt = "%(asctime)s | %(levelname)-8s | %(name)s | %(message)s"
 handler.setFormatter(ColorFormatter(fmt, use_color=use_color))
 logger.addHandler(handler)
-logger.setLevel(logging.INFO) # By default, hide debug/info messages
+logger.setLevel(logging.INFO)  # By default, hide debug/info messages
 logger.propagate = False
+
 
 def get_all_examples_for_type(ioc_type: str, role_path: Path) -> dict[str, Path]:
     logger.info(f"Identifying examples for IOC type: {ioc_type}")
@@ -107,21 +110,34 @@ def get_all_examples_for_type(ioc_type: str, role_path: Path) -> dict[str, Path]
                     all_examples[list(example_config.keys())[0]] = example_config_file
                 logger.debug(f"Found new style example: {example / 'config.yml'}")
             except Exception as e:
-                logger.warning(f"Failed to load example config: {example_config_file}, error: {e}")
+                logger.warning(
+                    f"Failed to load example config: {example_config_file}, error: {e}"
+                )
 
     return all_examples
 
 
 def ensure_container_running(container_name: str, el_version: int = 8):
     required_image = f"{BASE_CONTAINER_IMAGE}{el_version}:latest"
-    logger.info(f"Ensuring container with name {container_name} and image {required_image} is running")
+    logger.info(
+        f"Ensuring container with name {container_name} and image {required_image} is running"
+    )
     try:
-        subprocess.run([f"{Path(__file__).parent.absolute()}/setup_container.sh", container_name, str(el_version)], check=True)
+        subprocess.run(
+            [
+                f"{Path(__file__).parent.absolute()}/setup_container.sh",
+                container_name,
+                str(el_version),
+            ],
+            check=True,
+        )
     except subprocess.CalledProcessError as e:
         raise RuntimeError(f"Failed to ensure container is running: {e}")
 
 
-def install_galaxy_collection(name: str, is_req_file: bool = False, force: bool = False):
+def install_galaxy_collection(
+    name: str, is_req_file: bool = False, force: bool = False
+):
     cmd = ["ansible-galaxy", "collection", "install"]
     if is_req_file:
         cmd.extend(["-r", name])
@@ -160,8 +176,14 @@ def deploy_configs(options: DeploymentOptions):
         with open(path, "r") as fp:
             config_data = yaml.safe_load(fp)
 
-        if "deploy_ioc_supported_el_versions" in config_data and options.el_version not in config_data["deploy_ioc_supported_el_versions"]:
-            logger.warning(f"Skipping deployment of {ioc_name} for EL version {options.el_version} as it is not supported")
+        if (
+            "deploy_ioc_supported_el_versions" in config_data
+            and options.el_version
+            not in config_data["deploy_ioc_supported_el_versions"]
+        ):
+            logger.warning(
+                f"Skipping deployment of {ioc_name} for EL version {options.el_version} as it is not supported"
+            )
             continue
 
         example_skip_compilation = False
@@ -175,27 +197,36 @@ def deploy_configs(options: DeploymentOptions):
                 with open(options.verification_files[ioc_name], "r") as fp:
                     verification_data = yaml.safe_load(fp)
                     if verification_data["skip_compilation"]:
-                        logger.info("Skipping module compilation(s) as indicated in verification file")
+                        logger.info(
+                            "Skipping module compilation(s) as indicated in verification file"
+                        )
                         example_skip_compilation = True
-            
+
             logger.info("Using a local container for the deployment")
-            playbook_cmd.extend([
-                "-i", f"{options.hostname},",
-                "-c", "docker",
+            playbook_cmd.extend(
+                [
+                    "-i",
+                    f"{options.hostname},",
+                    "-c",
+                    "docker",
+                    "-e",
+                    "beamline_acronym=TST",  # Our containers come w/ softioc-tst accounts pre-made.
+                ]
+            )
+        playbook_cmd.extend(
+            [
+                "-u",
+                "root",
+                "--limit",
+                options.hostname,
                 "-e",
-                "beamline_acronym=TST", # Our containers come w/ softioc-tst accounts pre-made.
-            ])
-        playbook_cmd.extend([
-            "-u", "root",
-            "--limit",
-            options.hostname,
-            "-e",
-            f"deploy_ioc_target={ioc_name}",
-            "-e",
-            f"deploy_ioc_local_config_path={path}",
-            "-e",
-            f"deploy_ioc_nsls2network_available={NSLS2NETWORK_PKG_AVAILABLE}",
-        ])
+                f"deploy_ioc_target={ioc_name}",
+                "-e",
+                f"deploy_ioc_local_config_path={path}",
+                "-e",
+                f"deploy_ioc_nsls2network_available={NSLS2NETWORK_PKG_AVAILABLE}",
+            ]
+        )
         if options.skip_compilation or (options.container and example_skip_compilation):
             logger.info("Skipping any module compilations")
             playbook_cmd.extend(["-e", "install_module_skip_compilation=true"])
@@ -206,24 +237,49 @@ def deploy_configs(options: DeploymentOptions):
             logger.info("Performing dry run")
             playbook_cmd.append("--check")
 
-        playbook_cmd.append(f"{Path(__file__).parent.absolute() / 'deploy_local_ioc_config.yml'}")
+        playbook_cmd.append(
+            f"{Path(__file__).parent.absolute() / 'deploy_local_ioc_config.yml'}"
+        )
 
         logger.info(f"Executing command: {' '.join(playbook_cmd)}")
 
         try:
             subprocess.run(playbook_cmd, check=True)
         except subprocess.CalledProcessError as e:
-            logger.error(f"Deployment of {ioc_name} failed with exit code {e.returncode}: {e.cmd}")
+            logger.error(
+                f"Deployment of {ioc_name} failed with exit code {e.returncode}: {e.cmd}"
+            )
             deployment_summary[ioc_name] = (path, False)
             continue
 
         if ioc_name in options.verification_files:
             logger.info(f"Verifying deployment of {ioc_name}")
             try:
-                subprocess.run(["docker", "cp", options.verification_files[ioc_name], f"{options.hostname}:verify.yml"], check=True)
-                subprocess.run(["docker", "exec", f"{options.hostname}", "pixi", "run", "verification", ioc_name], check=True)
+                subprocess.run(
+                    [
+                        "docker",
+                        "cp",
+                        options.verification_files[ioc_name],
+                        f"{options.hostname}:verify.yml",
+                    ],
+                    check=True,
+                )
+                subprocess.run(
+                    [
+                        "docker",
+                        "exec",
+                        f"{options.hostname}",
+                        "pixi",
+                        "run",
+                        "verification",
+                        ioc_name,
+                    ],
+                    check=True,
+                )
             except subprocess.CalledProcessError as e:
-                logger.error(f"Verification of {ioc_name} failed with exit code {e.returncode}")
+                logger.error(
+                    f"Verification of {ioc_name} failed with exit code {e.returncode}"
+                )
                 deployment_summary[ioc_name] = (path, False)
                 continue
 
@@ -232,14 +288,28 @@ def deploy_configs(options: DeploymentOptions):
     overall_success = all(success for _, success in deployment_summary.values())
     return overall_success, deployment_summary
 
+
 def main():
-    parser = argparse.ArgumentParser(description="Deploy specified local IOC configuration")
+    parser = argparse.ArgumentParser(
+        description="Deploy specified local IOC configuration"
+    )
 
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("-l", "--limit", help="Target hostname onto which to deploy the IOCs")
-    group.add_argument("--container", action="store_true", help="Use a local container for the deployment")
+    group.add_argument(
+        "-l", "--limit", help="Target hostname onto which to deploy the IOCs"
+    )
+    group.add_argument(
+        "--container",
+        action="store_true",
+        help="Use a local container for the deployment",
+    )
     parser.add_argument("-t", "--type", help="Type of IOC to deploy")
-    parser.add_argument("-c", "--configs", nargs="+", help="Path to local IOC configuration files to deploy")
+    parser.add_argument(
+        "-c",
+        "--configs",
+        nargs="+",
+        help="Path to local IOC configuration files to deploy",
+    )
     parser.add_argument("-e", "--examples", nargs="+", help="Which examples to deploy")
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="Enable verbose output"
@@ -247,11 +317,23 @@ def main():
     parser.add_argument(
         "-d", "--dry-run", action="store_true", help="Perform a dry run"
     )
-    parser.add_argument("--skip_compilation", action="store_true", help="Skip compilation step")
+    parser.add_argument(
+        "--skip_compilation", action="store_true", help="Skip compilation step"
+    )
 
     # TODO: Enable el10 support.
-    parser.add_argument("-m", "--matrix", nargs="+", type=int, choices=[8, 9], default=[8], help="Specify the EL matrix version(s)")
-    parser.add_argument("-i", "--interactive", action="store_true", help="Enable interactive mode")
+    parser.add_argument(
+        "-m",
+        "--matrix",
+        nargs="+",
+        type=int,
+        choices=[8, 9],
+        default=[8],
+        help="Specify the EL matrix version(s)",
+    )
+    parser.add_argument(
+        "-i", "--interactive", action="store_true", help="Enable interactive mode"
+    )
 
     args = parser.parse_args()
 
@@ -268,10 +350,14 @@ def main():
 
     # Switch to the top level nsls2.ioc_deploy directory
     os.chdir(Path(__file__).parent.parent.absolute())
-    logger.debug(f"Changed working directory to {Path(__file__).parent.parent.absolute()}")
+    logger.debug(
+        f"Changed working directory to {Path(__file__).parent.parent.absolute()}"
+    )
 
     logger.info("Installing ansible collection requirements")
-    install_galaxy_collection(str(Path("collections/requirements.yml").absolute()), is_req_file=True)
+    install_galaxy_collection(
+        str(Path("collections/requirements.yml").absolute()), is_req_file=True
+    )
     install_galaxy_collection(str(Path(__file__).parent.parent.absolute()), force=True)
 
     if args.container:
@@ -279,27 +365,55 @@ def main():
 
     if args.type:
         logger.info(f"Loading all examples for IOC type: {args.type}")
-        role_path = (Path(__file__).parent.parent / "roles/device_roles" / args.type).absolute()
+        role_path = (
+            Path(__file__).parent.parent / "roles/device_roles" / args.type
+        ).absolute()
         if not role_path.exists():
             raise ValueError(f"Unknown IOC type: {args.type}")
 
         all_examples = get_all_examples_for_type(args.type, role_path)
         if not args.examples:
             if args.interactive:
-                configs_to_deploy.update({example: all_examples[example] for example in questionary.select("Select examples to deploy:", choices=list(all_examples.keys())).ask()})
+                configs_to_deploy.update(
+                    {
+                        example: all_examples[example]
+                        for example in questionary.select(
+                            "Select examples to deploy:",
+                            choices=list(all_examples.keys()),
+                        ).ask()
+                    }
+                )
             else:
-                logger.info(f"No specific examples provided; deploying all examples for {args.type}")
+                logger.info(
+                    f"No specific examples provided; deploying all examples for {args.type}"
+                )
                 configs_to_deploy.update(all_examples)
         else:
-            selected_examples = {example: all_examples[example] for example in args.examples if example in all_examples}
-            [logger.warning(f"Example '{example}' not found in available examples for type {args.type}") for example in args.examples if example not in selected_examples]
-            logger.info(f"Deploying selected examples for {args.type}: {list(selected_examples.keys())}")
+            selected_examples = {
+                example: all_examples[example]
+                for example in args.examples
+                if example in all_examples
+            }
+            [
+                logger.warning(
+                    f"Example '{example}' not found in available examples for type {args.type}"
+                )
+                for example in args.examples
+                if example not in selected_examples
+            ]
+            logger.info(
+                f"Deploying selected examples for {args.type}: {list(selected_examples.keys())}"
+            )
             configs_to_deploy.update(selected_examples)
 
         for ioc_name, example_config in configs_to_deploy.items():
             if (example_config.parent.absolute() / "verify.yml").exists():
-                logger.info(f"Found verification file configured for example {ioc_name}")
-                verification_files[ioc_name] = example_config.parent.absolute() / "verify.yml"
+                logger.info(
+                    f"Found verification file configured for example {ioc_name}"
+                )
+                verification_files[ioc_name] = (
+                    example_config.parent.absolute() / "verify.yml"
+                )
 
     if args.configs:
         logger.info(f"Loading specified config files: {args.configs}")
@@ -309,7 +423,9 @@ def main():
                     config = yaml.safe_load(fp)
                     ioc_name = list(config.keys())[0]
                     if ioc_name in configs_to_deploy:
-                        logger.warning(f"Config for '{ioc_name}' is already loaded; overwriting with {cfg}")
+                        logger.warning(
+                            f"Config for '{ioc_name}' is already loaded; overwriting with {cfg}"
+                        )
                     configs_to_deploy[ioc_name] = Path(cfg)
             except Exception as e:
                 logger.warning(f"Failed to load config '{cfg}': {e}")
@@ -318,50 +434,63 @@ def main():
 
     overall_success = True
     if args.container:
-        logger.info(f"Executing containerized local deployment(s) for EL matrix versions: {args.matrix}")
+        logger.info(
+            f"Executing containerized local deployment(s) for EL matrix versions: {args.matrix}"
+        )
         for el_version in args.matrix:
             logger.info(f"Executing deployment for EL version: {el_version}")
-            el_version_success, deployment_summary = deploy_configs(DeploymentOptions(
-                hostname=f"nsls2_ioc_deploy_el{el_version}",
+            el_version_success, deployment_summary = deploy_configs(
+                DeploymentOptions(
+                    hostname=f"nsls2_ioc_deploy_el{el_version}",
+                    configs=configs_to_deploy,
+                    verification_files=verification_files,
+                    dry_run=args.dry_run,
+                    verbose=args.verbose,
+                    skip_compilation=args.skip_compilation,
+                    container=args.container,
+                    el_version=el_version,
+                )
+            )
+            overall_success = overall_success and el_version_success
+            running_deployment_summary[el_version] = deployment_summary
+    else:
+        logger.info("Executing deployment(s) for specified configs")
+        overall_success, running_deployment_summary = deploy_configs(
+            DeploymentOptions(
+                hostname=args.limit,
                 configs=configs_to_deploy,
                 verification_files=verification_files,
                 dry_run=args.dry_run,
                 verbose=args.verbose,
                 skip_compilation=args.skip_compilation,
                 container=args.container,
-                el_version=el_version
-            ))
-            overall_success = overall_success and el_version_success
-            running_deployment_summary[el_version] = deployment_summary
-    else:
-        logger.info("Executing deployment(s) for specified configs")
-        overall_success, running_deployment_summary = deploy_configs(DeploymentOptions(
-            hostname=args.limit,
-            configs=configs_to_deploy,
-            verification_files=verification_files,
-            dry_run=args.dry_run,
-            verbose=args.verbose,
-            skip_compilation=args.skip_compilation,
-            container=args.container
-        ))
+            )
+        )
 
     print("\n\nDeployment Summary:\n=============================================\n")
 
     if args.container:
         for el_version, deployment_summary in running_deployment_summary.items():
-            print(f"EL Version: {el_version}\n---------------------------------------------")
+            print(
+                f"EL Version: {el_version}\n---------------------------------------------"
+            )
             for ioc_name, (path, success) in deployment_summary.items():
-                print(f"  {ioc_name} | {path.absolute()}: {EscapeCodes.GREEN.value if success else EscapeCodes.RED.value}{'Success' if success else 'Failed'}{EscapeCodes.RESET.value}")
+                print(
+                    f"  {ioc_name} | {path.absolute()}: {EscapeCodes.GREEN.value if success else EscapeCodes.RED.value}{'Success' if success else 'Failed'}{EscapeCodes.RESET.value}"
+                )
             print()
     else:
         for ioc_name, (path, success) in running_deployment_summary.items():
-            print(f"  {ioc_name} | {path.absolute()}: {EscapeCodes.GREEN.value if success else EscapeCodes.RED.value}{'Success' if success else 'Failed'}{EscapeCodes.RESET.value}")
+            print(
+                f"  {ioc_name} | {path.absolute()}: {EscapeCodes.GREEN.value if success else EscapeCodes.RED.value}{'Success' if success else 'Failed'}{EscapeCodes.RESET.value}"
+            )
 
     # Exit with 0 code on success, otherwise 1
     if overall_success:
         exit(0)
     else:
         exit(1)
+
 
 if __name__ == "__main__":
     main()
