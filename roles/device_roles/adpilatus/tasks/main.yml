@@ -32,8 +32,8 @@
     - name: Check to see if DCU is accessible
       ansible.builtin.command:
         cmd: "ping -c 1 {{ ioc.environment.PILATUS_DCU_IP }}"
-        changed_when: true
       register: dcu_ping_result
+      changed_when: dcu_ping_result.rc == 0
 
     - name: Initialize ramdisk mount on IOC server
       ansible.posix.mount:
