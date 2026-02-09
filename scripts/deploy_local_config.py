@@ -1,28 +1,21 @@
 #!/usr/bin/env python3
 
 import argparse
-from dataclasses import dataclass
-from enum import Enum
+import importlib.util
+import logging
 import os
 import subprocess
-import tempfile
-import uuid
-from pathlib import Path
 
 # import questionary
 import sys
+from dataclasses import dataclass
+from enum import Enum
+from pathlib import Path
 
 import questionary
 import yaml
 
-import logging
-
-try:
-    import nsls2network
-
-    NSLS2NETWORK_PKG_AVAILABLE = True
-except ImportError:
-    NSLS2NETWORK_PKG_AVAILABLE = False
+NSLS2NETWORK_PKG_AVAILABLE = importlib.util.find_spec("nsls2network") is not None
 
 # Pixi version pin, used if running in
 PIXI_VERSION = "v0.55.0"
@@ -68,7 +61,8 @@ class ColorFormatter(logging.Formatter):
             original_levelname = record.levelname
             # Pad to 8 characters (length of "CRITICAL") for consistent alignment
             padded_levelname = original_levelname.ljust(8)
-            record.levelname = f"{self.COLOR_MAP[record.levelno].value}{padded_levelname}{self.RESET.value}"
+            color = self.COLOR_MAP[record.levelno]
+            record.levelname = f"{color.value}{padded_levelname}{self.RESET.value}"
             base = super().format(record)
             # Restore the original levelname
             record.levelname = original_levelname
@@ -105,7 +99,7 @@ def get_all_examples_for_type(ioc_type: str, role_path: Path) -> dict[str, Path]
         for example in new_examples_path.iterdir():
             example_config_file = example / "config.yml"
             try:
-                with open(example_config_file, "r") as fp:
+                with open(example_config_file) as fp:
                     example_config = yaml.safe_load(fp)
                     all_examples[list(example_config.keys())[0]] = example_config_file
                 logger.debug(f"Found new style example: {example / 'config.yml'}")
@@ -120,7 +114,7 @@ def get_all_examples_for_type(ioc_type: str, role_path: Path) -> dict[str, Path]
 def ensure_container_running(container_name: str, el_version: int = 8):
     required_image = f"{BASE_CONTAINER_IMAGE}{el_version}:latest"
     logger.info(
-        f"Ensuring container with name {container_name} and image {required_image} is running"
+        f"Ensuring container {container_name} with image {required_image} is running"
     )
     try:
         subprocess.run(
@@ -132,7 +126,7 @@ def ensure_container_running(container_name: str, el_version: int = 8):
             check=True,
         )
     except subprocess.CalledProcessError as e:
-        raise RuntimeError(f"Failed to ensure container is running: {e}")
+        raise RuntimeError(f"Failed to ensure container is running: {e}") from e
 
 
 def install_galaxy_collection(
@@ -149,7 +143,7 @@ def install_galaxy_collection(
         logger.info(f"Installing required ansible-galaxy collection: {name}")
         subprocess.run(cmd, capture_output=True, text=True, check=True)
     except subprocess.CalledProcessError as e:
-        raise RuntimeError(f"Failed to install galaxy collection {name}: {e}")
+        raise RuntimeError(f"Failed to install galaxy collection {name}: {e}") from e
 
 
 @dataclass
@@ -173,7 +167,7 @@ def deploy_configs(options: DeploymentOptions):
     for ioc_name, path in options.configs.items():
         logger.info(f"Deploying config: {ioc_name} from {path}")
 
-        with open(path, "r") as fp:
+        with open(path) as fp:
             config_data = yaml.safe_load(fp)
 
         if (
@@ -182,7 +176,7 @@ def deploy_configs(options: DeploymentOptions):
             not in config_data["deploy_ioc_supported_el_versions"]
         ):
             logger.warning(
-                f"Skipping deployment of {ioc_name} for EL version {options.el_version} as it is not supported"
+                f"Skipping {ioc_name} on el{options.el_version}, unsupported"
             )
             continue
 
@@ -194,11 +188,11 @@ def deploy_configs(options: DeploymentOptions):
         ]
         if options.container:
             if ioc_name in options.verification_files:
-                with open(options.verification_files[ioc_name], "r") as fp:
+                with open(options.verification_files[ioc_name]) as fp:
                     verification_data = yaml.safe_load(fp)
                     if verification_data["skip_compilation"]:
                         logger.info(
-                            "Skipping module compilation(s) as indicated in verification file"
+                            "Skipping module compilation(s) per verification file"
                         )
                         example_skip_compilation = True
 
@@ -209,8 +203,9 @@ def deploy_configs(options: DeploymentOptions):
                     f"{options.hostname},",
                     "-c",
                     "docker",
+                    # Our containers come w/ softioc-tst accounts pre-made.
                     "-e",
-                    "beamline_acronym=TST",  # Our containers come w/ softioc-tst accounts pre-made.
+                    "beamline_acronym=TST",
                 ]
             )
         playbook_cmd.extend(
@@ -247,7 +242,7 @@ def deploy_configs(options: DeploymentOptions):
             subprocess.run(playbook_cmd, check=True)
         except subprocess.CalledProcessError as e:
             logger.error(
-                f"Deployment of {ioc_name} failed with exit code {e.returncode}: {e.cmd}"
+                f"Deployment of {ioc_name} failed; exit code {e.returncode}: {e.cmd}"
             )
             deployment_summary[ioc_name] = (path, False)
             continue
@@ -384,9 +379,7 @@ def main():
                     }
                 )
             else:
-                logger.info(
-                    f"No specific examples provided; deploying all examples for {args.type}"
-                )
+                logger.info(f"No example names provided; deploying all for {args.type}")
                 configs_to_deploy.update(all_examples)
         else:
             selected_examples = {
@@ -396,13 +389,13 @@ def main():
             }
             [
                 logger.warning(
-                    f"Example '{example}' not found in available examples for type {args.type}"
+                    f"'{example}' not found in available examples for type {args.type}"
                 )
                 for example in args.examples
                 if example not in selected_examples
             ]
             logger.info(
-                f"Deploying selected examples for {args.type}: {list(selected_examples.keys())}"
+                f"Selected examples for {args.type}: {list(selected_examples.keys())}"
             )
             configs_to_deploy.update(selected_examples)
 
@@ -424,7 +417,7 @@ def main():
                     ioc_name = list(config.keys())[0]
                     if ioc_name in configs_to_deploy:
                         logger.warning(
-                            f"Config for '{ioc_name}' is already loaded; overwriting with {cfg}"
+                            f"'{ioc_name}' already loaded; overwriting with {cfg}"
                         )
                     configs_to_deploy[ioc_name] = Path(cfg)
             except Exception as e:
@@ -435,7 +428,7 @@ def main():
     overall_success = True
     if args.container:
         logger.info(
-            f"Executing containerized local deployment(s) for EL matrix versions: {args.matrix}"
+            f"Executing containerized local deployment(s) for EL ver: {args.matrix}"
         )
         for el_version in args.matrix:
             logger.info(f"Executing deployment for EL version: {el_version}")
@@ -467,23 +460,25 @@ def main():
             )
         )
 
-    print("\n\nDeployment Summary:\n=============================================\n")
+    print("\n\nDeployment Summary:\n=========================================\n")
 
     if args.container:
         for el_version, deployment_summary in running_deployment_summary.items():
             print(
-                f"EL Version: {el_version}\n---------------------------------------------"
+                f"EL Version: {el_version}\n-----------------------------------------"
             )
             for ioc_name, (path, success) in deployment_summary.items():
-                print(
-                    f"  {ioc_name} | {path.absolute()}: {EscapeCodes.GREEN.value if success else EscapeCodes.RED.value}{'Success' if success else 'Failed'}{EscapeCodes.RESET.value}"
-                )
+                color = EscapeCodes.GREEN.value if success else EscapeCodes.RED.value
+                status_text = "Success" if success else "Failed"
+                status_msg = f"{color}{status_text}{EscapeCodes.RESET.value}"
+                print(f"  {ioc_name} | {path.absolute()}: {status_msg}")
             print()
     else:
         for ioc_name, (path, success) in running_deployment_summary.items():
-            print(
-                f"  {ioc_name} | {path.absolute()}: {EscapeCodes.GREEN.value if success else EscapeCodes.RED.value}{'Success' if success else 'Failed'}{EscapeCodes.RESET.value}"
-            )
+            color = EscapeCodes.GREEN.value if success else EscapeCodes.RED.value
+            status_text = "Success" if success else "Failed"
+            status_msg = f"{color}{status_text}{EscapeCodes.RESET.value}"
+            print(f"  {ioc_name} | {path.absolute()}: {status_msg}")
 
     # Exit with 0 code on success, otherwise 1
     if overall_success:
