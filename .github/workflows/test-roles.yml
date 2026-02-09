@@ -108,8 +108,8 @@ jobs:
   #         docker pull ghcr.io/nsls2/epics-alma${{ matrix.rhel_version }}:latest
   #         docker save ghcr.io/nsls2/epics-alma${{ matrix.rhel_version }}:latest -o /tmp/epics-alma${{ matrix.rhel_version }}.tar
 
-  test-roles:
-    name: Test Role - ${{ matrix.role }} on EL${{ matrix.rhel_version }}
+  test-deployments:
+    name: Test Deployment - RHEL${{ matrix.rhel_version }}
     runs-on: ubuntu-latest
     #, prepare-image]
     needs: [detect-changes]
@@ -148,5 +148,5 @@ jobs:
       # - name: Start EPICS Container
       #   run: docker run -dit --name nsls2_ioc_deploy_el${{ matrix.rhel_version }} ghcr.io/nsls2/epics-alma${{ matrix.rhel_version }}:latest
 
-      - name: Test Role
+      - name: Test Deployment
         run: pixi run deployment -t ${{ matrix.role }} --container -m ${{ matrix.rhel_version }}
