@@ -87,26 +87,34 @@ logger.propagate = False
 def get_all_examples_for_type(ioc_type: str, role_path: Path) -> dict[str, Path]:
     logger.info(f"Identifying examples for IOC type: {ioc_type}")
 
+    all_example_paths = []
     all_examples: dict[str, Path] = {}
     single_example_path = role_path / "example.yml"
     new_examples_path = role_path / "examples"
 
     if single_example_path.exists():
-        logger.debug(f"Found legacy example: {single_example_path}")
-        all_examples[single_example_path.stem] = single_example_path
+        logger.debug(f"Found legacy example at {single_example_path}")
+        all_example_paths.append(single_example_path)
 
     if new_examples_path.exists():
         for example in new_examples_path.iterdir():
             example_config_file = example / "config.yml"
-            try:
-                with open(example_config_file) as fp:
-                    example_config = yaml.safe_load(fp)
-                    all_examples[list(example_config.keys())[0]] = example_config_file
-                logger.debug(f"Found new style example: {example / 'config.yml'}")
-            except Exception as e:
-                logger.warning(
-                    f"Failed to load example config: {example_config_file}, error: {e}"
-                )
+            if example_config_file.exists():
+                logger.debug(f"Found new-style example at {example_config_file}")
+                all_example_paths.append(example_config_file)
+
+    for example_path in all_example_paths:
+        try:
+            with open(example_path) as fp:
+                example_config = yaml.safe_load(fp)
+                example_ioc_name = list(example_config.keys())[0]
+
+            logger.debug(f"Loaded example config for IOC: {example_ioc_name}")
+            all_examples[example_ioc_name] = example_path
+        except Exception as e:
+            logger.warning(
+                f"Failed to load example config: {example_path}, error: {e}"
+            )
 
     return all_examples
 
