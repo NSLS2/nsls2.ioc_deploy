@@ -5,7 +5,6 @@ import importlib.util
 import logging
 import os
 import subprocess
-
 import sys
 from dataclasses import dataclass
 from enum import Enum
@@ -255,8 +254,8 @@ def deploy_configs(options: DeploymentOptions):
             deployment_summary[ioc_name] = (path, False)
             continue
 
-        # Only attempt verification if deployment succeeded and a verification file is configured for this IOC
-        # and deployment is running in a container
+        # Only attempt verification if deployment succeeded and a verification file is
+        # configured for this IOC and deployment is running in a container
         if ioc_name in options.verification_files and options.container:
             logger.info(f"Verifying deployment of {ioc_name}")
             try:
@@ -351,11 +350,10 @@ def main():
 
     # Switch to the top level nsls2.ioc_deploy directory
     os.chdir(top_path)
-    logger.debug(
-        f"Changed working directory to {top_path}"
-    )
+    logger.debug(f"Changed working directory to {top_path}")
 
-    # Add the collections path to the environment so that ansible-galaxy can find our locally installed collection(s)
+    # Add the collections path to the environment so that ansible-galaxy
+    # can find our locally installed collection(s)
     os.environ["ANSIBLE_COLLECTIONS_PATH"] = str((top_path / "collections").absolute())
 
     logger.info("Executing deployment of local IOC configuration...")
@@ -368,7 +366,6 @@ def main():
 
     configs_to_deploy: dict[str, Path] = {}
     verification_files: dict[str, Path] = {}
-
 
     logger.info("Installing ansible collection requirements")
     install_galaxy_collection(
@@ -383,14 +380,14 @@ def main():
         logger.info("Finding all examples for all IOC types")
         device_roles_path = top_path / "roles/device_roles"
         for device_role_path in device_roles_path.iterdir():
-            device_role_examples = get_all_examples_for_type(device_role_path.stem, device_role_path)
+            device_role_examples = get_all_examples_for_type(
+                device_role_path.stem, device_role_path
+            )
             configs_to_deploy.update(device_role_examples)
 
     elif args.type:
         logger.info(f"Loading all examples for IOC type: {args.type}")
-        role_path = (
-            top_path / "roles/device_roles" / args.type
-        )
+        role_path = top_path / "roles/device_roles" / args.type
         if not role_path.exists():
             raise ValueError(f"Unknown IOC type: {args.type}")
 
@@ -456,7 +453,7 @@ def main():
     overall_success = True
     if args.container:
         logger.info(
-            f"Executing {len(configs_to_deploy)} containerized local deployment(s) for EL ver: {args.matrix}"
+            f"Executing {len(configs_to_deploy)} deployment(s) on EL{args.matrix}"
         )
         for el_version in args.matrix:
             logger.info(f"Executing deployment for EL version: {el_version}")
@@ -475,7 +472,9 @@ def main():
             overall_success = overall_success and el_version_success
             running_deployment_summary[el_version] = deployment_summary
     else:
-        logger.info(f"Executing {len(configs_to_deploy)} deployment(s) onto {args.limit}")
+        logger.info(
+            f"Executing {len(configs_to_deploy)} deployment(s) onto {args.limit}"
+        )
         overall_success, running_deployment_summary = deploy_configs(
             DeploymentOptions(
                 hostname=args.limit,

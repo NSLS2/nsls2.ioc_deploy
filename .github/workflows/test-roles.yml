@@ -112,7 +112,7 @@ jobs:
     name: Test Deployment of ${{ matrix.role }} on EL${{ matrix.rhel_version }}
     runs-on: ubuntu-latest
     # , prepare-image]
-    needs: [detect-changes]
+    needs: detect-changes
     if: needs.detect-changes.outputs.has-changes == 'true'
     strategy:
       matrix:
