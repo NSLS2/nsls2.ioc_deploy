@@ -21,7 +21,7 @@ lint = "pre-commit run --all-files"
 ruff-fix = "ruff check --fix"
 tests = "pytest"
 deployment = "scripts/deploy_local_config.py"
-deploy-all = "scripts/deploy_local_config.py --all --matrix 8 9"
+deploy-all = "scripts/deploy_local_config.py --all --container --matrix 8 9"
 
 # Package should not be in pixi lock file, but instead manually installed when on NSLS2 systems
 install-nsls2network = "pip install --upgrade git+https://github.com/NSLS2/nsls2network"
