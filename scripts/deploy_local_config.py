@@ -347,6 +347,17 @@ def main():
 
     args = parser.parse_args()
 
+    top_path = Path(__file__).parent.parent.absolute()
+
+    # Switch to the top level nsls2.ioc_deploy directory
+    os.chdir(top_path)
+    logger.debug(
+        f"Changed working directory to {top_path}"
+    )
+
+    # Add the collections path to the environment so that ansible-galaxy can find our locally installed collection(s)
+    os.environ["ANSIBLE_COLLECTIONS_PATH"] = str((top_path / "collections").absolute())
+
     logger.info("Executing deployment of local IOC configuration...")
     logger.info("Arguments:")
     for arg in vars(args):
@@ -358,25 +369,19 @@ def main():
     configs_to_deploy: dict[str, Path] = {}
     verification_files: dict[str, Path] = {}
 
-    # Switch to the top level nsls2.ioc_deploy directory
-    os.chdir(Path(__file__).parent.parent.absolute())
-    logger.debug(
-        f"Changed working directory to {Path(__file__).parent.parent.absolute()}"
-    )
 
     logger.info("Installing ansible collection requirements")
     install_galaxy_collection(
         str(Path("collections/requirements.yml").absolute()), is_req_file=True
     )
-    install_galaxy_collection(str(Path(__file__).parent.parent.absolute()), force=True)
+    install_galaxy_collection(str(top_path), force=True)
 
     if args.container:
         install_galaxy_collection("community.docker")
 
     if args.all:
-        all_example_paths = []
         logger.info("Finding all examples for all IOC types")
-        device_roles_path = Path(__file__).parent.parent / "roles/device_roles"
+        device_roles_path = top_path / "roles/device_roles"
         for device_role_path in device_roles_path.iterdir():
             device_role_examples = get_all_examples_for_type(device_role_path.stem, device_role_path)
             configs_to_deploy.update(device_role_examples)
@@ -384,8 +389,8 @@ def main():
     elif args.type:
         logger.info(f"Loading all examples for IOC type: {args.type}")
         role_path = (
-            Path(__file__).parent.parent / "roles/device_roles" / args.type
-        ).absolute()
+            top_path / "roles/device_roles" / args.type
+        )
         if not role_path.exists():
             raise ValueError(f"Unknown IOC type: {args.type}")
 
