@@ -8,8 +8,6 @@ pmac_f811ee1:
     - libssh2-devel
   config:
     BUILD_IOCS: "NO"
-    USE_GRAPHICSMAGICK: "NO"
-    WITH_BOOST: "NO"
     SSH: "/usr"
     SSH_LIB: "$(SSH)/lib64"
     SSH_INCLUDE: "$(SSH)/include"
