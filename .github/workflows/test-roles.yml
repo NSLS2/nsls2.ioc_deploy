@@ -109,9 +109,9 @@ jobs:
   #         docker save ghcr.io/nsls2/epics-alma${{ matrix.rhel_version }}:latest -o /tmp/epics-alma${{ matrix.rhel_version }}.tar
 
   test-deployments:
-    name: Test Deployment - RHEL${{ matrix.rhel_version }}
+    name: Test Deployment of ${{ matrix.role }} on EL${{ matrix.rhel_version }}
     runs-on: ubuntu-latest
-    #, prepare-image]
+    # , prepare-image]
     needs: [detect-changes]
     if: needs.detect-changes.outputs.has-changes == 'true'
     strategy:

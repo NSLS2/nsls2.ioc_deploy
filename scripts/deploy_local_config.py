@@ -112,9 +112,7 @@ def get_all_examples_for_type(ioc_type: str, role_path: Path) -> dict[str, Path]
             logger.debug(f"Loaded example config for IOC: {example_ioc_name}")
             all_examples[example_ioc_name] = example_path
         except Exception as e:
-            logger.warning(
-                f"Failed to load example config: {example_path}, error: {e}"
-            )
+            logger.warning(f"Failed to load example config: {example_path}, error: {e}")
 
     return all_examples
 
