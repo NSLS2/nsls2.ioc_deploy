@@ -148,7 +148,7 @@ def install_galaxy_collection(
     collections_path = Path(__file__).parent.parent / "collections"
     cmd.extend(["-p", str(collections_path.absolute())])
     try:
-        logger.info(f"Installing required ansible-galaxy collection: {name}")
+        logger.info(f"Installing required ansible-galaxy collection(s): {name}")
         subprocess.run(cmd, capture_output=True, text=True, check=True)
     except subprocess.CalledProcessError as e:
         raise RuntimeError(f"Failed to install galaxy collection {name}: {e}") from e
@@ -255,7 +255,9 @@ def deploy_configs(options: DeploymentOptions):
             deployment_summary[ioc_name] = (path, False)
             continue
 
-        if ioc_name in options.verification_files:
+        # Only attempt verification if deployment succeeded and a verification file is configured for this IOC
+        # and deployment is running in a container
+        if ioc_name in options.verification_files and options.container:
             logger.info(f"Verifying deployment of {ioc_name}")
             try:
                 subprocess.run(
