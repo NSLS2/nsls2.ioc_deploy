@@ -6,7 +6,6 @@ import logging
 import os
 import subprocess
 
-# import questionary
 import sys
 from dataclasses import dataclass
 from enum import Enum
@@ -145,6 +144,9 @@ def install_galaxy_collection(
         cmd.append(name)
     if force:
         cmd.append("--force")
+
+    collections_path = Path(__file__).parent.parent / "collections"
+    cmd.extend(["-p", str(collections_path.absolute())])
     try:
         logger.info(f"Installing required ansible-galaxy collection: {name}")
         subprocess.run(cmd, capture_output=True, text=True, check=True)
@@ -295,16 +297,15 @@ def main():
         description="Deploy specified local IOC configuration"
     )
 
-    group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument(
+    deployment_target_group = parser.add_mutually_exclusive_group(required=True)
+    deployment_target_group.add_argument(
         "-l", "--limit", help="Target hostname onto which to deploy the IOCs"
     )
-    group.add_argument(
+    deployment_target_group.add_argument(
         "--container",
         action="store_true",
         help="Use a local container for the deployment",
     )
-    parser.add_argument("-t", "--type", help="Type of IOC to deploy")
     parser.add_argument(
         "-c",
         "--configs",
@@ -320,6 +321,12 @@ def main():
     )
     parser.add_argument(
         "--skip_compilation", action="store_true", help="Skip compilation step"
+    )
+
+    example_source_group = parser.add_mutually_exclusive_group()
+    example_source_group.add_argument("-t", "--type", help="Type of IOC to deploy")
+    example_source_group.add_argument(
+        "--all", action="store_true", help="Deploy all available examples"
     )
 
     # TODO: Enable el10 support.
@@ -364,7 +371,15 @@ def main():
     if args.container:
         install_galaxy_collection("community.docker")
 
-    if args.type:
+    if args.all:
+        all_example_paths = []
+        logger.info("Finding all examples for all IOC types")
+        device_roles_path = Path(__file__).parent.parent / "roles/device_roles"
+        for device_role_path in device_roles_path.iterdir():
+            device_role_examples = get_all_examples_for_type(device_role_path.stem, device_role_path)
+            configs_to_deploy.update(device_role_examples)
+
+    elif args.type:
         logger.info(f"Loading all examples for IOC type: {args.type}")
         role_path = (
             Path(__file__).parent.parent / "roles/device_roles" / args.type
@@ -434,7 +449,7 @@ def main():
     overall_success = True
     if args.container:
         logger.info(
-            f"Executing containerized local deployment(s) for EL ver: {args.matrix}"
+            f"Executing {len(configs_to_deploy)} containerized local deployment(s) for EL ver: {args.matrix}"
         )
         for el_version in args.matrix:
             logger.info(f"Executing deployment for EL version: {el_version}")
@@ -453,7 +468,7 @@ def main():
             overall_success = overall_success and el_version_success
             running_deployment_summary[el_version] = deployment_summary
     else:
-        logger.info("Executing deployment(s) for specified configs")
+        logger.info(f"Executing {len(configs_to_deploy)} deployment(s) onto {args.limit}")
         overall_success, running_deployment_summary = deploy_configs(
             DeploymentOptions(
                 hostname=args.limit,

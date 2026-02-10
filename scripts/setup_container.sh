@@ -17,11 +17,23 @@ echo "Verifying that container '$CONTAINER_NAME' is running the required image '
 
 # Verify container is running
 if [ -z "$(docker ps -q -f name=$CONTAINER_NAME)" ]; then
+    # Check if container exists but is not running
+    if [ -n "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
+        echo "Container '$CONTAINER_NAME' exists but is not running."
+        echo "Please first remove the existing container with 'docker container rm -f $CONTAINER_NAME'."
+        exit 1
+    fi
+
     echo "Starting container '$CONTAINER_NAME'..."
     docker run -dit --name $CONTAINER_NAME $REQUIRED_IMAGE
+    if [ $? -ne 0 ]; then
+        echo "Error: Failed to start container '$CONTAINER_NAME' with image '$REQUIRED_IMAGE'."
+        exit 1
+    fi
 else
     echo "Container '$CONTAINER_NAME' is already running."
 fi
+
 
 # Verify container is running the required image
 CURRENT_IMAGE=$(docker inspect -f '{{.Config.Image}}' $CONTAINER_NAME)
