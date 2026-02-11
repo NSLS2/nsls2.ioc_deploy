@@ -440,7 +440,7 @@ def main():
                         logger.warning(
                             f"'{ioc_name}' already loaded; overwriting with {cfg}"
                         )
-                    configs_to_deploy[ioc_name] = Path(cfg)
+                    configs_to_deploy[ioc_name] = Path(cfg).absolute()
             except Exception as e:
                 logger.warning(f"Failed to load config '{cfg}': {e}")
 
