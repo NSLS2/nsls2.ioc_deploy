@@ -15,10 +15,6 @@ import yaml
 
 NSLS2NETWORK_PKG_AVAILABLE = importlib.util.find_spec("nsls2network") is not None
 
-# Pixi version pin, used if running in
-PIXI_VERSION = "v0.55.0"
-PIXI_SHA256 = "cb733205ae1a02986071bcbeff47c60460bfb92d1cd9565d40f4dea5448c86a5"
-
 BASE_CONTAINER_IMAGE = "ghcr.io/nsls2/epics-alma"
 
 logging.basicConfig(level=logging.INFO)

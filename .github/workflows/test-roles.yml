@@ -59,57 +59,9 @@ jobs:
             fi
           fi
 
-  # prepare-image:
-  #   name: Prepare Container Image
-  #   runs-on: ubuntu-latest
-  #   needs: detect-changes
-  #   if: needs.detect-changes.outputs.has-changes == 'true'
-  #   outputs:
-  #     digest: ${{ steps.digest.outputs.digest }}
-  #   strategy:
-  #     matrix:
-  #       rhel_version: [8, 9]
-  #   steps:
-  #     - name: Login to GitHub Container Registry
-  #       run: |
-  #         echo "${{ secrets.GITHUB_TOKEN }}" | \
-  #           docker login ghcr.io -u "${{ github.actor }}" --password-stdin
-
-  #     - name: Get Container Digest
-  #       id: digest
-  #       run: |
-  #         set -e
-  #         DIGEST=$(docker manifest inspect \
-  #           ghcr.io/nsls2/epics-alma${{ matrix.rhel_version }}:latest --verbose \
-  #           | jq -r '.[0].Descriptor.digest') || {
-  #           echo "Failed to retrieve container digest" >&2
-  #           exit 1
-  #         }
-  #         if [ -z "$DIGEST" ] || [ "$DIGEST" = "null" ]; then
-  #           echo "Invalid container digest: $DIGEST" >&2
-  #           exit 1
-  #         fi
-  #         echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
-  #         echo "Container digest: $DIGEST"
-
-  #     - name: Cache Docker Image
-  #       id: cache
-  #       uses: actions/cache@v4
-  #       with:
-  #         path: /tmp/epics-alma${{ matrix.rhel_version }}.tar
-  #         key: epics-alma${{ matrix.rhel_version }}-${{ steps.digest.outputs.digest }}
-
-  #     - name: Pull and Save Container Image
-  #       if: steps.cache.outputs.cache-hit != 'true'
-  #       run: |
-  #         echo "Pulling fresh image..."
-  #         docker pull ghcr.io/nsls2/epics-alma${{ matrix.rhel_version }}:latest
-  #         docker save ghcr.io/nsls2/epics-alma${{ matrix.rhel_version }}:latest -o /tmp/epics-alma${{ matrix.rhel_version }}.tar
-
   test-deployments:
     name: Test Deployment of ${{ matrix.role }} on EL${{ matrix.rhel_version }}
     runs-on: ubuntu-latest
-    # , prepare-image]
     needs: detect-changes
     if: needs.detect-changes.outputs.has-changes == 'true'
     strategy:
@@ -130,21 +82,6 @@ jobs:
           pixi-version: v0.55.0
           cache: false
           frozen: true
-
-      # - name: Restore Cached Docker Image
-      #   uses: actions/cache/restore@v4
-      #   with:
-      #     path: /tmp/epics-alma${{ matrix.rhel_version }}.tar
-      #     key: epics-alma${{ matrix.rhel_version }}-${{ needs.prepare-image.outputs.digest }}
-      #     fail-on-cache-miss: true
-
-      # - name: Load Container Image
-      #   run: |
-      #     echo "Loading cached image..."
-      #     docker load -i /tmp/epics-alma${{ matrix.rhel_version }}.tar
-
-      # - name: Start EPICS Container
-      #   run: docker run -dit --name nsls2_ioc_deploy_el${{ matrix.rhel_version }} ghcr.io/nsls2/epics-alma${{ matrix.rhel_version }}:latest
 
       - name: Test Deployment
         run: pixi run deployment -t ${{ matrix.role }} --container -m ${{ matrix.rhel_version }}
