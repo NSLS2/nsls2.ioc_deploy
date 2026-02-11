@@ -1,8 +1,23 @@
 ---
 
-- name: Reload default configuration variables
+- name: Load role defaults into namespace for per-IOC reset
   ansible.builtin.include_vars:
     file: defaults/main.yml
+    name: _deploy_ioc_defaults
+
+# Reset all default variables via set_fact to clear any values that persisted
+# from a prior loop iteration (set_fact has higher precedence than include_vars,
+# so a plain include_vars reload cannot override stale set_fact values).
+# deploy_ioc_default_env is excluded because it contains {{ ioc.type }} which
+# is not yet defined at this point; it is never set via set_fact elsewhere so
+# it does not suffer from cross-iteration leakage.
+- name: Reset default variables to prevent set_fact leakage across loop iterations
+  ansible.builtin.set_fact:
+    "{{ item.key }}": "{{ item.value }}" # noqa: var-naming[no-jinja]
+  loop: "{{ _deploy_ioc_defaults | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.key != 'deploy_ioc_default_env'
 
 - name: Make sure IOC with given name is configured on host
   ansible.builtin.fail:
@@ -17,8 +32,23 @@
   ansible.builtin.debug:
     msg: "{{ ioc }}"
 
-- name: Get IOC type specific default vars
-  ansible.builtin.include_vars: "vars/{{ ioc.type }}.yml"
+- name: Load device type vars into namespace
+  ansible.builtin.include_vars:
+    file: "vars/{{ ioc.type }}.yml"
+    name: _deploy_ioc_type_defaults
+
+# Promote device type vars to set_fact precedence so they override the
+# defaults reset above. deploy_ioc_template_root_path is excluded here
+# because in many device types it references {{ deploy_ioc_required_module_path }}
+# which is not set until after module installation; it is resolved separately
+# below.
+- name: Apply device type defaults at set_fact precedence
+  ansible.builtin.set_fact:
+    "{{ item.key }}": "{{ item.value }}" # noqa: var-naming[no-jinja]
+  loop: "{{ _deploy_ioc_type_defaults | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.key != 'deploy_ioc_template_root_path'
 
 - name: Check to make sure IOC can be deployed on this host
   ansible.builtin.fail:
@@ -54,7 +84,17 @@
     - name: If specified, override ioc exe with installed module exe
       ansible.builtin.set_fact:
         deploy_ioc_executable: "{{ install_module_leaf_executable }}"
-      when: install_module_leaf_executable is defined
+      when: install_module_leaf_executable | default('') != ''
+
+# Now that deploy_ioc_required_module_path is available, resolve
+# deploy_ioc_template_root_path from device type vars (which may
+# reference it as a Jinja2 template). For device types that set it
+# to a static path, this also works correctly.
+- name: Resolve device type template root path at set_fact precedence
+  ansible.builtin.set_fact:
+    deploy_ioc_template_root_path:
+      "{{ _deploy_ioc_type_defaults.deploy_ioc_template_root_path }}"
+  when: _deploy_ioc_type_defaults.deploy_ioc_template_root_path is defined
 
 - name: Get default environment variables for ioc type
   ansible.builtin.set_fact:
