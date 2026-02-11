@@ -16,4 +16,4 @@ repository: http://github.com/nsls2/nsls2.ioc_deploy
 documentation: http://github.com/nsls2/nsls2.ioc_deploy
 homepage: http://www.bnl.gov/nsls2
 issues: https://github.com/NSLS2/nsls2.ioc_deploy/issues
-build_ignore: ["tests", "venv", ".pixi"]
+build_ignore: ["tests", "venv", ".pixi", "scripts/.pixi"]

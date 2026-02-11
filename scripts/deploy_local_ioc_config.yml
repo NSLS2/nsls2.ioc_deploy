@@ -1,0 +1,55 @@
+---
+
+- name: Deploy Specified Local IOC Config
+  hosts: all
+  tasks:
+
+    - name: Ensure job is running against a single host
+      ansible.builtin.fail:
+        msg: Refusing to run on more than one host
+      when: ansible_play_hosts | length > 1
+
+    - name: Fail if local ioc configuration is not specified
+      ansible.builtin.fail:
+        msg: "Local IOC configuration is required"
+      when: deploy_ioc_local_config_path is not defined
+
+    # Typically host_config will be a dict of all ioc configurations on a particular
+    # host. Here, we always have one target.
+    - name: Load local ioc configuration
+      ansible.builtin.include_vars:
+        file: "{{ deploy_ioc_local_config_path }}"
+        name: host_config
+      when: deploy_ioc_local_config_path is defined
+
+    - name: Set EPICS interface information to localhost
+      ansible.builtin.set_fact:
+        _epics_interface:
+          address: "127.0.0.1"
+          broadcast: "127.0.0.1"
+
+    - name: Update epics interface automatically if nsls2.general collection available
+      when: deploy_ioc_nsls2network_available | default(false) and ansible_interfaces is defined
+      block:
+        - name: Find EPICS interface among host interfaces
+          ansible.builtin.set_fact:
+            _epics_interface: "{{ ansible_facts[item]['ipv4'] }}"
+          when: >
+            'ipv4' in ansible_facts[item]
+            and ansible_facts[item]['ipv4']['address'] | nsls2.general.nsls2network_find('subnet') == 'epics'
+          with_items: "{{ ansible_interfaces }}"
+
+    - name: Find softioc user and group
+      ansible.builtin.set_fact:
+        _softioc_user: "softioc{{ ('-' + (beamline_acronym | lower)) if beamline_acronym is defined else '' }}"
+
+    - name: Update host configuration with EPICS interface and softioc user and group
+      ansible.builtin.set_fact:
+        host_config: "{{ host_config |
+          combine({'epics_interface': _epics_interface,
+                   'softioc_user': _softioc_user,
+                   'softioc_group': _softioc_user}) }}"
+
+    - name: Deploy specified IOCs
+      ansible.builtin.include_role:
+        name: nsls2.ioc_deploy.deploy_ioc
