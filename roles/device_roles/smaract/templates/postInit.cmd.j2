@@ -1,0 +1,11 @@
+motorUtilInit("$(PREFIX)")
+
+makeAutosaveFileFromDbInfo("$(TOP)/as/req/info_settings.req",
+                           "autosaveFields")
+makeAutosaveFileFromDbInfo("$(TOP)/as/req/info_positions.req",
+                           "autosaveFields_pass0")
+
+cd $(TOP)
+
+dbl > /tmp/{{ deploy_ioc_ioc_name }}-records.dbl
+date

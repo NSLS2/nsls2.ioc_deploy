@@ -1,0 +1,3 @@
+{% for axis in ioc.substitutions.smaract.templates[0].instances %}
+file "asyn_motor_positions.req", P=$(PREFIX), M={{ axis[2] }}
+{% endfor %}
