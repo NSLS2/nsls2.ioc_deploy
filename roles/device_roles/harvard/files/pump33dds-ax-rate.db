@@ -1,0 +1,266 @@
+record(bo, "$(P){$(DEV)-Ax:$(AX)}$(CMD):DISABLE") {
+  field(PINI, "YES")
+  field(VAL, "$(DISABLE=1)")
+  field(OMSL, "supervisory")
+  field(ZNAM, "Enabled")
+  field(ONAM, "Disabled")
+}
+
+
+#===================================================
+# Set
+record(ao, "$(P){$(DEV)-Ax:$(AX)}$(CMD)") {
+  field(DESC, "Axis $(AX) $(CMD)")
+  field(DTYP, "stream")
+  field(FLNK, "$(P){$(DEV)-Ax:$(AX)}$(CMD):RBV")
+  field(OUT, "@pump33dds.proto setRateAx($(P), $(DEV), $(AX), $(CMD)) $(PORT)")
+  field(PREC, "0")
+  field(SDIS, "$(P)$(R)DISABLE")
+  info(autosaveFields_pass0, "VAL")
+}
+
+record(mbbi, "$(P){$(DEV)-Ax:$(AX)}$(CMD):EGU") {
+  field(DESC, "Ax $(AX) $(CMD) EGU")
+  field(ZRVL, "0")
+  field(ZRST, "pl/sec")
+  field(ONVL, "1")
+  field(ONST, "pl/min")
+  field(TWVL, "2")
+  field(TWST, "pl/hr")
+  field(THVL, "3")
+  field(THST, "nl/sec")
+  field(FRVL, "4")
+  field(FRST, "nl/min")
+  field(FVVL, "5")
+  field(FVST, "nl/hr")
+  field(SXVL, "6")
+  field(SXST, "ul/sec")
+  field(SVVL, "7")
+  field(SVST, "ul/min")
+  field(EIVL, "8")
+  field(EIST, "ul/hr")
+  field(NIVL, "9")
+  field(NIST, "ml/sec")
+  field(TEVL, "10")
+  field(TEST, "ml/min")
+  field(ELVL, "11")
+  field(ELST, "ml/hr")
+  field(SDIS, "$(P)$(R)DISABLE")
+}
+#-------------------------------------------------
+record(ao, "$(P){$(DEV)-Ax:$(AX)}$(CMD):MIN") {
+  field(DESC, "Axis $(AX) $(CMD) min")
+  field(DTYP, "stream")
+  field(FLNK, "$(P){$(DEV)-Ax:$(AX)}$(CMD):RBV")
+  field(OUT, "@pump33dds.proto setRateMinMaxAx($(P), $(DEV), $(AX), $(CMD), MIN) $(PORT)")
+  field(PREC, "0")
+  field(SDIS, "$(P)$(R)DISABLE")
+}
+
+record(mbbi, "$(P){$(DEV)-Ax:$(AX)}$(CMD):MIN:RBV:EGU") {
+  field(DESC, "Ax $(AX) $(CMD) min EGU")
+  field(ZRVL, "0")
+  field(ZRST, "pl/sec")
+  field(ONVL, "1")
+  field(ONST, "pl/min")
+  field(TWVL, "2")
+  field(TWST, "pl/hr")
+  field(THVL, "3")
+  field(THST, "nl/sec")
+  field(FRVL, "4")
+  field(FRST, "nl/min")
+  field(FVVL, "5")
+  field(FVST, "nl/hr")
+  field(SXVL, "6")
+  field(SXST, "ul/sec")
+  field(SVVL, "7")
+  field(SVST, "ul/min")
+  field(EIVL, "8")
+  field(EIST, "ul/hr")
+  field(NIVL, "9")
+  field(NIST, "ml/sec")
+  field(TEVL, "10")
+  field(TEST, "ml/min")
+  field(ELVL, "11")
+  field(ELST, "ml/hr")
+  field(SDIS, "$(P)$(R)DISABLE")
+}
+
+#-------------------------------------------------
+record(ao, "$(P){$(DEV)-Ax:$(AX)}$(CMD):MAX") {
+  field(DESC, "Axis $(AX) $(CMD) max")
+  field(DTYP, "stream")
+  field(FLNK, "$(P){$(DEV)-Ax:$(AX)}$(CMD):RBV")
+  field(OUT, "@pump33dds.proto setRateMinMaxAx($(P), $(DEV), $(AX), $(CMD), MAX) $(PORT)")
+  field(PREC, "0")
+  field(SDIS, "$(P)$(R)DISABLE")
+}
+
+record(mbbi, "$(P){$(DEV)-Ax:$(AX)}$(CMD):MAX:RBV:EGU") {
+  field(DESC, "Ax $(AX) $(CMD) max EGU")
+  field(ZRVL, "0")
+  field(ZRST, "pl/sec")
+  field(ONVL, "1")
+  field(ONST, "pl/min")
+  field(TWVL, "2")
+  field(TWST, "pl/hr")
+  field(THVL, "3")
+  field(THST, "nl/sec")
+  field(FRVL, "4")
+  field(FRST, "nl/min")
+  field(FVVL, "5")
+  field(FVST, "nl/hr")
+  field(SXVL, "6")
+  field(SXST, "ul/sec")
+  field(SVVL, "7")
+  field(SVST, "ul/min")
+  field(EIVL, "8")
+  field(EIST, "ul/hr")
+  field(NIVL, "9")
+  field(NIST, "ml/sec")
+  field(TEVL, "10")
+  field(TEST, "ml/min")
+  field(ELVL, "11")
+  field(ELST, "ml/hr")
+  field(SDIS, "$(P)$(R)DISABLE")
+}
+
+#===================================================
+# Get
+record(ai, "$(P){$(DEV)-Ax:$(AX)}$(CMD):RBV") {
+  field(DESC, "Axis $(AX) $(CMD) readback")
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getRateAx($(P), $(DEV), $(AX), $(CMD)) $(PORT)")
+  field(PREC, "5")
+  field(SDIS, "$(P)$(R)DISABLE")
+}
+
+record(mbbi, "$(P){$(DEV)-Ax:$(AX)}$(CMD):RBV:EGU") {
+  field(DESC, "Ax $(AX) $(CMD) readback EGU")
+  field(ZRVL, "0")
+  field(ZRST, "pl/sec")
+  field(ONVL, "1")
+  field(ONST, "pl/min")
+  field(TWVL, "2")
+  field(TWST, "pl/hr")
+  field(THVL, "3")
+  field(THST, "nl/sec")
+  field(FRVL, "4")
+  field(FRST, "nl/min")
+  field(FVVL, "5")
+  field(FVST, "nl/hr")
+  field(SXVL, "6")
+  field(SXST, "ul/sec")
+  field(SVVL, "7")
+  field(SVST, "ul/min")
+  field(EIVL, "8")
+  field(EIST, "ul/hr")
+  field(NIVL, "9")
+  field(NIST, "ml/sec")
+  field(TEVL, "10")
+  field(TEST, "ml/min")
+  field(ELVL, "11")
+  field(ELST, "ml/hr")
+}
+
+#----------------------------------------------------
+record(fanout, "$(P){$(DEV)-Ax:$(AX)}$(CMD):LIM") {
+  field(DESC, "Axis $(AX) $(CMD) limit readback")
+  field(LNK1, "$(P){$(DEV)-Ax:$(AX)}$(CMD)-LIM:ENABLE")
+  field(LNK2, "$(P){$(DEV)-Ax:$(AX)}$(CMD):MIN:RBV")
+  field(LNK3, "$(P){$(DEV)-Ax:$(AX)}$(CMD)-LIM:DISABLE")
+  field(SELM, "All")
+  field(SDIS, "$(P)$(R)DISABLE")
+}
+
+record(dfanout, "$(P){$(DEV)-Ax:$(AX)}$(CMD)-LIM:ENABLE") {
+  field(OUTA, "$(P){$(DEV)-Ax:$(AX)}$(CMD):DISABLE.VAL PP")
+  field(SCAN, "Passive")
+  field(OMSL, "closed_loop")
+  field(VAL, "0")
+}
+
+record(dfanout, "$(P){$(DEV)-Ax:$(AX)}$(CMD)-LIM:DISABLE") {
+  field(OUTA, "$(P){$(DEV)-Ax:$(AX)}$(CMD):DISABLE.VAL PP")
+  field(SCAN, "Passive")
+  field(OMSL, "closed_loop")
+  field(VAL, "1")
+}
+
+#----------------------------------------------------
+
+record(ai, "$(P){$(DEV)-Ax:$(AX)}$(CMD):MIN:RBV") {
+  field(DESC, "Axis $(AX) $(CMD) min")
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getRateMinAx($(P), $(DEV), $(AX), $(CMD)) $(PORT)")
+  field(PREC, "5")
+  field(SDIS, "$(P){$(DEV)-Ax:$(AX)}$(CMD):DISABLE")
+}
+
+record(mbbi, "$(P){$(DEV)-Ax:$(AX)}$(CMD):MIN:RBV:EGU") {
+  field(DESC, "Ax $(AX) $(CMD) readback EGU")
+  field(ZRVL, "0")
+  field(ZRST, "pl/sec")
+  field(ONVL, "1")
+  field(ONST, "pl/min")
+  field(TWVL, "2")
+  field(TWST, "pl/hr")
+  field(THVL, "3")
+  field(THST, "nl/sec")
+  field(FRVL, "4")
+  field(FRST, "nl/min")
+  field(FVVL, "5")
+  field(FVST, "nl/hr")
+  field(SXVL, "6")
+  field(SXST, "ul/sec")
+  field(SVVL, "7")
+  field(SVST, "ul/min")
+  field(EIVL, "8")
+  field(EIST, "ul/hr")
+  field(NIVL, "9")
+  field(NIST, "ml/sec")
+  field(TEVL, "10")
+  field(TEST, "ml/min")
+  field(ELVL, "11")
+  field(ELST, "ml/hr")
+}
+
+#----------------------------------------------------
+
+record(ai, "$(P){$(DEV)-Ax:$(AX)}$(CMD):MAX:RBV") {
+  field(DESC, "Axis $(AX) $(CMD) max")
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getRateMaxAx($(P), $(DEV), $(AX), $(CMD)) $(PORT)")
+  field(PREC, "5")
+  field(SCAN, "I/O Intr")
+  field(DISV, "0")
+  field(SDIS, "$(P){$(DEV)-Ax:$(AX)}$(CMD):DISABLE")
+}
+
+record(mbbi, "$(P){$(DEV)-Ax:$(AX)}$(CMD):MAX:RBV:EGU") {
+  field(DESC, "Ax $(AX) $(CMD) readback EGU")
+  field(ZRVL, "0")
+  field(ZRST, "pl/sec")
+  field(ONVL, "1")
+  field(ONST, "pl/min")
+  field(TWVL, "2")
+  field(TWST, "pl/hr")
+  field(THVL, "3")
+  field(THST, "nl/sec")
+  field(FRVL, "4")
+  field(FRST, "nl/min")
+  field(FVVL, "5")
+  field(FVST, "nl/hr")
+  field(SXVL, "6")
+  field(SXST, "ul/sec")
+  field(SVVL, "7")
+  field(SVST, "ul/min")
+  field(EIVL, "8")
+  field(EIST, "ul/hr")
+  field(NIVL, "9")
+  field(NIST, "ml/sec")
+  field(TEVL, "10")
+  field(TEST, "ml/min")
+  field(ELVL, "11")
+  field(ELST, "ml/hr")
+}
