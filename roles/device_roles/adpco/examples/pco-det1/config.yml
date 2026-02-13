@@ -1,0 +1,10 @@
+---
+
+adpco-01:
+  type: adpco
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{PCO-Det:1}
+    XSIZE: 2560
+    YSIZE: 2160
+    CAM_ID: 0
