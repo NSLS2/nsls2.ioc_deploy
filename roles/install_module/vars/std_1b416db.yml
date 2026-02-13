@@ -1,0 +1,9 @@
+---
+std_1b416db:
+  name: std
+  version: 1b416db
+  url: https://github.com/epics-modules/std
+  compilation_command:
+    "make -s"
+  module_deps:
+    - adcore_60080dc
