@@ -5,6 +5,7 @@ adpco_b17fe13:
   version: b17fe13
   url: https://github.com/paulscherrerinstitute/ADPco
   include_base_ad_config: true
+  executable: pcoApp
   config:
     WITH_PCO: "YES"
     PCO_SDK: "/opt/pco/pco.sdk"
