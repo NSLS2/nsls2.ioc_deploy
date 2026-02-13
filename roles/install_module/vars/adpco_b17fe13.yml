@@ -5,7 +5,10 @@ adpco_b17fe13:
   version: b17fe13
   url: https://github.com/paulscherrerinstitute/ADPco
   include_base_ad_config: True
+  config:
+    WITH_PCO: "YES"
+    PCO_SDK: "/opt/pco/pco.sdk"
+    PCO_LIB: "$(PCO_SDK)/lib"
+    PCO_INCLUDE: "$(PCO_SDK)/include"
   module_deps:
     - adcore_60080dc
-  pkg_deps:
-    - pco-sdk
