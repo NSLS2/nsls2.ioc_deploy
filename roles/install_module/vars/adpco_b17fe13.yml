@@ -1,0 +1,11 @@
+---
+
+adpco_b17fe13:
+  name: ADPco
+  version: b17fe13
+  url: https://github.com/paulscherrerinstitute/ADPco
+  include_base_ad_config: True
+  module_deps:
+    - adcore_60080dc
+  pkg_deps:
+    - pco-sdk
