@@ -18,7 +18,7 @@ verification:
     iocBoot/base.cmd:
       - "dbLoadDatabase"
       - "ADPcoConfig"
-      - 'dbLoadRecords("$(ADPCO)/db/ADPco.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT)")' # yamllint disable-line rule:line-length
+      - 'dbLoadRecords("$(ADPCO)/db/pco.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT)")' # yamllint disable-line rule:line-length
     autosave/req/auto_settings.req:
       - "pco_settings.req"
       - "commonPlugin_settings.req"
