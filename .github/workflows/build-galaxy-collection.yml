@@ -1,9 +1,6 @@
 ---
 
 name: Build Ansible Galaxy Collection
-permissions:
-  contents: read
-  packages: read
 on:
   release:
     types: [published]
@@ -12,6 +9,9 @@ jobs:
   build-and-publish:
     name: Build and Publish Collection
     runs-on: ubuntu-latest
+    permissions:
+      contents: rwrited
+      packages: write
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -28,7 +28,7 @@ jobs:
 
       - name: Run ansible galaxy collection build
         run: |
-          pixi run ansible-galaxy collection build .
+          pixi run ansible-galaxy collection build
 
       - name: Upload tarball to GitHub Release
         env:
