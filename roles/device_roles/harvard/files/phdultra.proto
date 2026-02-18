@@ -1,0 +1,116 @@
+InTerminator = 0x11;
+OutTerminator = CR LF;
+ReplyTimeout = 2000;
+
+setPollOn {
+	out "poll on";
+	in "\n%*s";
+}
+
+getForce {
+	out "force";
+	in "\n%d\%\r\n%(\$1:STATUS){:|>|<|*|T*}";
+}
+
+setForce {
+	out "force %d";
+	in "\n%(\$1:STATUS){:|>|<|*|T*}";
+	@init { getForce; }
+}
+
+getTargetTime {
+	out "ttime";
+        in "\n%[0-9:]\r\n%(\$1:STATUS){:|>|<|*|T*}";
+	@mismatch {
+		in "\n%[0-9.] seconds\r\n%(\$1:STATUS){:|>|<|*|T*}";
+	}
+	@mismatch {
+		in "\nTarget time %[^\r]\r\n%(\$1:STATUS){:|>|<|*|T*}";
+	}
+}
+
+setTargetTime {
+	out "ttime %d sec";
+	in "\n%(\$1:STATUS){:|>|<|*|T*}";
+}
+
+getTVolume {
+	out "tvolume";
+	in "\n%[0-9.] %(\$1:TVOLUMEUNITS:RBV){pl|nl|ul|ml}\r\n%(\$1:STATUS){:|>|<|*|T*}";
+	@mismatch {
+		in "\nTarget volume %[^\r]\r\n%(\$1:STATUS){:|>|<|*|T*}";
+	}
+}
+
+setTVolume {
+	out "tvolume %f %(\$1:TVOLUMEUNITS){pl|nl|ul|ml}";
+	in "\n%(\$1:STATUS){:|>|<|*|T*}";
+}
+
+getDiameter {
+	out "diameter";
+	in "\n%f mm\r\n%(\$1:STATUS){:|>|<|*|T*}";
+}
+
+setDiameter {
+	out "diameter %f";
+	in "\n%(\$1:STATUS){:|>|<|*|T*}";
+	@init { getDiameter; }
+}
+
+infuse {
+	out "irun";
+	in "\n%(\$1:STATUS){:|>|<|*|T*}";
+}
+
+withdraw {
+	out "wrun";
+	in "\n%(\$1:STATUS){:|>|<|*|T*}";
+}
+
+stop {
+	out "stop";
+	in "\n%(\$1:STATUS){:|>|<|*|T*}";
+}
+
+getIRate {
+	out "irate";
+	in "\n%f %(\$1:IRATEUNITS:RBV){pl/sec|pl/min|pl/hr|nl/sec|nl/min|nl/hr|ul/sec|ul/min|ul/hr|ml/sec|ml/min|ml/hr}\r\n%(\$1:STATUS){:|>|<|*|T*}";
+}
+
+setIRate {
+	out "irate %f %(\$1:IRATEUNITS){pl/sec|pl/min|pl/hr|nl/sec|nl/min|nl/hr|ul/sec|ul/min|ul/hr|ml/sec|ml/min|ml/hr}";
+	in "\n%(\$1:STATUS){:|>|<|*|T*}";
+	@init { getIRate; }
+}
+
+getWRate {
+	out "wrate";
+	in "\n%f %(\$1:WRATEUNITS:RBV){pl/sec|pl/min|pl/hr|nl/sec|nl/min|nl/hr|ul/sec|ul/min|ul/hr|ml/sec|ml/min|ml/hr}\r\n%(\$1:STATUS){:|>|<|*|T*}";
+}
+
+setWRate {
+	out "wrate %f %(\$1:WRATEUNITS){pl/sec|pl/min|pl/hr|nl/sec|nl/min|nl/hr|ul/sec|ul/min|ul/hr|ml/sec|ml/min|ml/hr}";
+	in "\n%(\$1:STATUS){:|>|<|*|T*}";
+	@init { getWRate; }
+}
+
+ivolume {
+	out "ivolume";
+	in "\n%f %(\$1:IVOLUMEUNITS:RBV)s\r\n%(\$1:STATUS){:|>|<|*|T*}";
+}
+
+clear_infused {
+	out "civolume";
+	in "\n%(\$1:STATUS){:|>|<|*|T*}";
+}
+
+wvolume {
+	out "wvolume";
+	in "\n%f %(\$1:WVOLUMEUNITS:RBV){pl|nl|ul|ml}\r\n%(\$1:STATUS){:|>|<|*|T*}";
+}
+
+clear_withdrawn {
+	out "cwvolume";
+	in "\n%(\$1:STATUS){:|>|<|*|T*}";
+}

@@ -1,0 +1,384 @@
+#OutTerminator = CR LF;
+ReplyTimeout = 2000;
+PollPeriod = 500;
+
+
+ax="%(\$1{\$2-Ax:\$3}";
+ax_status = "%(\$1{\$2-Ax:A}STATUS){:|>|<|*|T|?}%(\$1{\$2-Ax:B}STATUS){:|>|<|*|T|?}";
+
+
+
+#==========================================
+# Set pump condition.
+setCond {
+    out "condition %c";
+    in $ax_status;
+}
+
+getCond {
+    out "condition";
+    in  "%(\$1{\$2}CONDITION:RBV){Twin|Reciprocating|Independent}";
+}
+
+
+#==========================================
+#
+# Execute a command and receive status.
+#
+# Applicable for:
+#     . civolume
+#     . cwvolume
+#     . irun
+#     . wrun
+#     . stop
+#
+cmd {
+        out "\$4 \$3";
+	in $ax_status;
+}
+#==========================================
+
+
+#setPollOn {
+#	out "poll on";
+#	in "\n%*s";
+#}
+#
+#==========================================
+#
+# Set an integer value.
+#
+# Applicable for:
+#     .
+#
+setIntAx {
+	out "\$4 \$3 %d";
+        in $ax_status;
+}
+
+#==========================================
+#
+# Get an integer value.
+#
+# Applicable for:
+#     .
+#
+getIntAx {
+	out "\$4 \$3";
+        in $ax_status;
+}
+
+#==========================================
+#
+# Set an integer value with EGU.
+#
+# Applicable for:
+#     . force
+#
+setIntEGUAx {
+	out "\$4 \$3 %d $\5";
+        in $ax_status;
+	@init { getForce; }
+}
+
+#==========================================
+#
+# Get an integer value with EGU.
+#
+# Applicable for:
+#     . force
+#
+getIntEGUAx {
+	out "\$4 \$3";
+	in "\$3: %d%(\$1{\$2-Ax:\$3}\$4:RBV:EGU){%}\n" $ax_status;
+        @mismatch {
+                in "\$3: %d%(\$1{\$2-Ax:A}\$4:RBV:EGU){%|mm}\n\$3: %d%(\$1{\$2-Ax:B}\$4:RBV:EGU){%|mm}\n" $ax_status;
+
+        }
+}
+
+
+#==========================================
+#
+# RATE
+#
+#------------------------------------------
+# Set rate.
+#------------------------------------------
+setRateAx {
+    out "\$4 \$3 %f %(\$1{\$2-Ax:\$3}\$4:EGU){pl/sec|pl/min|pl/hr|nl/sec|nl/min|nl/hr|ul/sec|ul/min|ul/hr|ml/sec|ml/min|ml/hr}";
+    in $ax_status;
+}
+
+setRateMinMaxAx {
+    out "\$4 \$3 \$5";
+    in $ax_status;
+}
+
+
+#------------------------------------------
+# Get rate.
+#------------------------------------------
+getRateAx {
+	out "\$4 \$3";
+	in "\$3: %f %(\$1{\$2-Ax:\$3}\$4:RBV:EGU){pl/sec|pl/min|pl/hr|nl/sec|nl/min|nl/hr|ul/sec|ul/min|ul/hr|ml/sec|ml/min|ml/hr}\n" $ax_status;
+#	@init { getRateAx; }
+}
+
+getRateMinAx {
+	out "\$4 \$3 lim";
+	#in "\$3: %f %(\$1{\$2-Ax:\$3}\$4:MIN:RBV:EGU){pl/sec|pl/min|pl/hr|nl/sec|nl/min|nl/hr|ul/sec|ul/min|ul/hr|ml/sec|ml/min|ml/hr} to %*f %*s\n" $ax_status;
+	in "\$3: %f %(\$1{\$2-Ax:\$3}\$4:MIN:RBV:EGU){pl/sec|pl/min|pl/hr|nl/sec|nl/min|nl/hr|ul/sec|ul/min|ul/hr|ml/sec|ml/min|ml/hr} to %*f %6c\n" $ax_status;
+        @mismatch {
+            in "\$3: %f %(\$1{\$2-Ax:\$3}\$4:MIN:RBV:EGU){pl/sec|pl/min|pl/hr|nl/sec|nl/min|nl/hr|ul/sec|ul/min|ul/hr|ml/sec|ml/min|ml/hr} to %*f %6c\n" $ax_status;
+        }
+}
+
+getRateMaxAx {
+	#in "\$3: %*f %*s to %f %(\$1{\$2-Ax:\$3}\$4:MAX:RBV:EGU){pl/sec|pl/min|pl/hr|nl/sec|nl/min|nl/hr|ul/sec|ul/min|ul/hr|ml/sec|ml/min|ml/hr}\n" $ax_status;
+	in "\$3: %*f %*6c to %f %(\$1{\$2-Ax:\$3}\$4:MAX:RBV:EGU){pl/sec|pl/min|pl/hr|nl/sec|nl/min|nl/hr|ul/sec|ul/min|ul/hr|ml/sec|ml/min|ml/hr}\n" $ax_status;
+	@mismatch {
+            in "\$3: %*f %*5c to %f %(\$1{\$2-Ax:\$3}\$4:MAX:RBV:EGU){pl/sec|pl/min|pl/hr|nl/sec|nl/min|nl/hr|ul/sec|ul/min|ul/hr|ml/sec|ml/min|ml/hr}\n" $ax_status;
+        }
+}
+
+
+#==========================================
+#
+# VOLUME
+#
+#------------------------------------------
+# Set volumn.
+#------------------------------------------
+setVolAx {
+    out "\$4 \$3 %f %(\$1{\$2-Ax:\$3}\$4:EGU){pl|nl|ul|ml}";
+    in $ax_status;
+}
+
+setVol {
+    out "\$3 %f %(\$1{\$2}\$3:EGU){pl|nl|ul|ml}";
+    in $ax_status;
+}
+
+
+
+#------------------------------------------
+# Get volume.
+#------------------------------------------
+getVolAx {
+    out "\$4 \$3";
+    in "\$3: %f %(\$1{\$2-Ax:\$3}\$4:RBV:EGU){pl|nl|ul|ml}\n" $ax_status;
+    @mismatch {
+        in "A: %f %(\$1{\$2-Ax:A}\$4:RBV:EGU){pl|nl|ul|ml}\nB: %f %(\$1{\$2-Ax:B}\$4:RBV:EGU){pl|nl|ul|ml}\n" $ax_status;
+    }
+}
+
+getVol {
+    out "\$3";
+    in "%f %(\$1{\$2}\$3:RBV:EGU){pl|nl|ul|ml}\n" $ax_status;
+}
+
+
+#==========================================
+#
+# TIME
+#
+#------------------------------------------
+# Set time.
+#------------------------------------------
+setTimeAx {
+	out "\$4 \$3 %d";
+	in $ax_status;
+}
+
+#------------------------------------------
+# Get time.
+#------------------------------------------
+getTimeAx {
+	out "\$4 \$3";
+        in "\$3: %d\n" $ax_status;
+	@mismatch {
+		in "\$3: n%[0-9.] seconds\r\n" $ax_status;
+	}
+	@mismatch {
+		in "\$3: Target time %[^\r]\r\n" $ax_status;
+	}
+}
+
+
+#==========================================
+#
+# STATUS
+#
+#------------------------------------------
+# Ax A status.
+#------------------------------------------
+getStatusRateAxA {
+    out "status";
+    in "%d %*d %*d %*6c\n%*d %*d %*d %*6c\n" $ax_status;
+}
+
+getStatusTimeAxA {
+    in "%*d %d %*d %*6c\n%*d %*d %*d %*6c\n" $ax_status;
+}
+
+
+getStatusVolAxA {
+    in "%*d %*d %d %*6c\n%*d %*d %*d %*6c\n" $ax_status;
+}
+
+# Motor direction
+getStatusMtrDirAxA {
+    in "%*d %*d %*d %(\$1{\$2-Ax:A}MTRDIR:RBV){i|I|w|W}%*5c\n%*d %*d %*d %*6c\n" $ax_status;
+}
+
+# Limit switch status
+getStatusLimSwAxA {
+    in "%*d %*d %*d %*c%(\$1{\$2-Ax:A}LIMSW:RBV){i|I|w|W|.}%*4c\n%*d %*d %*d %*6c\n" $ax_status;
+}
+
+# Stall status
+getStatusStallAxA {
+    in "%*d %*d %*d %*2c%(\$1{\$2-Ax:A}STALL:RBV){S|.}%*3c\n%*d %*d %*d %*6c\n" $ax_status;
+}
+
+# Trigger input state
+getStatusTrigInAxA {
+    in "%*d %*d %*d %*3c%(\$1{\$2-Ax:A}TRIGIN:RBV){T|.}%*2c\n%*d %*d %*d %*6c\n" $ax_status;
+}
+
+# Direction port state
+getStatusDirPortAxA {
+    in "%*d %*d %*d %*4c%(\$1{\$2-Ax:A}DIRPORT:RBV){I|W}*c\n%*d %*d %*d %*6c\n" $ax_status;
+}
+
+# Target reached status
+getStatusTargetAxA {
+    in "%*d %*d %*d %*5c%(\$1{\$2-Ax:A}TARGET:RBV){T|.}\n%*d %*d %*d %*6c\n" $ax_status;
+}
+
+
+#------------------------------------------
+# Ax B status.
+#------------------------------------------
+getStatusRateAxB {
+    in "%*d %*d %*d %*6c\n%d %*d %*d %*6c\n" $ax_status;
+}
+
+getStatusTimeAxB {
+    in "%*d %*d %*d %*6c\n%*d %d %*d %*6c\n" $ax_status;
+}
+
+
+getStatusVolAxB {
+    in "%*d %*d %*d %*6c\n%*d %*d %d %*6c\n" $ax_status;
+}
+
+# Motor direction
+getStatusMtrDirAxB {
+    in "%*d %*d %*d %*6c\n%*d %*d %*d %(\$1{\$2-Ax:B}MTRDIR:RBV){i|I|w|W}%*5c\n" $ax_status;
+}
+
+# Limit switch status
+getStatusLimSwAxB {
+    in "%*d %*d %*d %*6c\n%*d %*d %*d %*c%(\$1{\$2-Ax:B}LIMSW:RBV){i|I|w|W|.}%*4c\n" $ax_status;
+}
+
+# Stall status
+getStatusStallAxB {
+    in "%*d %*d %*d %*6c\n%*d %*d %*d %*2c%(\$1{\$2-Ax:B}STALL:RBV){S|.}%*3c\n" $ax_status;
+}
+
+# Trigger input state
+getStatusTrigInAxB {
+    in "%*d %*d %*d %*6c\n%*d %*d %*d %*3c%(\$1{\$2-Ax:B}TRIGIN:RBV){{T|.}}%*c%*c\n" $ax_status;
+}
+
+# Direction port state
+getStatusDirPortAxB {
+    in "%*d %*d %*d %*6c\n%*d %*d %*d %*4c%(\$1{\$2-Ax:B}DIRPORT:RBV){I|W}%*c\n" $ax_status;
+}
+
+# Target reached status
+getStatusTargetAxB {
+    in "%*d %*d %*d %*6c\n%*d %*d %*d %*5c%(\$1{\$2-Ax:B}TARGET:RBV){T|.}\n" $ax_status;
+}
+
+
+
+
+#============================================================================================#
+# TO BE CLEANED.
+#============================================================================================#
+
+
+#getTVolume {
+#	out "tvolume";
+#	in "\n%[0-9.] %(\$1:TVOLUMEUNITS:RBV){pl|nl|ul|ml}\r\n%(\$1:STATUS){:|>|<|*|T*}";
+#	@mismatch {
+#		in "\nTarget volume %[^\r]\r\n%(\$1:STATUS){:|>|<|*|T*}";
+#	}
+#}
+#
+#setTVolume {
+#	out "tvolume %f %(\$1:TVOLUMEUNITS){pl|nl|ul|ml}";
+#	in "\n%(\$1:STATUS){:|>|<|*|T*}";
+#}
+#
+#getDiameter {
+#	out "diameter";
+#	in "\n%f mm\r\n%(\$1:STATUS){:|>|<|*|T*}";
+#}
+#
+#setDiameter {
+#	out "diameter %f";
+#	in "\n%(\$1:STATUS){:|>|<|*|T*}";
+##	@init { getDiameter; }
+#}
+#
+##==========================================
+##
+## Get float with unit.
+##
+##------------------------------------------
+#
+#setFloatEGUAx {
+#    out "\$4 \$3 %f %(\$1{\$2-Ax:\$3}:\$4:EGU)";
+#    in  $ax_status;
+#}
+#
+#getFloatEGUAx {
+#    out "\$4 \$3";
+#    in "\$3: %f%(\$1{\$2-Ax:\$3}:\$4:RBV:EGU){\$5}\n" $ax_status;
+#}
+#
+#setIRate {
+#	out "irate %f %(\$1:IRATEUNITS){pl/sec|pl/min|pl/hr|nl/sec|nl/min|nl/hr|ul/sec|ul/min|ul/hr|ml/sec|ml/min|ml/hr}";
+#	in "\n%(\$1:STATUS){:|>|<|*|T*}";
+#	@init { getIRate; }
+#}
+#
+#setWRate {
+#	out "wrate %f %(\$1:WRATEUNITS){pl/sec|pl/min|pl/hr|nl/sec|nl/min|nl/hr|ul/sec|ul/min|ul/hr|ml/sec|ml/min|ml/hr}";
+#	in "\n%(\$1:STATUS){:|>|<|*|T*}";
+#	@init { getWRate; }
+#}
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#ivolume {
+#	out "ivolume";
+#	in "\n%f %(\$1:IVOLUMEUNITS:RBV)s\r\n%(\$1:STATUS){:|>|<|*|T*}";
+#}
+#
+#wvolume {
+#	out "wvolume";
+#	in "\n%f %(\$1:WVOLUMEUNITS:RBV){pl|nl|ul|ml}\r\n%(\$1:STATUS){:|>|<|*|T*}";
+#}
+#

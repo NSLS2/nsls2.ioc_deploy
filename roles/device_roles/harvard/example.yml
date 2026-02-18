@@ -1,0 +1,92 @@
+---
+
+Harvard:
+  type: harvard
+  model: pump33dds  # pump33dds|phdultra
+  connections:
+    $(PORT):
+      type: IP  # IP|Serial
+      connection: 127.0.0.1:8000
+  environment:
+    DEV: Pump:Syrng-Ultra:1
+    P: XF:31ID1-ES
+    R: "{$(DEV)}"
+    PORT: HRVD1
+    PREFIX: $(P)$(R)
+  substitutions:
+    # Use this subsitution file configuration for phdultra
+    phdultra:
+      - filepath: db/phdultra.db
+        pattern: [P, R, PORT, A]
+        instances:
+          - [$(P), $(R), $(PORT), 0]
+      - filepath: $(ASYN)/db/asynRecord.db
+        pattern: [P, R, PORT, ADDR, OMAX, IMAX]
+        instances:
+          - [$(P), $(R), $(PORT), 0, 80, 80]
+    # Use this subsitution file configuration for pump33dds
+    pump33dds:
+      - filepath: db/pump33dds-cmd.db
+        pattern: [P, R, DEV, PORT]
+        instances:
+          - [$(P), $(R), $(DEV), $(PORT)]
+      - filepath: db/pump33dds-ax.db
+        pattern: [P, R, DEV, PORT, AX]
+        instances:
+          - [$(P), $(R), $(DEV), $(PORT), A]
+          - [$(P), $(R), $(DEV), $(PORT), B]
+      - filepath: db/pump33dds-ax-cmd.db
+        pattern: [P, R, DEV, PORT, AX, CMD]
+        instances:
+          - [$(P), $(R), $(DEV), $(PORT), A, CIVOLUME]
+          - [$(P), $(R), $(DEV), $(PORT), A, CWVOLUME]
+          - [$(P), $(R), $(DEV), $(PORT), A, IRUN]
+          - [$(P), $(R), $(DEV), $(PORT), A, WRUN]
+          - [$(P), $(R), $(DEV), $(PORT), A, RUN]
+          - [$(P), $(R), $(DEV), $(PORT), A, RRUN]
+          - [$(P), $(R), $(DEV), $(PORT), A, STOP]
+          - [$(P), $(R), $(DEV), $(PORT), B, CIVOLUME]
+          - [$(P), $(R), $(DEV), $(PORT), B, CWVOLUME]
+          - [$(P), $(R), $(DEV), $(PORT), B, IRUN]
+          - [$(P), $(R), $(DEV), $(PORT), B, WRUN]
+          - [$(P), $(R), $(DEV), $(PORT), B, RUN]
+          - [$(P), $(R), $(DEV), $(PORT), B, RRUN]
+          - [$(P), $(R), $(DEV), $(PORT), B, STOP]
+      - filepath: db/pump33dds-ax-int.db
+        pattern: [P, R, DEV, PORT, AX, CMD, EGU]
+        instances:
+          - [$(P), $(R), $(DEV), $(PORT), A, FORCE, "%"]
+          - [$(P), $(R), $(DEV), $(PORT), B, FORCE, "%"]
+          - [$(P), $(R), $(DEV), $(PORT), AB, FORCE, "%"]
+      - filepath: db/pump33dds-ax-rate.db
+        pattern: [P, R, DEV, PORT, AX, CMD]
+        instances:
+          - [$(P), $(R), $(DEV), $(PORT), A, IRATE]
+          - [$(P), $(R), $(DEV), $(PORT), A, WRATE]
+          - [$(P), $(R), $(DEV), $(PORT), B, IRATE]
+          - [$(P), $(R), $(DEV), $(PORT), B, WRATE]
+      - filepath: db/pump33dds-ax-vol.db
+        pattern: [P, R, DEV, PORT, AX, CMD]
+        instances:
+          - [$(P), $(R), $(DEV), $(PORT), A, TVOLUME]
+          - [$(P), $(R), $(DEV), $(PORT), A, IVOLUME]
+          - [$(P), $(R), $(DEV), $(PORT), A, WVOLUME]
+          - [$(P), $(R), $(DEV), $(PORT), B, TVOLUME]
+          - [$(P), $(R), $(DEV), $(PORT), B, IVOLUME]
+          - [$(P), $(R), $(DEV), $(PORT), B, WVOLUME]
+          - [$(P), $(R), $(DEV), $(PORT), AB, TVOLUME]
+          - [$(P), $(R), $(DEV), $(PORT), AB, IVOLUME]
+          - [$(P), $(R), $(DEV), $(PORT), AB, WVOLUME]
+      - filepath: db/pump33dds-ax-time.db
+        pattern: [P, R, DEV, PORT, AX, CMD]
+        instances:
+          - [$(P), $(R), $(DEV), $(PORT), A, TTIME]
+          - [$(P), $(R), $(DEV), $(PORT), B, TTIME]
+      - filepath: db/pump33dds-ax-status.db
+        pattern: [P, R, DEV, PORT, CMD]
+        instances:
+          - [$(P), $(R), $(DEV), $(PORT), STATUS]
+      - filepath: $(ASYN)/db/asynRecord.db
+        pattern: [P, R, PORT, ADDR, OMAX, IMAX]
+        instances:
+          - [$(P), $(R), $(PORT), 0, 80, 80]

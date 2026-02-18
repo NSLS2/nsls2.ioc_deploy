@@ -1,0 +1,493 @@
+## % macro, P, Device prefix
+## % macro, Q, Device suffix
+## % macro, PORT, Asyn port name
+## % macro, DISABLE, Set to 0 to enable this at startup
+## % macro, name, object and gui association name
+## % gui, $(name=), edmembed, harvardSyringe_embed.edl, device=$(P)$(DEV)
+## % gui, $(name=), edm, harvardSyringe.edl, device=$(P)$(DEV)
+#
+## This associates a BOY screen with the template
+## % gui, $(name=), boydetail, harvardSyringeApp_opi/harvardSyringe_detail.opi, P=$(P),Q=$(DEV),desc=Harvard Syringe Pump
+## % gui, $(name=), boyembed, harvardSyringeApp_opi/harvardSyringe_embed_box.opi, P=$(P),Q=$(DEV),desc=Harvard Syringe Pump
+## % gui, $(name=), boyembed, harvardSyringeApp_opi/harvardSyringe_embed.opi, P=$(P),Q=$(DEV),desc=Harvard Syringe Pump
+## These define what PVs the detail screen should contain
+## % gui, $(name=), enum, Enable,   $(P)$(DEV):DISABLE
+## % gui, $(name=), demand, Force,   $(P)$(DEV):FORCE
+## % gui, $(name=), readback, Force,   $(P)$(DEV):FORCE:RBV
+## % gui, $(name=), demand, Target Time,   $(P)$(DEV):TTIME
+## % gui, $(name=), readback, Target Time,   $(P)$(DEV):TTIME:RBV
+## % gui, $(name=), enum, Infuse Rate Units,   $(P)$(DEV):IRATEUNITS
+## % gui, $(name=), readback, Infuse Rate Units,   $(P)$(DEV):IRATEUNITS:RBV
+## % gui, $(name=), demand, Infuse Rate,   $(P)$(DEV):IRATE
+## % gui, $(name=), readback, Infuse Rate,   $(P)$(DEV):IRATE:RBV
+## % gui, $(name=), enum, Withdraw Rate Units,   $(P)$(DEV):WRATEUNITS
+## % gui, $(name=), readback, Withdraw Rate Units,   $(P)$(DEV):WRATEUNITS:RBV
+## % gui, $(name=), demand, Withdraw Rate,   $(P)$(DEV):WRATE
+## % gui, $(name=), readback, Withdraw Rate,   $(P)$(DEV):WRATE:RBV
+## % gui, $(name=), readback, Infused Volume,   $(P)$(DEV):IVOLUME:RBV
+## % gui, $(name=), readback, Infused Volume Units,   $(P)$(DEV):IVOLUMEUNITS:RBV
+## % gui, $(name=), command, Infused Volume Clear,   $(P)$(DEV):CLEARINFUSED
+## % gui, $(name=), readback, Withdrawn Volume,   $(P)$(DEV):WVOLUME:RBV
+## % gui, $(name=), readback, Withdrawn Volume Units,   $(P)$(DEV):WVOLUMEUNITS:RBV
+## % gui, $(name=), command, Withdrawn Volume Clear,   $(P)$(DEV):CLEARWITHDRAWN
+## % gui, $(name=), enum, Target Volume Units,   $(P)$(DEV):TVOLUMEUNITS
+## % gui, $(name=), readback, Target Volume Units,   $(P)$(DEV):TVOLUMEUNITS:RBV
+## % gui, $(name=), demand, Target Volume,   $(P)$(DEV):TVOLUME
+## % gui, $(name=), readback, Target Volume,   $(P)$(DEV):TVOLUME:RBV
+## % gui, $(name=), enum, Update,   $(P)$(DEV):UPDATE.SCAN
+## % gui, $(name=), command, Infuse,   $(P)$(DEV):IRUN
+## % gui, $(name=), command, Withdraw,   $(P)$(DEV):WRUN
+## % gui, $(name=), command, Stop,   $(P)$(DEV):STOP
+## % gui, $(name=), readback, Status,   $(P)$(DEV):STATUS
+#
+#======================================================
+#
+# POLL
+#
+record(ao, "$(P)$(DEV):POLLON") {
+  field(DESC, "Set Polling")
+  field(DTYP, "stream")
+  field(OUT, "@pump33dds.proto setPollOn($(P)$(DEV)) $(PORT)")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+  field(PINI, "YES")
+}
+
+record(bo, "$(P)$(DEV):DISABLE") {
+  field(DESC, "Disable comms")
+  field(PINI, "YES")
+  field(VAL, "$(DISABLE=1)")
+  field(OMSL, "supervisory")
+  field(ZNAM, "Enabled")
+  field(ONAM, "Disabled")
+  field(FLNK, "$(P)$(DEV):POLLON")
+}
+#
+#======================================================
+#
+# UPDATE
+#
+record(seq, "$(P)$(DEV):UPDATE") {
+  field(DESC, "Update Temp Params")
+  field(DOL1, "1")
+  field(DOL2, "1")
+  field(LNK1, "$(P)$(DEV)AXIS-A:UPDATE.PROC")
+  field(LNK1, "$(P)$(DEV)AXIS-B:UPDATE.PROC")
+  field(SCAN, "1 second")
+  field(PINI, "YES")
+}
+
+#======================================================
+#
+# STATUS
+#
+record(mbbi, "$(P)$(DEV):STATUS") {
+  field(DESC, "Pump Status")
+  field(ZRVL, "0")
+  field(ZRST, "Idle")
+  field(ONVL, "1")
+  field(ONST, "Infusing")
+  field(TWVL, "2")
+  field(TWST, "Withdrawing")
+  field(THVL, "3")
+  field(THST, "Stalled")
+  field(FRVL, "4")
+  field(FRST, "Target Reached")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+#
+#======================================================
+#
+# FORCE
+#
+record(ao, "$(P)$(DEV):FORCE") {
+  field(DESC, "Force")
+  field(DTYP, "stream")
+  field(FLNK, "$(P)$(DEV):FORCE:RBV")
+  field(OUT, "@pump33dds.proto setForce($(P)$(DEV)) $(PORT)")
+  field(PREC, "0")
+  field(EGU, "%")
+  field(DRVH, "100")
+  field(DRVL, "0")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+
+record(ai, "$(P)$(DEV):FORCE:RBV") {
+  field(DESC, "Force Readback")
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getForce($(P)$(DEV)) $(PORT)")
+  field(PREC, "0")
+  field(EGU, "%")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+
+#======================================================
+#
+# TARGET TIME
+#
+record(ao, "$(P)$(DEV):TTIME") {
+  field(DESC, "Target Time")
+  field(DTYP, "stream")
+  field(FLNK, "$(P)$(DEV):TTIME:RBV")
+  field(OUT, "@pump33dds.proto setTargetTime($(P)$(DEV)) $(PORT)")
+  field(EGU, "seconds")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+
+record(stringin, "$(P)$(DEV):TTIME:RBV") {
+  field(DESC, "Target Time Readback")
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getTargetTime($(P)$(DEV)) $(PORT)")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+#
+#======================================================
+#
+# DIAMETER
+#
+record(ao, "$(P)$(DEV):DIAMETER") {
+  field(DESC, "Syringe Diameter")
+  field(DTYP, "stream")
+  field(FLNK, "$(P)$(DEV):DIAMETER:RBV")
+  field(OUT, "@pump33dds.proto setDiameter($(P)$(DEV)) $(PORT)")
+  field(PREC, "4")
+  field(EGU, "mm")
+  field(DRVH, "100")
+  field(DRVL, "0")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+
+record(ai, "$(P)$(DEV):DIAMETER:RBV") {
+  field(DESC, "Syringe Diameter Readback")
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getDiameter($(P)$(DEV)) $(PORT)")
+  field(PREC, "4")
+  field(EGU, "mm")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+#
+#======================================================
+#
+# INFUSE RATE
+#
+record(ao, "$(P)$(DEV):IRATE") {
+  field(DESC, "Infusion Rate")
+  field(DTYP, "stream")
+  field(FLNK, "$(P)$(DEV):IRATE:RBV")
+  field(OUT, "@pump33dds.proto setIRate($(P)$(DEV)) $(PORT)")
+  field(PREC, "4")
+  field(DRVH, "100000")
+  field(DRVL, "0")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+
+record(ai, "$(P)$(DEV):IRATE:RBV") {
+  field(DESC, "Infusion Rate Readback")
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getIRate($(P)$(DEV)) $(PORT)")
+  field(PREC, "4")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+#
+#======================================================
+#
+# INFUSE RATE UNIT
+#
+record(mbbo, "$(P)$(DEV):IRATEUNITS") {
+  field(ZRVL, "0")
+  field(ZRST, "pl/sec")
+  field(ONVL, "1")
+  field(ONST, "pl/min")
+  field(TWVL, "2")
+  field(TWST, "pl/hr")
+  field(THVL, "3")
+  field(THST, "nl/sec")
+  field(FRVL, "4")
+  field(FRST, "nl/min")
+  field(FVVL, "5")
+  field(FVST, "nl/hr")
+  field(SXVL, "6")
+  field(SXST, "ul/sec")
+  field(SVVL, "7")
+  field(SVST, "ul/min")
+  field(EIVL, "8")
+  field(EIST, "ul/hr")
+  field(NIVL, "9")
+  field(NIST, "ml/sec")
+  field(TEVL, "10")
+  field(TEST, "ml/min")
+  field(ELVL, "11")
+  field(ELST, "ml/hr")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+
+record(mbbi, "$(P)$(DEV):IRATEUNITS:RBV") {
+  field(ZRVL, "0")
+  field(ZRST, "pl/sec")
+  field(ONVL, "1")
+  field(ONST, "pl/min")
+  field(TWVL, "2")
+  field(TWST, "pl/hr")
+  field(THVL, "3")
+  field(THST, "nl/sec")
+  field(FRVL, "4")
+  field(FRST, "nl/min")
+  field(FVVL, "5")
+  field(FVST, "nl/hr")
+  field(SXVL, "6")
+  field(SXST, "ul/sec")
+  field(SVVL, "7")
+  field(SVST, "ul/min")
+  field(EIVL, "8")
+  field(EIST, "ul/hr")
+  field(NIVL, "9")
+  field(NIST, "ml/sec")
+  field(TEVL, "10")
+  field(TEST, "ml/min")
+  field(ELVL, "11")
+  field(ELST, "ml/hr")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+#
+#======================================================
+#
+# WITHDRAW RATE
+#
+record(ao, "$(P)$(DEV):WRATE") {
+  field(DESC, "Withdraw Rate")
+  field(DTYP, "stream")
+  field(FLNK, "$(P)$(DEV):WRATE:RBV")
+  field(OUT, "@pump33dds.proto setWRate($(P)$(DEV)) $(PORT)")
+  field(PREC, "4")
+  field(DRVH, "100000")
+  field(DRVL, "0")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+
+record(ai, "$(P)$(DEV):WRATE:RBV") {
+  field(DESC, "Withdraw Rate Readback")
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getWRate($(P)$(DEV)) $(PORT)")
+  field(PREC, "4")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+#
+#======================================================
+#
+# WITHDRAW RATE UNIT
+#
+record(mbbo, "$(P)$(DEV):WRATEUNITS") {
+  field(ZRVL, "0")
+  field(ZRST, "pl/sec")
+  field(ONVL, "1")
+  field(ONST, "pl/min")
+  field(TWVL, "2")
+  field(TWST, "pl/hr")
+  field(THVL, "3")
+  field(THST, "nl/sec")
+  field(FRVL, "4")
+  field(FRST, "nl/min")
+  field(FVVL, "5")
+  field(FVST, "nl/hr")
+  field(SXVL, "6")
+  field(SXST, "ul/sec")
+  field(SVVL, "7")
+  field(SVST, "ul/min")
+  field(EIVL, "8")
+  field(EIST, "ul/hr")
+  field(NIVL, "9")
+  field(NIST, "ml/sec")
+  field(TEVL, "10")
+  field(TEST, "ml/min")
+  field(ELVL, "11")
+  field(ELST, "ml/hr")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+
+record(mbbi, "$(P)$(DEV):WRATEUNITS:RBV") {
+  field(ZRVL, "0")
+  field(ZRST, "pl/sec")
+  field(ONVL, "1")
+  field(ONST, "pl/min")
+  field(TWVL, "2")
+  field(TWST, "pl/hr")
+  field(THVL, "3")
+  field(THST, "nl/sec")
+  field(FRVL, "4")
+  field(FRST, "nl/min")
+  field(FVVL, "5")
+  field(FVST, "nl/hr")
+  field(SXVL, "6")
+  field(SXST, "ul/sec")
+  field(SVVL, "7")
+  field(SVST, "ul/min")
+  field(EIVL, "8")
+  field(EIST, "ul/hr")
+  field(NIVL, "9")
+  field(NIST, "ml/sec")
+  field(TEVL, "10")
+  field(TEST, "ml/min")
+  field(ELVL, "11")
+  field(ELST, "ml/hr")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+#
+#======================================================
+#
+# INFUSED VOLUME
+#
+record(ai, "$(P)$(DEV):IVOLUME:RBV") {
+  field(DESC, "Infused Volume")
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto ivolume($(P)$(DEV)) $(PORT)")
+  field(PREC, "4")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+#
+#======================================================
+#
+# INFUSED VOLUME UNIT
+#
+record(mbbi, "$(P)$(DEV):IVOLUMEUNITS:RBV") {
+  field(ZRVL, "0")
+  field(ZRST, "pl")
+  field(ONVL, "1")
+  field(ONST, "nl")
+  field(TWVL, "2")
+  field(TWST, "ul")
+  field(THVL, "3")
+  field(THST, "ml")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+#
+#======================================================
+#
+# CLEAR INFUSED VOLUME
+#
+record(bo, "$(P)$(DEV):CLEARINFUSED") {
+  field(DTYP, "stream")
+  field(OUT, "@pump33dds.proto clear_infused($(P)$(DEV)) $(PORT)")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+#
+#======================================================
+#
+# WITHDRAWN VOLUME
+#
+record(ai, "$(P)$(DEV):WVOLUME:RBV") {
+  field(DESC, "Withdrawn Volume")
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto wvolume($(P)$(DEV)) $(PORT)")
+  field(PREC, "4")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+#
+#======================================================
+#
+# WITHDRAWN VOLUME UNIT
+#
+record(mbbi, "$(P)$(DEV):WVOLUMEUNITS:RBV") {
+  field(ZRVL, "0")
+  field(ZRST, "pl")
+  field(ONVL, "1")
+  field(ONST, "nl")
+  field(TWVL, "2")
+  field(TWST, "ul")
+  field(THVL, "3")
+  field(THST, "ml")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+#
+#======================================================
+#
+# CLEAR WITHDRAWN
+#
+record(bo, "$(P)$(DEV):CLEARWITHDRAWN") {
+  field(DTYP, "stream")
+  field(OUT, "@pump33dds.proto clear_withdrawn($(P)$(DEV)) $(PORT)")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+#
+#======================================================
+#
+# TARGET VOLUME
+#
+record(ao, "$(P)$(DEV):TVOLUME") {
+  field(DESC, "Target Volume")
+  field(DTYP, "stream")
+  field(FLNK, "$(P)$(DEV):TVOLUME:RBV")
+  field(OUT, "@pump33dds.proto setTVolume($(P)$(DEV)) $(PORT)")
+  field(PREC, "4")
+  field(DRVH, "1000000")
+  field(DRVL, "0")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+
+record(stringin, "$(P)$(DEV):TVOLUME:RBV") {
+  field(DESC, "Target Volume Readback")
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getTVolume($(P)$(DEV)) $(PORT)")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+#
+#======================================================
+#
+# TARGET VOLUME UNIT
+#
+record(mbbo, "$(P)$(DEV):TVOLUMEUNITS") {
+  field(ZRVL, "0")
+  field(ZRST, "pl")
+  field(ONVL, "1")
+  field(ONST, "nl")
+  field(TWVL, "2")
+  field(TWST, "ul")
+  field(THVL, "3")
+  field(THST, "ml")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+
+record(mbbi, "$(P)$(DEV):TVOLUMEUNITS:RBV") {
+  field(ZRVL, "0")
+  field(ZRST, "pl")
+  field(ONVL, "1")
+  field(ONST, "nl")
+  field(TWVL, "2")
+  field(TWST, "ul")
+  field(THVL, "3")
+  field(THST, "ml")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+#
+#======================================================
+#
+# INFUSE RUN
+#
+record(bo, "$(P)$(DEV):IRUN") {
+  field(DESC, "Infuse")
+  field(DTYP, "stream")
+  field(OUT, "@pump33dds.proto infuse($(P)$(DEV)) $(PORT)")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+#
+#
+#======================================================
+#
+# WITHDRAW RUN
+#
+record(bo, "$(P)$(DEV):WRUN") {
+  field(DESC, "Withdraw")
+  field(DTYP, "stream")
+  field(OUT, "@pump33dds.proto withdraw($(P)$(DEV)) $(PORT)")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+#
+#======================================================
+#
+# STOP
+#
+record(bo, "$(P)$(DEV):STOP") {
+  field(DESC, "Stop")
+  field(DTYP, "stream")
+  field(OUT, "@pump33dds.proto stop($(P)$(DEV)) $(PORT)")
+  field(SDIS, "$(P)$(DEV):DISABLE")
+}
+#======================================================
