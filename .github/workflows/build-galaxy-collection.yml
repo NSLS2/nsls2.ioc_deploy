@@ -28,10 +28,10 @@ jobs:
 
       - name: Run ansible galaxy collection build
         run: |
-          pixi run ansible-galaxy collection build
+          pixi run ansible-galaxy collection build --output-path dist
 
       - name: Upload tarball to GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload ${{ github.event.release.tag_name }} ./*.tar.gz --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/*.tar.gz --clobber
