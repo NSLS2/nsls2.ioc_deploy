@@ -144,7 +144,7 @@ def install_galaxy_collection(
     cmd.extend(["-p", str(collections_path.absolute())])
     try:
         logger.info(f"Installing required ansible-galaxy collection(s): {name}")
-        subprocess.run(cmd, capture_output=True, text=True, check=True)
+        subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as e:
         raise RuntimeError(f"Failed to install galaxy collection {name}: {e}") from e
 
@@ -368,9 +368,6 @@ def main():
         str(Path("collections/requirements.yml").absolute()), is_req_file=True
     )
     install_galaxy_collection(str(top_path), force=True)
-
-    if args.container:
-        install_galaxy_collection("community.docker")
 
     if args.all:
         logger.info("Finding all examples for all IOC types")
