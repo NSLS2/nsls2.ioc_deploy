@@ -1,0 +1,37 @@
+---
+
+name: Build Ansible Galaxy Collection
+permissions:
+  contents: read
+  packages: read
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-publish:
+    name: Build and Publish Collection
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Pixi
+        uses: prefix-dev/setup-pixi@8ca4608ef7f4daeb54f5205b20d0b7cb42f11143  # yamllint disable-line rule:line-length
+        with:
+          pixi-version: v0.55.0
+          cache: false
+          frozen: true
+
+      - name: Run ansible galaxy collection build
+        run: |
+          pixi run ansible-galaxy collection build
+
+      - name: Upload tarball to GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ github.event.release.tag_name }} ./*.tar.gz --clobber
