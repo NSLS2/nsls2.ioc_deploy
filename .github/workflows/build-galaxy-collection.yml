@@ -28,7 +28,7 @@ jobs:
 
       - name: Run ansible galaxy collection build
         run: |
-          pixi run ansible-galaxy collection build
+          pixi run ansible-galaxy collection build .
 
       - name: Upload tarball to GitHub Release
         env:
