@@ -2,10 +2,10 @@
 nsls2em-01:
   type: nsls2em
   environment:
-    DEVICE_IP: "10.69.58.70"
+    DEVICE_IP: "10.69.58.68"
     SYS: "XF:31ID1-BI"
     DEV: "EM:1"
-    DEVICE_SN: "EC0009"
+    DEVICE_SN: "EC0019"
     PREFIX: "$(SYS){$(DEV)}"
 
     ENGINEER: C. Engineer
