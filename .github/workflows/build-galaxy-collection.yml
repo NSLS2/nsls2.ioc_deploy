@@ -6,8 +6,8 @@ on:
     types: [published]
 
 jobs:
-  build-and-publish:
-    name: Build and Publish Collection
+  build-and-upload:
+    name: Build Collection Tarball and Upload to Release
     runs-on: ubuntu-latest
     permissions:
       contents: rwrited
