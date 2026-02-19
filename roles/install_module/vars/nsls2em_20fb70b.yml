@@ -1,7 +1,7 @@
 ---
-nsls2em_8295ed8:
+nsls2em_20fb70b:
   name: nsls2em
-  version: 8295ed8
+  version: 20fb70b
   url: https://github.com/NSLS2/nsls2em-ioc
   include_base_ad_config: true
   executable: nsls2em
