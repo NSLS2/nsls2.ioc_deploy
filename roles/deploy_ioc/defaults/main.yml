@@ -15,7 +15,7 @@ deploy_ioc_as_directory:
 deploy_ioc_post_deploy_step: "None"
 
 # The two below are concatenated to form the full IOC executable path,
-# and it's associated dbd file. These can be overridden as needed.
+# and its associated dbd file. These can be overridden as needed.
 deploy_ioc_template_root_path: "/usr/lib/epics"
 deploy_ioc_executable: "softIoc"
 
