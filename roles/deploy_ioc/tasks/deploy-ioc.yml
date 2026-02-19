@@ -21,14 +21,6 @@
         manage_iocs_subcommand: "{{ deploy_ioc_ioc_name }}"
       when: deploy_ioc_service_file.stat.exists
 
-- name: Create IOC directory
-  ansible.builtin.file:
-    path: "{{ deploy_ioc_ioc_directory }}"
-    owner: "{{ host_config.softioc_user }}"
-    group: "{{ host_config.softioc_group }}"
-    state: directory
-    mode: "0775"
-
 - name: Perform base setup when using standard startup script format
   when: deploy_ioc_standard_st_cmd
   block:

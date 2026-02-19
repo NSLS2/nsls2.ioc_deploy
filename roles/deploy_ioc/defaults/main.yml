@@ -1,32 +1,56 @@
 ---
 
-deploy_ioc_common_dir: "/epics/common"
-deploy_ioc_post_deploy_step: "None"
-deploy_ioc_template_root_path: "/usr/lib/epics"
-deploy_ioc_iocs_directory: "/epics/iocs"
+# Default directory structure for IOC deployments
+deploy_ioc_base_directory: "/epics"
+deploy_ioc_common_directory: "{{ deploy_ioc_base_directory }}/common"
+deploy_ioc_iocs_directory: "{{ deploy_ioc_base_directory }}/iocs"
 deploy_ioc_ioc_directory:
   "{{ deploy_ioc_iocs_directory }}/{{ deploy_ioc_ioc_name }}"
+# Autosave directory configuration
+deploy_ioc_as_dir_name: "as"
+deploy_ioc_as_directory:
+  "{{ deploy_ioc_ioc_directory }}/{{ deploy_ioc_as_dir_name }}"
+
+# Specifies what post deployment step to take for each IOC.
+deploy_ioc_post_deploy_step: "None"
+
+# The two below are concatenated to form the full IOC executable path,
+# and it's associated dbd file. These can be overridden as needed.
+deploy_ioc_template_root_path: "/usr/lib/epics"
 deploy_ioc_executable: "softIoc"
+
+# Use standard st.cmd file, which loads `epicsEnv.cmd`, `base.cmd`, `common.cmd`,
+# executes iocInit(), and then loads `postInit.cmd`
 deploy_ioc_standard_st_cmd: true
+
+# If using standard startup script, specify whether `common.cmd` should be used.
+# Sets up autosave passes, loads standard databases like iocStats, reccaster, etc.
 deploy_ioc_use_common: true
 deploy_ioc_use_ad_common: false
+
+# Specify whether EPICS databases should be loaded as substitution files
+# i.e. dbLoadTemplate, or directly as db files, i.e. dbLoadRecords.
 deploy_ioc_load_as_substitutions: true
+
+# Manage-iocs starting port number
 deploy_ioc_nextport: 4000
+
+# Dictionary mapping OS environment variable names to their values.
+# Set before the IOC startup script is run.
 deploy_ioc_os_env_exports: {}
+
+# List of non-standard autosave req files that should be loaded.
 deploy_ioc_req_file_list: []
+
+# List of PV names and values that should be set after IOC startup.
 deploy_ioc_dbpf_list: []
 
 # List supported EL versions. By default, support EL 8 and 9.
 # Support EL 10 pending https://github.com/ralphlange/procServ/issues/71
 deploy_ioc_supported_el_versions: [8, 9]
 
-# Autosave directory configuration
-deploy_ioc_as_dir_name: "as"
-deploy_ioc_as_directory:
-  "{{ deploy_ioc_ioc_directory }}/{{ deploy_ioc_as_dir_name }}"
+# Specify whether or not to call `makeAutosaveFilesFromDbInfo()` at IOC startup.
 deploy_ioc_make_autosave_files: false
-
-deploy_ioc_ioc_host_vars_read_token: ""
 
 # A dict for device-specific environment variables. Override this as needed
 # to provide custom environment configurations for specific devices.

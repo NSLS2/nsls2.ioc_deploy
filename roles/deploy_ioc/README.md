@@ -60,9 +60,14 @@ The following variables can be overridden to customize the deployment behavior. 
 
 ### Directory Configuration
 
-**`deploy_ioc_common_dir`**
+**`deploy_ioc_base_directory`**
 - **Type**: string
-- **Default**: `"/epics/common"`
+- **Default**: `"/epics"`
+- **Description**: Base directory for all EPICS-related files and IOCs.
+
+**`deploy_ioc_common_directory`**
+- **Type**: string
+- **Default**: `"{{ deploy_ioc_base_directory }}/common"`
 - **Description**: Directory for common EPICS files shared across IOCs, such as network setup configuration files.
 
 **`deploy_ioc_template_root_path`**
@@ -72,7 +77,7 @@ The following variables can be overridden to customize the deployment behavior. 
 
 **`deploy_ioc_iocs_directory`**
 - **Type**: string
-- **Default**: `"/epics/iocs"`
+- **Default**: `"{{ deploy_ioc_base_directory }}/iocs"`
 - **Description**: Parent directory where all IOC instances are deployed.
 
 **`deploy_ioc_ioc_directory`**
@@ -95,7 +100,7 @@ The following variables can be overridden to customize the deployment behavior. 
 **`deploy_ioc_executable`**
 - **Type**: string
 - **Default**: `"softIoc"`
-- **Description**: The EPICS IOC executable to use. Can be overridden to use custom executables for specific IOC types.
+- **Description**: The EPICS IOC executable to use. Should be overridden by most device roles.
 
 **`deploy_ioc_standard_st_cmd`**
 - **Type**: boolean
@@ -173,7 +178,8 @@ TEMPLATE_TOP: "{{ deploy_ioc_template_root_path }}"
 HOSTNAME: "{{ inventory_hostname.split('.')[0] }}"
 IOCNAME: "{{ deploy_ioc_ioc_name }}"
 
-# EPICS module paths
+# EPICS module paths. By default all versions are pulled from central RPM distribution.
+# Add module dep to device role or ioc instance if specific versions are needed.
 ASYN: /usr/lib/epics
 AUTOSAVE: /usr/lib/epics
 BUSY: /usr/lib/epics
@@ -192,13 +198,6 @@ EPICS_BASE: /usr/lib/epics
 - **Type**: list
 - **Default**: `["procServ"]`
 - **Description**: List of system packages required for IOC operation. These packages are automatically installed via dnf/yum during deployment.
-
-### Other Variables
-
-**`deploy_ioc_ioc_host_vars_read_token`**
-- **Type**: string
-- **Default**: `""`
-- **Description**: Authentication token for reading IOC host variables from external sources. Used for integration with configuration management systems.
 
 ## Usage for Device Role Developers
 
