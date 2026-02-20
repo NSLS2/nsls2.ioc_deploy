@@ -1,0 +1,6 @@
+---
+
+type: enum("omega_rtc")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
