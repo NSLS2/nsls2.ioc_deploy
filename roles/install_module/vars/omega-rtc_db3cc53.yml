@@ -1,6 +1,6 @@
 ---
 
-omega-rtc_db3cc53:
-  name: omega-rtc
+omega_rtc_db3cc53:
+  name: omega_rtc
   version: db3cc53
   url: https://github.com/NSLS-II/omega_rtc_ioc
