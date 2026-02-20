@@ -1,6 +1,15 @@
 ---
 
 type: enum("omega_rtc")
+devices: list(device)
 environment:
   ENGINEER: str()
   PREFIX: str()
+  SYS: str()
+  
+---
+device:
+  SYS: str()
+  DEV: str()
+  PORT: str()
+  COMM: enum("RS-232", "RS-485")
