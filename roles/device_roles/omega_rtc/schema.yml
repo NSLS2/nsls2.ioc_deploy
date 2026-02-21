@@ -1,7 +1,7 @@
 ---
 
 type: enum("omega_rtc")
-devices: list(device)
+devices: list(include('device'))
 environment:
   ENGINEER: str()
   PREFIX: str()
