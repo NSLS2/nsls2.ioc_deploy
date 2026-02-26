@@ -31,6 +31,8 @@
     - name: Stash any local changes if module already cloned
       ansible.builtin.command:
         "git -C {{ install_module_dir }} stash" # noqa command-instead-of-module
+      become: true
+      become_user: "{{ host_config.softioc_user }}"
       register: install_module_stash_result
       changed_when: install_module_stash_result.rc == 0
       when: install_module_cloned.stat.exists
@@ -44,13 +46,8 @@
         # Don't allow recursive clones, because the `.ci`
         # submodule breaks things if cloned.
         recursive: false
-
-    - name: Add module dir to safe dirs list to avoid dubious ownership error
-      ansible.builtin.command:
-        "git config --global --add safe.directory {{ install_module_dir }}"
-        # noqa command-instead-of-module
-      register: install_module_make_dir_safe
-      changed_when: install_module_make_dir_safe.rc == 0
+      become: true
+      become_user: "{{ host_config.softioc_user }}"
 
     - name: If ADCore, install commonPlugin files
       ansible.builtin.copy:
@@ -106,6 +103,8 @@
     version: "{{ install_module_config.version }}"
     force: "{{ install_module_force_reinstall }}"
     recursive: true
+  become: true
+  become_user: "{{ host_config.softioc_user }}"
   when: install_module_name.startswith("epics_base")
 
 - name: Get list of required system packages
@@ -130,15 +129,11 @@
     cmd: "{{ install_module_compilation_command }}" # noqa: command-instead-of-shell
     # yamllint enable rule:line-length
     chdir: "{{ install_module_dir }}"
+  become: true
+  become_user: "{{ host_config.softioc_user }}"
   register: install_module_compile_result
   changed_when: install_module_compile_result.rc == 0
   when: not (install_module_skip_compilation | bool)
-
-- name: Ensure proper ownership of module files
-  ansible.builtin.command:
-    "chown -R {{ host_config.softioc_user }}:{{ host_config.softioc_group }} {{ install_module_dir }}" # yamllint disable-line rule:line-length
-  register: install_module_ownership_result
-  changed_when: install_module_ownership_result.rc == 0
 
 - name: Add module to dict mapping module names to paths
   ansible.builtin.set_fact:
