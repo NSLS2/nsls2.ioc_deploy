@@ -4,6 +4,11 @@
   ansible.builtin.set_fact:
     rbd9103_serial_num: "{{ ioc.environment.SERIAL_NUMBER }}"
 
+- name: Check if udev rules directory exists
+  ansible.builtin.stat:
+    path: /etc/udev/rules.d
+  register: rbd9103_udev_rules_dir
+
 - name: Install udev rule file for RBD9103
   ansible.builtin.template:
     src: "templates/99-rbd9103.rules.j2"
@@ -11,6 +16,7 @@
     owner: root
     group: root
     mode: "0644"
+  when: rbd9103_udev_rules_dir.stat.exists
   notify:
     - Reload udev rules
 
