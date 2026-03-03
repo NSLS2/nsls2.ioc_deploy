@@ -25,6 +25,14 @@
         path: "{{ install_module_dir }}/.git"
       register: install_module_cloned
 
+    - name: Ensure module directory is owned by softioc_user
+      ansible.builtin.file:
+        path: "{{ install_module_dir }}"
+        owner: "{{ host_config.softioc_user }}"
+        group: "{{ host_config.softioc_group }}"
+        recurse: true
+      when: install_module_cloned.stat.exists
+
     # The only changes should be to CONFIG_SITE and RELEASE files,
     # which we will re-apply in a second, so stash them to ensure correct
     # version is checked out in next step.

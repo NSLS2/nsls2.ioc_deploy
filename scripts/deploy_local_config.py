@@ -206,6 +206,9 @@ def deploy_configs(options: DeploymentOptions):
                     f"{options.hostname},",
                     "-c",
                     "docker",
+                    # Use 'su' instead of 'sudo' for become, since containers
+                    # don't have sudo/PAM configured.
+                    "--become-method=su",
                     # Our containers come w/ softioc-tst accounts pre-made.
                     "-e",
                     "beamline_acronym=TST",
