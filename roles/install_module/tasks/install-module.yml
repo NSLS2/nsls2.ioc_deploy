@@ -25,20 +25,19 @@
         path: "{{ install_module_dir }}/.git"
       register: install_module_cloned
 
-    - name: Ensure module directory is owned by softioc_user
-      ansible.builtin.file:
-        path: "{{ install_module_dir }}"
-        owner: "{{ host_config.softioc_user }}"
-        group: "{{ host_config.softioc_group }}"
-        recurse: true
-      when: install_module_cloned.stat.exists
+    - name: Add module directory to git safe.directory list
+      ansible.builtin.command:
+        "git config --global --add safe.directory {{ install_module_dir }}" # noqa command-instead-of-module
+      become: true
+      become_user: "{{ host_config.softioc_user }}"
+      changed_when: true
 
     # The only changes should be to CONFIG_SITE and RELEASE files,
     # which we will re-apply in a second, so stash them to ensure correct
     # version is checked out in next step.
     - name: Stash any local changes if module already cloned
       ansible.builtin.command:
-        "git -c safe.directory={{ install_module_dir }} -C {{ install_module_dir }} stash" # noqa command-instead-of-module
+        "git -C {{ install_module_dir }} stash" # noqa command-instead-of-module
       become: true
       become_user: "{{ host_config.softioc_user }}"
       register: install_module_stash_result
@@ -104,6 +103,14 @@
 
 # base is a special case, because it is cloned recursively, and should not
 # have any release/configure files adjusted.
+- name: Add epics_base directory to git safe.directory list
+  ansible.builtin.command:
+    "git config --global --add safe.directory {{ install_module_dir }}" # noqa command-instead-of-module
+  become: true
+  become_user: "{{ host_config.softioc_user }}"
+  changed_when: true
+  when: install_module_name.startswith("epics_base")
+
 - name: Handle epics_base
   ansible.builtin.git:
     repo: "{{ install_module_config.url }}"
@@ -142,6 +149,11 @@
   register: install_module_compile_result
   changed_when: install_module_compile_result.rc == 0
   when: not (install_module_skip_compilation | bool)
+
+- name: Ensure module directory is owned by softioc_user
+  ansible.builtin.command:
+    "chown -R {{ host_config.softioc_user }}:{{ host_config.softioc_group }} {{ install_module_dir }}" # noqa command-instead-of-module
+  changed_when: true
 
 - name: Add module to dict mapping module names to paths
   ansible.builtin.set_fact:
