@@ -1,22 +1,25 @@
 ---
 
 collections:
-  - # name: community.general
-    source: https://github.com/ansible-collections/community.general.git
-    type: git
+  - name: community.general
+    # source: https://github.com/ansible-collections/community.general.git
+    # type: git
     version: 10.1.0
-  - # name: ansible.posix
-    source: https://github.com/ansible-collections/ansible.posix.git
-    type: git
+  - name: ansible.posix
+    # source: https://github.com/ansible-collections/ansible.posix.git
+    # type: git
     version: 1.5.1
-  - # name: containers.podman
-    source: https://github.com/containers/ansible-podman-collections.git
-    type: git
+  - name: containers.podman
+    # source: https://github.com/containers/ansible-podman-collections.git
+    # type: git
     version: 1.16.2
   - # name: nsls2.general
     source: https://github.com/nsls2/nsls2.general.git
     type: git
-  - # name: awx.awx
-    source: https://github.com/nsls2/awx.git
-    type: git
-    version: nsls-ii-prod
+  # - # name: awx.awx
+  #   source: https://github.com/nsls2/awx.git
+  #   type: git
+  #   version: nsls-ii-prod
+  - name: community.docker
+    # source:
+    version: 3.4.9
