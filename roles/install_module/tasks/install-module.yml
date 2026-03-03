@@ -38,7 +38,7 @@
     # version is checked out in next step.
     - name: Stash any local changes if module already cloned
       ansible.builtin.command:
-        "git -C {{ install_module_dir }} stash" # noqa command-instead-of-module
+        "git -c safe.directory={{ install_module_dir }} -C {{ install_module_dir }} stash" # noqa command-instead-of-module
       become: true
       become_user: "{{ host_config.softioc_user }}"
       register: install_module_stash_result
