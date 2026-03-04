@@ -16,134 +16,6 @@
     state: "directory"
     mode: "0775"
 
-- name: Handle standard module
-  when: not install_module_name.startswith("epics_base")
-  block:
-
-    - name: Check if module has already been cloned
-      ansible.builtin.stat:
-        path: "{{ install_module_dir }}/.git"
-      register: install_module_cloned
-
-    - name: Check if module directory is already in git safe.directory
-      ansible.builtin.command:
-        "git config --global --get-all safe.directory" # noqa command-instead-of-module
-      become: true
-      become_user: "{{ host_config.softioc_user }}"
-      register: install_module_safe_dirs
-      changed_when: false
-      failed_when: false
-
-    - name: Add module directory to git safe.directory list
-      ansible.builtin.command:
-        "git config --global --add safe.directory {{ install_module_dir }}" # noqa command-instead-of-module
-      become: true
-      become_user: "{{ host_config.softioc_user }}"
-      when: install_module_dir not in (install_module_safe_dirs.stdout_lines | default([]))
-      changed_when: true
-
-    # The only changes should be to CONFIG_SITE and RELEASE files,
-    # which we will re-apply in a second, so stash them to ensure correct
-    # version is checked out in next step.
-    - name: Stash any local changes if module already cloned
-      ansible.builtin.command:
-        "git -C {{ install_module_dir }} stash" # noqa command-instead-of-module
-      become: true
-      become_user: "{{ host_config.softioc_user }}"
-      register: install_module_stash_result
-      changed_when: install_module_stash_result.rc == 0
-      when: install_module_cloned.stat.exists
-
-    - name: Clone module repository and checkout the correct version
-      ansible.builtin.git:
-        repo: "{{ install_module_config.url }}"
-        dest: "{{ install_module_dir }}"
-        version: "{{ install_module_config.version }}"
-        force: "{{ install_module_force_reinstall }}"
-        # Don't allow recursive clones, because the `.ci`
-        # submodule breaks things if cloned.
-        recursive: false
-      become: true
-      become_user: "{{ host_config.softioc_user }}"
-
-    - name: If ADCore, install commonPlugin files
-      ansible.builtin.copy:
-        src: "files/{{ item }}"
-        dest: "{{ install_module_dir }}/iocBoot/{{ item }}"
-        owner: "{{ host_config.softioc_user }}"
-        group: "{{ host_config.softioc_group }}"
-        mode: "0664"
-      when: install_module_name.startswith("adcore")
-      with_items:
-        - "commonPlugins.cmd"
-        - "commonPlugin_settings.req"
-
-    - name: Create dict to track total config entries for module
-      ansible.builtin.set_fact:
-        install_module_config_dict:
-          "{{ install_module_default_config_dict }}"
-
-    - name: If module is an AD module, include all standard AD features
-      ansible.builtin.set_fact:
-        install_module_config_dict:
-          "{{ install_module_config_dict
-          | combine(install_module_ad_config_dict) }}"
-      when: >-
-        install_module_config.include_base_ad_config is defined and
-        install_module_config.include_base_ad_config | bool
-
-    - name: Add any config overrides for module
-      ansible.builtin.set_fact:
-        install_module_config_dict:
-          "{{ install_module_config_dict
-          | combine(install_module_config.config) }}"
-      when: install_module_config.config is defined
-
-    - name: Find all EPICS configure directories for module
-      ansible.builtin.find:
-        paths: "{{ install_module_dir }}"
-        recurse: true
-        patterns: "configure"
-        file_type: directory
-      register: install_module_configure_dirs
-
-    - name: Update RELEASE and CONFIG_SITE files for each configure directory
-      ansible.builtin.include_tasks: reset-configure-files.yml
-      with_items: "{{ install_module_configure_dirs.files }}"
-
-# base is a special case, because it is cloned recursively, and should not
-# have any release/configure files adjusted.
-- name: Check if epics_base directory is already in git safe.directory
-  ansible.builtin.command:
-    "git config --global --get-all safe.directory" # noqa command-instead-of-module
-  become: true
-  become_user: "{{ host_config.softioc_user }}"
-  register: install_module_base_safe_dirs
-  changed_when: false
-  failed_when: false
-  when: install_module_name.startswith("epics_base")
-
-- name: Add epics_base directory to git safe.directory list
-  ansible.builtin.command:
-    "git config --global --add safe.directory {{ install_module_dir }}" # noqa command-instead-of-module
-  become: true
-  become_user: "{{ host_config.softioc_user }}"
-  changed_when: true
-  when: >-
-    install_module_name.startswith("epics_base") and
-    install_module_dir not in (install_module_base_safe_dirs.stdout_lines | default([]))
-
-- name: Handle epics_base
-  ansible.builtin.git:
-    repo: "{{ install_module_config.url }}"
-    dest: "{{ install_module_dir }}"
-    version: "{{ install_module_config.version }}"
-    force: "{{ install_module_force_reinstall }}"
-    recursive: true
-  become: true
-  become_user: "{{ host_config.softioc_user }}"
-  when: install_module_name.startswith("epics_base")
-
 - name: Get list of required system packages
   ansible.builtin.set_fact:
     install_module_pkg_deps: "{{ install_module_default_pkg_deps }}"
@@ -160,19 +32,37 @@
     name: "{{ install_module_pkg_deps }}"
     state: present
 
-- name: Compile the module
-  ansible.builtin.shell:
-    # yamllint disable rule:line-length
-    cmd: "{{ install_module_compilation_command }}" # noqa: command-instead-of-shell
-    # yamllint enable rule:line-length
-    chdir: "{{ install_module_dir }}"
+- name: Check if module has already been cloned
+  ansible.builtin.stat:
+    path: "{{ install_module_dir }}/.git"
+  register: install_module_cloned
+
+- name: If cloned, ensure ownership and permissions are set correctly
+  ansible.builtin.command:
+    "chown -R {{ host_config.softioc_user }}:{{ host_config.softioc_group }} {{ install_module_dir }}" # noqa command-instead-of-module
+  changed_when: true
+  when: install_module_cloned.stat.exists
+
+# Perform the clone and build as the softioc user
+- name: Clone, checkout, and build the module
   become: true
   become_user: "{{ host_config.softioc_user }}"
-  register: install_module_compile_result
-  changed_when: install_module_compile_result.rc == 0
-  when: not (install_module_skip_compilation | bool)
+  block:
+    - name: Clone the module and update configure files
+      ansible.builtin.include_tasks: clone-module.yml
 
-- name: Ensure module directory is owned by softioc_user
+    - name: Compile the module
+      ansible.builtin.shell:
+        # yamllint disable rule:line-length
+        cmd: "{{ install_module_compilation_command }}" # noqa: command-instead-of-shell
+        # yamllint enable rule:line-length
+        chdir: "{{ install_module_dir }}"
+      register: install_module_compile_result
+      changed_when: install_module_compile_result.rc == 0
+      when: not (install_module_skip_compilation | bool)
+
+# TODO: Check if this is necessary, since we're cloning and building as the softioc_user, but it doesn't hurt to be sure
+- name: Ensure module directory is owned by softioc_user, after compilation
   ansible.builtin.command:
     "chown -R {{ host_config.softioc_user }}:{{ host_config.softioc_group }} {{ install_module_dir }}" # noqa command-instead-of-module
   changed_when: true
