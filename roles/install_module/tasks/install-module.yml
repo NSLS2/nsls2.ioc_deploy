@@ -16,9 +16,6 @@
     state: "directory"
     mode: "0775"
 
-- name: Clone and checkout module repository, update configure files
-  ansible.builtin.include_tasks: clone-module.yml
-
 - name: Get list of required system packages
   ansible.builtin.set_fact:
     install_module_pkg_deps: "{{ install_module_default_pkg_deps }}"
@@ -35,19 +32,37 @@
     name: "{{ install_module_pkg_deps }}"
     state: present
 
-- name: Compile the module
-  ansible.builtin.shell:
-    # yamllint disable rule:line-length
-    cmd: "{{ install_module_compilation_command }}" # noqa: command-instead-of-shell
-    # yamllint enable rule:line-length
-    chdir: "{{ install_module_dir }}"
+- name: Check if module has already been cloned
+  ansible.builtin.stat:
+    path: "{{ install_module_dir }}/.git"
+  register: install_module_cloned
+
+- name: If cloned, ensure ownership and permissions are set correctly
+  ansible.builtin.command:
+    "chown -R {{ host_config.softioc_user }}:{{ host_config.softioc_group }} {{ install_module_dir }}" # noqa command-instead-of-module
+  changed_when: true
+  when: install_module_cloned.stat.exists
+
+# Perform the clone and build as the softioc user
+- name: Clone, checkout, and build the module
   become: true
   become_user: "{{ host_config.softioc_user }}"
-  register: install_module_compile_result
-  changed_when: install_module_compile_result.rc == 0
-  when: not (install_module_skip_compilation | bool)
+  block:
+    - name: Clone the module and update configure files
+      ansible.builtin.include_tasks: clone-module.yml
 
-- name: Ensure module directory is owned by softioc_user
+    - name: Compile the module
+      ansible.builtin.shell:
+        # yamllint disable rule:line-length
+        cmd: "{{ install_module_compilation_command }}" # noqa: command-instead-of-shell
+        # yamllint enable rule:line-length
+        chdir: "{{ install_module_dir }}"
+      register: install_module_compile_result
+      changed_when: install_module_compile_result.rc == 0
+      when: not (install_module_skip_compilation | bool)
+
+# TODO: Check if this is necessary, since we're cloning and building as the softioc_user, but it doesn't hurt to be sure
+- name: Ensure module directory is owned by softioc_user, after compilation
   ansible.builtin.command:
     "chown -R {{ host_config.softioc_user }}:{{ host_config.softioc_group }} {{ install_module_dir }}" # noqa command-instead-of-module
   changed_when: true

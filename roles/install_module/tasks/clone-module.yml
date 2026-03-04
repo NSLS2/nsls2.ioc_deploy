@@ -1,30 +1,15 @@
 ---
 
-- name: Check if module has already been cloned
-  ansible.builtin.stat:
-    path: "{{ install_module_dir }}/.git"
-  register: install_module_cloned
 
-- name: If cloned, ensure module dir is safe and stash any local changes before pulling updates
+# The only changes should be to CONFIG_SITE and RELEASE files,
+# which we will re-apply in a second, so stash them to ensure correct
+# version is checked out in next step.
+- name: Stash any local changes if module already cloned
+  ansible.builtin.command:
+    "git -C {{ install_module_dir }} stash" # noqa command-instead-of-module
+  register: install_module_stash_result
+  changed_when: install_module_stash_result.rc == 0
   when: install_module_cloned.stat.exists
-  block:
-    - name: Add module directory to git safe.directory list if already cloned
-      ansible.builtin.command:
-        "git -C {{ install_module_dir }} config --add safe.directory {{ install_module_dir }}" # noqa command-instead-of-module
-      become: true
-      become_user: "{{ host_config.softioc_user }}"
-      changed_when: true
-
-    # The only changes should be to CONFIG_SITE and RELEASE files,
-    # which we will re-apply in a second, so stash them to ensure correct
-    # version is checked out in next step.
-    - name: Stash any local changes if module already cloned
-      ansible.builtin.command:
-        "git -C {{ install_module_dir }} stash" # noqa command-instead-of-module
-      become: true
-      become_user: "{{ host_config.softioc_user }}"
-      register: install_module_stash_result
-      changed_when: install_module_stash_result.rc == 0
 
 - name: Clone module repository and checkout the correct version
   ansible.builtin.git:
@@ -33,15 +18,6 @@
     version: "{{ install_module_config.version }}"
     force: "{{ install_module_force_reinstall }}"
     recursive: "{{ install_module_config.clone_recursive | default(false) }}"
-  become: true
-  become_user: "{{ host_config.softioc_user }}"
-
-- name: Add module directory to git safe.directory list
-  ansible.builtin.command:
-    "git -C {{ install_module_dir }} config --add safe.directory {{ install_module_dir }}" # noqa command-instead-of-module
-  become: true
-  become_user: "{{ host_config.softioc_user }}"
-  changed_when: true
 
 - name: If not epics_base, handle CONFIG_SITE and RELEASE files
   when: not install_module_name.startswith("epics_base")
