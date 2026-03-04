@@ -16,6 +16,19 @@
     state: "directory"
     mode: "0775"
 
+- name: Look up softioc user home directory
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ host_config.softioc_user }}"
+
+- name: Ensure softioc user home directory exists
+  ansible.builtin.file:
+    path: "{{ getent_passwd[host_config.softioc_user][4] }}"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    state: directory
+    mode: "0755"
+
 - name: Handle standard module
   when: not install_module_name.startswith("epics_base")
   block:
