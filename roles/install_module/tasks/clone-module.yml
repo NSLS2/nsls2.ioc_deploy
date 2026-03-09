@@ -1,0 +1,68 @@
+---
+
+
+# The only changes should be to CONFIG_SITE and RELEASE files,
+# which we will re-apply in a second, so stash them to ensure correct
+# version is checked out in next step.
+- name: Stash any local changes if module already cloned
+  ansible.builtin.command:
+    "git -C {{ install_module_dir }} stash" # noqa command-instead-of-module
+  register: install_module_stash_result
+  changed_when: install_module_stash_result.rc == 0
+  when: install_module_cloned.stat.exists
+
+- name: Clone module repository and checkout the correct version
+  ansible.builtin.git:
+    repo: "{{ install_module_config.url }}"
+    dest: "{{ install_module_dir }}"
+    version: "{{ install_module_config.version }}"
+    force: "{{ install_module_force_reinstall }}"
+    recursive: "{{ install_module_config.clone_recursive | default(false) }}"
+
+- name: If not epics_base, handle CONFIG_SITE and RELEASE files
+  when: not install_module_name.startswith("epics_base")
+  block:
+    - name: If ADCore, install commonPlugin files
+      ansible.builtin.copy:
+        src: "files/{{ item }}"
+        dest: "{{ install_module_dir }}/iocBoot/{{ item }}"
+        owner: "{{ host_config.softioc_user }}"
+        group: "{{ host_config.softioc_group }}"
+        mode: "0664"
+      when: install_module_name.startswith("adcore")
+      with_items:
+        - "commonPlugins.cmd"
+        - "commonPlugin_settings.req"
+
+    - name: Create dict to track total config entries for module
+      ansible.builtin.set_fact:
+        install_module_config_dict:
+          "{{ install_module_default_config_dict }}"
+
+    - name: If module is an AD module, include all standard AD features
+      ansible.builtin.set_fact:
+        install_module_config_dict:
+          "{{ install_module_config_dict
+          | combine(install_module_ad_config_dict) }}"
+      when: >-
+        install_module_config.include_base_ad_config is defined and
+        install_module_config.include_base_ad_config | bool
+
+    - name: Add any config overrides for module
+      ansible.builtin.set_fact:
+        install_module_config_dict:
+          "{{ install_module_config_dict
+          | combine(install_module_config.config) }}"
+      when: install_module_config.config is defined
+
+    - name: Find all EPICS configure directories for module
+      ansible.builtin.find:
+        paths: "{{ install_module_dir }}"
+        recurse: true
+        patterns: "configure"
+        file_type: directory
+      register: install_module_configure_dirs
+
+    - name: Update RELEASE and CONFIG_SITE files for each configure directory
+      ansible.builtin.include_tasks: reset-configure-files.yml
+      with_items: "{{ install_module_configure_dirs.files }}"
