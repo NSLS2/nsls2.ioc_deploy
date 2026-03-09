@@ -1,8 +1,8 @@
 ---
 
-adxspd_latest:
+adxspd_986de77:
   name: ADXSPD
-  version: main
+  version: 986de77
   url: https://github.com/NSLS2/ADXSPD
   include_base_ad_config: True
   executable: xspdApp

@@ -1,7 +1,7 @@
 ---
 
 deploy_ioc_use_ad_common: true
-deploy_ioc_required_module: adxspd_latest
+deploy_ioc_required_module: adxspd_986de77
 deploy_ioc_template_root_path:
   "{{ deploy_ioc_required_module_path }}/iocs/xspdIOC"
 deploy_ioc_req_file_list:
