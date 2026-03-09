@@ -1,0 +1,96 @@
+---
+
+name: Test Device Roles
+permissions:
+  contents: read
+  packages: read
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'roles/device_roles/**'
+      - 'roles/deploy_ioc/vars/**'
+  workflow_dispatch:
+
+jobs:
+  detect-changes:
+    name: Detect Modified Roles
+    runs-on: ubuntu-latest
+    outputs:
+      roles: ${{ steps.set-roles.outputs.roles }}
+      has-changes: ${{ steps.set-roles.outputs.has-changes }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Detect Modified Device Roles
+        id: set-roles
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            # Manual run: test all roles
+            ROLES=$(find roles/device_roles/ -mindepth 1 -maxdepth 1 \
+              -type d -exec basename {} \; \
+              | jq -R -s -c 'split("\n")[:-1]')
+            echo "roles=$ROLES" >> "$GITHUB_OUTPUT"
+            echo "has-changes=true" >> "$GITHUB_OUTPUT"
+            echo "Manual run: testing all roles"
+          else
+            # PR: test only modified roles
+            ROLES=$(git diff --name-only \
+              "origin/${{ github.base_ref }}...HEAD" \
+              | awk '{
+                  if ($0 ~ /^roles\/device_roles\//) {
+                    split($0, a, "/")
+                    print a[3]
+                  } else if ($0 ~ /^roles\/deploy_ioc\/vars\/.*\.yml$/) {
+                    split($0, a, "/")
+                    sub(/\.yml$/, "", a[4])
+                    print a[4]
+                  }
+                }' \
+              | sort -u \
+              | while read -r role; do
+                  [ -d "roles/device_roles/$role" ] && echo "$role"
+                done \
+              | jq -R -s -c 'split("\n")[:-1]')
+            echo "roles=$ROLES" >> "$GITHUB_OUTPUT"
+
+            if [ "$ROLES" = "[]" ]; then
+              echo "has-changes=false" >> "$GITHUB_OUTPUT"
+              echo "No roles modified in this PR"
+            else
+              echo "has-changes=true" >> "$GITHUB_OUTPUT"
+              echo "Modified roles: $ROLES"
+            fi
+          fi
+
+  test-deployments:
+    name: Test Deployment of ${{ matrix.role }} on EL${{ matrix.rhel_version }}
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.has-changes == 'true'
+    strategy:
+      matrix:
+        role: ${{ fromJson(needs.detect-changes.outputs.roles) }}
+        rhel_version: [8, 9]
+      fail-fast: false
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Pixi
+        uses: prefix-dev/setup-pixi@8ca4608ef7f4daeb54f5205b20d0b7cb42f11143
+        with:
+          pixi-version: v0.55.0
+          cache: false
+          frozen: true
+
+      - name: Test Deployment
+        run: pixi run deployment -t ${{ matrix.role }} --container -m ${{ matrix.rhel_version }}

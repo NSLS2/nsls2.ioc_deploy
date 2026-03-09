@@ -16,3 +16,7 @@ collections:
   - # name: nsls2.general
     source: https://github.com/nsls2/nsls2.general.git
     type: git
+  - # name: awx.awx
+    source: https://github.com/nsls2/awx.git
+    type: git
+    version: nsls-ii-prod

@@ -1,0 +1,47 @@
+---
+# Requires proprietary SDK to compile
+skip_compilation: true
+
+verification:
+  files_must_exist:
+    # Standard IOC boot files (created by deploy_ioc)
+    - iocBoot/st.cmd
+    - iocBoot/epicsEnv.cmd
+    - iocBoot/postInit.cmd
+    # Role-specific files
+    - iocBoot/base.cmd
+    - as/req/auto_settings.req
+
+  file_must_contain:
+    iocBoot/st.cmd:
+      - "iocInit"
+    iocBoot/base.cmd:
+      - "ADTucamConfig"
+      - "dbLoadRecords"
+      - "ADTucam.template"
+      # Extra plugins
+      - "NDProcessConfigure"
+      - "NDTransformConfigure"
+    as/req/auto_settings.req:
+      - "ADTucam_settings.req"
+      - "commonPlugin_settings.req"
+      # Extra plugins
+      - "NDProcess_settings.req"
+      - "NDTransform_settings.req"
+
+  file_must_not_contain:
+    iocBoot/st.cmd:
+      - "{{"  # No unrendered jinja
+      - "}}"
+    iocBoot/base.cmd:
+      - "{{"
+      - "}}"
+    iocBoot/epicsEnv.cmd:
+      - "{{"
+      - "}}"
+    as/req/auto_settings.req:
+      - "{{"
+      - "}}"
+
+  permissions:
+    iocBoot/st.cmd: "0775"

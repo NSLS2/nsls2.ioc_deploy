@@ -1,0 +1,6 @@
+---
+
+type: enum("adurl")
+environment:
+  ENGINEER: str()
+  PREFIX: str()

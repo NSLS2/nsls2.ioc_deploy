@@ -10,3 +10,4 @@ exclude_paths:
   - "roles/install_module/vars/"
   # Exclude copied playbook - uses nsls2.general collection
   - "scripts/deploy_ioc.yml"
+  - "collections/ansible_collections/"

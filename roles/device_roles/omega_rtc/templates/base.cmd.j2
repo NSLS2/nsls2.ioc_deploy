@@ -1,0 +1,16 @@
+
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# omega_rtc specific commands
+# streamdevice protocol file path
+epicsEnvSet("STREAM_PROTOCOL_PATH", "{{ deploy_ioc_template_root_path }}/protocols")
+
+# load record instances
+{% for device in ioc.devices %}
+drvAsynIPPortConfigure("{{ device.PORT }}", "{{ device.HOST }}")
+dbLoadRecords("{{ deploy_ioc_template_root_path }}/db/omegaCNi32_temp.db","Sys={{ device.SYS }},Dev={{ device.DEV }},Chan={{ "01" if (device.COMM is defined) and (device.COMM == "RS-485") else "" }},PORT={{ device.PORT }}")
+dbLoadRecords("{{ deploy_ioc_template_root_path }}/db/asynRecord.db","P={{ device.SYS }},R={{ device.DEV }}Asyn,PORT={{ device.PORT }},ADDR=0,IMAX=256,OMAX=256")
+{% endfor %}
+
+dbLoadRecords("$(TOP)/db/alarm.db", "SYS={{ ioc.environment.SYS }}")

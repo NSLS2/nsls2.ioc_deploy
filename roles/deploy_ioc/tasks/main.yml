@@ -29,10 +29,23 @@
   ansible.builtin.debug:
     msg: "EPICS interface IP: {{ host_config.epics_interface.address }}"
 
+- name: Create base directories if they don't exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0755"
+  loop:
+    - "{{ deploy_ioc_base_directory }}"
+    - "{{ deploy_ioc_iocs_directory }}"
+    - "{{ deploy_ioc_common_directory }}"
+
+
 - name: Deploy netsetup file
   ansible.builtin.template:
     src: "templates/netsetup.j2"
-    dest: "{{ deploy_ioc_common_dir }}/{{ inventory_hostname.split('.')[0] }}-netsetup.cmd" # yamllint disable-line rule:line-length
+    dest: "{{ deploy_ioc_common_directory }}/{{ inventory_hostname.split('.')[0] }}-netsetup.cmd" # yamllint disable-line rule:line-length
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
     mode: "0664"

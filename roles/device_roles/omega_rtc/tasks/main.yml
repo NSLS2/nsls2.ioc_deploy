@@ -1,0 +1,26 @@
+---
+# Tasks for omega_rtc role
+
+- name: Install base.cmd
+  ansible.builtin.template:
+    src: templates/base.cmd.j2
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    mode: "0664"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+
+- name: Install custom postInit.cmd
+  ansible.builtin.template:
+    src: templates/postInit.cmd.j2
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/postInit.cmd"
+    mode: "0664"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+
+- name: Install custom alarm.db
+  ansible.builtin.template:
+    src: templates/alarm.db.j2
+    dest: "{{ deploy_ioc_ioc_directory }}/db/alarm.db"
+    mode: "0664"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"

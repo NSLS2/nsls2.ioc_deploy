@@ -4,5 +4,5 @@ skip_compilation: bool()
 verification:
   files_must_exist: list(str())
   file_must_contain: map(list(str()), key=str())
-  file_must_not_contain: map(list(str()), key=str())
+  file_must_not_contain: map(list(str()), key=str(), required=False)
   permissions: map(str(), key=str())
