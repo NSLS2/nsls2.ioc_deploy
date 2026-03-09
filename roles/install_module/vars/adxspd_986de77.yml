@@ -11,4 +11,3 @@ adxspd_986de77:
   module_deps:
     - adcompvision_9750d13
     - adcore_60080dc
-    - ffmpeg_server_07c570f
