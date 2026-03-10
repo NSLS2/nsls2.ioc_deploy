@@ -1,0 +1,19 @@
+## Register all support components
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# Configure the low level communication port
+ek9000Configure("${EK9K}", "${HOST}", 502, ${NUM_TERMS})
+dbLoadRecords("{{ deploy_ioc_template_root_path }}/db/ek9000_status.db","P=$(SYS){$(DEV)},EK9K=$(EK9K)")
+
+# Configure terminal
+{% for elio in ioc.terminals %}
+############  Config for elio #{{ loop.index }} - {{ elio[0] }} - {{ elio[1] }}  ############
+
+epicsEnvSet("POS",{{ elio[0] }})
+epicsEnvSet("MODEL","{{ elio[1] }}")
+epicsEnvSet("Dev","{$(DEV)_$(POS)}")
+ek9000ConfigureTerminal("$(EK9K)", "$(Dev)", "$(MODEL)", "$(POS)")
+dbLoadTemplate("{{ deploy_ioc_template_root_path }}/db/$(MODEL).substitutions","DEVICE=$(EK9K), Sys=$(SYS), Dev=$(Dev), POS=$(POS)")
+
+{% endfor %}

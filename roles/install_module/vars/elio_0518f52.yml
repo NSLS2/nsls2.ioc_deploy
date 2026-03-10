@@ -1,0 +1,7 @@
+elio_0518f52:
+  name: "elio"
+  url: "https://github.com/NSLS2/elio-ioc"
+  version: 0518f52
+  module_deps:
+    - ek9000_60e62b5
+

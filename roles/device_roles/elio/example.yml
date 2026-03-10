@@ -1,0 +1,27 @@
+gpio_ex1:
+  type: "elio"
+  terminals:
+    # POS, MODEL
+  - ["1", "EL3068"]
+  - ["2", "EL4008"]
+  - ["3", "EL1808"]
+  - ["4", "EL1808"]
+  - ["5", "EL2808"]
+  - ["6", "EL2808"]
+  - ["7", "EL3068"]
+  - ["8", "EL1124"]
+  - ["9", "EL2124"]
+
+  # SYS and DEV: used to generate prefix for each device
+  # PREFIX: used for IOC-specific PVs
+  # HOST may be an IP address or host name  
+  # EK9K: port name
+  # NUM_TERMS: total terminal numbers
+  environment:
+    SYS: "XF:31ID1-ES"
+    DEV: "GPIO:1"
+    EK9K: EK9K1
+    HOST: 10.69.58.101
+    NUM_TERMS: 9
+    PREFIX: "XF:31ID1-CT{IOC:GPIO1}"
+    ENGINEER: "H. Xu"    # Your name/contact info

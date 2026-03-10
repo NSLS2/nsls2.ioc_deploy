@@ -1,0 +1,6 @@
+ek9000_60e62b5:
+  name: "ek9000"
+  url: "https://github.com/slac-epics/ek9000"
+  version: 60e62b5
+  module_deps:
+    - modbus_bb9fa05
