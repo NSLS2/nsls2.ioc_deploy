@@ -4,4 +4,5 @@ deploy_ioc_use_common: true
 deploy_ioc_use_ad_common: false
 deploy_ioc_make_autosave_files: true
 deploy_ioc_required_module: mdrive_8bc9a09
+deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
 deploy_ioc_executable: mdrive

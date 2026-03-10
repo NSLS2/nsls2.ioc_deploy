@@ -1,0 +1,11 @@
+---
+
+type: enum("elio")
+environment:
+  SYS: str()
+  DEV: str()
+  EK9K: str()
+  HOST: str()
+  NUM_TERMS: int()
+  PREFIX: str()
+  ENGINEER: str()
