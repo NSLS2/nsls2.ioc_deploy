@@ -1,0 +1,23 @@
+---
+
+- name: Fail if host_config.softioc_user is not defined
+  ansible.builtin.fail:
+    msg: "host_config.softioc_user must be defined to perform a rollback deployment."
+  when: host_config is not defined or host_config.softioc_user is not defined
+
+- name: Check if the ioc is a git repository before attempting to rollback
+  ansible.builtin.stat:
+    path: "{{ rollback_deployment_ioc_dir }}/.git"
+  register: rollback_deployment_git_repo
+
+- name: Fail if the ioc is not a git repository
+  ansible.builtin.fail:
+    msg: "The IOC directory {{ rollback_deployment_ioc_dir }} is not a git repository. Cannot perform rollback."
+  when: not rollback_deployment_git_repo.stat.exists
+
+- name: Perform the rollback as the softioc user
+  become: true
+  become_user: "{{ host_config.softioc_user }}"
+  block:
+    - name: Perform the rollback
+      ansible.builtin.include_tasks: rollback.yml
