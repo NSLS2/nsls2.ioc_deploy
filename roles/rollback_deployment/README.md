@@ -8,4 +8,4 @@ A role that allows for quick rollbacks of deployments if they had unintended con
 - `rollback_deployment_iocs_dir`: The directory where all IOCs are stored. Default is `{{ rollback_deployment_base_dir }}/iocs`.
 - `rollback_deployment_ioc_dir`: The directory for the specific IOC being rolled back. Default is `{{ rollback_deployment_iocs_dir }}/{{ rollback_deployment_ioc_name }}`.
 - `rollback_deployment_ioc_name`: The name of the IOC being rolled back. This variable must be set when using the role.
-- `rollback_deployment_num_rollback_steps`: The number of previous deployment steps to keep for rollback purposes. Default is `1`.
+- `rollback_deployment_num_rollback_steps`: The number of deployments to rollback. Default is `1`.

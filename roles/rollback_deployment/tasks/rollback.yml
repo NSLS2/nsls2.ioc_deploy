@@ -1,0 +1,45 @@
+---
+
+- name: Check to make sure the repository has a HEAD
+  ansible.builtin.command: git rev-parse --verify HEAD  # noqa: command-instead-of-module
+  args:
+    chdir: "{{ rollback_deployment_ioc_dir }}"
+  register: rollback_deployment_git_head_check
+  changed_when: false
+
+- name: Fail if the repository doesn't have a HEAD
+  ansible.builtin.fail:
+    msg: "The git repository in {{ rollback_deployment_ioc_dir }} doesn't have a HEAD. Cannot perform rollback."
+  when: rollback_deployment_git_head_check.rc != 0
+
+- name: Check to make sure there are no uncommitted changes before attempting to rollback
+  ansible.builtin.command: git status --porcelain  # noqa: command-instead-of-module
+  args:
+    chdir: "{{ rollback_deployment_ioc_dir }}"
+  register: rollback_deployment_git_status
+  changed_when: false
+
+- name: Fail if there are uncommitted changes in the ioc directory
+  ansible.builtin.fail:
+    msg: "There are uncommitted changes in {{ rollback_deployment_ioc_dir }}. Commit or stash the changes before attempting to rollback."
+  when: rollback_deployment_git_status.stdout != ""
+
+- name: Make sure there are enough commits to perform the rollback
+  ansible.builtin.command: git rev-list --count HEAD  # noqa: command-instead-of-module
+  args:
+    chdir: "{{ rollback_deployment_ioc_dir }}"
+  register: rollback_deployment_git_commit_count
+  changed_when: false
+
+- name: Fail if the requested rollback is greater than the number of commits in the repository
+  ansible.builtin.fail:
+    msg: "Can't rollback {{ rollback_deployment_num_rollback_steps }} steps! There are only {{ rollback_deployment_git_commit_count.stdout }} commits."
+  when: rollback_deployment_git_commit_count.stdout | int <= rollback_deployment_num_rollback_steps | int
+
+- name: Rollback the deployment
+  ansible.builtin.command: git reset --hard HEAD~{{ rollback_deployment_num_rollback_steps }}  # noqa: command-instead-of-module
+  args:
+    chdir: "{{ rollback_deployment_ioc_dir }}"
+  register: rollback_deployment_git_reset_result
+  changed_when: true
+  failed_when: rollback_deployment_git_reset_result.rc != 0

@@ -105,6 +105,14 @@
   become_user: "{{ host_config.softioc_user }}"
   block:
 
+    - name: Install gitignore file
+      ansible.builtin.template:
+        src: templates/gitignore.j2
+        dest: "{{ deploy_ioc_ioc_directory }}/.gitignore"
+        owner: "{{ host_config.softioc_user }}"
+        group: "{{ host_config.softioc_group }}"
+        mode: "0664"
+
     - name: Check if IOC directory is a git repository
       ansible.builtin.stat:
         path: "{{ deploy_ioc_ioc_directory }}/.git"
