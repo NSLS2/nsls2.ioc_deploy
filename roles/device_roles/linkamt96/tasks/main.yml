@@ -1,6 +1,31 @@
 ---
 # Tasks for linkamt96 role
 
+# socat PTY bridge for Moxa terminal server connections.
+# Replaces the fragile npreal2 kernel module with a userspace PTY bridge
+# that survives kernel updates without manual intervention.
+- name: Set up socat PTY bridge for Moxa serial connection
+  when: "'MOXA_HOST' in ioc.environment"
+  block:
+    - name: Ensure socat is installed
+      ansible.builtin.dnf:
+        name: socat
+        state: present
+
+    - name: Deploy linkam PTY bridge systemd service
+      ansible.builtin.template:
+        src: templates/linkam-pty.service.j2
+        dest: "/etc/systemd/system/linkam-pty-{{ deploy_ioc_ioc_name }}.service"
+        mode: "0644"
+      register: linkamt96_pty_service
+
+    - name: Enable and start linkam PTY bridge
+      ansible.builtin.systemd:
+        name: "linkam-pty-{{ deploy_ioc_ioc_name }}"
+        enabled: true
+        state: started
+        daemon_reload: "{{ linkamt96_pty_service.changed }}"
+
 - name: Install base.cmd
   ansible.builtin.template:
     src: templates/base.cmd.j2

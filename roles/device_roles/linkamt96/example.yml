@@ -1,13 +1,38 @@
 ---
 
+# Example: Moxa terminal server via socat PTY bridge (recommended)
+# Deploys a systemd service that bridges TCP to a local PTY device,
+# eliminating the need for the npreal2 kernel module.
 linkamt96-01:
   type: linkamt96
   environment:
     ENGINEER: C. Engineer
     PREFIX: XF:31ID1-ES{LINKAMT96:01}
     PORT: "LINK3"
-    SERIAL_PORT: "/dev/ttyUSB0"
-    VENDOR_ID: "1234"
-    PRODUCT_ID: "5678"
+    MOXA_HOST: "10.68.42.77"
+    MOXA_PORT: "4001"
     LINKAM3_LICENSE_PATH: "/path/to/linkamt96_license.txt"
     LINKAM3_LOG_PATH: "/path/to/linkamt96_log.txt"
+
+# Example: Direct serial connection
+# linkamt96-02:
+#   type: linkamt96
+#   environment:
+#     ENGINEER: C. Engineer
+#     PREFIX: XF:31ID1-ES{LINKAMT96:02}
+#     PORT: "LINK3"
+#     SERIAL_PORT: "/dev/ttyUSB0"
+#     LINKAM3_LICENSE_PATH: "/path/to/linkamt96_license.txt"
+#     LINKAM3_LOG_PATH: "/path/to/linkamt96_log.txt"
+
+# Example: USB connection
+# linkamt96-03:
+#   type: linkamt96
+#   environment:
+#     ENGINEER: C. Engineer
+#     PREFIX: XF:31ID1-ES{LINKAMT96:03}
+#     PORT: "LINK3"
+#     VENDOR_ID: "1234"
+#     PRODUCT_ID: "5678"
+#     LINKAM3_LICENSE_PATH: "/path/to/linkamt96_license.txt"
+#     LINKAM3_LOG_PATH: "/path/to/linkamt96_log.txt"

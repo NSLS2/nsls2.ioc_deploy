@@ -5,6 +5,8 @@ environment:
   ENGINEER: str()
   PREFIX: str()
   PORT: str()  # asyn port
+  MOXA_HOST: str(required=False)  # Moxa terminal server IP/hostname (socat PTY bridge)
+  MOXA_PORT: str(required=False)  # Moxa TCP port (socat PTY bridge)
   SERIAL_PORT: str(required=False)
   VENDOR_ID: str(required=False)
   PRODUCT_ID: str(required=False)
