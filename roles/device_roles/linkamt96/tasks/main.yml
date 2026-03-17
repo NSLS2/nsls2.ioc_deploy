@@ -25,7 +25,7 @@
       ansible.builtin.systemd:
         name: "linkam-pty-{{ deploy_ioc_ioc_name }}"
         enabled: true
-        state: started
+        state: "{{ 'restarted' if linkamt96_pty_service.changed else 'started' }}"
         daemon_reload: "{{ linkamt96_pty_service.changed }}"
 
 - name: Install base.cmd

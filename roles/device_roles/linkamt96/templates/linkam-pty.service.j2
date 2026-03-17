@@ -6,7 +6,7 @@ Wants=network-online.target
 [Service]
 Type=simple
 ExecStart=/usr/bin/socat \
-    PTY,link=/dev/linkam-pty-{{ deploy_ioc_ioc_name }},raw,echo=0,mode=0666 \
+    PTY,link=/dev/linkam-pty-{{ deploy_ioc_ioc_name }},raw,echo=0,mode=0660,group-late={{ host_config.softioc_group }} \
     TCP:{{ ioc.environment.MOXA_HOST }}:{{ ioc.environment.MOXA_PORT }},retry,interval=5,forever
 Restart=always
 RestartSec=5
