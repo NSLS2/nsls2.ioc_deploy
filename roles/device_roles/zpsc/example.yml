@@ -1,0 +1,7 @@
+---
+
+zpsc-01:
+  type: zpsc
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{ZPSC:01}

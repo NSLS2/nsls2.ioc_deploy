@@ -1,0 +1,6 @@
+---
+
+type: enum("zpsc")
+environment:
+  ENGINEER: str()
+  PREFIX: str()

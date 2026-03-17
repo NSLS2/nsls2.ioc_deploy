@@ -1,0 +1,42 @@
+# zpsc specific post-init commands
+# Add your post-init commands here
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan1:DigOut_ON1-SP 0
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan2:DigOut_ON1-SP 0
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan3:DigOut_ON1-SP 0
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan4:DigOut_ON1-SP 0
+
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan1:DigOut_ON2-SP 1
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan2:DigOut_ON2-SP 1
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan3:DigOut_ON2-SP 1
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan4:DigOut_ON2-SP 1
+
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan1:DigOut_Reset-SP 0
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan2:DigOut_Reset-SP 0
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan3:DigOut_Reset-SP 0
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan4:DigOut_Reset-SP 0
+
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan1:DigOut_Spare-SP 0
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan2:DigOut_Spare-SP 0
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan3:DigOut_Spare-SP 0
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan4:DigOut_Spare-SP 0
+
+
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan1:DigOut_Park-SP 0
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan2:DigOut_Park-SP 0
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan3:DigOut_Park-SP 0
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan4:DigOut_Park-SP 0
+
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan1:DAC_SetPt-SP 0
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan2:DAC_SetPt-SP 0
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan3:DAC_SetPt-SP 0
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan4:DAC_SetPt-SP 0
+
+#dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan1:DACSetPt-Offset-SP 0.0
+#dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan1:DACSetPt-Gain-SP 1.0
+
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan1:DAC_OpMode-SP 0
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan2:DAC_OpMode-SP 0
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan3:DAC_OpMode-SP 0
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan4:DAC_OpMode-SP 0
+
+dbpf $(SYSTEMS){$(DEVICE)$(NO)}Chan2:AveMode-SP 0
