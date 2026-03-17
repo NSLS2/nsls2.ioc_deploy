@@ -100,6 +100,39 @@
 - name: Generate manage-iocs config file
   ansible.builtin.include_tasks: update-config.yml
 
+- name: Commit any changes to git repository
+  become: true
+  become_user: "{{ host_config.softioc_user }}"
+  block:
+
+    - name: Check if IOC directory is a git repository
+      ansible.builtin.stat:
+        path: "{{ deploy_ioc_ioc_directory }}/.git"
+      register: deploy_ioc_git_repo
+
+    - name: If it is not yet a git repository, initialize a new one
+      ansible.builtin.command: git init
+      args:
+        chdir: "{{ deploy_ioc_ioc_directory }}"
+      when: not deploy_ioc_git_repo.stat.exists
+
+    - name: Add all changes to git
+      ansible.builtin.command: git add -A
+      args:
+        chdir: "{{ deploy_ioc_ioc_directory }}"
+      register: deploy_ioc_git_add_result
+      changed_when: deploy_ioc_git_add_result.rc == 0
+      failed_when: false
+
+    - name: Commit changes to git
+      ansible.builtin.command: git commit -m "Changes from deployment on {{ ansible_date_time.iso8601 }}"
+      args:
+        chdir: "{{ deploy_ioc_ioc_directory }}"
+      register: deploy_ioc_git_commit_result
+      changed_when: deploy_ioc_git_commit_result.rc == 0
+      failed_when: false
+      when: deploy_ioc_git_add_result.changed
+
 - name: Perform post-deployment IOC setup tasks
   when: deploy_ioc_post_deploy_step != "None"
   block:

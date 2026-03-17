@@ -1,0 +1,7 @@
+---
+# Default directory structure for IOC deployments
+rollback_deployment_base_dir: "/epics"
+rollback_deployment_iocs_dir: "{{ rollback_deployment_base_dir }}/iocs"
+rollback_deployment_ioc_dir:
+  "{{ rollback_deployment_iocs_dir }}/{{ rollback_deployment_ioc_name }}"
+rollback_deployment_num_rollback_steps: 1
