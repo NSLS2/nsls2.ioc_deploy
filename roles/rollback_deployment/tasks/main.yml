@@ -11,7 +11,7 @@
   when: not deploy_ioc_git_repo.stat.exists
 
 - name: Check to make sure there are no uncommitted changes before attempting to rollback
-  ansible.builtin.command: git status --porcelain
+  ansible.builtin.command: git status --porcelain  # noqa: command-instead-of-module
   args:
     chdir: "{{ rollback_deployment_ioc_dir }}"
   register: deploy_ioc_git_status
@@ -19,11 +19,11 @@
 
 - name: Fail if there are uncommitted changes in the ioc directory
   ansible.builtin.fail:
-    msg: "There are uncommitted changes in the IOC directory {{ rollback_deployment_ioc_dir }}. Please commit or stash these changes before attempting to rollback."
+    msg: "There are uncommitted changes in {{ rollback_deployment_ioc_dir }}. Commit or stash the changes before attempting to rollback."
   when: deploy_ioc_git_status.stdout != ""
 
 - name: Make sure there are enough commits to perform the rollback
-  ansible.builtin.command: git rev-list --count HEAD
+  ansible.builtin.command: git rev-list --count HEAD  # noqa: command-instead-of-module
   args:
     chdir: "{{ rollback_deployment_ioc_dir }}"
   register: deploy_ioc_git_commit_count
@@ -31,13 +31,13 @@
 
 - name: Fail if the requested rollback is greater than the number of commits in the repository
   ansible.builtin.fail:
-    msg: "Cannot perform rollback of {{ rollback_deployment_num_rollback_steps }} steps because there are only {{ deploy_ioc_git_commit_count.stdout }} commits in the repository."
+    msg: "Can't rollback {{ rollback_deployment_num_rollback_steps }} steps! There are only {{ deploy_ioc_git_commit_count.stdout }} commits."
   when: deploy_ioc_git_commit_count.stdout | int < rollback_deployment_num_rollback_steps | int
 
 - name: Rollback the deployment as the softioc user
   become: true
   become_user: "{{ host_config.softioc_user }}"
-  ansible.builtin.command: git reset --hard HEAD~{{ rollback_deployment_num_rollback_steps }}
+  ansible.builtin.command: git reset --hard HEAD~{{ rollback_deployment_num_rollback_steps }}  # noqa: command-instead-of-module
   args:
     chdir: "{{ rollback_deployment_ioc_dir }}"
   register: deploy_ioc_git_reset_result

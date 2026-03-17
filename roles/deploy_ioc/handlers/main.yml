@@ -1,0 +1,11 @@
+---
+
+- name: Commit any changes to IOC to git
+  become: true
+  become_user: "{{ host_config.softioc_user }}"
+  ansible.builtin.command: git commit -m "Changes from deployment on {{ ansible_date_time.iso8601 }}"  # noqa: command-instead-of-module
+  args:
+    chdir: "{{ deploy_ioc_ioc_directory }}"
+  register: deploy_ioc_git_commit_result
+  changed_when: deploy_ioc_git_commit_result.rc == 0
+  failed_when: false
