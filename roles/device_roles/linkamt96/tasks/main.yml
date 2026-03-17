@@ -5,7 +5,7 @@
 # Replaces the fragile npreal2 kernel module with a userspace PTY bridge
 # that survives kernel updates without manual intervention.
 - name: Set up socat PTY bridge for Moxa serial connection
-  when: "'MOXA_HOST' in ioc.environment"
+  when: "'MOXA_HOST' in ioc.environment and 'MOXA_PORT' in ioc.environment"
   block:
     - name: Ensure socat is installed
       ansible.builtin.dnf:
@@ -17,6 +17,8 @@
         src: templates/linkam-pty.service.j2
         dest: "/etc/systemd/system/linkam-pty-{{ deploy_ioc_ioc_name }}.service"
         mode: "0644"
+        owner: root
+        group: root
       register: linkamt96_pty_service
 
     - name: Enable and start linkam PTY bridge
