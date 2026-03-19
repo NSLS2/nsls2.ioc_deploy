@@ -6,19 +6,19 @@ delete:
 
 role:
 	@if [ -z "${TARGET}" ]; then \
-		./scripts/manage_collection.py add role; \
+		pixi run make-role; \
 	else \
-		./scripts/manage_collection.py $(TARGET) role; \
+		pixi run $(TARGET)-role; \
 	fi
 	git status
 
 module:
 	@if [ -z "${TARGET}" ]; then \
-		./scripts/manage_collection.py add module; \
+		pixi run make-module; \
 	else \
-		./scripts/manage_collection.py $(TARGET) module; \
+		pixi run $(TARGET)-module; \
 	fi
 	git status
 
 report:
-	./scripts/manage_collection.py report
+	pixi run report

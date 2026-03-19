@@ -1,0 +1,8 @@
+---
+
+elio_cc756ab:
+    name: "elio"
+    url: "https://github.com/NSLS2/elio-ioc"
+    version: cc756ab
+    module_deps:
+        - ek9000_60e62b5

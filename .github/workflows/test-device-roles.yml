@@ -1,6 +1,6 @@
 ---
 
-name: Test Modified Roles
+name: Test Device Roles
 permissions:
   contents: read
   packages: read
@@ -10,6 +10,7 @@ on:
     branches: [main]
     paths:
       - 'roles/device_roles/**'
+      - 'roles/deploy_ioc/vars/**'
   workflow_dispatch:
 
 jobs:
@@ -26,7 +27,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Detect Modified Roles
+      - name: Detect Modified Device Roles
         id: set-roles
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
@@ -41,8 +42,16 @@ jobs:
             # PR: test only modified roles
             ROLES=$(git diff --name-only \
               "origin/${{ github.base_ref }}...HEAD" \
-              | grep "^roles/device_roles/" \
-              | cut -d'/' -f3 \
+              | awk '{
+                  if ($0 ~ /^roles\/device_roles\//) {
+                    split($0, a, "/")
+                    print a[3]
+                  } else if ($0 ~ /^roles\/deploy_ioc\/vars\/.*\.yml$/) {
+                    split($0, a, "/")
+                    sub(/\.yml$/, "", a[4])
+                    print a[4]
+                  }
+                }' \
               | sort -u \
               | while read -r role; do
                   [ -d "roles/device_roles/$role" ] && echo "$role"

@@ -1,0 +1,8 @@
+---
+deploy_ioc_use_common: true
+deploy_ioc_required_module: elio_cc756ab
+deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
+deploy_ioc_make_autosave_files: true
+deploy_ioc_executable: elio
+deploy_ioc_device_specific_env:
+  EPICS_DB_INCLUDE_PATH: "$(ELIO)/db"

@@ -1,0 +1,29 @@
+---
+omega_rtc:
+  type: "omega_rtc"
+  devices:
+    - SYS: "XF:31ID1-CT"
+      DEV: "{RG:A1-RTC:1}"
+      PORT: "tsrv1-p1"
+      COMM: "RS-232"
+      HOST: "xf31id1-tsrv3.nsls2.bnl.local:4001"
+    - SYS: "XF:31ID1-CT"
+      DEV: "{RG:A2-RTC:1}"
+      PORT: "tsrv1-p2"
+      COMM: "RS-232"
+      HOST: "xf31id1-tsrv3.nsls2.bnl.local:4002"
+    - SYS: "XF:31ID1-CT"
+      DEV: "{RG:A3-RTC:1}"
+      PORT: "tsrv1-p3"
+      COMM: "RS-232"
+      HOST: "xf31id1-tsrv3.nsls2.bnl.local:4003"
+    - SYS: "XF:31ID1-CT"
+      DEV: "{RG:A4-RTC:1}"
+      PORT: "tsrv1-p4"
+      COMM: "RS-232"
+      HOST: "xf31id1-tsrv3.nsls2.bnl.local:4004"
+
+  environment:
+    PREFIX: "XF:31ID1-CT{IOC:RTC}"
+    ENGINEER: ""
+    SYS: "XF:31ID1-CT"
