@@ -1,0 +1,62 @@
+---
+
+name: Test Deploy IOC Role
+permissions:
+  contents: read
+  packages: read
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'roles/deploy_ioc/**'
+  workflow_dispatch:
+
+jobs:
+  test-single-python-ioc:
+    name: Test deployment of python IOC
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rhel_version: [8, 9]
+      fail-fast: false
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Pixi
+        uses: prefix-dev/setup-pixi@8ca4608ef7f4daeb54f5205b20d0b7cb42f11143
+        with:
+          pixi-version: v0.55.0
+          cache: false
+          frozen: true
+
+      - name: Test Deployment
+        run: pixi run deployment -t pandabox --container -m ${{ matrix.rhel_version }}
+
+  test-compiled-ioc:
+    name: Test deployment of compiled IOC
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rhel_version: [8, 9]
+      fail-fast: false
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Pixi
+        uses: prefix-dev/setup-pixi@8ca4608ef7f4daeb54f5205b20d0b7cb42f11143
+        with:
+          pixi-version: v0.55.0
+          cache: false
+          frozen: true
+
+      - name: Test Deployment
+        run: pixi run deployment -t rbd9103 --container -m ${{ matrix.rhel_version }}
