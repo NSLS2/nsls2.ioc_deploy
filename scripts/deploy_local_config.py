@@ -159,6 +159,7 @@ class DeploymentOptions:
     skip_compilation: bool = False
     container: bool = False
     el_version: int = 8
+    pixi_path: str = "pixi"
 
 
 def deploy_configs(options: DeploymentOptions):
@@ -226,6 +227,8 @@ def deploy_configs(options: DeploymentOptions):
                 f"deploy_ioc_local_config_path={path}",
                 "-e",
                 f"deploy_ioc_nsls2network_available={NSLS2NETWORK_PKG_AVAILABLE}",
+                "-e",
+                f"deploy_ioc_pixi_executable_path={options.pixi_path}",
             ]
         )
         if options.skip_compilation or (options.container and example_skip_compilation):
@@ -322,6 +325,12 @@ def main():
     parser.add_argument(
         "--skip_compilation", action="store_true", help="Skip compilation step"
     )
+    parser.add_argument(
+        "--pixi_path",
+        type=str,
+        default="pixi",
+        help="Path to the pixi executable (default: 'pixi' - i.e. must be in PATH)",
+    )
 
     example_source_group = parser.add_mutually_exclusive_group()
     example_source_group.add_argument("-t", "--type", help="Type of IOC to deploy")
@@ -366,7 +375,7 @@ def main():
     configs_to_deploy: dict[str, Path] = {}
     verification_files: dict[str, Path] = {}
 
-    logger.info("Installing ansible collection requirements")
+    logger.info("Checking if ansible galaxy collection requirements are installed...")
 
     # TODO: This is a bit of a primitive check, but given that the
     # nsls2.awx fork and nsls2.general don't have built versions,
@@ -478,6 +487,7 @@ def main():
                     skip_compilation=args.skip_compilation,
                     container=args.container,
                     el_version=el_version,
+                    pixi_path=args.pixi_path,
                 )
             )
             overall_success = overall_success and el_version_success
@@ -495,6 +505,7 @@ def main():
                 verbose=args.verbose,
                 skip_compilation=args.skip_compilation,
                 container=args.container,
+                pixi_path=args.pixi_path,
             )
         )
 
