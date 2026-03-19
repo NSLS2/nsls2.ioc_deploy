@@ -144,7 +144,7 @@ def install_galaxy_collection(
     cmd.extend(["-p", str(collections_path.absolute())])
     try:
         logger.info(f"Installing required ansible-galaxy collection(s): {name}")
-        subprocess.run(cmd, capture_output=True, text=True, check=True)
+        subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as e:
         raise RuntimeError(f"Failed to install galaxy collection {name}: {e}") from e
 
@@ -367,13 +367,25 @@ def main():
     verification_files: dict[str, Path] = {}
 
     logger.info("Installing ansible collection requirements")
-    install_galaxy_collection(
-        str(Path("collections/requirements.yml").absolute()), is_req_file=True
-    )
-    install_galaxy_collection(str(top_path), force=True)
 
-    if args.container:
-        install_galaxy_collection("community.docker")
+    # TODO: This is a bit of a primitive check, but given that the
+    # nsls2.awx fork and nsls2.general don't have built versions,
+    # it's the best we can do for now to avoid unnecessary galaxy installs.
+    expected_collections = [
+        "ansible/posix",
+        "awx/awx",
+        "community/general",
+        "containers/podman",
+        "nsls2/general",
+    ]
+    for dir in expected_collections:
+        if not (top_path / f"collections/ansible_collections/{dir}").exists():
+            install_galaxy_collection(
+                str(Path("collections/requirements.yml").absolute()), is_req_file=True
+            )
+            break
+
+    install_galaxy_collection(str(top_path), force=True)
 
     if args.all:
         logger.info("Finding all examples for all IOC types")
