@@ -27,7 +27,7 @@
         owner: "{{ host_config.softioc_user }}"
         group: "{{ host_config.softioc_group }}"
         state: directory
-        mode: "0775"
+        mode: "02775"
 
     - name: Check to see if DCU is accessible
       ansible.builtin.command:

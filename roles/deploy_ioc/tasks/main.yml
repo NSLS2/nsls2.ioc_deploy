@@ -35,7 +35,7 @@
     state: directory
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
-    mode: "0755"
+    mode: "02775"
   loop:
     - "{{ deploy_ioc_base_directory }}"
     - "{{ deploy_ioc_iocs_directory }}"

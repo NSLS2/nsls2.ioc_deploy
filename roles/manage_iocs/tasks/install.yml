@@ -66,7 +66,7 @@
     owner: "{{ manage_iocs_ioc_user.stdout }}"
     group: "{{ manage_iocs_ioc_group }}"
     state: directory
-    mode: "0775"
+    mode: "02775"
 
 - name: Get path to ioc log directory
   ansible.builtin.set_fact:
