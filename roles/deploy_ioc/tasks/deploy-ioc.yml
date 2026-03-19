@@ -27,7 +27,8 @@
     state: directory
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
-    mode: "0775"
+    mode: "02775"
+
 
 - name: Perform base setup when using standard startup script format
   when: deploy_ioc_standard_st_cmd
@@ -38,7 +39,7 @@
         owner: "{{ host_config.softioc_user }}"
         group: "{{ host_config.softioc_group }}"
         state: directory
-        mode: "0775"
+        mode: "02775"
       with_items:
         - "db"
         - "iocBoot"
@@ -107,6 +108,69 @@
 
 - name: Generate manage-iocs config file
   ansible.builtin.include_tasks: update-config.yml
+
+- name: Ensure ownership of all files and directories is correct
+  ansible.builtin.command:
+    cmd: "chown -R {{ host_config.softioc_user }}:{{ host_config.softioc_group }} {{ deploy_ioc_ioc_directory }}"
+  changed_when: true
+
+- name: Query IOC directory ACLs
+  ansible.posix.acl:
+    path: "{{ deploy_ioc_ioc_directory }}"
+    state: query
+  register: deploy_ioc_ioc_directory_acl_query
+  changed_when: false
+
+- name: Get IOC directory ACL users and groups
+  ansible.builtin.set_fact:
+    deploy_ioc_group_acls: >-
+      {{
+        (
+          deploy_ioc_group_acls | default([])
+        )
+        + (
+          deploy_ioc_ioc_directory_acl_query.acl
+          | select('match', '^(default:)?group:[^:]+:')
+          | reject('match', '^(default:)?group::')
+          | map('regex_replace', '^(?:default:)?group:([^:]+):.*$', '\1')
+          | list
+        )
+        | unique
+      }}
+    deploy_ioc_user_acls: >-
+      {{
+        (
+          deploy_ioc_user_acls | default([])
+        )
+        + (
+          deploy_ioc_ioc_directory_acl_query.acl
+          | select('match', '^(default:)?user:[^:]+:')
+          | reject('match', '^(default:)?user::')
+          | map('regex_replace', '^(?:default:)?user:([^:]+):.*$', '\1')
+          | list
+        )
+        | unique
+      }}
+  changed_when: false
+
+- name: Make contents of EPICS writable by groups via ACLs
+  ansible.builtin.command: >-
+    setfacl -nR{{ item.1 }}m g:{{ item.0 }}:rwX {{ deploy_ioc_ioc_directory }}
+  changed_when: true
+  loop: >-
+    {{ deploy_ioc_group_acls | product(['', 'd']) | list }}
+  loop_control:
+    label: "{{ item.0 }}{{ ' default' if 'd' in item.1 else '' }}"
+
+- name: Make contents of EPICS writable by users via ACLs
+  ansible.builtin.command: >-
+    setfacl -nR{{ item.1 }}m u:{{ item.0 }}:rwX {{ deploy_ioc_ioc_directory }}
+  changed_when: true
+  loop: >-
+    {{ deploy_ioc_user_acls |
+       product(['', 'd']) | list }}
+  loop_control:
+    label: "{{ item.0 }}{{ ' default' if 'd' in item.1 else '' }}"
 
 - name: Perform post-deployment IOC setup tasks
   when: deploy_ioc_post_deploy_step != "None"

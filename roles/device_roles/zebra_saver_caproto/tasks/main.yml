@@ -7,7 +7,6 @@
 
 - name: Initialize Pixi
   ansible.builtin.command:
-    # yamllint disable-line rule:line-length
     cmd: "{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} init"
     chdir: "{{ deploy_ioc_ioc_directory }}"
   when: not pixi_toml_stat.stat.exists
@@ -29,7 +28,6 @@
 
 - name: Install dependencies
   ansible.builtin.command:
-    # yamllint disable-line rule:line-length
     cmd: "{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} install"
     chdir: "{{ deploy_ioc_ioc_directory }}"
   changed_when: true
