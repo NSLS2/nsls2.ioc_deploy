@@ -3,4 +3,9 @@
 type: enum("zpsc")
 environment:
   ENGINEER: str()
+  SYSTEMS: str()
+  DEVICE: str()
+  NO: str()
+  BLEN: str()
+  PSC1_IP: any(ip(), hostname())
   PREFIX: str()

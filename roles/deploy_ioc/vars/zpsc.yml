@@ -1,6 +1,6 @@
 ---
 
-deploy_ioc_required_module: pscdrv_1ed650d
+deploy_ioc_required_module: zpsc_13fff72.yml
 deploy_ioc_executable: zpsc
 deploy_ioc_template_root_path: "{{ install_module_leaf_module_path }}"
 deploy_ioc_use_common: true

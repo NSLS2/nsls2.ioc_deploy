@@ -45,4 +45,3 @@ epicsEnvSet("IOC_TOP", "{{ deploy_ioc_merged_env.TOP }}")
 # Restore TOP to IOC deploy directory
 epicsEnvSet("TOP", "$(IOC_TOP)")
 cd "$(TOP)/iocBoot"
-iocInit

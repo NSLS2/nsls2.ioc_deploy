@@ -3,5 +3,10 @@
 zpsc-01:
   type: zpsc
   environment:
-    ENGINEER: C. Engineer
-    PREFIX: XF:31ID1-ES{ZPSC:01}
+    ENGINEER: Y. Tian
+    SYSTEMS: SR:C12-MG
+    DEVICE: PS:SKQ
+    NO: "1"
+    BLEN: 100000
+    PSC1_IP: "10.0.140.201"
+    PREFIX: $(SYSTEMS){$(DEVICE)$(NO)}
