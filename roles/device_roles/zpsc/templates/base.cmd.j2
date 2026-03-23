@@ -1,0 +1,47 @@
+epicsEnvSet("TOP", "{{ deploy_ioc_template_root_path }}")
+cd "$(TOP)"
+dbLoadDatabase "dbd/{{ deploy_ioc_executable }}.dbd"
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver pdbbase
+
+## Load record instances for PSC1
+dbLoadRecords("db/lstats.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE)")
+dbLoadRecords("db/status10hz.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), OFFSET=100, BUFLEN=10000")
+dbLoadRecords("db/control_glob.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE)")
+dbLoadRecords("db/control_chan.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), CHAN=1")
+dbLoadRecords("db/control_chan.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), CHAN=2")
+dbLoadRecords("db/control_chan.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), CHAN=3")
+dbLoadRecords("db/control_chan.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), CHAN=4")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=USR, CHAN=1, MSGID=60, BUFLEN=$(BLEN)")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=USR, CHAN=2, MSGID=61, BUFLEN=$(BLEN)")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=USR, CHAN=3, MSGID=62, BUFLEN=$(BLEN)")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=USR, CHAN=4, MSGID=63, BUFLEN=$(BLEN)")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=FLT, CHAN=1, MSGID=70, BUFLEN=$(BLEN)")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=FLT, CHAN=2, MSGID=71, BUFLEN=$(BLEN)")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=FLT, CHAN=3, MSGID=72, BUFLEN=$(BLEN)")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=FLT, CHAN=4, MSGID=73, BUFLEN=$(BLEN)")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=ERR, CHAN=1, MSGID=80, BUFLEN=$(BLEN)")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=ERR, CHAN=2, MSGID=81, BUFLEN=$(BLEN)")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=ERR, CHAN=3, MSGID=82, BUFLEN=$(BLEN)")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=ERR, CHAN=4, MSGID=83, BUFLEN=$(BLEN)")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=INJ, CHAN=1, MSGID=90, BUFLEN=$(BLEN)")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=INJ, CHAN=2, MSGID=91, BUFLEN=$(BLEN)")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=INJ, CHAN=3, MSGID=92, BUFLEN=$(BLEN)")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=INJ, CHAN=4, MSGID=93, BUFLEN=$(BLEN)")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=EVR, CHAN=1, MSGID=100, BUFLEN=$(BLEN)")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=EVR, CHAN=2, MSGID=101, BUFLEN=$(BLEN)")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=EVR, CHAN=3, MSGID=102, BUFLEN=$(BLEN)")
+dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=EVR, CHAN=4, MSGID=103, BUFLEN=$(BLEN)")
+dbLoadRecords("db/wfmstats.db", "P=$(SYSTEMS), PSC=$(DEVICE)$(NUM)")
+#dbLoadRecords("db/asub_test.db")
+epicsThreadSleep(5)
+var(PSCDebug, 0)	#5 full debug   #0: zero debug
+#psc1 Create the PSC
+createPSC("PSC$(NUM)", $(PSC1_IP), 3000, 0)
+setPSCSendBlockSize("PSC$(NUM)", 1100, 512)
+
+epicsThreadSleep(5)
+
+epicsEnvSet("IOC_TOP", "{{ deploy_ioc_merged_env.TOP }}")
+# Restore TOP to IOC deploy directory
+epicsEnvSet("TOP", "$(IOC_TOP)")
+cd "$(TOP)/iocBoot"
