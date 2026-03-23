@@ -6,3 +6,5 @@ deploy_ioc_required_module: linkam3_1093365
 deploy_ioc_executable: linkamT96App
 deploy_ioc_template_root_path:
   "{{ deploy_ioc_required_module_path }}/iocs/linkamIOC"
+deploy_ioc_device_specific_env:
+  LINKAM3_LICENSE_PATH: /etc/linkam/Linkam.lsk
