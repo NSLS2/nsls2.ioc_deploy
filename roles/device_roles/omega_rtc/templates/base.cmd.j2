@@ -8,9 +8,19 @@ epicsEnvSet("STREAM_PROTOCOL_PATH", "{{ deploy_ioc_template_root_path }}/protoco
 
 # load record instances
 {% for device in ioc.devices %}
+  {% if device.COMM is defined and device.COMM == "RS-485" %}
+    {% if device.CHAN is defined %}
+      {% set chan = device.CHAN %}
+    {% else %}
+      {% set chan = "01" %}
+    {% endif %}
+  {% else %}
+    {% set chan = "" %}
+  {% endif %}
+
 drvAsynIPPortConfigure("{{ device.PORT }}", "{{ device.HOST }}")
-dbLoadRecords("{{ deploy_ioc_template_root_path }}/db/omegaCNi32_temp.db","Sys={{ device.SYS }},Dev={{ device.DEV }},Chan={{ "01" if (device.COMM is defined) and (device.COMM == "RS-485") else "" }},PORT={{ device.PORT }}")
-dbLoadRecords("{{ deploy_ioc_template_root_path }}/db/asynRecord.db","P={{ device.SYS }},R={{ device.DEV }}Asyn,PORT={{ device.PORT }},ADDR=0,IMAX=256,OMAX=256")
+dbLoadRecords("{{ deploy_ioc_template_root_path }}/db/omegaCNi32_temp.db", "Sys={{ device.SYS }},Dev={{ device.DEV }},Chan={{ chan }},PORT={{ device.PORT }}")
+dbLoadRecords("{{ deploy_ioc_template_root_path }}/db/asynRecord.db", "P={{ device.SYS }},R={{ device.DEV }}Asyn,PORT={{ device.PORT }},ADDR=0,IMAX=256,OMAX=256")
 {% endfor %}
 
 dbLoadRecords("$(TOP)/db/alarm.db", "SYS={{ ioc.environment.SYS }}")
