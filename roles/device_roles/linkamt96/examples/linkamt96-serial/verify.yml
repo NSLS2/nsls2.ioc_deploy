@@ -1,0 +1,37 @@
+---
+# Set to true to skip module compilation (for roles requiring proprietary SDKs)
+skip_compilation: true
+
+verification:
+  files_must_exist:
+    # Standard IOC boot files (created by deploy_ioc)
+    - iocBoot/st.cmd
+    - iocBoot/epicsEnv.cmd
+    - iocBoot/postInit.cmd
+    # Role-specific files
+    - iocBoot/base.cmd
+
+  file_must_contain:
+    iocBoot/st.cmd:
+      - "iocInit"
+    iocBoot/base.cmd:
+      - "dbLoadDatabase"
+      - "registerRecordDeviceDriver"
+      - 'Linkam3ConnectSerial("$(PORT)", "$(SERIAL_PORT)"'
+      - 'dbLoadRecords("$(LINKAM3)/db/Linkam.template"'
+
+  file_must_not_contain:
+    iocBoot/st.cmd:
+      - "{{"  # No unrendered jinja
+      - "}}"
+    iocBoot/base.cmd:
+      - "{{"
+      - "}}"
+      - "Linkam3ConnectUSB"
+      - "linkam-pty"
+    iocBoot/epicsEnv.cmd:
+      - "{{"
+      - "}}"
+
+  permissions:
+    iocBoot/st.cmd: "0775"

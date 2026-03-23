@@ -1,6 +1,55 @@
 ---
 # Tasks for linkamt96 role
 
+# socat PTY bridge for Moxa terminal server connections.
+# Replaces the fragile npreal2 kernel module with a userspace PTY bridge
+# that survives kernel updates without manual intervention.
+- name: Set up socat PTY bridge for Moxa serial connection
+  when: "ioc.environment.get('MOXA_HOST') and ioc.environment.get('MOXA_PORT')"
+  block:
+    - name: Ensure socat is installed
+      ansible.builtin.dnf:
+        name: socat
+        state: present
+
+    - name: Deploy linkam PTY bridge systemd service
+      ansible.builtin.template:
+        src: templates/linkam-pty.service.j2
+        dest: "/etc/systemd/system/linkam-pty-{{ deploy_ioc_ioc_name }}.service"
+        mode: "0644"
+        owner: root
+        group: root
+      register: linkamt96_pty_service
+
+    - name: Enable and start linkam PTY bridge
+      ansible.builtin.systemd:
+        name: "linkam-pty-{{ deploy_ioc_ioc_name }}"
+        enabled: true
+        state: "{{ 'restarted' if linkamt96_pty_service.changed else 'started' }}"
+        daemon_reload: "{{ linkamt96_pty_service.changed }}"
+
+- name: Clean up stale socat PTY bridge if Moxa config removed
+  when: "not (ioc.environment.get('MOXA_HOST') and ioc.environment.get('MOXA_PORT'))"
+  block:
+    - name: Check if linkam PTY bridge service exists
+      ansible.builtin.stat:
+        path: "/etc/systemd/system/linkam-pty-{{ deploy_ioc_ioc_name }}.service"
+      register: linkamt96_pty_service_file
+
+    - name: Stop and disable stale linkam PTY bridge
+      ansible.builtin.systemd:
+        name: "linkam-pty-{{ deploy_ioc_ioc_name }}"
+        enabled: false
+        state: stopped
+        daemon_reload: true
+      when: linkamt96_pty_service_file.stat.exists
+
+    - name: Remove stale linkam PTY bridge service file
+      ansible.builtin.file:
+        path: "/etc/systemd/system/linkam-pty-{{ deploy_ioc_ioc_name }}.service"
+        state: absent
+      when: linkamt96_pty_service_file.stat.exists
+
 - name: Install base.cmd
   ansible.builtin.template:
     src: templates/base.cmd.j2
