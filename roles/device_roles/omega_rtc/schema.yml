@@ -13,5 +13,5 @@ device:
   DEV: str()
   PORT: str()
   HOST: str()
-  CHAN: str()
-  COMM: enum("RS-232", "RS-485")
+  CHAN: str(required=False, default="01")
+  COMM: enum("RS-232", "RS-485", required=False)
