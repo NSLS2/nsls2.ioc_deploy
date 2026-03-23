@@ -5,7 +5,7 @@ adtimepix3_2faf970:
   version: 2faf970
 
   url: https://github.com/areaDetector/ADTimePix3
-  include_base_ad_config: True
+  include_base_ad_config: true
   pkg_deps:
     - curl-devel
   module_deps:

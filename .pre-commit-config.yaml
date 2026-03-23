@@ -25,7 +25,7 @@ repos:
       - id: yamllint
         name: yaml lint
         language: system
-        entry: yamllint --strict -c .yaml-lint.yml
+        entry: yamllint --strict -c .yamllint.yml
         description: YamlLint with same config as super-linter
         types: [yaml]
 

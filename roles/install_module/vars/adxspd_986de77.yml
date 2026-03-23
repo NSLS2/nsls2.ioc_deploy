@@ -4,7 +4,7 @@ adxspd_986de77:
   name: ADXSPD
   version: 986de77
   url: https://github.com/NSLS2/ADXSPD
-  include_base_ad_config: True
+  include_base_ad_config: true
   executable: xspdApp
   pkg_deps:
     - curl-devel
