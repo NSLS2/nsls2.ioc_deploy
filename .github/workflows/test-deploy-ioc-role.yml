@@ -7,8 +7,9 @@ permissions:
 
 on:
 
-  # Specifically avoid triggering on changes to vars, in deploy_ioc and install_module,
-  # since those are device-specific and tested via test-device-roles.yml
+  # Specifically avoid triggering on changes to vars in deploy_ioc and install_module.
+  # deploy_ioc vars are tested via test-device-roles.yml; install_module vars are tested
+  # via validate_module_configs.yml.
   pull_request:
     branches: [main]
     paths:
