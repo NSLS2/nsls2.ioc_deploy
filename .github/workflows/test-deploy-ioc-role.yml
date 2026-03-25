@@ -21,7 +21,7 @@ on:
 
 jobs:
   test-single-python-ioc:
-    name: Test deployment of a python IOC
+    name: Test deployment of a Python IOC
     runs-on: ubuntu-latest
     strategy:
       matrix:
