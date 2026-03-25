@@ -12,13 +12,11 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - 'roles/deploy_ioc/tasks/**'
-      - 'roles/deploy_ioc/defaults/**'
-      - 'roles/deploy_ioc/templates/**'
-      - 'roles/install_module/tasks/**'
-      - 'roles/install_module/defaults/**'
-      - 'roles/install_module/templates/**'
-      - 'roles/install_module/files/**'
+      - 'roles/deploy_ioc/**'
+      - 'roles/install_module/**'
+    paths-ignore:
+      - 'roles/deploy_ioc/vars/**'
+      - 'roles/install_module/vars/**'
   workflow_dispatch:
 
 jobs:
