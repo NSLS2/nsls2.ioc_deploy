@@ -15,9 +15,8 @@ on:
     paths:
       - 'roles/deploy_ioc/**'
       - 'roles/install_module/**'
-    paths-ignore:
-      - 'roles/deploy_ioc/vars/**'
-      - 'roles/install_module/vars/**'
+      - '!roles/deploy_ioc/vars/**'
+      - '!roles/install_module/vars/**'
   workflow_dispatch:
 
 jobs:
