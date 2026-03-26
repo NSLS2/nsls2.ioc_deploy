@@ -6,15 +6,22 @@ permissions:
   packages: read
 
 on:
+
+  # Specifically avoid triggering on changes to vars in deploy_ioc and
+  # install_module. Changes to `vars` are tested via test-device-roles.yml,
+  # so don't re-test with this workflow.
   pull_request:
     branches: [main]
     paths:
       - 'roles/deploy_ioc/**'
+      - 'roles/install_module/**'
+      - '!roles/deploy_ioc/vars/**'
+      - '!roles/install_module/vars/**'
   workflow_dispatch:
 
 jobs:
   test-single-python-ioc:
-    name: Test deployment of python IOC
+    name: Test deployment of a Python IOC
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -35,10 +42,12 @@ jobs:
           frozen: true
 
       - name: Test Deployment
-        run: pixi run deployment -t pandabox --container -m ${{ matrix.rhel_version }}
+        run: >
+          pixi run deployment -t pandabox
+          --container -m ${{ matrix.rhel_version }}
 
   test-compiled-ioc:
-    name: Test deployment of compiled IOC
+    name: Test deployment of a compiled IOC
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -59,4 +68,6 @@ jobs:
           frozen: true
 
       - name: Test Deployment
-        run: pixi run deployment -t rbd9103 --container -m ${{ matrix.rhel_version }}
+        run: >
+          pixi run deployment -t rbd9103
+          --container -m ${{ matrix.rhel_version }}
