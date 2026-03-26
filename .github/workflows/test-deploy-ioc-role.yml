@@ -43,7 +43,9 @@ jobs:
           frozen: true
 
       - name: Test Deployment
-        run: pixi run deployment -t pandabox --container -m ${{ matrix.rhel_version }}
+        run: >
+          pixi run deployment -t pandabox
+          --container -m ${{ matrix.rhel_version }}
 
   test-compiled-ioc:
     name: Test deployment of a compiled IOC
@@ -67,4 +69,6 @@ jobs:
           frozen: true
 
       - name: Test Deployment
-        run: pixi run deployment -t rbd9103 --container -m ${{ matrix.rhel_version }}
+        run: >
+          pixi run deployment -t rbd9103
+          --container -m ${{ matrix.rhel_version }}
