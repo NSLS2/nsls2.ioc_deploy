@@ -6,7 +6,7 @@ mc02:
     CONTROLLER: "MC:02"
     DEV: "{$(CONTROLLER)}"
     CT_SYS: "XF:31ID1-CT"
-    NUM_AXES: 8 # Controller has 8 axes, even though only 4 are used
+    NUM_AXES: 8 # Controller has 8 axes; this example defines only one
     ENGINEER: "J. Wlodek"
     CONTROLLER_IP: "xf31id1-lab3-mc2.nsls2.bnl.local"
 
