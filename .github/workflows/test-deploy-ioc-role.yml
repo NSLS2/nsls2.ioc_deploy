@@ -47,7 +47,7 @@ jobs:
           --container -m ${{ matrix.rhel_version }}
 
   test-compiled-ioc:
-    name: Test deployment of a compiled IOC
+    name: Test deployment of a compiled IOCs
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -67,7 +67,12 @@ jobs:
           cache: false
           frozen: true
 
-      - name: Test Deployment
+      - name: Test Deployment of PowerPMAC IOC
         run: >
           pixi run deployment -t powerpmac
+          --container -m ${{ matrix.rhel_version }}
+
+      - name: Test Deployment of RBD9103 IOC
+        run: >
+          pixi run deployment -t rbd9103
           --container -m ${{ matrix.rhel_version }}
