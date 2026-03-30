@@ -5,8 +5,8 @@ dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable
 # va specific commands
 
 ## User defined ENV variables
-epicsEnvSet("STREAM_PROTOCOL_PATH", "${VA}/protocol")
+epicsEnvSet("STREAM_PROTOCOL_PATH", "$(VA)/protocol")
 
-{% for device in ioc.environment.devices %}
+{% for device in ioc.devices %}
 drvAsynIPPortConfigure({{ device.PORT }}, "{{ device.HOST }}:{{ device.IP_PORT }}")
 {% endfor %}
