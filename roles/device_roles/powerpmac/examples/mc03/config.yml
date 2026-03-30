@@ -6,7 +6,7 @@ mc03:
     CONTROLLER: "MC:03"
     DEV: "{$(CONTROLLER)}"
     CT_SYS: "XF:31ID1-CT"
-    NUM_AXES: 8 # Controller has 8 axes, even though only 4 are used
+    NUM_AXES: 8 # Controller has 8 axes; only X is configured in this example
     ENGINEER: "J. Wlodek"
     MOVING_POLL_PERIOD: 100
     IDLE_POLL_PERIOD: 1000
