@@ -52,7 +52,7 @@ verification:
     db/pmacaux.substitutions:
       - "{{"
       - "}}"
-    db/pmac_asyn_motor.substitutions: 
+    db/pmac_asyn_motor.substitutions:
       - "{{"
       - "}}"
     db/pmac_physical_limit.substitutions:
