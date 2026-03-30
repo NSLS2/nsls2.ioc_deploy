@@ -14,7 +14,7 @@ pmacCreateController("$(CTRL_PORT)", "$(SSH_PORT)", 0, $(NUM_AXES), {{ deploy_io
 pmacCreateAxes("$(CTRL_PORT)", $(NUM_AXES))
 
 {% if ioc.disable_all_limits is defined and ioc.disable_all_limits %}
-# Disable limits check fo all axes
+# Disable limits check for all axes
 pmacDisableLimitsCheck("$(CTRL_PORT)", 0, 1)
 {% else %}
 {% for axis in ioc.axes %}
