@@ -24,7 +24,7 @@ verification:
     iocBoot/base.cmd:
       - "dbLoadDatabase"
       - 'pmacCreateController("$(CTRL_PORT)", "$(SSH_PORT)", 0, $(NUM_AXES), 100, 1000)'
-      - "# Disable limits check fo all axes"
+      - "# Disable limits check for all axes"
       - 'pmacDisableLimitsCheck("$(CTRL_PORT)", 0, 1)'
     db/motor.substitutions:
       - '{"XF:31ID1-OP:1", "{CMT:1-Ax:Rot}Mtr", "M0", "P0", 1, "Rotation", asynMotor, 0.045, "deg", 4, ""}'
