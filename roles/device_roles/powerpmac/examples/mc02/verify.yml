@@ -1,0 +1,66 @@
+---
+# Set to true to skip module compilation (for roles requiring proprietary SDKs)
+skip_compilation: false
+
+verification:
+  files_must_exist:
+    # Standard IOC boot files (created by deploy_ioc)
+    - iocBoot/st.cmd
+    - iocBoot/epicsEnv.cmd
+    - iocBoot/postInit.cmd
+    # Role-specific files
+    - iocBoot/base.cmd
+    - db/motor.substitutions
+    - db/motorstatus.substitutions
+    - db/pmacStatus.substitutions
+    - db/pmacaux.substitutions
+    - db/pmac_asyn_motor.substitutions
+    - db/pmac_physical_limit.substitutions
+    - db/autohome.substitutions
+
+  file_must_contain:
+    iocBoot/st.cmd:
+      - "iocInit"
+    iocBoot/base.cmd:
+      - "dbLoadDatabase"
+      - 'pmacCreateController("$(CTRL_PORT)", "$(SSH_PORT)", 0, $(NUM_AXES), 100, 1000)'
+      - "# Disable limits check fo all axes"
+      - 'pmacDisableLimitsCheck("$(CTRL_PORT)", 0, 1)'
+    db/motor.substitutions:
+      - '{"XF:31ID1-OP:1", "{CMT:1-Ax:Rot}Mtr", "M0", "P0", 1, "Rotation", asynMotor, 0.045, "deg", 4, ""}'
+
+
+  file_must_not_contain:
+    iocBoot/st.cmd:
+      - "{{"  # No unrendered jinja
+      - "}}"
+    iocBoot/base.cmd:
+      - "{{"
+      - "}}"
+    iocBoot/epicsEnv.cmd:
+      - "{{"
+      - "}}"
+    db/motor.substitutions:
+      - "{{"
+      - "}}"
+    db/motorstatus.substitutions:
+      - "{{"
+      - "}}"
+    db/pmacStatus.substitutions:
+      - "{{"
+      - "}}"
+    db/pmacaux.substitutions:
+      - "{{"
+      - "}}"
+    db/pmac_asyn_motor.substitutions: 
+      - "{{"
+      - "}}"
+    db/pmac_physical_limit.substitutions:
+      - "{{"
+      - "}}"
+    db/autohome.substitutions:
+      - "{{"
+      - "}}"
+
+  permissions:
+    iocBoot/st.cmd: "0775"

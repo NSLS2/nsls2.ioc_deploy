@@ -69,5 +69,5 @@ jobs:
 
       - name: Test Deployment
         run: >
-          pixi run deployment -t rbd9103
+          pixi run deployment -t powerpmac
           --container -m ${{ matrix.rhel_version }}
