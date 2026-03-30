@@ -47,7 +47,7 @@ jobs:
           --container -m ${{ matrix.rhel_version }}
 
   test-compiled-ioc:
-    name: Test deployment of a compiled IOCs
+    name: Test deployment of compiled IOCs
     runs-on: ubuntu-latest
     strategy:
       matrix:
