@@ -32,11 +32,6 @@
   ansible.builtin.debug:
     msg: "IOC user is {{ manage_iocs_ioc_user.stdout }}"
 
-- name: Fail if configured IOC user doesn't match expected user
-  ansible.builtin.fail:
-    msg: "IOC user {{ manage_iocs_ioc_user.stdout }} doesn't match expected user {{ host_config.softioc_user }}!"
-  when: manage_iocs_ioc_user.stdout != host_config.softioc_user
-
 # Split out the check for port number into a separate task,
 # since if we move to containerized IOCs, the port number will be redundant.
 - name: Ensure ioc port number is set
