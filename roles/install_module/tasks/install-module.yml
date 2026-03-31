@@ -14,7 +14,7 @@
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
     state: "directory"
-    mode: "0775"
+    mode: "02775"
 
 - name: Get list of required system packages
   ansible.builtin.set_fact:

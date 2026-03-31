@@ -79,7 +79,7 @@
     state: directory
     owner: "{{ manage_iocs_ioc_user.stdout }}"
     group: "{{ manage_iocs_ioc_group }}"
-    mode: "0664"
+    mode: "02775"
 
 - name: Install IOC service file
   ansible.builtin.template:
