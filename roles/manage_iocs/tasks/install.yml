@@ -34,7 +34,7 @@
 
 # Split out the check for port number into a separate task,
 # since if we move to containerized IOCs, the port number will be redundant.
-- name: Enusre ioc port number is set
+- name: Ensure ioc port number is set
   ansible.builtin.fail:
     msg: PORT field missing in {{ manage_iocs_ioc_dir }}/config !
   when: manage_iocs_ioc_port.stdout == ""
@@ -79,7 +79,7 @@
     state: directory
     owner: "{{ manage_iocs_ioc_user.stdout }}"
     group: "{{ manage_iocs_ioc_group }}"
-    mode: "0664"
+    mode: "02775"
 
 - name: Install IOC service file
   ansible.builtin.template:
