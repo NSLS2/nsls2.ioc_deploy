@@ -1,7 +1,7 @@
 ---
-adpilatus_af15230:
+adpilatus_72c7844:
   name: ADPilatus
-  version: af15230
+  version: 72c7844
   url: https://github.com/areaDetector/ADPilatus
   include_base_ad_config: true
   executable: pilatusDetectorApp
