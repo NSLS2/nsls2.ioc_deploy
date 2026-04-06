@@ -6,6 +6,6 @@ file "$(EPICS_BASE)/db/asynRecord.db"
 pattern
 {{"{"}}P, R, PORT, ADDR, IMAX, OMAX{{"}"}}
 {% for device in ioc.devices -%}
-{{"{"}}"{{ ioc.environment.SYS_IOC }}", "{{"{"}}MDrive:{{ device.io_port[1:] }}{{"}"}}Asyn", "{{ device.io_port }}", "0", "256", "256"{{"}"}}
+{{"{"}}"{{ ioc.environment.SYS_IOC }}", "{{"{"}}{{ device.Dev }}{{"}"}}Asyn", "{{ device.io_port }}", "0", "256", "256"{{"}"}}
 {% endfor -%}
 {{"}"}}
