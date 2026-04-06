@@ -29,7 +29,7 @@ mdrive-01:
       Sys: "XF:31ID1-OP"
       Dev: "MDrive:3"
       MRES: 4.9609375e-5
-      EGU: "mm"  
+      EGU: "mm"
       DESC: "MDrive 3"
       ALIAS: "mdrive3"
     - host: "127.0.0.1"
@@ -56,4 +56,3 @@ mdrive-01:
       EGU: "mm"
       DESC: "MDrive 6"
       ALIAS: "mdrive6"
-  
