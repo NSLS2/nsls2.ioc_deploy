@@ -7,13 +7,14 @@ mdrive-01:
     PREFIX: "XF:31ID1-CT{IOC:MDrivePS1}"
     SYS_IOC: "XF:31ID1-CT"
     IP_PORT: 503
+    SYS: "XF:31ID1-OP"
+    MRES: 4.9609375e-5
+    EGU: "mm"
   devices:
     - host: "127.0.0.1"
       io_port: P1
       Sys: "XF:31ID1-OP"
       Dev: "MDrive:1"
-      MRES: 4.9609375e-5
-      EGU: "mm"
       DESC: "MDrive 1"
       ALIAS: "mdrive1"
     - host: "127.0.0.1"
@@ -26,10 +27,7 @@ mdrive-01:
       ALIAS: "mdrive2"
     - host: "127.0.0.1"
       io_port: P3
-      Sys: "XF:31ID1-OP"
       Dev: "MDrive:3"
-      MRES: 4.9609375e-5
-      EGU: "mm"
       DESC: "MDrive 3"
       ALIAS: "mdrive3"
     - host: "127.0.0.1"

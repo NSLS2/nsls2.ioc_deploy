@@ -6,6 +6,9 @@ environment:
   PREFIX: str()
   SYS_IOC: str()
   IP_PORT: int()
+  SYS: str()
+  MRES: num()
+  EGU: str()
 
 devices: list(include('device'), min=1)
 
