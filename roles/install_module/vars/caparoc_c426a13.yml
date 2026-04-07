@@ -1,0 +1,8 @@
+---
+
+caparoc_c426a13:
+  name: "caparoc"
+  url: "https://github.com/NSLS2/caparoc-ioc"
+  version: "c426a13"
+  module_deps:
+    - modbus_bb9fa05
