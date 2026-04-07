@@ -4,7 +4,7 @@ mdrive-01:
   type: mdrive
   environment:
     ENGINEER: C. Engineer
-    PREFIX: "XF:31ID1-CT{IOC:MDrive}"
+    PREFIX: "XF:31ID1-CT{IOC:MDrivePS1}"
     SYS_IOC: "XF:31ID1-CT"
     IP_PORT: 503
   devices:
