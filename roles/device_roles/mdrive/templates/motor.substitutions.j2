@@ -6,6 +6,6 @@ file "$(MDRIVE)/db/motor.db"
 pattern
 {{"{"}}P, M, MOTOR, DTYP, ADDR, DESC, EGU, MRES, ALIAS{{"}"}}
 {% for device in ioc.devices -%}
-{{"{"}}"{{ device.Sys }}", "{{"{"}}{{ device.Dev }}{{"}"}}Mtr", "{{ device.io_port }}_Mtr", "asynMotor", "0", "{{ device.DESC }}", "{{ device.EGU }}", {{ device.MRES }}, "{{ device.ALIAS" }}"{{"}"}"}}
+{{"{"}}"{{ device.Sys }}", "{{"{"}}{{ device.Dev }}{{"}"}}Mtr", "{{ device.io_port }}_Mtr", "asynMotor", "0", "{{ device.DESC }}", "{{ device.EGU }}", {{ device.MRES }}, "{{ device.ALIAS" }}"{{"}"}}
 {% endfor -%}
 {{"}"}}
