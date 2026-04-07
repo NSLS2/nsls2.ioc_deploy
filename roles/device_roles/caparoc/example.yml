@@ -95,5 +95,3 @@ cb1:
         START_ADDR: 4096
         MODBUS_LEN: 80
         DATA_TYPE: "STRING_HIGH_LOW"
-      
-

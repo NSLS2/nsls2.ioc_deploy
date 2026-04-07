@@ -20,4 +20,3 @@ drvModbusAsynConfigure("$(PORT_NAME)", "$(CB_ASYNPORT)", 0, $(MODBUS_FUNC), $(ST
 {% endfor %}
 
 dbLoadRecords("$(CAPAROC)/db/caparoc_cb.db","Sys=$(SYS), Dev=$(DEV), ASYNPORT=$(CB_ASYNPORT)")
-
