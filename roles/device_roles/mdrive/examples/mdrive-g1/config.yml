@@ -1,10 +1,10 @@
 ---
 
-mdrive-01:
+mdrive-g1:
   type: mdrive
   environment:
     ENGINEER: C. Engineer
-    PREFIX: "XF:31ID1-CT{IOC:MDrivePS1}"
+    PREFIX: "XF:31ID1-CT{IOC:MDriveG1}"
     SYS_IOC: "XF:31ID1-CT"
     IP_PORT: 503
     SYS: "XF:31ID1-OP"
