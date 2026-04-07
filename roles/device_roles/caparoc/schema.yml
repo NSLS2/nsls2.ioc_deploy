@@ -9,9 +9,13 @@ environment:
   PREFIX: str()
   ENGINEER: str()
 
-  operations: list(include('operation'), min=1)
-    - PORT_NAME: str()
-      MODBUS_FUNC: int()
-      START_ADDR: int()
-      MODBUS_LEN: int()
-      DATA_TYPE: enum("UINT16", "INT16", "UINT32", "INT32", "FLOAT32", "FLOAT64", "STRING_HIGH_LOW")
+operations: list(include('operation'), min=1)
+
+---
+
+operation:
+  PORT_NAME: str()
+  MODBUS_FUNC: int()
+  START_ADDR: int()
+  MODBUS_LEN: int()
+  DATA_TYPE: enum("UINT16", "INT16", "UINT32", "INT32", "FLOAT32", "FLOAT64", "STRING_HIGH_LOW")

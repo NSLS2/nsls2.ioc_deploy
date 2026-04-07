@@ -1,13 +1,15 @@
-cb1:
-  type: "CAPAROC"
+---
+
+caparoc1:
+  type: "caparoc"
 
   environment:
     SYS: "XF:31ID1-ES"
-    DEV: "{CB:1}"
+    DEV: "{CAPAROC:1}"
     HOST: 10.69.58.102
-    CB_ASYNPORT: "CB1"
-    PREFIX: "XF:31ID1-CT{IOC:CB1}"
-    ENGINEER: "H. Xu"
+    CB_ASYNPORT: "CAPAROC1"
+    PREFIX: "XF:31ID1-CT{IOC:CAPAROC1}"
+    ENGINEER: "Engineer Name"
 
     operations:
       - PORT_NAME: "${CB_ASYNPORT}_ERR_RST"

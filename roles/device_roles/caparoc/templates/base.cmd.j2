@@ -1,13 +1,13 @@
 ## Register all support components
-dbLoadDatabase("{{ _ioc_template_root_path }}/dbd/caparoc.dbd",0,0)
-caparoc_registerRecordDeviceDriver(pdbbase)
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
 
 # Configure the low level communication port
 drvAsynIPPortConfigure("$(CB_ASYNPORT)","$(HOST):502", 0, 0, 1)
 modbusInterposeConfig("$(CB_ASYNPORT)", 0, 2000, 0)
 
 # Configure circuit breakers
-{% for op in ioc.environment.operations %}
+{% for op in ioc.operations %}
 
 epicsEnvSet("PORT_NAME","{{ op.PORT_NAME }}")
 epicsEnvSet("MODBUS_FUNC", "{{ op.MODBUS_FUNC }}")
