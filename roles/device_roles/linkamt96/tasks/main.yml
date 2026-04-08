@@ -50,6 +50,14 @@
         state: absent
       when: linkamt96_pty_service_file.stat.exists
 
+- name: Deploy logrotate config for Linkam SDK log
+  ansible.builtin.template:
+    src: templates/logrotate-linkam.j2
+    dest: "/etc/logrotate.d/linkam-{{ deploy_ioc_ioc_name }}"
+    mode: "0644"
+    owner: root
+    group: root
+
 - name: Install base.cmd
   ansible.builtin.template:
     src: templates/base.cmd.j2
