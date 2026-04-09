@@ -4,8 +4,9 @@ type: enum("mdrive")
 environment:
   ENGINEER: str()
   PREFIX: str()
-  SYS: str()
   SYS_IOC: str()
+  IP_PORT: int()
+  SYS: str()
   MRES: num()
   EGU: str()
 
@@ -15,5 +16,10 @@ devices: list(include('device'), min=1)
 
 device:
   host: any(ip(), hostname())
-  ip_port: int()
   io_port: regex("^P\\d+$")
+  Sys: str()
+  Dev: str()
+  MRES: num()
+  EGU: str()
+  DESC: str()
+  ALIAS: str()

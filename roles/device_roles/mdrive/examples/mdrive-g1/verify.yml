@@ -19,11 +19,11 @@ verification:
     iocBoot/base.cmd:
       - "dbLoadDatabase"
       - 'drvAsynIPPortConfigure("P1", "127.0.0.1:503")'
-      - 'drvAsynIPPortConfigure("P2", "127.0.0.1:504")'
-      - 'drvAsynIPPortConfigure("P3", "127.0.0.1:505")'
-      - 'drvAsynIPPortConfigure("P4", "127.0.0.1:506")'
-      - 'drvAsynIPPortConfigure("P5", "127.0.0.1:507")'
-      - 'drvAsynIPPortConfigure("P6", "127.0.0.1:508")'
+      - 'drvAsynIPPortConfigure("P2", "127.0.0.1:503")'
+      - 'drvAsynIPPortConfigure("P3", "127.0.0.1:503")'
+      - 'drvAsynIPPortConfigure("P4", "127.0.0.1:503")'
+      - 'drvAsynIPPortConfigure("P5", "127.0.0.1:503")'
+      - 'drvAsynIPPortConfigure("P6", "127.0.0.1:503")'
       - 'ImsMDrivePlusCreateController("P1_Mtr", "P1", "", "100", "1000")'
       - 'ImsMDrivePlusCreateController("P2_Mtr", "P2", "", "100", "1000")'
       - 'ImsMDrivePlusCreateController("P3_Mtr", "P3", "", "100", "1000")'

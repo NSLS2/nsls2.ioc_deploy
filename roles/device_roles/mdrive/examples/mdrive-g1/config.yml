@@ -1,0 +1,61 @@
+---
+
+mdrive-g1:
+  type: mdrive
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: "XF:31ID1-CT{IOC:MDriveG1}"
+    SYS_IOC: "XF:31ID1-CT"
+    IP_PORT: 503
+    SYS: "XF:31ID1-OP"
+    MRES: 4.9609375e-5
+    EGU: "mm"
+  devices:
+    - host: "127.0.0.1"
+      io_port: P1
+      Sys: "XF:31ID1-OP"
+      Dev: "MDrive:1"
+      MRES: 4.9609375e-5
+      EGU: "mm"
+      DESC: "MDrive 1"
+      ALIAS: "mdrive1"
+    - host: "127.0.0.1"
+      io_port: P2
+      Sys: "XF:31ID1-OP"
+      Dev: "MDrive:2"
+      MRES: 4.9609375e-5
+      EGU: "mm"
+      DESC: "MDrive 2"
+      ALIAS: "mdrive2"
+    - host: "127.0.0.1"
+      io_port: P3
+      Sys: "XF:31ID1-OP"
+      Dev: "MDrive:3"
+      MRES: 4.9609375e-5
+      EGU: "mm"
+      DESC: "MDrive 3"
+      ALIAS: "mdrive3"
+    - host: "127.0.0.1"
+      io_port: P4
+      Sys: "XF:31ID1-OP"
+      Dev: "MDrive:4"
+      MRES: 4.9609375e-5
+      EGU: "mm"
+      DESC: "MDrive 4"
+      ALIAS: "mdrive4"
+    - host: "127.0.0.1"
+      io_port: P5
+      Sys: "XF:31ID1-OP"
+      Dev: "MDrive:5"
+      MRES: 4.9609375e-5
+      EGU: "mm"
+      DESC: "MDrive 5"
+      ALIAS: "mdrive5"
+    - host: "127.0.0.1"
+      io_port: P6
+      Sys: "XF:31ID1-OP"
+      Dev: "MDrive:6"
+      MRES: 4.9609375e-5
+      EGU: "mm"
+      DESC: "MDrive 6"
+      ALIAS: "mdrive6"
