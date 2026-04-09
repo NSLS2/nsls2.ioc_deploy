@@ -8,6 +8,8 @@ adtimepix3_15009fe:
   include_base_ad_config: true
   pkg_deps:
     - curl-devel
+  compilation_command:
+    "bash tpx3Support/jsonSrc/installJSON.sh && bash tpx3Support/cprSrc/installCPR.sh && make -sj"
   module_deps:
     - adcore_60080dc
     - adsupport_6acf83f
