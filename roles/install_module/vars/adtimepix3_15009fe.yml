@@ -1,8 +1,8 @@
 ---
 
-adtimepix3_2faf970:
+adtimepix3_15009fe:
   name: ADTimePix3
-  version: 2faf970
+  version: 15009fe
 
   url: https://github.com/areaDetector/ADTimePix3
   include_base_ad_config: true
