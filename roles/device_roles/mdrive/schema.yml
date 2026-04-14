@@ -22,4 +22,4 @@ device:
   MRES: num(required=False)
   EGU: str(required=False)
   DESC: str()
-  ALIAS: str()
+  ALIAS: str(required=False)
