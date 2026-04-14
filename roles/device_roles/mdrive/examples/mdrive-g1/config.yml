@@ -13,6 +13,7 @@ mdrive-g1:
   devices:
     - host: "127.0.0.1"
       io_port: P1
+      Sys: "XF:31ID1-OP"
       Dev: "MDrive:1"
       DESC: "MDrive 1"
       ALIAS: "mdrive1"
@@ -33,7 +34,10 @@ mdrive-g1:
       ALIAS: "mdrive4"
     - host: "127.0.0.1"
       io_port: P5
+      Sys: "XF:31ID1-OP"
       Dev: "MDrive:5"
+      MRES: 9.765625e-6
+      EGU: "um"
       DESC: "MDrive 5"
       ALIAS: "mdrive5"
     - host: "127.0.0.1"
