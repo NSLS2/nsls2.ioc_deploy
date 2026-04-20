@@ -3,6 +3,6 @@
 deploy_ioc_use_common: true
 deploy_ioc_use_ad_common: false
 deploy_ioc_make_autosave_files: true
-deploy_ioc_required_module: base_soft_ioc_d6f341c
+deploy_ioc_required_module: base_soft_ioc_f4c87af
 deploy_ioc_executable: baseSoftIOC
 deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
