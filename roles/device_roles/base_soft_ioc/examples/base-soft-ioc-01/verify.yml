@@ -16,14 +16,7 @@ verification:
       - "iocInit"
     iocBoot/base.cmd:
       - "dbLoadDatabase"
-      - 'drvAsynIPPortConfigure("LS331", "127.0.0.1:8000")'
-      - 'asynOctetSetOutputEos("LS331", 0, "\r\n")'
-      - 'asynOctetSetInputEos("LS331", 0, "\r\n")'
-      - 'dbLoadTemplate("$(TOP)/db/lakeshore331.substitutions")'
-    db/lakeshore331.substitutions:
-      - 'file "$(TOP)/db/Lakeshore331.template"'
-      - '{ PORT, P, R }'
-      - '{ "LS331", "XF:31ID1-ES", "{LS331:1}" }'
+      - "baseSoftIOC_registerRecordDeviceDriver(pdbbase)"
 
   file_must_not_contain:
     iocBoot/st.cmd:
@@ -34,9 +27,6 @@ verification:
       - "}}"
       - 'asynSetOption'
     iocBoot/epicsEnv.cmd:
-      - "{{"
-      - "}}"
-    db/lakeshore331.substitutions:
       - "{{"
       - "}}"
 
