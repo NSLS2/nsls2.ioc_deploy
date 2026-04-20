@@ -1,0 +1,6 @@
+---
+base_soft_ioc_d6f341c:
+  name: BaseSoftIOC
+  url: https://github.com/NSLS2/BaseSoftIOC
+  version: d6f341c
+  executable: "baseSoftIOC"
