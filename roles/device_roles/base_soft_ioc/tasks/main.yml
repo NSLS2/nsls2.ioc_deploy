@@ -1,5 +1,5 @@
 ---
-# Tasks for lakeshore331 role
+# Tasks for base_soft_ioc role
 - name: Create protocol directory
   ansible.builtin.file:
     path: "{{ deploy_ioc_ioc_directory }}/protocol"
