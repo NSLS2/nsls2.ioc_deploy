@@ -50,6 +50,8 @@
                    'softioc_user': _softioc_user,
                    'softioc_group': _softioc_user}) }}"
 
-    - name: Deploy specified IOCs
+    - name: Deploy specified IOC
       ansible.builtin.include_role:
         name: nsls2.ioc_deploy.deploy_ioc
+      vars:
+        deploy_ioc_ioc_name: "{{ deploy_ioc_target }}"
