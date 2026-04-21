@@ -47,6 +47,23 @@
         - "{{ deploy_ioc_as_dir_name }}/req"
         - "{{ deploy_ioc_as_dir_name }}/save"
 
+    - name: Copy manual IOC files to appropriate directories
+      ansible.builtin.copy:
+        content: "{{ item.value }}"
+        dest: >-
+          {{ deploy_ioc_ioc_directory }}/{{
+            'iocBoot' if item.key.endswith('.cmd')
+            else deploy_ioc_as_dir_name ~ '/req' if item.key.endswith('.req')
+            else 'db'
+          }}/{{ item.key }}
+        owner: "{{ host_config.softioc_user }}"
+        group: "{{ host_config.softioc_group }}"
+        mode: "0664"
+      loop: "{{ deploy_ioc_manual_ioc_files | dict2items }}"
+      when:
+        - deploy_ioc_manual_ioc_files | length > 0
+        - item.key | regex_search('\.(cmd|req|db|template|substitutions)$')
+
     - name: Generate substitutions based on IOC configuration
       ansible.builtin.include_tasks: generate-substitutions-file.yml
       loop: "{{ ioc.substitutions | dict2items }}"
@@ -85,6 +102,8 @@
         owner: "{{ host_config.softioc_user }}"
         group: "{{ host_config.softioc_group }}"
         mode: "0775"
+
+
 
 - name: Deploy IOC template
   ansible.builtin.include_role:

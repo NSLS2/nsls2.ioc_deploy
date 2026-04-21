@@ -52,6 +52,11 @@ deploy_ioc_supported_el_versions: [8, 9]
 # Specify whether or not to call `makeAutosaveFilesFromDbInfo()` at IOC startup.
 deploy_ioc_make_autosave_files: false
 
+# A dict mapping filenames to file contents for manual IOC files.
+# Files are placed based on extension: .cmd -> iocBoot, .req -> autosave/req,
+# .db/.template/.substitutions -> db
+deploy_ioc_manual_ioc_files: {}
+
 # A dict for device-specific environment variables. Override this as needed
 # to provide custom environment configurations for specific devices.
 deploy_ioc_device_specific_env: {}
