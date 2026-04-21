@@ -1,0 +1,10 @@
+---
+
+base-soft-ioc-01:
+  type: base_soft_ioc
+  environment:
+    ENGINEER: C. Engineer
+    SYS: XF:31ID1-ES
+    DEV: "{IOC:1}"
+    PREFIX: "$(SYS)$(DEV)"
+    CT_PREFIX: "XF:31ID1-CT$(DEV)"
