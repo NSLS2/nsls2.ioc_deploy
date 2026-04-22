@@ -41,3 +41,6 @@ verification:
     iocBoot/epicsEnv.cmd:
       - "{{"
       - "}}"
+
+  permissions:
+    iocBoot/st.cmd: "0775"
