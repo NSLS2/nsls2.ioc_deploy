@@ -3,7 +3,7 @@
 eps-01:
   type: eps
   environment:
-    ENGINEER: ENGINEER
+    ENGINEER: "C. Engineer"
     PREFIX: XF:31ID1-ES{EPS:01}
     PLC: "XF31ID1_EPS"
     PLC_IP: "xf31id1-plc1.nsls2.bnl.gov"
