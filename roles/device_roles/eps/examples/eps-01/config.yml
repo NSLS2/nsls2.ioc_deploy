@@ -155,7 +155,7 @@ eps-01:
             - ["XF:09IDA-PU", "LN2-Main:IV", "EStop-Sts", "LN2 Main Supply Emergency Stop", "", "1", "Pressed", "NO Pressed", "MINOR", "NO_ALARM"]
             - ["XF:09IDA-OP", "Cryo:1", "Alarm-Sts", "Cryocooler alarm status", "", "1", "Alarm", "OK", "MINOR", "NO_ALARM"]
             - ["XF:09IDA-OP", "Cryo:1", "Run-Sts", "Cryocooler run status", "", "1", "Not Running", "Running", "MINOR", "NO_ALARM"]
-            - ["XF:09IDA-OP", "Cryo:1", "Inh-Sts", "Cryocooler inhibit status", "", "1", "Inhibited", "NOt Inhibited", "MINOR", "NO_ALARM"]
+            - ["XF:09IDA-OP", "Cryo:1", "Inh-Sts", "Cryocooler inhibit status", "", "1", "Inhibited", "Not Inhibited", "MINOR", "NO_ALARM"]
 
         - filepath: "$(EPS)/db/plc-first.template"
           pattern: ["Sys", "Dev", "Sig", "Seq", "ArrNum"]
