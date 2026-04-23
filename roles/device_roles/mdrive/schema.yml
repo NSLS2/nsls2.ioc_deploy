@@ -18,6 +18,7 @@ device:
   host: any(ip(), hostname())
   io_port: regex("^P\\d+$")
   Sys: str(required=False)
+  Sys_IOC: str(required=False)
   Dev: str()
   MRES: num(required=False)
   EGU: str(required=False)
