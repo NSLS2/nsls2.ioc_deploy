@@ -127,9 +127,6 @@ eps-01:
             - ["XF:09ID-EPS", "IL:PSh1", "Main:Wtr-Sts", "Main PSh1 interlock(water)", "", "1", "Interlocked", "OK", "MAJOR", "NO_ALARM"]
 
             - ["XF:09IDA-PU", "Hutch-LD:1", "Alarm-Sts", "A-Hutch Leak Det Status", "", "1", "Leak", "NO Leak", "MAJOR", "NO_ALARM"]
-            - ["XF:09IDA-PU", "Roof-LD:1", "Alarm-Sts", "Hutch Roofs Leak Det Status", "", "1", "Leak", "NO Leak", "MAJOR", "NO_ALARM"]
-            - ["XF:09IDB-PU", "Hutch-LD:1", "Alarm-Sts", "B-Hutch Leak Det Status", "", "1", "Leak", "NO Leak", "MAJOR", "NO_ALARM"]
-            - ["XF:09IDA-PU", "SEB-LD:1", "Alarm-Sts", "Satellite Bldg Leak Det Status", "", "1", "Leak", "NO Leak", "MAJOR", "NO_ALARM"]
 
         - filepath: "$(EPS)/db/plc-first.template"
           pattern: ["Sys", "Dev", "Sig", "Seq", "ArrNum"]
