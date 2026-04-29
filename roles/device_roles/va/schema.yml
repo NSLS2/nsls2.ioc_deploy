@@ -43,7 +43,14 @@ ipc_substitution_block:
   filepath: enum(
     "$(VA)/db/gammampcq_controller.template",
     "$(VA)/db/gammampcq_ip.template",
-    "$(VA)/db/gammampcq_setpoint.template"
+    "$(VA)/db/gammampcq_setpoint.template",
+    "$(VA)/db/agilent4uhv-ip-download.template",
+    "$(VA)/db/agilent4uhv_controller.template",
+    "$(VA)/db/agilent4uhv_ip.template",
+    "$(VA)/db/varian_tsp.template",
+    "$(VA)/db/variandual-ip-download.template",
+    "$(VA)/db/variandual_controller.template",
+    "$(VA)/db/variandual_ip.template"
     )
   pattern: list(
     enum("Sys", "Dev", "CHAN", "PORT", "Cntl", "SPNUM")
