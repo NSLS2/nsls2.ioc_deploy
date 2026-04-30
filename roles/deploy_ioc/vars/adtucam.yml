@@ -1,7 +1,7 @@
 ---
 deploy_ioc_use_common: false
 deploy_ioc_use_ad_common: true
-deploy_ioc_required_module: adtucam_0c04e68
+deploy_ioc_required_module: adtucam_14c6ceb
 deploy_ioc_template_root_path:
   "{{ deploy_ioc_required_module_path }}/iocs/tucamIOC"
 deploy_ioc_device_specific_env:
