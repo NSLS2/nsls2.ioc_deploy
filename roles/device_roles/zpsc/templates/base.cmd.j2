@@ -31,7 +31,7 @@ dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYP
 dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=EVR, CHAN=2, MSGID=101, BUFLEN=$(BLEN)")
 dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=EVR, CHAN=3, MSGID=102, BUFLEN=$(BLEN)")
 dbLoadRecords("db/snapshots.db", "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE), TYPE=EVR, CHAN=4, MSGID=103, BUFLEN=$(BLEN)")
-dbLoadRecords("db/wfmstats.db", "P=$(SYSTEMS), PSC=$(DEVICE)$(NUM)")
+dbLoadRecords("db/wfmstats.db",  "P=$(SYSTEMS), NO=$(NUM), DEVICE=$(DEVICE)")
 #dbLoadRecords("db/asub_test.db")
 epicsThreadSleep(5)
 var(PSCDebug, 0)	#5 full debug   #0: zero debug
