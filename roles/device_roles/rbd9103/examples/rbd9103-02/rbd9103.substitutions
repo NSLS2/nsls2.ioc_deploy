@@ -1,0 +1,24 @@
+#
+# rbd9103.substitutions
+#
+
+file "$(RBD9103)/db/rbd9103.template"
+{
+pattern
+{P, R, PORT}
+{"XF:31ID1-ES", "{RBD9103-AMM:2}", "RBD"}
+}
+
+file "$(RBD9103)/db/rbd9103_recording.template"
+{
+pattern
+{P, R, PORT}
+{"XF:31ID1-ES", "{RBD9103-AMM:2}", "RBD"}
+}
+
+file "$(ASYN)/db/asynRecord.db"
+{
+pattern
+{P, R, PORT, ADDR, OMAX, IMAX}
+{"XF:31ID1-ES", "{RBD9103-AMM:2}AsynIO", "RBD_TTY", "0", "0", "0"}
+}
