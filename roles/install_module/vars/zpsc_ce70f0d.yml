@@ -1,8 +1,8 @@
 ---
-zpsc_13fff72:
+zpsc_ce70f0d:
   name: ZPSC
   url: https://github.com/NSLS2/zPSC.git
-  version: 13fff72
+  version: ce70f0d
   compilation_command: "make -s"
   module_deps:
     - pscdrv_1ed650d
