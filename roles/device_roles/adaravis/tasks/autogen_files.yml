@@ -12,9 +12,13 @@
     state: directory
     mode: "02775"
 
+- name: Set Aravis tool name
+  ansible.builtin.set_fact:
+    adaravis_arv_tool: "arv-tool"
+
 - name: Use arv-tool to generate xml file from camera
   ansible.builtin.shell: >-
-    {{ deploy_ioc_adaravis_arv_tool }} -n "{{ ioc.environment.CAMERA_NAME }}" genicam >
+    {{ adaravis_arv_tool }} -n "{{ ioc.environment.CAMERA_NAME }}" genicam >
     {{ deploy_ioc_ioc_directory }}/xml/{{ adaravis_camera_model_name }}.xml
   register: arv_tool_result
   changed_when: >-
