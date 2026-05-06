@@ -5,6 +5,7 @@ deploy_ioc_required_module: adaravis_a0aa4d6
 deploy_ioc_template_root_path:
   "{{ deploy_ioc_required_module_path }}/iocs/aravisIOC"
 deploy_ioc_as_dir_name: autosave
+adaravis_arv_tool: arv-tool-0.8
 deploy_ioc_req_file_list:
   - name: auto_settings.req
     macros: "P=$(PREFIX)"

@@ -37,10 +37,7 @@
   register: venv_result
   changed_when: >-
     not ansible_check_mode and
-    venv_result.rc == 0 and
-    not (lookup('ansible.builtin.stat', venv_path).exists)
-  vars:
-    venv_path: "{{ deploy_ioc_ioc_directory }}/genicam-xml-converters/venv"
+    venv_result.rc == 0
 
 - name: Autogenerate database files from xml
   ansible.builtin.shell: >-
