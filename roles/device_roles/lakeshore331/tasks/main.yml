@@ -1,5 +1,55 @@
 ---
 # Tasks for lakeshore331 role
+
+# socat PTY bridge for Moxa terminal server connections.
+# Replaces the fragile npreal2 kernel module with a userspace PTY bridge
+# that survives kernel updates without manual intervention.
+- name: Set up socat PTY bridge for Moxa serial connection
+  when: "ioc.environment.get('MOXA_HOST') and ioc.environment.get('MOXA_PORT')"
+  block:
+    - name: Ensure socat is installed
+      ansible.builtin.dnf:
+        name: socat
+        state: present
+
+    - name: Deploy lakeshore PTY bridge systemd service
+      ansible.builtin.template:
+        src: templates/lakeshore-pty.service.j2
+        dest: "/etc/systemd/system/lakeshore-pty-{{ deploy_ioc_ioc_name }}.service"
+        mode: "0644"
+        owner: root
+        group: root
+      register: lakeshore331_pty_service
+
+    - name: Enable and start lakeshore PTY bridge
+      ansible.builtin.systemd:
+        name: "lakeshore-pty-{{ deploy_ioc_ioc_name }}"
+        enabled: true
+        state: "{{ 'restarted' if lakeshore331_pty_service.changed else 'started' }}"
+        daemon_reload: "{{ lakeshore331_pty_service.changed }}"
+
+- name: Clean up stale socat PTY bridge if Moxa config removed
+  when: "not (ioc.environment.get('MOXA_HOST') and ioc.environment.get('MOXA_PORT'))"
+  block:
+    - name: Check if lakeshore PTY bridge service exists
+      ansible.builtin.stat:
+        path: "/etc/systemd/system/lakeshore-pty-{{ deploy_ioc_ioc_name }}.service"
+      register: lakeshore331_pty_service_file
+
+    - name: Stop and disable stale lakeshore PTY bridge
+      ansible.builtin.systemd:
+        name: "lakeshore-pty-{{ deploy_ioc_ioc_name }}"
+        enabled: false
+        state: stopped
+        daemon_reload: true
+      when: lakeshore331_pty_service_file.stat.exists
+
+    - name: Remove stale lakeshore PTY bridge service file
+      ansible.builtin.file:
+        path: "/etc/systemd/system/lakeshore-pty-{{ deploy_ioc_ioc_name }}.service"
+        state: absent
+      when: lakeshore331_pty_service_file.stat.exists
+
 - name: Create protocol directory
   ansible.builtin.file:
     path: "{{ deploy_ioc_ioc_directory }}/protocol"

@@ -7,9 +7,18 @@ dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable
 
 # ============================ BASE STREAM DEVICE CONFIGURATION ============================
 # Configure all asyn port connections
+{% set is_moxa = ioc.environment.get('MOXA_HOST') and ioc.environment.get('MOXA_PORT') %}
+{% if is_moxa %}
+# Connection via socat PTY bridge to Moxa terminal server
+# Managed by systemd service: lakeshore-pty-{{ deploy_ioc_ioc_name }}
+{% endif %}
 {% if ioc.connections is defined %}
 {% for connection in ioc.connections|dict2items %}
+{% if is_moxa %}
+drvAsynSerialPortConfigure("{{ connection.key }}", "/dev/lakeshore-pty-{{ deploy_ioc_ioc_name }}")
+{% else %}
 drvAsyn{{ connection.value.type }}PortConfigure("{{ connection.key }}", "{{ connection.value.connection }}")
+{% endif %}
 {% if connection.value.serial_settings is defined %}
 {% for serial_setting in connection.value.serial_settings %}
 asynSetOption("{{ connection.key }}", 0, "{{ serial_setting }}", "{{ serial_settings[serial_setting] }}")

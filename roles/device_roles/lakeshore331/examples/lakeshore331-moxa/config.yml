@@ -1,0 +1,23 @@
+---
+
+# Moxa terminal server via socat PTY bridge.
+# Deploys a systemd service that bridges TCP to a local PTY device,
+# eliminating the need for the npreal2 kernel module.
+# When MOXA_HOST/MOXA_PORT are set, the asyn port auto-points at
+# /dev/lakeshore-pty-<ioc_name> and any `connection:` value below is ignored.
+lakeshore331-moxa:
+  type: lakeshore331
+  environment:
+    ENGINEER: C. Engineer
+    PORT: LS331
+    P: XF:31ID1-ES
+    R: "{LS331:1}"
+    PREFIX: "$(P)$(R)"
+    CT_PREFIX: "XF:31ID1-CT{LS331:1}"
+    MOXA_HOST: "10.68.42.77"
+    MOXA_PORT: "4002"
+  connections:
+    LS331:
+      type: "Serial"
+      output_eos: "\\r\\n"
+      input_eos: "\\r\\n"

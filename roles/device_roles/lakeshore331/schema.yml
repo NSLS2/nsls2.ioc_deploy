@@ -8,12 +8,14 @@ environment:
   P: str()
   R: str()
   CT_PREFIX: str()
+  MOXA_HOST: str(required=False)  # Moxa terminal server IP/hostname (socat PTY bridge)
+  MOXA_PORT: str(required=False)  # Moxa TCP port (socat PTY bridge)
 connections: map(include('connection'), key=str())
 
 ---
 connection:
   type: enum("IP", "Serial")
-  connection: str()
+  connection: str(required=False)  # ignored when MOXA_HOST/MOXA_PORT are set; auto-points at /dev/lakeshore-pty-<ioc_name>
   output_eos: str()
   input_eos: str()
   serial_settings: include('serial_setting', required=False)
