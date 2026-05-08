@@ -19,5 +19,9 @@ lakeshore331-moxa:
   connections:
     LS331:
       type: "Serial"
+      # `connection` is required by the schema but is ignored when
+      # MOXA_HOST/MOXA_PORT are set; the role auto-points the asyn port
+      # at the socat-managed PTY shown below.
+      connection: "/dev/lakeshore-pty-lakeshore331-moxa"
       output_eos: "\\r\\n"
       input_eos: "\\r\\n"

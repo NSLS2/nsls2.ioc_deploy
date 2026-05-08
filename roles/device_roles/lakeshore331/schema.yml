@@ -15,7 +15,7 @@ connections: map(include('connection'), key=str())
 ---
 connection:
   type: enum("IP", "Serial")
-  connection: str(required=False)  # ignored when MOXA_HOST/MOXA_PORT are set; auto-points at /dev/lakeshore-pty-<ioc_name>
+  connection: str()  # ignored when MOXA_HOST/MOXA_PORT are set; auto-points at /dev/lakeshore-pty-<ioc_name>
   output_eos: str()
   input_eos: str()
   serial_settings: include('serial_setting', required=False)

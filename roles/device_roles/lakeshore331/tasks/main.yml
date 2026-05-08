@@ -60,13 +60,8 @@
       ansible.builtin.file:
         path: "/etc/systemd/system/lakeshore-pty-{{ deploy_ioc_ioc_name }}.service"
         state: absent
-      register: lakeshore331_pty_service_file_removed
       when: lakeshore331_pty_service_file.stat.exists
-
-    - name: Reload systemd after removing stale lakeshore PTY bridge service file
-      ansible.builtin.systemd:
-        daemon_reload: true
-      when: lakeshore331_pty_service_file_removed.changed
+      notify: Reload systemd
 
 - name: Create protocol directory
   ansible.builtin.file:
