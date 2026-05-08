@@ -7,6 +7,19 @@
 - name: Set up socat PTY bridge for Moxa serial connection
   when: "ioc.environment.get('MOXA_HOST') and ioc.environment.get('MOXA_PORT')"
   block:
+    - name: Validate that all connections are type Serial when using MOXA
+      ansible.builtin.assert:
+        that:
+          - "item.value.type == 'Serial'"
+        fail_msg: >-
+          Connection '{{ item.key }}' has type '{{ item.value.type }}'.
+          When MOXA_HOST/MOXA_PORT are set, all connections must be type
+          'Serial' (the asyn port is auto-configured to point at
+          /dev/lakeshore-pty-{{ deploy_ioc_ioc_name }}).
+      loop: "{{ ioc.connections | dict2items if ioc.connections is defined else [] }}"
+      loop_control:
+        label: "{{ item.key }}"
+
     - name: Ensure socat is installed
       ansible.builtin.dnf:
         name: socat

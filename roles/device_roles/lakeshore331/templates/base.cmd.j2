@@ -14,10 +14,18 @@ dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable
 {% endif %}
 {% if ioc.connections is defined %}
 {% for connection in ioc.connections|dict2items %}
+{% set connection_type = connection.value.type %}
+{% if connection_type == 'Serial' %}
 {% if is_moxa %}
 drvAsynSerialPortConfigure("{{ connection.key }}", "/dev/lakeshore-pty-{{ deploy_ioc_ioc_name }}")
 {% else %}
-drvAsyn{{ connection.value.type }}PortConfigure("{{ connection.key }}", "{{ connection.value.connection }}")
+drvAsynSerialPortConfigure("{{ connection.key }}", "{{ connection.value.connection }}")
+{% endif %}
+{% elif is_moxa %}
+{# MOXA PTY bridging is only valid for Serial connections; fail template rendering for incompatible types. #}
+{% set _moxa_requires_serial_connection_type = 1 / 0 %}
+{% else %}
+drvAsyn{{ connection_type }}PortConfigure("{{ connection.key }}", "{{ connection.value.connection }}")
 {% endif %}
 {% if connection.value.serial_settings is defined %}
 {% for serial_setting in connection.value.serial_settings %}
