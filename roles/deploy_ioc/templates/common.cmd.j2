@@ -25,6 +25,17 @@ dbLoadRecords("{{ template.filepath }}", "
 {% endfor %}
 {% endif %}
 
+{% if deploy_ioc_manual_ioc_files is defined %}
+{% for filename in deploy_ioc_manual_ioc_files.keys() | sort %}
+{% if filename.endswith('.substitutions') %}
+{% set sub_name = filename | replace('.substitutions', '') %}
+{% if ioc.substitutions is not defined or sub_name not in ioc.substitutions %}
+dbLoadTemplate("$(TOP)/db/{{ filename }}")
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}
+
 {% if deploy_ioc_use_ad_common %}
 # Load base set of plugins using commonPlugins.cmd
 < $(ADCORE)/iocBoot/commonPlugins.cmd
