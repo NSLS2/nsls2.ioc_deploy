@@ -1,0 +1,39 @@
+---
+
+- name: Ensure Happi database autogen directory exists
+  ansible.builtin.file:
+    path: "{{ happi_db_autogen_directory }}"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
+- name: Create variable to store Happi database contents
+  ansible.builtin.set_fact:
+    happi_db_autogen_contents: {}
+
+- name: Merge in default objects
+  ansible.builtin.set_fact:
+    happi_db_autogen_contents:
+      "{{ happi_db_autogen_contents |
+          combine(happi_db_autogen_base_objects) }}"
+
+- name: Get list of IOC names from loaded config
+  ansible.builtin.set_fact:
+    happi_db_autogen_ioc_list:
+      "{{ happi_db_autogen_component_config |
+          dict2items |
+          selectattr('value', 'mapping') |
+          selectattr('value.type', 'defined') |
+          map(attribute='key') | list }}"
+
+- name: Merge in device specific objects
+  ansible.builtin.include_tasks: add-device-specific.yml
+  loop: "{{ happi_db_autogen_ioc_list }}"
+  loop_control:
+    loop_var: happi_db_autogen_device_name
+
+- name: Write out the contents of the Happi database
+  ansible.builtin.copy:
+    dest: "{{ happi_db_autogen_directory }}/{{ happi_db_autogen_beamline_acronym }}_happi_db.json" # yamllint disable-line rule:line-length
+    content: "{{ happi_db_autogen_contents | to_nice_json(sort_keys=False) }}"
