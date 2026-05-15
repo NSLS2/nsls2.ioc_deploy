@@ -1,7 +1,7 @@
 ---
-xspress3_911d16d:
+xspress3_b1e03f7:
   name: xspress3
-  version: 911d16d
+  version: b1e03f7
   url: https://github.com/epics-modules/xspress3
   include_base_ad_config: true
   module_deps:
