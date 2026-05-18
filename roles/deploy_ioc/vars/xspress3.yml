@@ -75,3 +75,4 @@ deploy_ioc_device_specific_env:
   NUM_BINS: 4096
   PORT: "XSP3"
   CIRC_BUFFER: 1
+  EPICS_DB_INCLUDE_PATH: "$(ADCORE)/db:$(XSPRESS3)/db"
