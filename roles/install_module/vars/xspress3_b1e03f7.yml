@@ -4,5 +4,6 @@ xspress3_b1e03f7:
   version: b1e03f7
   url: https://github.com/epics-modules/xspress3
   include_base_ad_config: true
+  overwrite_config_site: true
   module_deps:
     - adcore_60080dc
