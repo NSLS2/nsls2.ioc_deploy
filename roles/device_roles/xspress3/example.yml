@@ -7,4 +7,4 @@ xspress3-01:
     NUM_CHANNELS: 8
     NUM_CARDS: 4
     XSPRESS3_IP: "192.168.0.1"
-    CALIBRATION_DIR: "/etc/xspress3/calibration/initial"
+    CALIBRATION_DIR: "/etc/xspress3/calibration/initial/settings"
