@@ -1,0 +1,8 @@
+---
+
+omegartc_764faf1:
+  name: omega_rtc
+  url: https://github.com/NSLS-II/omega_rtc_ioc
+  version: 764faf1
+  executable: omegaCNi32
+  module_deps: []
