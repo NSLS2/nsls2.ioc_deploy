@@ -4,9 +4,9 @@ dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable
 
 # adxspd specific commands
 {% if ioc.environment.DEVICE_ID is defined %}
-ADXSPDConfig("$(PORT)", "$(IP):$(PORT_NUM)", "$(DEVICE_ID)")
+ADXSPDConfig("$(PORT)", "$(IP)", "$(PORT_NUM)", "$(DEVICE_ID)")
 {% else %}
-ADXSPDConfig("$(PORT)", "$(IP):$(PORT_NUM)")
+ADXSPDConfig("$(PORT)", "$(IP)", "$(PORT_NUM)")
 {% endif %}
 
 dbLoadRecords("$(ADXSPD)/db/ADXSPD.template","P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
