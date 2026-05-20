@@ -39,7 +39,7 @@ pmacCreateCSAxes("CS{{ coord_system.num }}", {{ coord_system.num_axes }})
 # Define coordinate step resolution
 #pmacSetCoordStepsPerUnit(coordinate_system_port, cs_axis, counts_per_egu)
 {% for virtual_axis in ioc.virtual_axes %}
-pmacSetCoordStepsPerUnit("CS{{ virtual_axis.cs }}", {{ virtual_axis.num }}, {{ (1 / virtual_axis.mres) | int }})
+pmacSetCoordStepsPerUnit("CS{{ virtual_axis.cs }}", {{ virtual_axis.num }}, {{ (1 / virtual_axis.mres) | round(0) | int }})
 {% endfor %}
 {% endif %}
 {% endif %}

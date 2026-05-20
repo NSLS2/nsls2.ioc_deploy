@@ -1,0 +1,27 @@
+---
+mc02:
+  type: powerpmac
+  environment:
+    SYS: "XF:31ID1-OP:1"
+    CONTROLLER: "MC:02"
+    DEV: "{$(CONTROLLER)}"
+    CT_SYS: "XF:31ID1-CT"
+    NUM_AXES: 8 # Controller has 8 axes; this example defines only one
+    ENGINEER: "J. Wlodek"
+    CONTROLLER_IP: "xf31id1-lab3-mc2.nsls2.bnl.local"
+
+  disable_all_limits: true
+
+  axes:
+    - name: "Rot"
+      num: 1
+      component: CMT:1
+      desc: "Rotation"
+      mres: 0.045
+      egu: "deg"
+
+  poll_periods:
+    - card: 1
+      idle: 2000
+      moving: 200
+      cs: false
