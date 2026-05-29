@@ -14,6 +14,11 @@
         msg: "Local IOC configuration is required"
       when: deploy_ioc_local_config_path is not defined
 
+    - name: Fail if deploy_ioc_target is not specified
+      ansible.builtin.fail:
+        msg: "deploy_ioc_target variable is required to specify which IOC to deploy"
+      when: deploy_ioc_target is not defined
+
     # Typically host_config will be a dict of all ioc configurations on a particular
     # host. Here, we always have one target.
     - name: Load local ioc configuration
@@ -50,6 +55,8 @@
                    'softioc_user': _softioc_user,
                    'softioc_group': _softioc_user}) }}"
 
-    - name: Deploy specified IOCs
+    - name: Deploy specified IOC
       ansible.builtin.include_role:
         name: nsls2.ioc_deploy.deploy_ioc
+      vars:
+        deploy_ioc_ioc_name: "{{ deploy_ioc_target }}"

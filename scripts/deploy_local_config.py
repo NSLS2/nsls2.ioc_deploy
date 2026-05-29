@@ -2,11 +2,13 @@
 
 import argparse
 import importlib.util
+import json
 import logging
 import os
 import subprocess
 import sys
-from dataclasses import dataclass
+import tempfile
+from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 
@@ -16,6 +18,8 @@ import yaml
 NSLS2NETWORK_PKG_AVAILABLE = importlib.util.find_spec("nsls2network") is not None
 
 BASE_CONTAINER_IMAGE = "ghcr.io/nsls2/epics-alma"
+
+MANUAL_FILE_EXTENSIONS = {".template", ".substitutions", ".db", ".cmd", ".req"}
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("nsls2.ioc_deploy")
@@ -111,6 +115,16 @@ def get_all_examples_for_type(ioc_type: str, role_path: Path) -> dict[str, Path]
     return all_examples
 
 
+def collect_manual_ioc_files(directory: Path) -> dict[str, str]:
+    """Collect manual IOC files from a directory based on extension."""
+    manual_files = {}
+    for f in directory.iterdir():
+        if f.is_file() and f.suffix in MANUAL_FILE_EXTENSIONS:
+            logger.debug(f"Collected manual IOC file: {f.name}")
+            manual_files[f.name] = f.read_text()
+    return manual_files
+
+
 def ensure_container_running(container_name: str, el_version: int = 8):
     required_image = f"{BASE_CONTAINER_IMAGE}{el_version}:latest"
     logger.info(
@@ -160,6 +174,7 @@ class DeploymentOptions:
     container: bool = False
     el_version: int = 8
     pixi_path: str = "pixi"
+    manual_ioc_files: dict[str, dict[str, str]] = field(default_factory=dict)
 
 
 def deploy_configs(options: DeploymentOptions):
@@ -234,6 +249,23 @@ def deploy_configs(options: DeploymentOptions):
         if options.skip_compilation or (options.container and example_skip_compilation):
             logger.info("Skipping any module compilations")
             playbook_cmd.extend(["-e", "install_module_skip_compilation=true"])
+
+        manual_files_tmpfile = None
+        if ioc_name in options.manual_ioc_files:
+            logger.info(
+                f"Passing {len(options.manual_ioc_files[ioc_name])} manual IOC "
+                f"file(s) for {ioc_name}"
+            )
+            manual_files_tmpfile = tempfile.NamedTemporaryFile(
+                mode="w", suffix=".json", delete=False
+            )
+            json.dump(
+                {"deploy_ioc_manual_ioc_files": options.manual_ioc_files[ioc_name]},
+                manual_files_tmpfile,
+            )
+            manual_files_tmpfile.close()
+            playbook_cmd.extend(["-e", f"@{manual_files_tmpfile.name}"])
+
         if options.verbose:
             logger.info("Enabling verbose output")
             playbook_cmd.append("-vvv")
@@ -255,6 +287,9 @@ def deploy_configs(options: DeploymentOptions):
             )
             deployment_summary[ioc_name] = (path, False)
             continue
+        finally:
+            if manual_files_tmpfile is not None:
+                os.unlink(manual_files_tmpfile.name)
 
         # Only attempt verification if deployment succeeded and a verification file is
         # configured for this IOC and deployment is running in a container
@@ -374,6 +409,7 @@ def main():
 
     configs_to_deploy: dict[str, Path] = {}
     verification_files: dict[str, Path] = {}
+    manual_ioc_files: dict[str, dict[str, str]] = {}
 
     logger.info("Checking if ansible galaxy collection requirements are installed...")
 
@@ -444,27 +480,58 @@ def main():
             )
             configs_to_deploy.update(selected_examples)
 
+    if args.all or args.type:
         for ioc_name, example_config in configs_to_deploy.items():
-            if (example_config.parent.absolute() / "verify.yml").exists():
+            example_dir = example_config.parent.absolute()
+            if (example_dir / "verify.yml").exists():
                 logger.info(
                     f"Found verification file configured for example {ioc_name}"
                 )
-                verification_files[ioc_name] = (
-                    example_config.parent.absolute() / "verify.yml"
+                verification_files[ioc_name] = example_dir / "verify.yml"
+            collected = collect_manual_ioc_files(example_dir)
+            if collected:
+                logger.info(
+                    f"Collected {len(collected)} manual file(s) "
+                    f"for example {ioc_name}: {list(collected.keys())}"
                 )
+                manual_ioc_files[ioc_name] = collected
 
     if args.configs:
         logger.info(f"Loading specified config files: {args.configs}")
         for cfg in args.configs:
+            cfg_path = Path(cfg).absolute()
             try:
-                with open(cfg) as fp:
-                    config = yaml.safe_load(fp)
-                    ioc_name = list(config.keys())[0]
+                if cfg_path.is_dir():
+                    config_file = cfg_path / f"{cfg_path.name}.yml"
+                    if not config_file.exists():
+                        logger.warning(
+                            f"No {cfg_path.name}.yml found in directory {cfg}"
+                        )
+                        continue
+                    with open(config_file) as fp:
+                        config = yaml.safe_load(fp)
+                        ioc_name = list(config.keys())[0]
                     if ioc_name in configs_to_deploy:
                         logger.warning(
                             f"'{ioc_name}' already loaded; overwriting with {cfg}"
                         )
-                    configs_to_deploy[ioc_name] = Path(cfg).absolute()
+                    configs_to_deploy[ioc_name] = config_file
+                    collected = collect_manual_ioc_files(cfg_path)
+                    if collected:
+                        logger.info(
+                            f"Collected {len(collected)} manual file(s) "
+                            f"for {ioc_name}: {list(collected.keys())}"
+                        )
+                        manual_ioc_files[ioc_name] = collected
+                else:
+                    with open(cfg_path) as fp:
+                        config = yaml.safe_load(fp)
+                        ioc_name = list(config.keys())[0]
+                        if ioc_name in configs_to_deploy:
+                            logger.warning(
+                                f"'{ioc_name}' already loaded; overwriting with {cfg}"
+                            )
+                        configs_to_deploy[ioc_name] = cfg_path
             except Exception as e:
                 logger.warning(f"Failed to load config '{cfg}': {e}")
 
@@ -488,6 +555,7 @@ def main():
                     container=args.container,
                     el_version=el_version,
                     pixi_path=args.pixi_path,
+                    manual_ioc_files=manual_ioc_files,
                 )
             )
             overall_success = overall_success and el_version_success
@@ -506,6 +574,7 @@ def main():
                 skip_compilation=args.skip_compilation,
                 container=args.container,
                 pixi_path=args.pixi_path,
+                manual_ioc_files=manual_ioc_files,
             )
         )
 
