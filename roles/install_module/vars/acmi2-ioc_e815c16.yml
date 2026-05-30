@@ -1,0 +1,10 @@
+---
+acmi2-ioc_e815c16:
+  name: acmi2-ioc
+  url: https://github.com/NSLS2/acmi2-ioc
+  version: e815c166e9e6383fdff72052916f5bbdd6ffffdb
+  executable: acmi2
+  pkg_deps:
+    - fftw-libs
+  module_deps:
+    - pscdrv_1ed650d
