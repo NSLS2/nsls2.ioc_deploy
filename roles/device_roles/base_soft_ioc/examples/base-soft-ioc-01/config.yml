@@ -33,7 +33,7 @@ base-soft-ioc-01:
     #    argument of dbLoadTemplate function. In this example the parameter
     #    'P' is passed directly to the test.db file. The parameter 'DEV'
     #    is passed to the substitution file and used to set the 'R' parameter.
-    #    (The generated substitutions file will contain "$(Dev)" as a value
+    #    (The generated substitutions file will contain "$(DEV)" as a value
     #    for the instance)
     test-gen-variable-params:
       template_macros: "P=$(SYS),DEV=$(DEV)"
