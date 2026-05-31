@@ -2,7 +2,6 @@
 
 base-soft-ioc-01:
   type: base_soft_ioc
-  deploy_ioc_load_as_substitutions: true
   environment:
     ENGINEER: C. Engineer
     SYS: TEST
