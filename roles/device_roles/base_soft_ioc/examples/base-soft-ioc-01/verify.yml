@@ -10,6 +10,10 @@ verification:
     - iocBoot/postInit.cmd
     # Role-specific files
     - iocBoot/base.cmd
+    - db/test.db
+    - db/test.substitutions
+    - db/test-gen-fixed-params.substitutions
+    - db/test-gen-variable-params.substitutions
 
   file_must_contain:
     iocBoot/st.cmd:
@@ -17,14 +21,21 @@ verification:
     iocBoot/base.cmd:
       - "dbLoadDatabase"
       - "baseSoftIOC_registerRecordDeviceDriver(pdbbase)"
-
-  file_must_contain:
+    iocBoot/common.cmd:
+      - "dbLoadTemplate(\"$(TOP)/db/test-gen-fixed-params.substitutions\")"
+      - "dbLoadTemplate(\"$(TOP)/db/test-gen-variable-params.substitutions\", \"P=$(SYS),DEV=$(DEV)\")"
+      - "dbLoadTemplate(\"$(TOP)/db/test.substitutions\")"
     db/test.db:
       - "record(ao, \"$(P)$(R)pv\")"
     db/test.substitutions:
       - "file \"$(TOP)/db/test.db\""
-
-
+    db/test-gen-fixed-params.substitutions:
+      - "file \"$(TOP)/db/test.db\""
+      - "{\"TEST\", \"{PRM:FIXED}\"}"
+    db/test-gen-variable-params.substitutions:
+      - "file \"$(TOP)/db/test.db\""
+      - "{R}"
+      - "{\"$(DEV)\"}"
 
   file_must_not_contain:
     iocBoot/st.cmd:
@@ -34,7 +45,16 @@ verification:
       - "{{"
       - "}}"
       - 'asynSetOption'
+    iocBoot/common.cmd:
+      - "{{"
+      - "}}"
     iocBoot/epicsEnv.cmd:
+      - "{{"
+      - "}}"
+    db/test-gen-fixed-params.substitutions:
+      - "{{"
+      - "}}"
+    db/test-gen-variable-params.substitutions:
       - "{{"
       - "}}"
 
