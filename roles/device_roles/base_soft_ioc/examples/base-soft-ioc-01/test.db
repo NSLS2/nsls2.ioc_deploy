@@ -12,5 +12,3 @@ record(ai, "$(P)$(R)pv_RBV")
 	field(PREC, "3")
 	field(INP,  "$(P)$(R)pv NPP NMS")
 }
-
-
