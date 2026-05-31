@@ -10,7 +10,7 @@ The IOC application depends on the PSC (Portable Streaming Controller) driver
 [`pscdrv`](https://github.com/mdavidsaver/pscdrv), which is automatically built
 as a module dependency before `acmi2-ioc` is compiled.
 
-## Required Environment Variables
+## Environment Variables
 
 | Variable   | Description                               |
 | ---------- | ----------------------------------------- |
