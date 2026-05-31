@@ -106,7 +106,12 @@
 
 - name: Deploy IOC template
   ansible.builtin.include_role:
-    name: "nsls2.ioc_deploy.device_roles.{{ ioc.type }}"
+    name: >-
+      {{
+        "nsls2.ioc_deploy.acmi2_ioc"
+        if ioc.type == "acmi2-ioc"
+        else "nsls2.ioc_deploy.device_roles." ~ ioc.type
+      }}
 
 - name: Writeout IOC configuration used to yml
   ansible.builtin.copy:
