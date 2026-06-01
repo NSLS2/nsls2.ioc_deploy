@@ -1,5 +1,5 @@
 ---
-acmi2:
+acmi2-ioc1:
   type: acmi2-ioc
   environment:
     ENGINEER: Y. Hu
