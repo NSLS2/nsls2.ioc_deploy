@@ -3,6 +3,11 @@
 - name: Set deployment facts
   ansible.builtin.include_tasks: set-facts.yml
 
+- name: Initialize deploy_ioc_loop_index only if not defined
+  ansible.builtin.set_fact:
+    deploy_ioc_loop_index: 0
+  when: deploy_ioc_loop_index is not defined
+
 - name: Stop existing IOC instance if running
   when: >
     deploy_ioc_post_deploy_step == "Restart" or
