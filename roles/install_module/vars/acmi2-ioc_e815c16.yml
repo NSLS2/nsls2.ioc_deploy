@@ -5,6 +5,6 @@ acmi2-ioc_e815c16:
   version: e815c16
   executable: acmi2
   pkg_deps:
-    - fftw-libs
+    - fftw-devel
   module_deps:
     - pscdrv_1ed650d
