@@ -48,8 +48,6 @@ def generate_module_table() -> str:
 def generate_role_table() -> str:
     """Generate a markdown table of all device roles."""
     vars_dir = Path("roles/deploy_ioc/vars")
-    Path("roles/device_roles")
-
     lines = [
         "| Role | Required Module | Uses AD Common | Uses Common |",
         "|------|----------------|----------------|-------------|",
