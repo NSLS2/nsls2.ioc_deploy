@@ -22,6 +22,9 @@ ruff-fix = "ruff check --fix"
 tests = "pytest"
 deployment = "scripts/deploy_local_config.py"
 deploy-all = "scripts/deploy_local_config.py --all --container --matrix 8 9"
+docs-table = "scripts/generate_docs_table.py"
+docs-build = "mkdocs build"
+docs-serve = "mkdocs serve"
 
 # Package should not be in pixi lock file, but instead manually installed when on NSLS2 systems
 install-nsls2network = "pip install --upgrade git+https://github.com/NSLS2/nsls2network"
@@ -38,6 +41,8 @@ pip = "*"
 pytest = "*"
 pyyaml = "*"
 yamllint = "*"
+
+mkdocs = ">=1.5,<2"
 
 ansible = "*"
 ansible-compat = "==24.10.0"
