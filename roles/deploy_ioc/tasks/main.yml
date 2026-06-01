@@ -41,7 +41,6 @@
     - "{{ deploy_ioc_iocs_directory }}"
     - "{{ deploy_ioc_common_directory }}"
 
-
 - name: Deploy netsetup file
   ansible.builtin.template:
     src: "templates/netsetup.j2"
@@ -50,42 +49,11 @@
     group: "{{ host_config.softioc_group }}"
     mode: "0664"
 
-- name: Create empty list to store IOC names
-  ansible.builtin.set_fact:
-    deploy_ioc_full_ioc_list: []
-
-- name: Get list of IOC names from loaded config
-  ansible.builtin.set_fact:
-    deploy_ioc_full_ioc_list: >-
-      "{{ host_config |
-          dict2items |
-          selectattr('value', 'mapping') |
-          selectattr('value.type', 'defined') |
-          map(attribute='key') | list }}"
-
-- name: Make deploymnent list all IOCs if requested
-  ansible.builtin.set_fact:
-    deploy_ioc_ioc_list: "{{ deploy_ioc_full_ioc_list }}"
-  when: deploy_ioc_target == "all"
-
-- name: Set deploy iocs to specified IOCs if requested
-  ansible.builtin.set_fact:
-    deploy_ioc_ioc_list: "{{ deploy_ioc_target.split(',') }}"
-  when: deploy_ioc_target != "all"
-
-- name: Show list of IOCs
-  ansible.builtin.debug:
-    msg: "Deploying IOCs: {{ deploy_ioc_ioc_list }}"
-
 - name: Ensure required system packages are installed
   ansible.builtin.dnf:
     name: "{{ item }}"
     state: present
   loop: "{{ deploy_ioc_required_system_packages }}"
 
-- name: Deploy specified IOCs
+- name: Deploy specified IOC
   ansible.builtin.include_tasks: "deploy-ioc.yml"
-  loop: "{{ deploy_ioc_ioc_list }}"
-  loop_control:
-    loop_var: deploy_ioc_ioc_name
-    index_var: deploy_ioc_loop_index

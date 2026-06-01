@@ -7,3 +7,4 @@ environment:
   SYS: str()
   DEV: str()
   CT_PREFIX: str()
+substitutions: map(required=False)
