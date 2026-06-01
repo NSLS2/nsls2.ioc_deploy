@@ -19,6 +19,7 @@ repos:
           ansible-lint --offline
           --exclude roles/install_module/vars/*
           --exclude scripts/deploy_ioc.yml
+          --exclude mkdocs.yml
         description: Perform ansible linting
         types: [yaml]
 
