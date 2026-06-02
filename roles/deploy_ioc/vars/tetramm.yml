@@ -16,4 +16,3 @@ deploy_ioc_device_specific_env:
   TSPOINTS: 10000
   MAX_THREADS: 8
   EPICS_CA_MAX_ARRAY_BYTES: 5000000
-  EPICS_DB_INCLUDE_PATH: "$(QUADEM)/db:$(ADCORE)/db"

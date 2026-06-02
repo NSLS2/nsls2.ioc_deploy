@@ -15,4 +15,3 @@ deploy_ioc_device_specific_env:
   MAX_THREADS: 8
   XSIZE: 1024
   YSIZE: 1024
-  EPICS_DB_INCLUDE_PATH: "$(ADCORE)/db"

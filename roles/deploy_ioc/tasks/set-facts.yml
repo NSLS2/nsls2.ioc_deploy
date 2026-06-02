@@ -70,6 +70,30 @@
       "{{ deploy_ioc_merged_env | combine(ioc.environment) }}"
   when: ioc.environment is defined
 
+# Auto-compute EPICS_DB_INCLUDE_PATH from known module locations so that
+# device role vars don't have to set it manually. Honors any explicit value
+# the user already supplied via device_specific_env or ioc.environment.
+- name: Auto-compute EPICS_DB_INCLUDE_PATH if not explicitly set
+  ansible.builtin.set_fact:
+    deploy_ioc_merged_env:
+      "{{ deploy_ioc_merged_env
+          | combine({'EPICS_DB_INCLUDE_PATH':
+                     deploy_ioc_auto_db_include_path}) }}"
+  vars:
+    deploy_ioc_db_module_keys: >-
+      {{ ((install_module_default_epics_deps | default({})).keys() | list
+          + (install_module_epics_deps | default({})).keys() | list
+          + (install_module_installed | default({})).keys() | list)
+         | unique
+         | reject('equalto', 'EPICS_BASE')
+         | list }}
+    deploy_ioc_auto_db_include_path: >-
+      {{ (['$(TOP)/db']
+          + (deploy_ioc_db_module_keys
+             | map('regex_replace', '^(.*)$', '$(\1)/db') | list)
+          + ['$(EPICS_BASE)/db']) | join(':') }}
+  when: "'EPICS_DB_INCLUDE_PATH' not in deploy_ioc_merged_env"
+
 - name: Show merged environment pre-macro substitution
   ansible.builtin.debug:
     msg: "{{ deploy_ioc_merged_env }}"
