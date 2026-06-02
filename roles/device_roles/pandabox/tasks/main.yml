@@ -36,8 +36,10 @@
       - "{{ item }}"
   loop: "{{ device_roles_pandabox_pip_dependencies }}"
   register: pandabox_pip_install
-  changed_when: >-
-    "Successfully installed" in (pandabox_pip_install.results | map(attribute='stdout') | join('\n'))
+  # changed_when is evaluated per loop iteration, so `pandabox_pip_install`
+  # here is the per-item result dict (with `.stdout`), not the aggregated
+  # `.results` list available after the loop completes.
+  changed_when: "'Successfully installed' in pandabox_pip_install.stdout"
 
 - name: Update ownership of venv directory
   ansible.builtin.command:
