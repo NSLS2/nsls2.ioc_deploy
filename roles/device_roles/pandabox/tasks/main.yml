@@ -30,10 +30,14 @@
   # being installed in the target's system Python (not present in the EL9
   # container image used by CI).
   ansible.builtin.command:
-    cmd: "{{ deploy_ioc_ioc_directory }}/venv/bin/pip install {{ item }}"
+    argv:
+      - "{{ deploy_ioc_ioc_directory }}/venv/bin/pip"
+      - install
+      - "{{ item }}"
   loop: "{{ device_roles_pandabox_pip_dependencies }}"
   register: pandabox_pip_install
-  changed_when: "'Successfully installed' in pandabox_pip_install.stdout"
+  changed_when: >-
+    "Successfully installed" in (pandabox_pip_install.results | map(attribute='stdout') | join('\n'))
 
 - name: Update ownership of venv directory
   ansible.builtin.command:
