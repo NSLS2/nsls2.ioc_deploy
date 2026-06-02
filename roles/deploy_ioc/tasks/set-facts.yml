@@ -73,6 +73,8 @@
 # Auto-compute EPICS_DB_INCLUDE_PATH from known module locations so that
 # device role vars don't have to set it manually. Honors any explicit value
 # the user already supplied via device_specific_env or ioc.environment.
+# Only includes module macros that are actually present in the merged env,
+# so we never reference a macro the IOC doesn't know about.
 - name: Auto-compute EPICS_DB_INCLUDE_PATH if not explicitly set
   ansible.builtin.set_fact:
     deploy_ioc_merged_env:
@@ -86,6 +88,7 @@
           + (install_module_installed | default({})).keys() | list)
          | unique
          | reject('equalto', 'EPICS_BASE')
+         | select('in', deploy_ioc_merged_env)
          | list }}
     deploy_ioc_auto_db_include_path: >-
       {{ (['$(TOP)/db']
