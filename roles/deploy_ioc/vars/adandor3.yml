@@ -20,4 +20,5 @@ deploy_ioc_device_specific_env:
   NDFTVL: "UCHAR"
   NELMT: 12000000
   MAX_THREADS: 8
+  EPICS_DB_INCLUDE_PATH: "$(ADCORE)/db:$(ADANDOR3)/db"
   NELEMENTS: 10000000

@@ -19,4 +19,5 @@ deploy_ioc_device_specific_env:
   NCHANS: 1280
   CBUFFS: 100
   MAX_THREADS: 8
+  EPICS_DB_INCLUDE_PATH: "$(ADCORE)/db:$(ADMYTHEN)/db"
   NELEMENTS: 5000000

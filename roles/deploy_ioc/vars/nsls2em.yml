@@ -25,3 +25,4 @@ deploy_ioc_device_specific_env:
   RING_SIZE: 10000
   TSPOINTS: 10000
   EPICS_CA_MAX_ARRAY_BYTES: 10000000
+  EPICS_DB_INCLUDE_PATH: "$(NSLS2EM)/db:$(PSCDRV)/db:$(ADCORE)/db:$(EPICS_BASE)/db"

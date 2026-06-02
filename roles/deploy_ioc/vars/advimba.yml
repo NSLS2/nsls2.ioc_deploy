@@ -17,3 +17,4 @@ deploy_ioc_device_specific_env:
   YSIZE: 1080
   NELEMENTS: 500000
   GENICAM_GENTL64_PATH: "$(ADVIMBA)/bin/linux-x86_64"
+  EPICS_DB_INCLUDE_PATH: "$(ADCORE)/db:$(ADGENICAM)/db"

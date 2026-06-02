@@ -11,3 +11,4 @@ deploy_ioc_device_specific_env:
   YSIZE: 4096
   NCHANS: 2048
   CBUFFS: 500
+  EPICS_DB_INCLUDE_PATH: "$(ADCORE)/db:$(ADTUCAM)/db"
