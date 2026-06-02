@@ -4,7 +4,40 @@ base-soft-ioc-01:
   type: base_soft_ioc
   environment:
     ENGINEER: C. Engineer
-    SYS: XF:31ID1-ES
-    DEV: "{IOC:1}"
+    SYS: TEST
+    DEV: "{PRM:VAR}"
     PREFIX: "$(SYS)$(DEV)"
-    CT_PREFIX: "XF:31ID1-CT$(DEV)"
+    CT_PREFIX: "$(SYS){IOC:1}"
+
+  # In this example the database 'test.db' is loaded in 3 ways:
+  #   1. test.substitutions file is copied to the $(TOP)/db
+  #      directory and automatically loaded in common.cmd file.
+  #      All variables must be defined in the .substitutions
+  #      file, there is no way to pass parameters from the .cmd
+  #      file.
+  substitutions:
+    # 2: test-gen-fixed-params.substitutions file is generated
+    #    automatically based on the parameters specified under 'templates'
+    #    key. No parameters are passed from the .cmd file in the
+    #    dbLoadTemplate function.
+    test-gen-fixed-params:
+      templates:
+        - filepath: "$(TOP)/db/test.db"
+          pattern: ["P", "R"]
+          instances:
+            - ["TEST", "{PRM:FIXED}"]
+    # 3. test-gen-variable-params.substitutions file is generated
+    #    based on the parameters under the 'templates' key.
+    #    The 'template_macros' is a string that is included as the second
+    #    argument of dbLoadTemplate function. In this example the parameter
+    #    'P' is passed directly to the test.db file. The parameter 'DEV'
+    #    is passed to the substitution file and used to set the 'R' parameter.
+    #    (The generated substitutions file will contain "$(DEV)" as a value
+    #    for the instance)
+    test-gen-variable-params:
+      template_macros: "P=$(SYS),DEV=$(DEV)"
+      templates:
+        - filepath: "$(TOP)/db/test.db"
+          pattern: ["R"]
+          instances:
+            - ["$(DEV)"]

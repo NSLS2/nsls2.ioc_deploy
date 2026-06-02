@@ -1,0 +1,14 @@
+record(ao, "$(P)$(R)pv")
+{
+	field(DESC, "Test setpoint")
+	field(PREC, "3")
+	field(VAL,  0)
+	field(FLNK, "$(P)$(R)pv_RBV")
+}
+
+record(ai, "$(P)$(R)pv_RBV")
+{
+	field(DESC, "Test readback")
+	field(PREC, "3")
+	field(INP,  "$(P)$(R)pv NPP NMS")
+}
