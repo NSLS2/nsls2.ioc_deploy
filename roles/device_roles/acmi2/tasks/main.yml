@@ -1,5 +1,5 @@
 ---
-- name: Install acmi2-ioc base startup commands
+- name: Install acmi2 base startup commands
   ansible.builtin.template:
     src: templates/base.cmd.j2
     dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"

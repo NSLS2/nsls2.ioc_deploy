@@ -1,5 +1,5 @@
 ---
-type: enum("acmi2-ioc")
+type: enum("acmi2")
 environment:
   IOCNAME: str()
   UNIT: str()
