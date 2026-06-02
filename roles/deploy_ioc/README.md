@@ -168,6 +168,23 @@ The following variables can be overridden to customize the deployment behavior. 
 - **Default**: See below
 - **Description**: Default EPICS environment variables available to all IOCs. Includes paths to EPICS base and common support modules.
 
+#### Auto-computed `EPICS_DB_INCLUDE_PATH`
+
+If `EPICS_DB_INCLUDE_PATH` is not explicitly set (via
+`deploy_ioc_device_specific_env`, `deploy_ioc_default_env`, or
+`ioc.environment`), `deploy_ioc` auto-computes it from the modules that
+the `install_module` role built for this host. The resulting path is:
+
+```
+$(TOP)/db:$(MOD1)/db:$(MOD2)/db:...:$(EPICS_BASE)/db
+```
+
+where `MOD1`, `MOD2`, ... come from `install_module_installed` (i.e. modules
+actually built locally). Modules that resolve to the EPICS bundle
+(`/usr/lib/epics`) are already covered by `$(EPICS_BASE)/db` and are not
+listed individually. To override, set `EPICS_DB_INCLUDE_PATH` explicitly in
+any of the env dicts above.
+
 Default environment variables include:
 
 ```yaml
