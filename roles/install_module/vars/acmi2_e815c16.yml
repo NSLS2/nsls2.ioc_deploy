@@ -1,6 +1,6 @@
 ---
-acmi2-ioc_e815c16:
-  name: acmi2-ioc
+acmi2_e815c16:
+  name: acmi2
   url: https://github.com/NSLS2/acmi2-ioc
   version: e815c16
   executable: acmi2

@@ -1,6 +1,6 @@
 ---
 acmi2-ioc1:
-  type: acmi2-ioc
+  type: acmi2
   environment:
     ENGINEER: Y. Hu
     IOCNAME: lab
