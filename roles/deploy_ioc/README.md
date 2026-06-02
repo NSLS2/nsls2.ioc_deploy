@@ -175,7 +175,7 @@ If `EPICS_DB_INCLUDE_PATH` is not explicitly set (via
 `ioc.environment`), `deploy_ioc` auto-computes it from the modules that
 the `install_module` role built for this host. The resulting path is:
 
-```
+```text
 $(TOP)/db:$(MOD1)/db:$(MOD2)/db:...:$(EPICS_BASE)/db
 ```
 
