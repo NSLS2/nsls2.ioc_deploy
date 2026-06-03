@@ -2,7 +2,7 @@
 
 Ansible collection meant for centralizing deployment logic for EPICS IOC instances.
 
-The `nsls2.ioc_deploy` collection expects to be used in tandem with two other repositories; one with the [playbook](https://github.com/NSLS2/ansible/blob/main/deploy_ioc.yml) that eventually call these roles with some input parameters, and another [repository](https://github.com/NSLS2/ioc_host_vars) for storing IOC instance configurations.
+The `nsls2.ioc_deploy` collection expects to be used in tandem with two other (currently private) repositories; one with the playbook that eventually calls these roles with input parameters ([deploy_ioc.yml](https://github.com/NSLS2/ansible/blob/main/deploy_ioc.yml)), and another repository for storing IOC instance configurations ([ioc_host_vars](https://github.com/NSLS2/ioc_host_vars)).
 
 The collection includes several core central roles that are shared by all deployments, and then one role per type of IOC/hardware/device, found under `roles/device_roles/`. Each IOC type also has a `vars` file for overriding default behaviors in `roles/deploy_ioc/vars/`.
 Any required EPICS modules can be automatically built by the `install_module` role. The configured modules can be seen at `roles/install_module/vars/`.
