@@ -68,6 +68,9 @@
   changed_when: true
 
 - name: Add module to dict mapping module names to paths
+  # Note: this dict is also consumed by the deploy_ioc role to auto-compute
+  # EPICS_DB_INCLUDE_PATH (each entry contributes a `$(MODULE)/db` segment).
+  # See roles/deploy_ioc/tasks/set-facts.yml.
   ansible.builtin.set_fact:
     install_module_installed:
       "{{ install_module_installed |
