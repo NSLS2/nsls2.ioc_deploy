@@ -1,10 +1,10 @@
 ---
 
-admerlin_399508f:
+admerlin_f9b6b1b:
   name: ADMerlin
   url: https://github.com/areadetector/ADMerlin
   include_base_ad_config: true
-  version: 399508f
+  version: f9b6b1b
   executable: merlinApp
   module_deps:
     - adcore_60080dc
