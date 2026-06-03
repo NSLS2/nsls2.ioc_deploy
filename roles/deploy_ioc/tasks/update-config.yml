@@ -26,7 +26,11 @@
     - name: Find largest port number in use
       ansible.builtin.shell:
         # yamllint disable rule:line-length
-        cmd: find -maxdepth 2 -name config -type f -exec cat {} \; | grep ^PORT | awk -F '=' '{print($2)}' | sort -n | tail -1 # noqa: risky-shell-pipe
+        cmd: >-
+          find -maxdepth 2 -name config -type f |
+          xargs grep -l "^HOST={{ inventory_hostname.split('.')[0] }}" |
+          xargs -I{} sh -c 'grep ^PORT {} | awk -F= "{print \$2}"' |
+          sort -n | tail -1
         # yamllint enable rule:line-length
         chdir: "{{ deploy_ioc_iocs_directory }}"
       register: deploy_ioc_current_max_port
