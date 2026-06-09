@@ -48,7 +48,7 @@
 
     - name: If specified, override ioc exe with installed module exe
       ansible.builtin.set_fact:
-        deploy_ioc_executable: "{{ install_module_leaf_executable }}"
+        deploy_ioc_executable_module_: "{{ install_module_leaf_executable }}"
       when: install_module_leaf_executable is defined
 
 - name: Get default environment variables for ioc type
@@ -127,6 +127,16 @@
     deploy_ioc_executable: "{{ ioc.executable }}"
   when: ioc.executable is defined
 
+- name: Set IOC exe name to the name defined in module parameters
+  ansible.builtin.set_fact:
+    deploy_ioc_executable: "{{ deploy_ioc_executable_module_ }}" 
+  when: deploy_ioc_executable is not defined and deploy_ioc_executable_module_ is defined
+
+- name: Set IOC exe name to the default name
+  ansible.builtin.set_fact:
+    deploy_ioc_executable: "{{ deploy_ioc_executable_default_ }}" 
+  when: deploy_ioc_executable is not defined
+  
 - name: Get list of substitution files
   ansible.builtin.set_fact:
     substitutions: "{{ ioc.substitutions }}"

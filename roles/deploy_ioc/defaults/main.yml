@@ -17,7 +17,7 @@ deploy_ioc_post_deploy_step: "None"
 # The two below are concatenated to form the full IOC executable path,
 # and its associated dbd file. These can be overridden as needed.
 deploy_ioc_template_root_path: "/usr/lib/epics"
-deploy_ioc_executable: "softIoc"
+deploy_ioc_executable_default_: "softIoc"
 
 # Use standard st.cmd file, which loads `epicsEnv.cmd`, `base.cmd`, `common.cmd`,
 # executes iocInit(), and then loads `postInit.cmd`
