@@ -26,7 +26,7 @@
 - name: Initialize executable name defined in module parameters
   ansible.builtin.set_fact:
     deploy_ioc_executable_module_: none
-    
+
 - name: Handle any module requirements
   when: deploy_ioc_required_module is defined or ioc.required_module is defined
   block:
