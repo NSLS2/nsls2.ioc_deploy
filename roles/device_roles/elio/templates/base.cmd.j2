@@ -3,17 +3,29 @@ dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable
 {{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
 
 # Configure the low level communication port
-ek9000Configure("${EK9K}", "${HOST}", 502, ${NUM_TERMS})
+ek9000Configure("${EK9K}", "${HOST}", 502, {{ ioc.terminals | length }})
 dbLoadRecords("{{ deploy_ioc_template_root_path }}/db/ek9000_status.db","P=$(SYS){$(DEV)},EK9K=$(EK9K)")
 
 # Configure terminal
 {% for elio in ioc.terminals %}
-############  Config for elio #{{ loop.index }} - {{ elio[0] }} - {{ elio[1] }}  ############
+{% set num_chans = elio.MODEL[-1] | int %}
+############  Config for elio #{{ loop.index }} - {{ elio.POS }} - {{ elio.MODEL }}  ############
 
-epicsEnvSet("POS",{{ elio[0] }})
-epicsEnvSet("MODEL","{{ elio[1] }}")
+epicsEnvSet("POS",{{ elio.POS }})
+epicsEnvSet("MODEL","{{ elio.MODEL }}")
 epicsEnvSet("Dev","{$(DEV)_$(POS)}")
 ek9000ConfigureTerminal("$(EK9K)", "$(Dev)", "$(MODEL)", "$(POS)")
+{% if elio.CHAN_SPECIFIC_CONFIG is not defined %}
 dbLoadTemplate("{{ deploy_ioc_template_root_path }}/db/$(MODEL).substitutions","DEVICE=$(EK9K), Sys=$(SYS), Dev=$(Dev), POS=$(POS)")
+{% else %}
+{% for chan in range(1, num_chans + 1) %}
+{% set chan_config = elio.CHAN_SPECIFIC_CONFIG[chan] if elio.CHAN_SPECIFIC_CONFIG is defined and chan in elio.CHAN_SPECIFIC_CONFIG else {} %}
+{% set chan_macros = [] %}
+{% for key, value in chan_config.items() %}
+{% if chan_macros.append(key ~ "=" ~ value) %}{% endif %}
+{% endfor %}
+dbLoadTemplate("{{ deploy_ioc_template_root_path }}/db/$(MODEL).template","DEVICE=$(EK9K), Sys=$(SYS), Dev=$(Dev), POS=$(POS), CHAN={{ chan }}{% if chan_macros %}, {{ chan_macros | join(', ') }}{% endif %}")
+{% endfor %}
+{% endif %}
 
 {% endfor %}
