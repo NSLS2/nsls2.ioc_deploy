@@ -1,7 +1,7 @@
 ---
 
 type: enum("elio")
-terminals: list(include("terminal"))
+terminals: list(include("terminal"), min=1)
 environment:
   SYS: str()
   DEV: str()
