@@ -29,7 +29,6 @@ gpio_ex1:
   # PREFIX: used for IOC-specific PVs
   # HOST may be an IP address or host name
   # EK9K: port name
-  # NUM_TERMS: total terminal numbers
   environment:
     SYS: "XF:31ID1-ES"
     DEV: "GPIO:1"

@@ -20,4 +20,4 @@ terminal:
   # Optional dict for channel-specific configuration,
   # e.g. {1: {"LINR": "SLOPE"}, 2: {"LINR": "SLOPE"}} for channels 1 and 2
   CHAN_SPECIFIC_CONFIG: >-
-    map(map(any(str(), num()), key=str()), key=int(), required=False)
+    map(map(any(str(), num()), key=str()), key=int(min=1), required=False)

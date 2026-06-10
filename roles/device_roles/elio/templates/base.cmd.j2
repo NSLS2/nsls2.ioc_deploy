@@ -8,6 +8,7 @@ dbLoadRecords("{{ deploy_ioc_template_root_path }}/db/ek9000_status.db","P=$(SYS
 
 # Configure terminal
 {% for elio in ioc.terminals %}
+{# The last character of the model name indicates the number of channels, e.g. EL3068 has 8 channels #}
 {% set num_chans = elio.MODEL[-1] | int %}
 ############  Config for elio #{{ loop.index }} - {{ elio.POS }} - {{ elio.MODEL }}  ############
 
@@ -22,7 +23,7 @@ dbLoadTemplate("{{ deploy_ioc_template_root_path }}/db/$(MODEL).substitutions","
 {% set chan_config = elio.CHAN_SPECIFIC_CONFIG[chan] if elio.CHAN_SPECIFIC_CONFIG is defined and chan in elio.CHAN_SPECIFIC_CONFIG else {} %}
 {% set chan_macros = [] %}
 {% for key, value in chan_config.items() %}
-{% if chan_macros.append(key ~ "=" ~ value) %}{% endif %}
+{% set _ = chan_macros.append(key ~ "=" ~ value) %}
 {% endfor %}
 dbLoadTemplate("{{ deploy_ioc_template_root_path }}/db/$(MODEL).template","DEVICE=$(EK9K), Sys=$(SYS), Dev=$(Dev), POS=$(POS), CHAN={{ chan }}{% if chan_macros %}, {{ chan_macros | join(', ') }}{% endif %}")
 {% endfor %}
