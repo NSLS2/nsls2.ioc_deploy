@@ -3,7 +3,7 @@ dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable
 {{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
 
 # Increase callback queue size to prevent "callbackRequest: cbLow ring buffer full"
-callbackSetQueueSize(30000)
+callbackSetQueueSize(32768)
 
 # nsls2em specific commands
 drvAsynIPPortConfigure("IP_$(PORT)", "$(DEVICE_IP):17", 0, 0, 0)

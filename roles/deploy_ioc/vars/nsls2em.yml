@@ -11,8 +11,6 @@ deploy_ioc_dbpf_list:
   - pv: $(PREFIX)Reg31-Sp
     value: 0
     sleep: 1
-  - pv: $(PREFIX)regsend.SCAN
-    value: ".02 second"
   - pv: $(PREFIX)Reg8-Sp
     value: 7520
   - pv: $(PREFIX)Reg49-I.FLNK
