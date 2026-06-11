@@ -15,6 +15,7 @@ mdrive-g1:
       io_port: P1
       Sys: "XF:31ID1-OP"
       Dev: "MDrive:1"
+      CntlDev: "A-MDrive:1"
       DESC: "MDrive 1"
       ALIAS: "mdrive1"
     - host: "127.0.0.1"

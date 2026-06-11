@@ -20,6 +20,7 @@ device:
   Sys: str(required=False)
   Sys_IOC: str(required=False)
   Dev: str()
+  CntlDev: str(required=False)
   MRES: num(required=False)
   EGU: str(required=False)
   DESC: str()
