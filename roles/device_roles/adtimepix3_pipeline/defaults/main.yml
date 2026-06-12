@@ -1,0 +1,4 @@
+---
+
+device_roles_tpx3_pipline_python_version: ">=3.13"
+device_roles_tpx3_pipline_python_iocs_git_revision: "v0.1.0"

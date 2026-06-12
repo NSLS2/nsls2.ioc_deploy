@@ -1,0 +1,41 @@
+---
+
+- name: Check if pixi.toml exists
+  ansible.builtin.stat:
+    path: "{{ deploy_ioc_ioc_directory }}/pixi.toml"
+  register: pixi_toml_stat
+
+- name: Initialize Pixi
+  ansible.builtin.command:
+    cmd: "{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} init"
+    chdir: "{{ deploy_ioc_ioc_directory }}"
+  when: not pixi_toml_stat.stat.exists
+  changed_when: not pixi_toml_stat.stat.exists
+
+- name: Add Python dependency
+  ansible.builtin.command:
+    # yamllint disable-line rule:line-length
+    cmd: "{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} add 'python{{ ioc.python_version | default(device_roles_tpx3_pipline_python_version) }}'"
+    chdir: "{{ deploy_ioc_ioc_directory }}"
+  changed_when: true
+
+- name: Add tpx3_pipeline program from github as PyPI dependency
+  ansible.builtin.command:
+    # yamllint disable-line rule:line-length
+    cmd: "{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} add --pypi 'tpx3_pipeline @ git+https://github.com/MTakahashi-KWH/tpx3_pipeline.git@{{ ioc.python_iocs_git_revision | default(device_roles_tpx3_pipline_python_iocs_git_revision) }}'"
+    chdir: "{{ deploy_ioc_ioc_directory }}"
+  changed_when: true
+
+- name: Install dependencies
+  ansible.builtin.command:
+    cmd: "{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} install"
+    chdir: "{{ deploy_ioc_ioc_directory }}"
+  changed_when: true
+
+- name: Install startup script
+  ansible.builtin.template:
+    src: "templates/st.cmd.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/st.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0775"
