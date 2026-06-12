@@ -25,7 +25,7 @@ dbLoadTemplate("{{ deploy_ioc_template_root_path }}/db/$(MODEL).substitutions","
 {% for key, value in chan_config.items() %}
 {% set _ = chan_macros.append(key ~ "=" ~ value) %}
 {% endfor %}
-dbLoadTemplate("{{ deploy_ioc_template_root_path }}/db/$(MODEL).template","DEVICE=$(EK9K), Sys=$(SYS), Dev=$(Dev), POS=$(POS), CHAN={{ chan }}{% if chan_macros %}, {{ chan_macros | join(', ') }}{% endif %}")
+dbLoadRecords("{{ deploy_ioc_template_root_path }}/db/$(MODEL).template","DEVICE=$(EK9K), Sys=$(SYS), Dev=$(Dev), POS=$(POS), CHAN={{ chan }}{% if chan_macros %}, {{ chan_macros | join(', ') }}{% endif %}")
 {% endfor %}
 {% endif %}
 
