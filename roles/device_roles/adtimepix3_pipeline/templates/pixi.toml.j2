@@ -1,0 +1,14 @@
+[workspace]
+authors = [{{ioc.environment.ENGINEER| default("Rhys Takahashi <19mt01@gmail.com>)"}}]
+channels = ["conda-forge"]
+name = "tpx3_deploy_env"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+python = "{{ ioc.python_version | default(device_roles_tpx3_pipline_python_version) }}"
+
+[pypi-dependencies]
+tpx3-pipeline = { git = "https://github.com/MTakahashi-KWH/tpx3_pipeline.git", tag = {{ ioc.srx_caproto_iocs_git_revision | default(device_roles_zebra_saver_caproto_srx_caproto_iocs_git_revision) }} }
