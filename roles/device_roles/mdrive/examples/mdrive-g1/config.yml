@@ -4,7 +4,7 @@ mdrive-g1:
   type: mdrive
   environment:
     ENGINEER: C. Engineer
-    PREFIX: "XF:31ID1-CT{IOC:MDriveG1}"
+    PREFIX: "XF:31ID1-CT{IOC:MDrvG1}"
     SYS_IOC: "XF:31ID1-CT"
     IP_PORT: 503
     SYS: "XF:31ID1-OP"
@@ -15,6 +15,7 @@ mdrive-g1:
       io_port: P1
       Sys: "XF:31ID1-OP"
       Dev: "MDrive:1"
+      CntlDev: "A-MDrv:1"
       DESC: "MDrive 1"
       ALIAS: "mdrive1"
     - host: "127.0.0.1"
