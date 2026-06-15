@@ -1,7 +1,7 @@
 ---
-nsls2em_442dad6:
+nsls2em_1194122:
   name: nsls2em
-  version: 442dad6
+  version: 1194122
   url: https://github.com/NSLS2/nsls2em-ioc
   include_base_ad_config: true
   executable: nsls2em
