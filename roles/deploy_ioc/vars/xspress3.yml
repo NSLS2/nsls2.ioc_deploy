@@ -1,7 +1,9 @@
 ---
 deploy_ioc_use_common: true
 deploy_ioc_use_ad_common: false
-deploy_ioc_required_module: xspress3_911d16d
+deploy_ioc_required_module: xspress3_5f459a1
+deploy_ioc_template_root_path:
+  "{{ deploy_ioc_required_module_path }}/iocs/xspress3IOC"
 deploy_ioc_executable: xspress3App
 
 deploy_ioc_req_file_list:
@@ -73,3 +75,4 @@ deploy_ioc_device_specific_env:
   NUM_BINS: 4096
   PORT: "XSP3"
   CIRC_BUFFER: 1
+  EPICS_DB_INCLUDE_PATH: "$(ADCORE)/db:$(XSPRESS3)/db"
