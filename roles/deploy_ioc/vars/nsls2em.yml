@@ -1,5 +1,5 @@
 ---
-deploy_ioc_required_module: nsls2em_6ccc872
+deploy_ioc_required_module: nsls2em_23437dc
 deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
 deploy_ioc_executable: nsls2em
 deploy_ioc_make_autosave_files: true
@@ -11,8 +11,6 @@ deploy_ioc_dbpf_list:
   - pv: $(PREFIX)Reg31-Sp
     value: 0
     sleep: 1
-  - pv: $(PREFIX)Reg8-Sp
-    value: 7520
   - pv: $(PREFIX)Reg49-I.FLNK
     value: $(PREFIX)$(PID_X):Inp-Sts
   - pv: $(PREFIX)Reg50-I.FLNK
