@@ -1,5 +1,5 @@
 ---
 deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
-deploy_ioc_required_module: acmi2_19833db
+deploy_ioc_required_module: acmi2_32df6c6
 deploy_ioc_executable: acmi2
 deploy_ioc_use_common: false
