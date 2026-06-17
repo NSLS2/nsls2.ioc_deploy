@@ -1,5 +1,4 @@
 dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
-dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}Subs.dbd")
 {{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
 
 dbLoadRecords("{{ deploy_ioc_template_root_path }}/db/ADC.db",         "P=$(IOCNAME), NO=$(UNIT)")
