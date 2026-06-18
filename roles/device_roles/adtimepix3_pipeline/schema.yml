@@ -1,0 +1,13 @@
+---
+
+type: enum("adtimepix3_pipeline")
+pixi_executable_path: str(required=False)
+python_ioc_git_revision: str(required=False)
+python_version: str(required=False)
+environment:
+  PREFIX: str()
+  ENGINEER: str(required=False)
+    # this will really need to be changed, though this is a runtime changeable default path
+    # designed so that the pipeline always dumps data somewhere (admin can manage later)
+    # philosophy is in worst case data surviving is more important than clean access management
+  PATH: str()
