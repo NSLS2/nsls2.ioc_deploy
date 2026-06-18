@@ -1,7 +1,7 @@
 ---
 adtimepix3_pipeline_01:
   type: "adtimepix3_pipeline"
-  python_ioc_git_revision: "v0.1.0"
+  python_ioc_git_revision: "v0.1.1"
   python_version: ">=3.14.0"
   environment:
     PREFIX: "XF:11ID1-ES:TPX:PIPE:1:"
