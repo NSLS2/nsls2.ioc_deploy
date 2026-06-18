@@ -1,8 +1,8 @@
 ---
 
-elio_335730d:
+elio_89f7a97:
     name: "elio"
     url: "https://github.com/NSLS2/elio-ioc"
-    version: 335730d
+    version: 89f7a97
     module_deps:
         - ek9000_60e62b5
