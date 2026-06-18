@@ -91,3 +91,9 @@
     install_module_leaf_executable:
       "{{ install_module_config.executable }}"
   when: install_module_config.executable is defined
+
+- name: If specified, set installed leaf module IOC template root path
+  ansible.builtin.set_fact:
+    install_module_leaf_template_root_path:
+      "{{ install_module_dir }}/{{ install_module_config.ioc_template_root_path }}"
+  when: install_module_config.ioc_template_root_path is defined
