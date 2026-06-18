@@ -6,7 +6,7 @@
     dest: "{{ deploy_ioc_ioc_directory }}/pixi.toml"
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
-    mode: "0775"
+    mode: "0664"
 
 - name: Install lock
   ansible.builtin.template:
@@ -14,19 +14,19 @@
     dest: "{{ deploy_ioc_ioc_directory }}/pixi.lock"
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
-    mode: "0775"
+    mode: "0664"
 
 - name: Install conversion config
-  ansible.builtin.template:
+  ansible.builtin.copy:
     src: "files/tpx3.json"
     dest: "{{ deploy_ioc_ioc_directory }}/tpx3.json"
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
-    mode: "0775"
+    mode: "0664"
 
 - name: Install dependencies
   ansible.builtin.command:
-    cmd: "{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} update"
+    cmd: "{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} install"
     chdir: "{{ deploy_ioc_ioc_directory }}"
   changed_when: true
 
