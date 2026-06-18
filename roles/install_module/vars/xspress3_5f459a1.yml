@@ -1,8 +1,9 @@
 ---
-xspress3_911d16d:
+xspress3_5f459a1:
   name: xspress3
-  version: 911d16d
+  version: 5f459a1
   url: https://github.com/epics-modules/xspress3
   include_base_ad_config: true
+  overwrite_config_site: true
   module_deps:
     - adcore_60080dc

@@ -1,8 +1,8 @@
 ---
-acmi2_e815c16:
+acmi2_32df6c6:
   name: acmi2
   url: https://github.com/NSLS2/acmi2-ioc
-  version: e815c16
+  version: 32df6c6
   executable: acmi2
   pkg_deps:
     - fftw-devel

@@ -1,11 +1,23 @@
 ---
 
 type: enum("elio")
+terminals: list(include("terminal"), min=1)
 environment:
   SYS: str()
   DEV: str()
   EK9K: str()
   HOST: str()
-  NUM_TERMS: int()
   PREFIX: str()
   ENGINEER: str()
+
+---
+terminal:
+  POS: int(min=1)
+  MODEL: >-
+    enum("EL1124", "EL1808", "EL2124", "EL2798", "EL2808",
+    "EL3008", "EL3068", "EL3154", "EL3164", "EL3314",
+    "EL4008", "EL4038", "EL4104", "EL4134", "EL9505")
+  # Optional dict for channel-specific configuration,
+  # e.g. {1: {"LINR": "SLOPE"}, 2: {"LINR": "SLOPE"}} for channels 1 and 2
+  CHAN_SPECIFIC_CONFIG: >-
+    map(map(any(str(), num()), key=str()), key=int(min=1), required=False)

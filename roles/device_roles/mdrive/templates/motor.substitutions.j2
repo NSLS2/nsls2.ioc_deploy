@@ -15,3 +15,14 @@ pattern
 {{"{"}}"{{ sys }}", "{{"{"}}{{ dev }}{{"}"}}Mtr", "{{ device.io_port }}_Mtr", "asynMotor", "0", "{{ desc }}", "{{ egu }}", {{ mres }}, "{{ alias }}"{{"}"}}
 {% endfor -%}
 {{"}"}}
+
+file "$(IMS)/db/IMS_extra.db"
+{{"{"}}
+pattern
+{{"{"}}P, R, PORT, ADDR, TIMEOUT{{"}"}}
+{% for device in ioc.devices -%}
+{% set sys = device.Sys | default(ioc.environment.SYS) -%}
+{% set dev = device.Dev | default(device.io_port) -%}
+{{"{"}}"{{ sys }}", "{{"{"}}{{ dev }}{{"}"}}", "{{ device.io_port }}_Mtr", "0", 1.0{{"}"}}
+{% endfor -%}
+{{"}"}}
