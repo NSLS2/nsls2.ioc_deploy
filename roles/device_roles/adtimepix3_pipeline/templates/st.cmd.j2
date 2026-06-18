@@ -7,4 +7,4 @@ export EPICS_CA_ADDR_LIST="{{ host_config.epics_interface.broadcast }}"
 export EPICS_CAS_BEACON_ADDR_LIST="{{ host_config.epics_interface.broadcast }}"
 
 # Start IOC here.
-{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} run python -m tpx3_pipeline.ioc --path {{ioc.environment.PATH}} --prefix '{{ ioc.environment.PREFIX | replace('{', '') | replace('}', '')}}'
+{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} run python -m tpx3_pipeline.ioc --path "{{ ioc.environment.PATH }}" --prefix '{{ ioc.environment.PREFIX | replace('{', '{{') | replace('}', '}}') }}'
