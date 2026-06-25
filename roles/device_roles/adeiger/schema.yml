@@ -12,7 +12,7 @@ adeiger_local_intf_ip: any(ip(), hostname(), required=False)
 environment:
   ENGINEER: str()
   PREFIX: str()
-  EIGER_IP: any(ip(), hostname())
+  DCU_IP: any(ip(), hostname())
   STREAM_IP: any(ip(), hostname(), required=False)
 
   XSIZE: int()
