@@ -12,4 +12,4 @@ adpco_b17fe13:
     PCO_LIB: "$(PCO_SDK)/lib"
     PCO_INCLUDE: "$(PCO_SDK)/include"
   module_deps:
-    - adcore_60080dc
+    - adcore_5860bd3

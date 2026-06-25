@@ -2,8 +2,8 @@
 
 adeiger-01:
   type: adeiger
-  # Eiger version must be 1 for Eiger or 2 for Eiger2
-  eiger_version: 1
+  # Detector model must be one of the following: eiger1, eiger2, pilatus4, selun
+  detector_model: eiger1
 
   # Configure local port if Eiger is connected directly to the server.
   # Comment out otherwise.
@@ -13,7 +13,7 @@ adeiger-01:
   environment:
     ENGINEER: C. Engineer
     PREFIX: XF:31ID1-ES{ADEIGER:01}
-    EIGER_IP: "10.69.57.71"
+    DCU_IP: "192.168.100.10"
 
     XSIZE: 1030
     YSIZE: 1065

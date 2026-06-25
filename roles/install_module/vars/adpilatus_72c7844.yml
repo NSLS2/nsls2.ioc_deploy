@@ -6,7 +6,7 @@ adpilatus_72c7844:
   include_base_ad_config: true
   executable: pilatusDetectorApp
   module_deps:
-    - adcore_60080dc
+    - adcore_5860bd3
     - adcompvision_9750d13
     - adpluginbar_448d96b
     - ffmpeg_server_07c570f

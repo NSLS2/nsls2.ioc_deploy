@@ -6,5 +6,5 @@ adgermanium_0395fac:
   url: https://github.com/lijibnl/test-deployment
   include_base_ad_config: true
   module_deps:
-    - adcore_60080dc
-    - adsupport_6acf83f
+    - adcore_5860bd3
+    - adsupport_fe23754
