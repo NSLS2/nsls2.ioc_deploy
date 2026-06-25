@@ -1,10 +1,9 @@
 ---
-
-adeiger_05e8a65:
+adeiger_a7b25dc:
   name: ADEiger
   url: https://github.com/areadetector/ADEiger
   include_base_ad_config: true
-  version: 05e8a65
+  version: a7b25dc
   executable: eigerDetectorApp
   module_deps:
     - adcore_5860bd3

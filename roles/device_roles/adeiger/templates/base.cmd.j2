@@ -10,7 +10,7 @@ eigerDetectorConfig("$(PORT)", "$(EIGER_IP)", "$(STREAMIP)", 0, 0)
 {% else %}
 eigerDetectorConfig("$(PORT)", "$(EIGER_IP)", 0, 0)
 {% endif %}
-dbLoadRecords("$(ADEIGER)/db/eiger{{ ioc.eiger_version }}.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
+dbLoadRecords("$(ADEIGER)/db/{{ ioc.detector_model }}.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
 
 
 # Debug

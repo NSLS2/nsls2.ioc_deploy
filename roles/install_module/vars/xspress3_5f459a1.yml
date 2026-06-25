@@ -6,4 +6,4 @@ xspress3_5f459a1:
   include_base_ad_config: true
   overwrite_config_site: true
   module_deps:
-    - adcore_60080dc
+    - adcore_5860bd3

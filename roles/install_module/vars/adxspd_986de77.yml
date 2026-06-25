@@ -10,4 +10,4 @@ adxspd_986de77:
     - curl-devel
   module_deps:
     - adcompvision_9750d13
-    - adcore_60080dc
+    - adcore_5860bd3
