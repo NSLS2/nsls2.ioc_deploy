@@ -3,7 +3,7 @@
 adeiger-01:
   type: adeiger
   # Eiger version must be 1 for Eiger or 2 for Eiger2
-  eiger_version: 1
+  detector_model: eiger1
 
   # Configure local port if Eiger is connected directly to the server.
   # Comment out otherwise.
