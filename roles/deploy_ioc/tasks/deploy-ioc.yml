@@ -34,7 +34,6 @@
     group: "{{ host_config.softioc_group }}"
     mode: "02775"
 
-
 - name: Perform base setup when using standard startup script format
   when: deploy_ioc_standard_st_cmd
   block:
@@ -108,6 +107,16 @@
         - deploy_ioc_manual_ioc_files is defined
         - deploy_ioc_manual_ioc_files | length > 0
         - item.key | regex_search('\.(cmd|req|db|template|substitutions)$')
+
+    - name: Delete any existing autosave files if requested
+      ansible.builtin.shell:
+        cmd: find . -name '*.sav*' -type f -print -delete
+        chdir: "{{ deploy_ioc_as_directory }}/save"
+      register: deploy_ioc_cleared_autosave
+      when:
+        - deploy_ioc_clear_autosave_files is defined
+        - deploy_ioc_clear_autosave_files | bool
+      changed_when: deploy_ioc_cleared_autosave.stdout | length > 0
 
 - name: Deploy IOC template
   ansible.builtin.include_role:
