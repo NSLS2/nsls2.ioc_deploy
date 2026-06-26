@@ -9,6 +9,10 @@ mdrive-g1:
     IP_PORT: 503
     SYS: "XF:31ID1-OP"
     MRES: 4.9609375e-5
+    VBAS: 1.0
+    VELO: 2
+    VMAX: 5
+    ACCL: 0.2
     EGU: "mm"
   devices:
     - host: "127.0.0.1"
