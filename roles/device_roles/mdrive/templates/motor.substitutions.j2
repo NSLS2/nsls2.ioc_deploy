@@ -16,7 +16,7 @@ pattern
 {% set vmax = device.VMAX | default(ioc.environment.VMAX) -%}
 {% set accl = device.ACCL | default(ioc.environment.ACCL) -%}
 {% set alias = device.ALIAS | default(dev ~ "Mtr") -%}
-{{"{"}}"{{ sys }}", "{{"{"}}{{ dev }}{{"}"}}Mtr", "{{ device.io_port }}_Mtr", "asynMotor", "0", "{{ desc }}", "{{ egu }}", {{ mres }}, "{{ alias }}"{{"}"}}
+{{"{"}}"{{ sys }}", "{{"{"}}{{ dev }}{{"}"}}Mtr", "{{ device.io_port }}_Mtr", "asynMotor", "0", "{{ desc }}", "{{ egu }}", {{ mres }}, {{ vbas }}, {{ velo }}, {{vmax }}, {{ accl}}, "{{ alias }}"{{"}"}}
 {% endfor -%}
 {{"}"}}
 
