@@ -23,21 +23,6 @@
     and ansible_distribution == "RedHat"
     and ansible_distribution_major_version | int not in deploy_ioc_supported_el_versions
 
-- name: Initialize module-level overrides
-  ansible.builtin.set_fact:
-    deploy_ioc_executable_module_: null
-    deploy_ioc_template_root_path_module_: null
-
-# Save whether the device role vars file set these variables.
-# We check against null (the default from defaults/main.yml) to detect
-# role-level overrides. We cannot eagerly evaluate the role-level values
-# here because they may reference variables (e.g. deploy_ioc_required_module_path)
-# that are not yet defined.
-- name: Detect role-level overrides
-  ansible.builtin.set_fact:
-    deploy_ioc_executable_role_set_: "{{ deploy_ioc_executable is not none }}"
-    deploy_ioc_template_root_path_role_set_: "{{ deploy_ioc_template_root_path is not none }}"
-
 - name: Handle any module requirements
   when: deploy_ioc_required_module is defined or ioc.required_module is defined
   block:
@@ -63,49 +48,20 @@
 
     - name: If specified, save module-level executable
       ansible.builtin.set_fact:
-        deploy_ioc_executable_module_: "{{ install_module_leaf_executable }}"
-      when: install_module_leaf_executable is defined
+        deploy_ioc_executable: "{{ install_module_leaf_executable }}"
+      when: install_module_leaf_executable is defined and deploy_ioc_executable is not defined
 
     - name: If specified, save module-level template root path
       ansible.builtin.set_fact:
-        deploy_ioc_template_root_path_module_: "{{ install_module_leaf_template_root_path }}"
-      when: install_module_leaf_template_root_path is defined
+        deploy_ioc_template_root_path: "{{ install_module_leaf_template_root_path }}"
+      when: install_module_leaf_template_root_path is defined and deploy_ioc_template_root_path is not defined
 
-# Resolve deploy_ioc_executable with priority (lowest to highest):
-#   1. default (deploy_ioc_executable_default_ = "softIoc")
-#   2. module  (executable field in install_module vars)
-#   3. role    (deploy_ioc_executable in device role vars file)
-#   4. instance (ioc.executable in host config)
-#
-# The role-level value is already active via include_vars. We only need
-# to apply default/module when the role vars did NOT set the variable.
-- name: Resolve IOC exe — apply default then module (role did not set it)
-  ansible.builtin.set_fact:
-    deploy_ioc_executable: >-
-      {{ deploy_ioc_executable_module_
-         if deploy_ioc_executable_module_ is not none
-         else deploy_ioc_executable_default_ }}
-  when: not (deploy_ioc_executable_role_set_ | bool)
-
-- name: Override IOC exe name with instance-level value
+- name: Override IOC exe name with instance-level value, if set
   ansible.builtin.set_fact:
     deploy_ioc_executable: "{{ ioc.executable }}"
   when: ioc.executable is defined
 
-# Resolve deploy_ioc_template_root_path with priority (lowest to highest):
-#   1. default ("/usr/lib/epics")
-#   2. module  (ioc_template_root_path field in install_module vars)
-#   3. role    (deploy_ioc_template_root_path in device role vars file)
-#   4. instance (ioc.ioc_template_root_path in host config)
-- name: Resolve IOC template root path — apply default then module (role did not set it)
-  ansible.builtin.set_fact:
-    deploy_ioc_template_root_path: >-
-      {{ deploy_ioc_template_root_path_module_
-         if deploy_ioc_template_root_path_module_ is not none
-         else deploy_ioc_template_root_path_default_ }}
-  when: not (deploy_ioc_template_root_path_role_set_ | bool)
-
-- name: Override IOC template root path with instance-level value
+- name: Override IOC template root path with instance-level value, if set
   ansible.builtin.set_fact:
     deploy_ioc_template_root_path: "{{ ioc.ioc_template_root_path }}"
   when: ioc.ioc_template_root_path is defined
