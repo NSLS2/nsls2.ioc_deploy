@@ -16,9 +16,10 @@ deploy_ioc_post_deploy_step: "None"
 
 # The two below are concatenated to form the full IOC executable path,
 # and its associated dbd file. These can be overridden as needed.
-deploy_ioc_template_root_path: "/usr/lib/epics"
-deploy_ioc_executable: none
-deploy_ioc_executable_default_: "softIoc"
+# They must be set either at the role level (in device role vars), at the module level (ioc_template_root_path and executable),
+# or at the instance level (in host config).
+#deploy_ioc_template_root_path: null
+#deploy_ioc_executable: null
 
 # Use standard st.cmd file, which loads `epicsEnv.cmd`, `base.cmd`, `common.cmd`,
 # executes iocInit(), and then loads `postInit.cmd`
@@ -65,7 +66,7 @@ deploy_ioc_default_env:
   IOC: "{{ ioc.type }}"
   IOC_DIR: "{{ deploy_ioc_iocs_directory }}"
   TOP: "$(IOC_DIR)/{{ deploy_ioc_ioc_name }}"
-  TEMPLATE_TOP: "{{ deploy_ioc_template_root_path }}"
+  TEMPLATE_TOP: "{{ deploy_ioc_template_root_path | default('') }}"
   HOSTNAME: "{{ inventory_hostname.split('.')[0] }}"
   IOCNAME: "{{ deploy_ioc_ioc_name }}"
 
