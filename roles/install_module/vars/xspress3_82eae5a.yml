@@ -5,4 +5,4 @@ xspress3_82eae5a:
   url: https://github.com/epics-modules/xspress3
   include_base_ad_config: true
   module_deps:
-    - adcore_60080dc
+    - adcore_5860bd3
