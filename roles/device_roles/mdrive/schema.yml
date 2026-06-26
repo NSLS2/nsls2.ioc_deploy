@@ -8,6 +8,10 @@ environment:
   IP_PORT: int()
   SYS: str()
   MRES: num()
+  VBAS: num(required=False)
+  VELO: num(required=False)
+  VMAX: num(required=False)
+  ACCL: num(required=False)
   EGU: str()
 
 devices: list(include('device'), min=1)

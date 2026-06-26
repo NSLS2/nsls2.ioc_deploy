@@ -4,13 +4,17 @@
 file "$(MDRIVE)/db/motor.db"
 {{"{"}}
 pattern
-{{"{"}}P, M, MOTOR, DTYP, ADDR, DESC, EGU, MRES, ALIAS{{"}"}}
+{{"{"}}P, M, MOTOR, DTYP, ADDR, DESC, EGU, MRES, VBAS, VELO, VMAX, ACCL, ALIAS{{"}"}}
 {% for device in ioc.devices -%}
 {% set sys = device.Sys | default(ioc.environment.SYS) -%}
 {% set dev = device.Dev | default(device.io_port) -%}
 {% set desc = device.DESC | default(dev ~ " motor") -%}
 {% set egu = device.EGU | default(ioc.environment.EGU) -%}
 {% set mres = device.MRES | default(ioc.environment.MRES) -%}
+{% set vbas = device.VBAS | default(ioc.environment.VBAS) -%}
+{% set velo = device.VELO | default(ioc.environment.VELO) -%}
+{% set vmax = device.VMAX | default(ioc.environment.VMAX) -%}
+{% set accl = device.ACCL | default(ioc.environment.ACCL) -%}
 {% set alias = device.ALIAS | default(dev ~ "Mtr") -%}
 {{"{"}}"{{ sys }}", "{{"{"}}{{ dev }}{{"}"}}Mtr", "{{ device.io_port }}_Mtr", "asynMotor", "0", "{{ desc }}", "{{ egu }}", {{ mres }}, "{{ alias }}"{{"}"}}
 {% endfor -%}
