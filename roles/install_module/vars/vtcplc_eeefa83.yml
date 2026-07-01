@@ -1,0 +1,7 @@
+---
+
+vtcplc_eeefa83:
+  name: VTCplc
+  version: eeefa83
+  url: https://github.com/NSLS2/vacuum-plc
+  compilation_command: "make -s"
