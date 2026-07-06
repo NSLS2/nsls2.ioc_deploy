@@ -1,0 +1,10 @@
+---
+acmi2_8f6bac7:
+  name: acmi2
+  url: https://github.com/NSLS2/acmi2-ioc
+  version: 8f6bac7
+  executable: acmi2
+  pkg_deps:
+    - fftw-devel
+  module_deps:
+    - pscdrv_1ed650d
