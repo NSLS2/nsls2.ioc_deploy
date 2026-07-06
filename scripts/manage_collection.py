@@ -10,6 +10,23 @@ import tabulate
 import yaml
 
 
+class IndentedDumper(yaml.SafeDumper):
+    def increase_indent(self, flow=False, indentless=False):
+        return super().increase_indent(flow, False)
+
+
+def write_yaml_config(path, data):
+    with open(path, "w") as file:
+        yaml.dump(
+            data,
+            file,
+            Dumper=IndentedDumper,
+            default_flow_style=False,
+            sort_keys=False,
+            explicit_start=True,
+        )
+
+
 def get_module_list():
     """Return a list of module names from the install_module vars directory."""
     return [
@@ -113,8 +130,7 @@ def update_module():
         "roles", "install_module", "vars", f"{new_module_name_ver}.yml"
     )
 
-    with open(new_module_config_path, "w") as file:
-        yaml.dump(new_module_config, file, default_flow_style=False, sort_keys=False)
+    write_yaml_config(new_module_config_path, new_module_config)
 
     print(f"Updating {module_base_name} to {new_version} for all dependant modules...")
     module_var_files = [
