@@ -1,0 +1,18 @@
+---
+
+adkreios_4ec03dc:
+  name: ADKreios
+  url: https://github.com/NSLS2/ADKreios
+  version: 4ec03dc
+
+  # ADKreios is an areaDetector driver, so pull in the standard AD build config
+  # (HDF5, TIFF, JPEG, etc.) and let deploy overwrite CONFIG_SITE/RELEASE.
+  include_base_ad_config: true
+
+  # Name of the example IOC application/executable built under iocs/kreiosIOC.
+  executable: kreios
+
+  # ADCore transitively provides ADSupport. asyn, autosave, busy, calc, sscan,
+  # seq and iocStats come from the epics-bundle (see install_module defaults).
+  module_deps:
+    - adcore_60080dc

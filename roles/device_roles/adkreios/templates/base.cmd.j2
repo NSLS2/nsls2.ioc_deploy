@@ -1,0 +1,19 @@
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# Asyn IP port for the SpecsLab Prodigy "Remote In" TCP server (default port 7010)
+drvAsynIPPortConfigure("PRODIGY", "$(PRODIGY_HOST):$(PRODIGY_PORT)", 0, 0, 0)
+asynSetTraceIOMask("PRODIGY", 0, 2)
+
+# KREIOS-150 driver:
+# kreiosConfig(portName, driverPort, maxBuffers, maxMemory, priority, stackSize)
+kreiosConfig("$(PORT)", "PRODIGY", 0, 0, 0, 0)
+
+# Give the driver a moment to establish the Prodigy connection
+epicsThreadSleep(2)
+
+# Main detector database
+dbLoadRecords("$(ADKREIOS)/db/kreios.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
+
+# Make the KREIOS autosave request files discoverable
+set_requestfile_path("$(ADKREIOS)/db")
