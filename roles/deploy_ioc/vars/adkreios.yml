@@ -1,0 +1,27 @@
+---
+
+deploy_ioc_required_module: adkreios_4ec03dc
+deploy_ioc_template_root_path:
+  "{{ deploy_ioc_required_module_path }}/iocs/kreiosIOC"
+
+# ADKreios is an areaDetector driver, so load the standard AD plugin stack
+# (commonPlugins.cmd, autosave, reccaster, iocStats) via the shared common.cmd.
+deploy_ioc_use_ad_common: true
+
+deploy_ioc_req_file_list:
+  - name: auto_settings.req
+    macros: "P=$(PREFIX)"
+
+deploy_ioc_device_specific_env:
+  PORT: "KREIOS1"
+  QSIZE: 20
+  NCHANS: 2048
+  CBUFFS: 500
+  MAX_THREADS: 8
+  # KREIOS-150 detector dimensions (overridable per instance)
+  XSIZE: 1285
+  YSIZE: 730
+  NELEMENTS: 50000000
+  # SpecsLab Prodigy "Remote In" server (override PRODIGY_HOST per instance)
+  PRODIGY_HOST: "127.0.0.1"
+  PRODIGY_PORT: 7010

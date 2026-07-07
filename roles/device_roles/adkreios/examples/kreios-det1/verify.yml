@@ -1,0 +1,43 @@
+---
+# Set to true to skip module compilation. ADKreios only needs open-source EPICS
+# modules (ADCore/ADSupport + the epics-bundle), so compilation can run in CI.
+skip_compilation: false
+
+verification:
+  files_must_exist:
+    # Standard IOC boot files (created by deploy_ioc)
+    - iocBoot/st.cmd
+    - iocBoot/epicsEnv.cmd
+    - iocBoot/postInit.cmd
+    # Role-specific files
+    - iocBoot/base.cmd
+    - as/req/auto_settings.req
+
+  file_must_contain:
+    iocBoot/st.cmd:
+      - "iocInit"
+    iocBoot/base.cmd:
+      - "dbLoadDatabase"
+      - "drvAsynIPPortConfigure"
+      - "kreiosConfig"
+      - 'dbLoadRecords("$(ADKREIOS)/db/kreios.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")' # yamllint disable-line rule:line-length
+    as/req/auto_settings.req:
+      - "kreios_settings.req"
+      - "commonPlugin_settings.req"
+
+  file_must_not_contain:
+    iocBoot/st.cmd:
+      - "{{"  # No unrendered jinja
+      - "}}"
+    iocBoot/base.cmd:
+      - "{{"
+      - "}}"
+    iocBoot/epicsEnv.cmd:
+      - "{{"
+      - "}}"
+    as/req/auto_settings.req:
+      - "{{"
+      - "}}"
+
+  permissions:
+    iocBoot/st.cmd: "0775"
