@@ -20,8 +20,5 @@
     - "autohome"
     - "motor"
     - "motorstatus"
-    - "pmacaux"
     - "pmacStatus"
     - "cs"
-    - "pmac_asyn_motor"
-    - "pmac_physical_limit"
