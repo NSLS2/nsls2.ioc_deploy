@@ -163,6 +163,17 @@ def install_galaxy_collection(
         raise RuntimeError(f"Failed to install galaxy collection {name}: {e}") from e
 
 
+def install_local_collection(top_path: Path, reinstall_collection: bool = True):
+    if not reinstall_collection:
+        logger.info(
+            "Skipping local collection reinstall/rebuild per "
+            "--not-reinstall-collections"
+        )
+        return
+
+    install_galaxy_collection(str(top_path), force=True)
+
+
 @dataclass
 class DeploymentOptions:
     hostname: str
@@ -366,6 +377,14 @@ def main():
         default="pixi",
         help="Path to the pixi executable (default: 'pixi' - i.e. must be in PATH)",
     )
+    parser.add_argument(
+        "--not-reinstall-collections",
+        action="store_true",
+        help=(
+            "Skip reinstall/rebuild of the local nsls2.ioc_deploy collection before "
+            "deployment"
+        ),
+    )
 
     example_source_group = parser.add_mutually_exclusive_group()
     example_source_group.add_argument("-t", "--type", help="Type of IOC to deploy")
@@ -430,7 +449,9 @@ def main():
             )
             break
 
-    install_galaxy_collection(str(top_path), force=True)
+    install_local_collection(
+        top_path, reinstall_collection=not args.not_reinstall_collections
+    )
 
     if args.all:
         logger.info("Finding all examples for all IOC types")
