@@ -164,7 +164,16 @@ def install_galaxy_collection(
 
 
 def install_local_collection(top_path: Path, reinstall_collection: bool = True):
+    local_collection_path = (
+        top_path / "collections" / "ansible_collections" / "nsls2" / "ioc_deploy"
+    )
+
     if not reinstall_collection:
+        if not local_collection_path.exists():
+            logger.warning("Local Galaxy collections are missing, installing them ...")
+            install_galaxy_collection(str(top_path), force=True)
+            return
+
         logger.info(
             "Skipping local collection reinstall/rebuild per "
             "--not-reinstall-collections"
