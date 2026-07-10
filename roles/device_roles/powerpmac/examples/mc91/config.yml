@@ -1,5 +1,5 @@
 ---
-mc01:
+mc91:
   type: powerpmac
   environment:
     SYS: "XF:31ID1-OP:1"
