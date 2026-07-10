@@ -1,9 +1,7 @@
----
-
-ppmac_afc1f8c:
+ppmac_91b4edc:
   name: ppmac
   url: https://github.com/NSLS2/ppmac
-  version: afc1f8c
+  version: 91b4edc
   executable: "ppmac"
   remove_existing_release_files: true
   module_deps:
