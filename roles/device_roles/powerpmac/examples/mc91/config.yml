@@ -20,6 +20,7 @@ mc91:
       motion_prog: 10
       num_axes: 9
 
+  # Note if mres is exponential format, a decimal point and one digit after is required
   axes:
     - name: "Rot"
       num: 1
@@ -33,21 +34,21 @@ mc91:
       num: 2
       component: CMT:1
       desc: "X translation"
-      mres: 0.00005
+      mres: 5.0e-5
       egu: "mm"
 
     - name: "Y"
       num: 3
       component: CMT:1
       desc: "Y translation"
-      mres: 0.00005
+      mres: 5.0e-5
       egu: "mm"
 
     - name: "Z"
       num: 4
       component: CMT:1
       desc: "Z translation"
-      mres: 0.00005
+      mres: 5.0e-5
       egu: "mm"
 
   virtual_axes:
