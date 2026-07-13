@@ -186,7 +186,7 @@ mydriver-01:
 
 The `adaravis` role is a complete example of an AD role with extra complexity (camera model detection via `arv-tool`).
 
-### Module vars (`roles/install_module/vars/adaravis_a0aa4d6.yml`):
+### Module vars (`roles/install_module/vars/adaravis_a0aa4d6.yml`)
 
 ```yaml
 adaravis_a0aa4d6:
@@ -199,7 +199,7 @@ adaravis_a0aa4d6:
     - adgenicam_5d08a11
 ```
 
-### Deploy vars (`roles/deploy_ioc/vars/adaravis.yml`):
+### Deploy vars (`roles/deploy_ioc/vars/adaravis.yml`)
 
 ```yaml
 deploy_ioc_use_ad_common: true
@@ -220,7 +220,7 @@ deploy_ioc_device_specific_env:
   NELEMENTS: 500000
 ```
 
-### Tasks (`roles/device_roles/adaravis/tasks/main.yml`):
+### Tasks (`roles/device_roles/adaravis/tasks/main.yml`)
 
 ```yaml
 - name: Ensure aravis rpm package is installed
@@ -274,7 +274,7 @@ Note how `adaravis` extends the standard pattern with:
 
 `adsimdetector` is the simplest AD role — no hardware interaction, just configuration:
 
-### Deploy vars (`roles/deploy_ioc/vars/adsimdetector.yml`):
+### Deploy vars (`roles/deploy_ioc/vars/adsimdetector.yml`)
 
 ```yaml
 deploy_ioc_template_root_path:
@@ -295,7 +295,7 @@ deploy_ioc_device_specific_env:
   EPICS_DB_INCLUDE_PATH: "$(ADCORE)/db"
 ```
 
-### Schema (`roles/device_roles/adsimdetector/schema.yml`):
+### Schema (`roles/device_roles/adsimdetector/schema.yml`)
 
 ```yaml
 type: enum("adsimdetector")

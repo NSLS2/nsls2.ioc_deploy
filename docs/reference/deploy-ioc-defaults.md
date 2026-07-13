@@ -118,6 +118,7 @@ The `deploy_ioc` role provides the central deployment logic for all IOC types. I
 - **Description**: List of autosave request files to load. Each entry is a dict with `name` and optional `macros` fields.
 
 Example:
+
 ```yaml
 deploy_ioc_req_file_list:
   - name: auto_settings.req
@@ -133,6 +134,7 @@ deploy_ioc_req_file_list:
 - **Description**: List of `dbpf` (database put field) commands executed after `iocInit()`. Each entry specifies a PV name and value.
 
 Example:
+
 ```yaml
 deploy_ioc_dbpf_list:
   - pv: "$(PREFIX)AcquireMode"
@@ -222,6 +224,7 @@ deploy_ioc_default_env:
 | `.db`, `.template`, `.substitutions` | `db/` |
 
 Example:
+
 ```yaml
 deploy_ioc_manual_ioc_files:
   custom_setup.cmd: |

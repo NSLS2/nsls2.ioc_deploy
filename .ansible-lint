@@ -4,10 +4,13 @@ mock_modules:
   - ansible.posix.mount # For some reason ansible lint doesn't find this
 
 exclude_paths:
-  - ".github/workflows/super-linter.yml"
   # Be more flexible for install module vars, since they are based
   # on epics module names
   - "roles/install_module/vars/"
   # Exclude copied playbook - uses nsls2.general collection
   - "scripts/deploy_ioc.yml"
   - "collections/ansible_collections/"
+  - "docs/"
+  - "site/"
+  - "roles/device_roles/adpilatus/"
+  - "mkdocs.yml"

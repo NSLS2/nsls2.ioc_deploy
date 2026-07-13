@@ -7,6 +7,7 @@ Local testing allows you to validate your device roles by deploying them into Do
 - **pixi** installed and working
 - **Docker** or **Podman** with access to `ghcr.io`
 - Logged in to the GitHub Container Registry:
+
   ```bash
   docker login ghcr.io
   ```

@@ -22,6 +22,7 @@ This interactive tool:
 If you prefer to do it manually:
 
 1. Create the new module vars file:
+
    ```yaml
    # roles/install_module/vars/mymodule_newver.yml
    mymodule_newver:
@@ -32,12 +33,14 @@ If you prefer to do it manually:
    ```
 
 2. Update the device role vars to reference the new module:
+
    ```yaml
    # roles/deploy_ioc/vars/mydevice.yml
    deploy_ioc_required_module: mymodule_newver
    ```
 
 3. Update any modules that depend on this one:
+
    ```yaml
    # roles/install_module/vars/othermodule_xyz.yml
    othermodule_xyz:
@@ -55,6 +58,7 @@ If you prefer to do it manually:
 ### Adding New Environment Variables
 
 1. Add the variable to the schema:
+
    ```yaml
    # roles/device_roles/mydevice/schema.yml
    environment:
@@ -62,6 +66,7 @@ If you prefer to do it manually:
    ```
 
 2. Reference it in your template if needed:
+
    ```jinja2
    {# templates/base.cmd.j2 #}
    {% if ioc.environment.NEW_VAR is defined %}

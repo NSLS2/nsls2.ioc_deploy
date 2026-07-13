@@ -10,7 +10,7 @@ drvAsynPowerPMACPortConfigure("$(SSH_PORT)", "$(CONTROLLER_IP)", "root", "deltat
 # Configure Model 3 Controller Driver (ControllerPort, LowLevelDriverPort, Address, Axes, MovingPoll, IdlePoll)
 pmacCreateController("$(CTRL_PORT)", "$(SSH_PORT)", 0, $(NUM_AXES), {{ deploy_ioc_merged_env.MOVING_POLL_PERIOD }}, {{ deploy_ioc_merged_env.IDLE_POLL_PERIOD }})
 
-# Configure Model 3 Axes Driver (Controler Port, Axis Count)
+# Configure Model 3 Axes Driver (Controller Port, Axis Count)
 pmacCreateAxes("$(CTRL_PORT)", $(NUM_AXES))
 
 {% if ioc.disable_all_limits is defined and ioc.disable_all_limits %}

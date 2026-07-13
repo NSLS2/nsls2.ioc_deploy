@@ -1,0 +1,5 @@
+[codespell]
+# EPICS record field names and abbreviations that are not typos
+ignore-words-list = thst,aslo,sav,gaus,hav,indx,hiden,re-use
+# Skip vendor-provided files and third-party collections
+skip = *.mib,*.MIB,./collections,./site,./.git
