@@ -5,12 +5,12 @@ dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable
 # adeiger specific commands
 errlogInit(20000)
 
-{% if ioc.environment.STREAMIP is defined %}
-eigerDetectorConfig("$(PORT)", "$(EIGER_IP)", "$(STREAMIP)", 0, 0)
+{% if ioc.environment.STREAM_IP is defined %}
+eigerDetectorConfig("$(PORT)", "$(DCU_IP)", "$(STREAM_IP)", 0, 0)
 {% else %}
-eigerDetectorConfig("$(PORT)", "$(EIGER_IP)", 0, 0)
+eigerDetectorConfig("$(PORT)", "$(DCU_IP)", 0, 0)
 {% endif %}
-dbLoadRecords("$(ADEIGER)/db/eiger{{ ioc.eiger_version }}.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
+dbLoadRecords("$(ADEIGER)/db/{{ ioc.detector_model }}.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
 
 
 # Debug

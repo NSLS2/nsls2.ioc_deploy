@@ -53,9 +53,9 @@ ipc_substitution_block:
     "$(VA)/db/variandual_ip.template"
     )
   pattern: list(
-    enum("Sys", "Dev", "CHAN", "PORT", "Cntl", "SPNUM")
+    enum("Sys", "Dev", "CHAN", "PORT", "Cntl", "SPNUM", "Indx")
     )
-  instances: list(list(min=3, max=6))
+  instances: list(list(min=1, max=7))
 
 asyn_substitution_block:
   filepath: enum("$(EPICS_BASE)/db/asynRecord.db")

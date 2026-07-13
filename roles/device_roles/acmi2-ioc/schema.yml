@@ -1,8 +1,0 @@
----
-type: enum("acmi2-ioc")
-environment:
-  IOCNAME: str()
-  UNIT: str()
-  PSC_IP: any(ip(), hostname())
-  PSC_PORT: int(min=1, max=65535, required=False)
-  ENGINEER: str(required=False)

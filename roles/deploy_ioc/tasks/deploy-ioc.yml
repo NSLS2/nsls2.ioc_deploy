@@ -3,6 +3,11 @@
 - name: Set deployment facts
   ansible.builtin.include_tasks: set-facts.yml
 
+- name: Initialize deploy_ioc_loop_index only if not defined
+  ansible.builtin.set_fact:
+    deploy_ioc_loop_index: 0
+  when: deploy_ioc_loop_index is not defined
+
 - name: Stop existing IOC instance if running
   when: >
     deploy_ioc_post_deploy_step == "Restart" or
@@ -28,7 +33,6 @@
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
     mode: "02775"
-
 
 - name: Perform base setup when using standard startup script format
   when: deploy_ioc_standard_st_cmd
@@ -103,6 +107,16 @@
         - deploy_ioc_manual_ioc_files is defined
         - deploy_ioc_manual_ioc_files | length > 0
         - item.key | regex_search('\.(cmd|req|db|template|substitutions)$')
+
+    - name: Delete any existing autosave files if requested
+      ansible.builtin.shell:
+        cmd: find . -name '*.sav*' -type f -print -delete
+        chdir: "{{ deploy_ioc_as_directory }}/save"
+      register: deploy_ioc_cleared_autosave
+      when:
+        - deploy_ioc_clear_autosave_files is defined
+        - deploy_ioc_clear_autosave_files | bool
+      changed_when: deploy_ioc_cleared_autosave.stdout | length > 0
 
 - name: Deploy IOC template
   ansible.builtin.include_role:

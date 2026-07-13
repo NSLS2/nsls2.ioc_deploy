@@ -6,4 +6,4 @@ adtucam_c8c1685:
   version: c8c1685
   executable: tucamApp
   module_deps:
-    - adcore_60080dc
+    - adcore_5860bd3

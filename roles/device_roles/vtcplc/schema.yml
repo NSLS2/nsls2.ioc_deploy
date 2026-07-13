@@ -1,0 +1,10 @@
+---
+
+type: enum("vtcplc")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
+  PLCADR: any(ip(), hostname())
+  SYS: str()
+  SYSPORT: str()
+  Template: str()

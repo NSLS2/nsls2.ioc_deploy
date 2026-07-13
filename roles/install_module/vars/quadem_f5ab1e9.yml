@@ -10,4 +10,4 @@ quadem_f5ab1e9:
   compilation_command:
     "cp quadEMApp/src/drvQuadEM.h quadEMApp/sydorSrc && make -sj"
   module_deps:
-    - adcore_60080dc
+    - adcore_5860bd3

@@ -48,10 +48,8 @@ pmacSetCoordStepsPerUnit("CS{{ virtual_axis.cs }}", {{ virtual_axis.num }}, {{ (
 dbLoadTemplate("$(TOP)/db/motor.substitutions")
 dbLoadTemplate("$(TOP)/db/motorstatus.substitutions")
 dbLoadTemplate("$(TOP)/db/pmacStatus.substitutions")
-dbLoadTemplate("$(TOP)/db/pmac_asyn_motor.substitutions")
-dbLoadTemplate("$(TOP)/db/pmacaux.substitutions")
-dbLoadTemplate("$(TOP)/db/pmac_physical_limit.substitutions")
 dbLoadTemplate("$(TOP)/db/autohome.substitutions")
+{% if ioc.virtual_axes is defined %}
 dbLoadTemplate("$(TOP)/db/cs.substitutions")
-dbLoadRecords("$(PPMAC)/db/kill_all.db","Sys=$(SYS),Dev=$(DEV),Port=$(SSH_PORT)")
+{% endif %}
 dbLoadRecords("$(PPMAC)/db/asynComm.db", "P=$(CT_SYS)$(DEV), PORT=$(SSH_PORT), ADDR=0")

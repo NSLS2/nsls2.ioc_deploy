@@ -7,6 +7,7 @@ pattern
 {{"{"}}P, R, PORT, ADDR, IMAX, OMAX{{"}"}}
 {% for device in ioc.devices -%}
 {% set sys_ioc = device.Sys_IOC | default(ioc.environment.SYS_IOC) -%}
-{{"{"}}"{{ sys_ioc }}", "{{"{"}}{{ device.Dev }}{{"}"}}Asyn", "{{ device.io_port }}", "0", "256", "256"{{"}"}}
+{% set sys_dev = device.CntlDev | default(device.Dev) -%}
+{{"{"}}"{{ sys_ioc }}", "{{"{"}}{{ sys_dev }}{{"}"}}Asyn", "{{ device.io_port }}", "0", "256", "256"{{"}"}}
 {% endfor -%}
 {{"}"}}

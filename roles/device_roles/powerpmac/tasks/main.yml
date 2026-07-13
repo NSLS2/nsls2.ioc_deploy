@@ -20,8 +20,13 @@
     - "autohome"
     - "motor"
     - "motorstatus"
-    - "pmacaux"
     - "pmacStatus"
-    - "cs"
-    - "pmac_asyn_motor"
-    - "pmac_physical_limit"
+
+- name: Install coordinate system substitution file
+  ansible.builtin.template:
+    src: "templates/cs.substitutions.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/db/cs.substitutions"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+  when: ioc.virtual_axes is defined

@@ -1,0 +1,11 @@
+---
+
+vtcplc-01:
+  type: vtcplc
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{VTCPLC:01}
+    PLCADR: "10.69.34.74"
+    SYS: "Vactest-FEA:"
+    SYSPORT: "vactest"
+    Template: "fea-plc.db"

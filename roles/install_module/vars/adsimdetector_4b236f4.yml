@@ -13,7 +13,7 @@ adsimdetector_4b236f4:
   version: 4b236f4
   include_base_ad_config: true
   module_deps:
-    - adcore_60080dc
+    - adcore_5860bd3
     - adcompvision_9750d13
     - adpluginbar_448d96b
     - ffmpeg_server_07c570f

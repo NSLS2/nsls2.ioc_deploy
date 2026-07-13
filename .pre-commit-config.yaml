@@ -22,6 +22,7 @@ repos:
           --exclude docs/*
           --exclude site/*
           --exclude roles/device_roles/adpilatus/*
+          --exclude mkdocs.yml
         description: Perform ansible linting
         types: [yaml]
 

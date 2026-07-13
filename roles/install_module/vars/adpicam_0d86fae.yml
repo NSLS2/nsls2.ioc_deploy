@@ -7,7 +7,7 @@ adpicam_0d86fae:
   include_base_ad_config: true
   executable: ADPICamApp
   module_deps:
-    - adcore_60080dc
+    - adcore_5860bd3
     - adcompvision_9750d13
     - adpluginbar_448d96b
     - ffmpeg_server_07c570f

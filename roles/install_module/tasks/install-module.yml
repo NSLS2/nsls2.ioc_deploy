@@ -68,6 +68,9 @@
   changed_when: true
 
 - name: Add module to dict mapping module names to paths
+  # Note: this dict is also consumed by the deploy_ioc role to auto-compute
+  # EPICS_DB_INCLUDE_PATH (each entry contributes a `$(MODULE)/db` segment).
+  # See roles/deploy_ioc/tasks/set-facts.yml.
   ansible.builtin.set_fact:
     install_module_installed:
       "{{ install_module_installed |
@@ -88,3 +91,9 @@
     install_module_leaf_executable:
       "{{ install_module_config.executable }}"
   when: install_module_config.executable is defined
+
+- name: If specified, set installed leaf module IOC template root path
+  ansible.builtin.set_fact:
+    install_module_leaf_template_root_path:
+      "{{ install_module_dir }}/{{ install_module_config.ioc_template_root_path }}"
+  when: install_module_config.ioc_template_root_path is defined

@@ -6,8 +6,8 @@ adurl_1c725ed:
   url: https://github.com/areaDetector/ADURL
   include_base_ad_config: true
   module_deps:
-    - adsupport_6acf83f
+    - adsupport_fe23754
     - adcompvision_9750d13
-    - adcore_60080dc
+    - adcore_5860bd3
     - adpluginbar_448d96b
     - ffmpeg_server_07c570f

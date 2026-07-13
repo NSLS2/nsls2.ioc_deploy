@@ -1,0 +1,8 @@
+---
+adcore_5860bd3:
+  name: ADCore
+  url: https://github.com/areaDetector/ADCore
+  include_base_ad_config: true
+  version: 5860bd3
+  module_deps:
+    - adsupport_fe23754
