@@ -20,7 +20,7 @@ mc91:
       motion_prog: 10
       num_axes: 9
 
-  # Note if mres is exponential format, a decimal point and one digit after is required
+  # Note: if mres uses exponential notation, include a decimal point and at least one digit after it (e.g., 5.0e-5) so it parses as a number.
   axes:
     - name: "Rot"
       num: 1
