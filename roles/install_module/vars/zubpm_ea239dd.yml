@@ -1,0 +1,8 @@
+---
+zubpm_ea239dd:
+  name: zubpm
+  url: https://github.com/huyong1979/zubpm-ioc.git
+  version: ea239dd
+  executable: zbpm
+  module_deps:
+    - pscdrv_1ed650d
