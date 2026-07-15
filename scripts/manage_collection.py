@@ -132,7 +132,7 @@ def update_module():
 
     write_yaml_config(new_module_config_path, new_module_config)
 
-    print(f"Updating {module_base_name} to {new_version} for all dependant modules...")
+    print(f"Updating {module_base_name} to {new_version} for all dependent modules...")
     module_var_files = [
         os.path.join("roles", "install_module", "vars", file)
         for file in os.listdir(os.path.join("roles", "install_module", "vars"))
@@ -148,7 +148,7 @@ def update_module():
     )
 
     print(
-        f"Updating {module_base_name} to {new_version} for all dependant ioc types..."
+        f"Updating {module_base_name} to {new_version} for all dependent IOC types..."
     )
     ioc_vars_files = [
         os.path.join("roles", "deploy_ioc", "vars", file)

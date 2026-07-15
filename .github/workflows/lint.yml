@@ -1,0 +1,232 @@
+---
+# Canonical CI lint gate. Runs the committed .pre-commit-config.yaml
+# (the same hook set developers run locally) against changed files
+# only.
+#
+# Changed-file scope:
+#   pull_request    -> files changed vs. the PR base (origin/main).
+#   push to main    -> files changed in the push (github.event.before..HEAD).
+#   workflow_dispatch -> all files (no push range available; safe fallback).
+#
+# ansible-lint runs as a separate job (run_ansible_lint) with a
+# galaxy collection install step so collection-aware rules have full
+# context in CI — matching the behaviour of the retired super-linter
+# workflow.
+#
+# The ansible-lint pre-commit hook is skipped in the lint job via
+# SKIP=ansible-lint because the lint job installs no galaxy collections;
+# running it offline with no collections installed causes every
+# git-sourced FQCN (community.general.*, ansible.posix.*, etc.) to fail
+# as unknown-module. The run_ansible_lint job is the authoritative CI
+# gate for collection-aware ansible-lint.
+
+name: Lint
+permissions:
+  contents: read
+
+"on":
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint (changed files)
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Pixi
+        # SHA pin for supply-chain safety; comment shows the human-readable tag.
+        uses: prefix-dev/setup-pixi@a0af7a228712d6121d37aba47adf55c1332c9c2e  # v0.9.4
+        with:
+          pixi-version: v0.67.2
+          environments: dev
+          cache: false
+          frozen: true
+
+      - name: Determine changed-file ref range
+        id: refs
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          SHA: ${{ github.sha }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            echo "from_ref=origin/${BASE_REF}" >> "$GITHUB_OUTPUT"
+            echo "to_ref=${SHA}"               >> "$GITHUB_OUTPUT"
+          elif [[ "$EVENT_NAME" == "push" ]]; then
+            echo "from_ref=${BEFORE}"          >> "$GITHUB_OUTPUT"
+            echo "to_ref=${SHA}"               >> "$GITHUB_OUTPUT"
+          else
+            # workflow_dispatch: lint everything
+            echo "from_ref=" >> "$GITHUB_OUTPUT"
+            echo "to_ref="   >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run pre-commit (changed files)
+        id: pre_commit
+        env:
+          FROM_REF: ${{ steps.refs.outputs.from_ref }}
+          TO_REF: ${{ steps.refs.outputs.to_ref }}
+          # ansible-lint requires galaxy collections to resolve FQCNs.
+          # This job installs no collections, so the hook would always fail
+          # on any file referencing a git-sourced collection module.
+          # Collection-aware linting is handled by the run_ansible_lint job.
+          SKIP: ansible-lint
+        run: |
+          set -o pipefail
+          if [[ -n "$FROM_REF" ]]; then
+            pixi run -e dev pre-commit run \
+              --from-ref "$FROM_REF" \
+              --to-ref   "$TO_REF"   \
+              --show-diff-on-failure \
+              --color always \
+              2>&1 | tee /tmp/pre-commit-output.txt
+          else
+            pixi run -e dev pre-commit run \
+              --all-files \
+              --show-diff-on-failure \
+              --color always \
+              2>&1 | tee /tmp/pre-commit-output.txt
+          fi
+
+      - name: Write job summary
+        if: always()
+        env:
+          PRE_COMMIT_OUTCOME: ${{ steps.pre_commit.outcome }}
+          FROM_REF: ${{ steps.refs.outputs.from_ref }}
+          TO_REF: ${{ steps.refs.outputs.to_ref }}
+        run: |
+          if [[ "$PRE_COMMIT_OUTCOME" == "success" ]]; then
+            BADGE="All linting hooks passed"
+          else
+            BADGE="One or more linting hooks failed"
+          fi
+
+          if [[ -n "$FROM_REF" ]]; then
+            SCOPE="\`${FROM_REF}\`..\`${TO_REF}\`"
+          else
+            SCOPE="all files (workflow_dispatch)"
+          fi
+
+          {
+            echo "## Lint results"
+            echo ""
+            echo "$BADGE"
+            echo ""
+            echo "**Scope:** changed files — ${SCOPE}"
+            echo ""
+            echo "### Hooks run"
+            echo ""
+            echo "| Hook | Tool |"
+            echo "| ---- | ---- |"
+            echo "| trailing-whitespace | pre-commit-hooks |"
+            echo "| end-of-file-fixer | pre-commit-hooks |"
+            echo "| check-yaml / check-json / check-toml | pre-commit-hooks |"
+            echo "| check-added-large-files | pre-commit-hooks |"
+            echo "| check-merge-conflict | pre-commit-hooks |"
+            echo "| ruff check + ruff format | ruff |"
+            echo "| mypy | mypy |"
+            echo "| codespell | codespell |"
+            echo "| markdownlint | markdownlint-cli |"
+            echo "| yamllint | yamllint |"
+            echo "| zizmor | zizmor |"
+            echo "| actionlint | actionlint |"
+            echo "| ansible-lint (skipped — see run_ansible_lint job) | ansible-lint |"
+            echo "| shellcheck | shellcheck |"
+            echo "| gitleaks | gitleaks |"
+            echo ""
+            echo "Pinned versions live in \`.pre-commit-config.yaml\` (\`rev:\`) and"
+            echo "\`pixi.toml\` (\`[feature.dev.dependencies]\`); actual versions run appear in the Output below."
+            echo ""
+            if [[ -s /tmp/pre-commit-output.txt ]]; then
+              echo "### Output"
+              echo ""
+              echo '```'
+              sed 's/\x1b\[[0-9;]*m//g' /tmp/pre-commit-output.txt
+              echo '```'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # ansible-lint with galaxy collection install
+  # Runs as a separate job so it can cache and install galaxy collections
+  # before linting — matching the behaviour of the retired super-linter
+  # workflow's run_ansible_lint job. Only triggered when YAML files change.
+  # ──────────────────────────────────────────────────────────────────────────
+  get_changed_files:
+    name: Get changed yaml files
+    runs-on: ubuntu-24.04
+    outputs:
+      any_changed: ${{ steps.changed-files.outputs.any_changed }}
+      all_changed_files: ${{ steps.changed-files.outputs.all_changed_files }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Get changed files
+        id: changed-files
+        # Pin to commit; not an official github action
+        uses: step-security/changed-files@2e07db73e5ccdb319b9a6c7766bd46d39d304bad  # v47.0.5
+        with:
+          files: |
+            **/*.{yml,yaml}
+
+  run_ansible_lint:
+    name: Run ansible-lint (with galaxy collections)
+    runs-on: ubuntu-24.04
+    needs: [get_changed_files]
+    if: needs.get_changed_files.outputs.any_changed == 'true'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Pixi
+        # SHA pin for supply-chain safety; comment shows the human-readable tag.
+        uses: prefix-dev/setup-pixi@a0af7a228712d6121d37aba47adf55c1332c9c2e  # v0.9.4
+        with:
+          pixi-version: v0.67.2
+          environments: dev
+          cache: false
+          frozen: true
+
+      - name: Cache ansible galaxy collections
+        id: collections-cache
+        uses: actions/cache@v5
+        with:
+          path: /home/runner/.ansible/collections
+          key: ansible-collections-${{ hashFiles('collections/requirements.yml') }}
+
+      - name: Install ansible galaxy requirements
+        if: steps.collections-cache.outputs.cache-hit != 'true'
+        run: |
+          pixi run ansible-galaxy install \
+            -r collections/requirements.yml \
+            --timeout 120
+
+      - name: Lint changed ansible files
+        env:
+          ANSIBLE_FILTER_PLUGINS: "${{ github.workspace }}/filter_plugins"
+          FILES_TO_LINT: "${{ needs.get_changed_files.outputs.all_changed_files }}"
+        run: |
+          set -euo pipefail
+          read -r -a files <<< "$FILES_TO_LINT"
+          pixi run ansible-lint \
+            -c .ansible-lint \
+            -i .github/linters/.ansible-lint-ignore \
+            --offline \
+            "${files[@]}"

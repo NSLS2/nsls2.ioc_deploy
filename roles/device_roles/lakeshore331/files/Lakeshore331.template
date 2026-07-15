@@ -11,7 +11,7 @@
 #
 
 #
-# Initalization fanout records
+# Initialization fanout records
 #
 
 grecord(dfanout,"$(P)$(R):INIT") {
@@ -405,7 +405,7 @@ record(scalcout, "$(P)$(R):SP_SCALC") {
 }
 
 record(scalcout, "$(P)$(R):SAMPLE_A") {
-    field(DESC, "Convt str fror SplA query")
+    field(DESC, "Convert string from SplA query")
     field(CALC, "DBL(AA)")
     field(INAA, "$(P)$(R):READ_SAMPLE_A.AINP  PP MS")
     field(INEE, "0")
@@ -413,7 +413,7 @@ record(scalcout, "$(P)$(R):SAMPLE_A") {
 }
 
 record(scalcout, "$(P)$(R):SAMPLE_B") {
-    field(DESC, "Convrt str from SplB query")
+    field(DESC, "Convert string from SplB query")
     field(CALC, "DBL(AA)")
     field(INAA, "$(P)$(R):READ_SAMPLE_B.AINP  PP MS")
     field(INEE, "0")
@@ -489,7 +489,7 @@ record(scalcout, "$(P)$(R):SET_HEAT") {
 }
 
 record(scalcout, "$(P)$(R):READ_SPLA_SCALC") {
-    field(DESC, "Format str for A query")
+    field(DESC, "Format string for A query")
     field(CALC, "AA+BB")
     field(INAA, "$(P)$(R):CTRL_UNITS_STR.SVAL  PP MS")
     field(INBB, "0")

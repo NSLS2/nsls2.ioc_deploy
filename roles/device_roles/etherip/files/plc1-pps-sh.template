@@ -1,6 +1,6 @@
 # PPS Shutter Template
 # Interfaces to SH UDTs in PLC, i.e. SH_Sts and SH_Cmd
-# This template can be used for non-PPS shutters which re-use SH Handler objects
+# This template can be used for non-PPS shutters which reuse SH Handler objects
 
 #
 # PPS Shutter Readbacks/Statuses

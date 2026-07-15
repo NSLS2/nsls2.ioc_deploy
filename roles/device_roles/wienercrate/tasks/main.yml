@@ -12,7 +12,7 @@
 
 - name: Copy MIB file
   ansible.builtin.copy:
-    src: "WIENER-CRATE-MIB.txt"
+    src: "WIENER-CRATE-MIB.MIB"
     dest: "{{ deploy_ioc_ioc_directory }}/mibs"
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
