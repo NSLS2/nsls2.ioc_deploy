@@ -25,7 +25,7 @@
   block:
     - name: Find largest port number in use
       ansible.builtin.shell:
-        # yamllint disable rule:line-length
+        # Added "|| true" to prevent exit code 1 if no config files or ports are found
         cmd: |
           set -o pipefail
           configs=$(find -maxdepth 2 -name config -type f)
@@ -35,7 +35,7 @@
           echo "$configs" | \
           xargs grep -l "^HOST={{ inventory_hostname.split('.')[0] }}" 2>/dev/null | \
           xargs -I{} sh -c 'grep ^PORT {} | awk -F= "{print \$2}"' | \
-          sort -n | tail -1
+          sort -n | tail -1 || true
         # yamllint enable rule:line-length
         chdir: "{{ deploy_ioc_iocs_directory }}"
       register: deploy_ioc_current_max_port
