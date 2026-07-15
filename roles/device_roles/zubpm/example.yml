@@ -1,0 +1,30 @@
+---
+zubpm-c28-test:
+  type: zubpm
+  environment:
+    ENGINEER: "Y. Hu"
+    IOCNAME: "C28test"
+    "NO": 2
+    PSC: "psc2"
+    ZBPM_IP: "10.0.142.1xx"
+    PX: "C28test{BPM:2}"
+    ALIVELEN: 8000
+    TLIVELEN: 8000
+    ALEN: 500000
+    TLEN: 500000
+    FLEN: 500000
+  dbpf:
+    - pv: "$(PX)Gain:RfAtte-SP"
+      value: 4
+    - pv: "$(PX)DMA:FALen-SP"
+      value: 5000
+    - pv: "$(PX)FA:WfmLen-SP"
+      value: 4200
+    - pv: "$(PX)DMA:TBTLen-SP"
+      value: 9000
+    - pv: "$(PX)TBT:WfmLen-SP"
+      value: 8200
+    - pv: "$(PX)DMA:ADCLen-SP"
+      value: 1000
+    - pv: "$(PX)ADC:WfmLen-SP"
+      value: 300
