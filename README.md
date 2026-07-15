@@ -39,9 +39,9 @@ Follow the prompts to get started. See [deploy_ioc](roles/deploy_ioc/README.md) 
 
 There are a few required items to help make this repository more maintainable. They are:
 - a `schema.yml` defining how to configure the role for deployment
-- an `example.yml` to demonstrate a working example
+- an example configuration (either `examples/<name>/config.yml` or legacy `example.yml`)
 
-You can deploy your `example.yml` easily. Please see the section on [Local Testing](#local-testing).
+You can deploy your example configuration locally. Please see the section on [Local Testing](#local-testing).
 
 ### Updating an existing role or module
 
@@ -65,19 +65,19 @@ pixi run update-module
 
 This requires pixi and docker or podman.
 
-To get the latest EPICS container for local testing:
+Deploy a device role's example configuration into a local container:
 
 ```bash
-docker login ghcr.io
-docker pull ghcr.io/nsls2/epics-alma8:latest
-docker run -dit --name epics-dev ghcr.io/nsls2/epics-alma8:latest
+pixi run deployment --container -t <role-name>
 ```
 
-Test a device role locally against an EPICS container (`test-role` is still under development):
+Deploy all examples across multiple EL versions:
 
 ```bash
-pixi run test-role <role-name>
+pixi run deploy-all
 ```
+
+The deployment script automatically pulls the required `ghcr.io/nsls2/epics-alma{8,9}:latest` container image and manages the container lifecycle.
 
 ## Helper scripts
 
@@ -94,4 +94,6 @@ Run using `pixi run <command>`.
 | `lint` | Run the linter to check for errors |
 | `lint-changes` | Lint only the changed files |
 | `tests` | Run tests |
-| `test-role` | Test deploying a role using [a local container](#local-testing) |
+| `deployment` | Deploy example configs locally (interactive) |
+| `deploy-all` | Deploy all examples in containers across EL matrix |
+| `ruff-fix` | Auto-fix linting issues |

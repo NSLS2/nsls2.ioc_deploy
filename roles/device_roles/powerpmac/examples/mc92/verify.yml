@@ -13,9 +13,6 @@ verification:
     - db/motor.substitutions
     - db/motorstatus.substitutions
     - db/pmacStatus.substitutions
-    - db/pmacaux.substitutions
-    - db/pmac_asyn_motor.substitutions
-    - db/pmac_physical_limit.substitutions
     - db/autohome.substitutions
 
   file_must_contain:
@@ -27,7 +24,7 @@ verification:
       - "# Disable limits check for all axes"
       - 'pmacDisableLimitsCheck("$(CTRL_PORT)", 0, 1)'
     db/motor.substitutions:
-      - '{"XF:31ID1-OP:1", "{CMT:1-Ax:Rot}Mtr", "M0", "P0", 1, "Rotation", asynMotor, 0.045, "deg", 4, ""}'
+      - '{"XF:31ID1-OP:1", "{CMT:1-Ax:Rot}", "M0", "P0", 1, "Rotation", 0.045, "deg", 4}'
 
 
   file_must_not_contain:
@@ -37,6 +34,7 @@ verification:
     iocBoot/base.cmd:
       - "{{"
       - "}}"
+      - 'dbLoadTemplate("$(TOP)/db/cs.substitutions")' # Not loaded without virtual axes
     iocBoot/epicsEnv.cmd:
       - "{{"
       - "}}"
@@ -47,15 +45,6 @@ verification:
       - "{{"
       - "}}"
     db/pmacStatus.substitutions:
-      - "{{"
-      - "}}"
-    db/pmacaux.substitutions:
-      - "{{"
-      - "}}"
-    db/pmac_asyn_motor.substitutions:
-      - "{{"
-      - "}}"
-    db/pmac_physical_limit.substitutions:
       - "{{"
       - "}}"
     db/autohome.substitutions:

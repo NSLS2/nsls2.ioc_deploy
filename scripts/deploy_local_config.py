@@ -224,6 +224,8 @@ def deploy_configs(options: DeploymentOptions):
         playbook_cmd = [
             "ansible-playbook",
             "--diff",
+            "-i",
+            f"{options.hostname},",
         ]
         if options.container:
             if ioc_name in options.verification_files:
@@ -238,8 +240,6 @@ def deploy_configs(options: DeploymentOptions):
             logger.info("Using a local container for the deployment")
             playbook_cmd.extend(
                 [
-                    "-i",
-                    f"{options.hostname},",
                     "-c",
                     "docker",
                     # Use 'su' instead of 'sudo' for become, since containers
