@@ -1,0 +1,15 @@
+---
+zubpm-c28-test:
+  type: zubpm
+  environment:
+    ENGINEER: "Y. Hu"
+    IOCNAME: "C28test"
+    "NO": 2
+    PSC: "psc2"
+    ZBPM_IP: "10.0.142.100"
+    PX: "C28test{BPM:2}"
+    ALIVELEN: 8000
+    TLIVELEN: 8000
+    ALEN: 500000
+    TLEN: 500000
+    FLEN: 500000
