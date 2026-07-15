@@ -6,7 +6,7 @@ zubpm-c28-test:
     IOCNAME: "C28test"
     "NO": 2
     PSC: "psc2"
-    ZBPM_IP: "10.0.142.1xx"
+    ZBPM_IP: "10.0.142.100"
     PX: "C28test{BPM:2}"
     ALIVELEN: 8000
     TLIVELEN: 8000

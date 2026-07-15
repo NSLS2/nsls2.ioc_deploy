@@ -2,7 +2,7 @@
 
 type: enum("zubpm")
 environment:
-  ENGINEER: str(required=False)
+  ENGINEER: str()
   IOCNAME: str()
   NO: int()
   PSC: str()
