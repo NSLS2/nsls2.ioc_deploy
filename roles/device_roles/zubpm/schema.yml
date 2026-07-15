@@ -1,0 +1,18 @@
+---
+
+type: enum("zubpm")
+environment:
+  ENGINEER: str(required=False)
+  IOCNAME: str()
+  NO: int()
+  ZBPM_IP: any(ip(), hostname())
+  PX: str()
+  ALIVELEN: int()
+  TLIVELEN: int()
+  ALEN: int()
+  TLEN: int()
+  FLEN: int()
+  SAVG_N: int(required=False)
+  SAVG_NSAM: int(required=False)
+  PSCDEBUG: int(required=False)
+  PSC_PORT: str(required=False)

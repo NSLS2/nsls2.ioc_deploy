@@ -1,0 +1,27 @@
+epicsEnvSet("TOP", "{{ deploy_ioc_template_root_path }}")
+cd "$(TOP)"
+
+dbLoadDatabase("dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+dbLoadRecords("db/zubpm.db", "P=$(IOCNAME), NO=$(NO), ADC_LIVE_WFM_LEN=$(ALIVELEN), ADC_WFM_LEN=$(ALEN), TBT_LIVE_WFM_LEN=$(TLIVELEN), TBT_WFM_LEN=$(TLEN), SAVG_N=100, SAVG_NSAM=100")
+dbLoadRecords("db/FA.db", "P=$(IOCNAME), NO=$(NO), FA_LEN=$(FLEN)")
+dbLoadRecords("db/TBT.db", "P=$(IOCNAME), NO=$(NO), TBT_LEN=$(TLEN)")
+dbLoadRecords("db/ADC.db", "P=$(IOCNAME), NO=$(NO), ADC_LEN=$(ALEN)")
+dbLoadRecords("db/SFP.db", "P=$(IOCNAME), B=$(NO), S=0, TMP=140, VCC=164, TXB=188, TXP=212, RXP=236")
+dbLoadRecords("db/SFP.db", "P=$(IOCNAME), B=$(NO), S=1, TMP=144, VCC=168, TXB=192, TXP=216, RXP=240")
+dbLoadRecords("db/SFP.db", "P=$(IOCNAME), B=$(NO), S=2, TMP=148, VCC=172, TXB=196, TXP=220, RXP=244")
+dbLoadRecords("db/SFP.db", "P=$(IOCNAME), B=$(NO), S=3, TMP=152, VCC=176, TXB=200, TXP=224, RXP=248")
+dbLoadRecords("db/SFP.db", "P=$(IOCNAME), B=$(NO), S=4, TMP=156, VCC=180, TXB=204, TXP=228, RXP=252")
+dbLoadRecords("db/SFP.db", "P=$(IOCNAME), B=$(NO), S=5, TMP=160, VCC=184, TXB=208, TXP=232, RXP=256")
+dbLoadRecords("db/SA.db", "P=$(IOCNAME), NO=$(NO)")
+dbLoadRecords("db/Power.db", "P=$(IOCNAME), NO=$(NO)")
+dbLoadRecords("db/Temp.db", "P=$(IOCNAME), NO=$(NO)")
+dbLoadRecords("db/FFT.db", "P=$(IOCNAME), NO=$(NO)")
+
+var(PSCDebug, 5)
+createPSC("psc1", $(ZBPM_IP), 3000, 0)
+
+epicsEnvSet("IOC_TOP", "{{ deploy_ioc_merged_env.TOP }}")
+epicsEnvSet("TOP", "$(IOC_TOP)")
+cd "$(TOP)/iocBoot"
