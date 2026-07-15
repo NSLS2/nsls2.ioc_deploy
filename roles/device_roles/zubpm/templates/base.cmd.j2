@@ -20,7 +20,7 @@ dbLoadRecords("db/Temp.db", "P=$(IOCNAME), NO=$(NO)")
 dbLoadRecords("db/FFT.db", "P=$(IOCNAME), NO=$(NO)")
 
 var(PSCDebug, 5)
-createPSC("psc1", $(ZBPM_IP), 3000, 0)
+createPSC("$(PSC)", $(ZBPM_IP), 3000, 0)
 
 epicsEnvSet("IOC_TOP", "{{ deploy_ioc_merged_env.TOP }}")
 epicsEnvSet("TOP", "$(IOC_TOP)")
