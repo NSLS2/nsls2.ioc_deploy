@@ -4,7 +4,7 @@ type: enum("zubpm")
 environment:
   ENGINEER: str(required=False)
   IOCNAME: str()
-  NO: int()
+  "NO": int()
   PSC: str()
   ZBPM_IP: any(ip(), hostname())
   PX: str()
