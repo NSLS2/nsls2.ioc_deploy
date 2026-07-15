@@ -1,8 +1,10 @@
 ---
-zubpm_ea239dd:
+zubpm_cedd09e:
   name: zubpm
   url: https://github.com/huyong1979/zubpm-ioc.git
-  version: ea239dd
+  version: cedd09e
   executable: zbpm
+  pkg_deps:
+    - fftw-devel
   module_deps:
     - pscdrv_1ed650d
