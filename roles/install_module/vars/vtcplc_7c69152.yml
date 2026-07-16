@@ -1,7 +1,7 @@
 ---
 
-vtcplc_eeefa83:
+vtcplc_7c69152:
   name: VTCplc
-  version: eeefa83
+  version: 7c69152
   url: https://github.com/NSLS2/vacuum-plc
   compilation_command: "make -s"
