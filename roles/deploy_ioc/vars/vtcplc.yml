@@ -3,5 +3,5 @@
 deploy_ioc_use_common: true
 deploy_ioc_use_ad_common: false
 deploy_ioc_required_module: vtcplc_eeefa83
-deploy_ioc_executable: vtcplc
+deploy_ioc_executable: vacuum_plc
 deploy_ioc_template_root_path: "{{ install_module_leaf_module_path }}"

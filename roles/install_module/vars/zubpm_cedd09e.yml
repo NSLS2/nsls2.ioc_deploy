@@ -1,0 +1,10 @@
+---
+zubpm_cedd09e:
+  name: zubpm
+  url: https://github.com/NSLS2/zubpm-ioc.git
+  version: cedd09e
+  executable: zbpm
+  pkg_deps:
+    - fftw-devel
+  module_deps:
+    - pscdrv_1ed650d

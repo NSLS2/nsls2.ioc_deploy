@@ -8,4 +8,4 @@ drvEtherIP_init()
 drvEtherIP_define_PLC("$(SYSPORT)_PLC","$(PLCADR)",0)
 EIP_verbosity(6)
 
-dbLoadRecords("$(vaplc)/db/$(Template)","Sys=$(SYS),Dev={PLC},PLC=$(SYSPORT)_PLC")
+dbLoadRecords("$(VTCPLC)/db/$(Template)","Sys=$(SYS),Dev={PLC},PLC=$(SYSPORT)_PLC")
