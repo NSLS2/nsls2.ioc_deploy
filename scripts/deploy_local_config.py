@@ -166,9 +166,7 @@ def install_galaxy_collection(
 
 def install_local_collection(top_path: Path, reinstall_collection: bool = True):
     local_collection_parent = top_path / "collections" / "ansible_collections" / "nsls2"
-    local_collection_path = (
-        local_collection_parent / "ioc_deploy"
-    )
+    local_collection_path = local_collection_parent / "ioc_deploy"
 
     def _ensure_local_collection_symlink():
         local_collection_parent.mkdir(parents=True, exist_ok=True)
@@ -186,7 +184,9 @@ def install_local_collection(top_path: Path, reinstall_collection: bool = True):
                 local_collection_path.unlink()
 
         local_collection_path.symlink_to(relative_target)
-        logger.info("Linked local collection: %s -> %s", local_collection_path, top_path)
+        logger.info(
+            "Linked local collection: %s -> %s", local_collection_path, top_path
+        )
 
     if not reinstall_collection:
         if not local_collection_path.exists():
