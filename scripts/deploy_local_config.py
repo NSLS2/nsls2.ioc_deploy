@@ -5,6 +5,7 @@ import importlib.util
 import json
 import logging
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -164,14 +165,35 @@ def install_galaxy_collection(
 
 
 def install_local_collection(top_path: Path, reinstall_collection: bool = True):
+    local_collection_parent = top_path / "collections" / "ansible_collections" / "nsls2"
     local_collection_path = (
-        top_path / "collections" / "ansible_collections" / "nsls2" / "ioc_deploy"
+        local_collection_parent / "ioc_deploy"
     )
+
+    def _ensure_local_collection_symlink():
+        local_collection_parent.mkdir(parents=True, exist_ok=True)
+        relative_target = os.path.relpath(top_path, local_collection_parent)
+
+        if local_collection_path.is_symlink():
+            if os.readlink(local_collection_path) == relative_target:
+                logger.info("Using symlinked local nsls2.ioc_deploy collection")
+                return
+            local_collection_path.unlink()
+        elif local_collection_path.exists():
+            if local_collection_path.is_dir():
+                shutil.rmtree(local_collection_path)
+            else:
+                local_collection_path.unlink()
+
+        local_collection_path.symlink_to(relative_target)
+        logger.info("Linked local collection: %s -> %s", local_collection_path, top_path)
 
     if not reinstall_collection:
         if not local_collection_path.exists():
-            logger.warning("Local Galaxy collections are missing, installing them ...")
-            install_galaxy_collection(str(top_path), force=True)
+            logger.warning(
+                "Local Galaxy collections are missing, linking local collection ..."
+            )
+            _ensure_local_collection_symlink()
             return
 
         logger.info(
@@ -180,7 +202,15 @@ def install_local_collection(top_path: Path, reinstall_collection: bool = True):
         )
         return
 
-    install_galaxy_collection(str(top_path), force=True)
+    try:
+        _ensure_local_collection_symlink()
+    except OSError as e:
+        logger.warning(
+            "Failed to symlink local collection, falling back to ansible-galaxy "
+            "install: %s",
+            e,
+        )
+        install_galaxy_collection(str(top_path), force=True)
 
 
 @dataclass
