@@ -8,4 +8,4 @@ vtcplc-01:
     PLCADR: "10.69.34.74"
     SYS: "Vactest-FEA:"
     SYSPORT: "vactest"
-    Template: "fea-plc.db"
+    Template: "fea-plc.template"
