@@ -3,7 +3,7 @@
 egun-s7plc-01:
   type: egun-s7plc
   environment:
-    ENGINEER: Deepak Mandge
+    ENGINEER: C. Engineer
     PREFIX: "Egun-Test:"
     IP_ADDR: "XX.XX.XX.XX"
     PLC_NAME: "ES"
