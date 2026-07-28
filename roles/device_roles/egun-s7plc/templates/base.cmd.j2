@@ -3,3 +3,8 @@ dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable
 {{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
 
 # egun-s7plc specific commands
+#s7plcConfigure("PLCname", "IPaddr", port, inSize, outSize, bigEndian, recvTimeout, sendInterval)
+s7plcConfigure("{{ ioc.environment.PLC_NAME }}", "{{ ioc.environment.IP_ADDR }}", 2000, 176, 88, 1, 5000, 100)
+
+## Load PLC record instances
+dbLoadRecords("$(EGUN-S7PLC)/db/es.db" ,"P=Egun-Test:")

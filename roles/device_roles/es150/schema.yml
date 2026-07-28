@@ -4,3 +4,20 @@ type: enum("es150")
 environment:
   ENGINEER: str()
   PREFIX: str()
+
+devices: list(include('device'), min=1)
+
+substitutions:
+  dcps: list(include('dcps_substitution_block'))
+---
+
+device:
+  HOST: any(ip(), hostname())
+  IP_PORT: int()
+  PORT: str()
+
+# Substitution blocks for dc ps
+dcps_substitution_block:
+  filepath: enum("$(ES150)/db/powersupply.template")
+  pattern: list(enum("Sys", "Dev"))
+  instances: list(list(min=2, max=2))
