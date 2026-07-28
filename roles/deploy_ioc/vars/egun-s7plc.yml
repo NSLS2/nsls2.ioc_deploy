@@ -1,0 +1,7 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_use_ad_common: false
+deploy_ioc_required_module: egun-s7plc_285e095
+deploy_ioc_executable: egun-s7plc
+deploy_ioc_template_root_path: "{{ install_module_leaf_module_path }}"

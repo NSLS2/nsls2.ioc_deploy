@@ -1,0 +1,7 @@
+---
+
+egun-s7plc-01:
+  type: egun-s7plc
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{EGUN-S7PLC:01}

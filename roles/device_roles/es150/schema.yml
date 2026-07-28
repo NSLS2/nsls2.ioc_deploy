@@ -1,0 +1,6 @@
+---
+
+type: enum("es150")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
