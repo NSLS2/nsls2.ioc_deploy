@@ -1,5 +1,5 @@
 ---
-# Tasks for egun-s7plc role
+# Tasks for eguns7 role
 
 - name: Install base.cmd
   ansible.builtin.template:

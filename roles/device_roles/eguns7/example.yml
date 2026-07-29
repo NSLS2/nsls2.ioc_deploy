@@ -1,7 +1,7 @@
 ---
 
 egun-s7plc-01:
-  type: egun-s7plc
+  type: eguns7
   environment:
     ENGINEER: C. Engineer
     PREFIX: "Egun-Test:"

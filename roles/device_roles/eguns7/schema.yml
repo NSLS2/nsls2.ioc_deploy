@@ -1,6 +1,6 @@
 ---
 
-type: enum("egun-s7plc")
+type: enum("eguns7")
 environment:
   ENGINEER: str()
   PREFIX: str()

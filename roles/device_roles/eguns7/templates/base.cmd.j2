@@ -2,7 +2,7 @@
 dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
 {{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
 
-# egun-s7plc specific commands
+# eguns7 specific commands
 #s7plcConfigure("PLCname", "IPaddr", port, inSize, outSize, bigEndian, recvTimeout, sendInterval)
 s7plcConfigure("$(PLC_NAME)","$(IP_ADDR)", 2000, 176, 88, 1, 5000, 100)
 
