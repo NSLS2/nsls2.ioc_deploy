@@ -1,0 +1,6 @@
+---
+egun-s7plc_33d4b81:
+  name: Egun-s7plc
+  version: 33d4b81
+  url: https://github.com/NSLS2/egun-s7plc
+  compilation_command: make -s

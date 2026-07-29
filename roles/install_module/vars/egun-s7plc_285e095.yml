@@ -1,7 +1,0 @@
----
-
-egun-s7plc_285e095:
-  name: Egun-s7plc
-  version: 285e095
-  url: https://github.com/NSLS2/egun-s7plc
-  compilation_command: "make -s"

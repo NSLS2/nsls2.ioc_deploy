@@ -1,7 +1,0 @@
----
-
-dcpses150_93db052:
-  name: DCPSES150
-  version: 93db052
-  url: https://github.com/NSLS2/es15-dcps
-  compilation_command: "make -s"
