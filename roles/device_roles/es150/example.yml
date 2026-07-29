@@ -1,0 +1,29 @@
+---
+
+es150-01:
+  type: es150
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: "Egun-Test:"
+    SYS: "Egun-Test:"
+
+  devices:
+    - HOST: "XX.XX.XX.XX"
+      IP_PORT: 4001
+      PORT: ES150-1
+    - HOST: "XX.XX.XX.XX"
+      IP_PORT: 4002
+      PORT: ES150-2
+    - HOST: "XX.XX.XX.XX"
+      IP_PORT: 4003
+      PORT: ES150-3
+
+# Schema is in-exact, so caution must be used when copying filepath/patern
+  substitutions:
+    dcps: # DC Power Supply
+      - filepath: "$(ES150)/db/powersupply.template"
+        pattern: ["Sys", "Dev"]
+        instances:
+          - ["Egun-Test:DC1", "ES150-1"]
+          - ["Egun-Test:DC2", "ES150-2"]
+          - ["Egun-Test:DC3", "ES150-3"]
