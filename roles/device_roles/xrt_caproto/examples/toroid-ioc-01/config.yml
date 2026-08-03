@@ -1,0 +1,8 @@
+---
+toroid-ioc-01:
+  type: "xrt_caproto"
+  pixi_executable_path: "pixi"
+  environment:
+    PREFIX: "XF:31ID1-ES{SIM:01}"
+    ENGINEER: "C. Engineer"
+    XML_PATH: "toroid_focus.xml"
