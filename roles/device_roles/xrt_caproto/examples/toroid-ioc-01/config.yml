@@ -5,4 +5,4 @@ toroid-ioc-01:
   environment:
     PREFIX: "XF:31ID1-ES{SIM:01}"
     ENGINEER: "C. Engineer"
-    XML_PATH: "toroid_focus.xml"
+    XML_FILE_NAME: "toroid_focus.xml"

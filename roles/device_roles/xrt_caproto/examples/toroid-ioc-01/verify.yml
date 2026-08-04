@@ -6,6 +6,7 @@ verification:
   files_must_exist:
     # Standard IOC boot files (created by deploy_ioc)
     - st.cmd
+    - db/toroid_focus.xml
   file_must_contain:
     st.cmd:
       # Make sure EPICS networking env vars get set
@@ -18,7 +19,7 @@ verification:
       - "pixi run python -m caproto.ioc_examples.xrt_xml_ioc"
 
       # Make sure xml is set correctly
-      - "--xml='toroid_focus.xml'"
+      - "--xml='db/toroid_focus.xml'"
 
       # Make sure prefix is set correctly
       - "--prefix='XF:31ID1-ES{{SIM:01}}'"

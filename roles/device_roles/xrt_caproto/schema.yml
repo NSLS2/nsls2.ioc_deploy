@@ -6,4 +6,4 @@ python_version: str(required=False)
 environment:
   PREFIX: str()
   ENGINEER: str(required=False)
-  XML_PATH: str()
+  XML_FILE_NAME: str()

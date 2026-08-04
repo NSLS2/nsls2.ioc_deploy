@@ -12,6 +12,6 @@ export EPICS_CAS_BEACON_ADDR_LIST={{ host_config.epics_interface.broadcast }}
 {% endif %}
 {{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} run python -m caproto.ioc_examples.xrt_xml_ioc \
   --list-pvs \
-  --xml='{{ ioc.environment.XML_PATH }}' \
+  --xml='db/{{ ioc.environment.XML_FILE_NAME }}' \
   -- \
   --prefix='{{ioc.environment.PREFIX | replace('{', '{{') | replace('}', '}}')}}'
