@@ -34,6 +34,13 @@
     chdir: "{{ deploy_ioc_ioc_directory }}"
   changed_when: true
 
+- name: Verify xrt_caproto Python dependencies import
+  ansible.builtin.command:
+    # yamllint disable-line rule:line-length
+    cmd: "{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} run python -c 'import caproto.ioc_examples.xrt_xml_ioc'"
+    chdir: "{{ deploy_ioc_ioc_directory }}"
+  changed_when: false
+
 - name: Install startup script
   ansible.builtin.template:
     src: "templates/st.cmd.j2"
