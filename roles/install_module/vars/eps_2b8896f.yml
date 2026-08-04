@@ -1,8 +1,8 @@
 ---
 
-eps_2b8896f:
+eps_f9f96b4:
   name: eps
-  version: 2b8896f
+  version: f9f96b4
   url: https://github.com/NSLS2/eps-ioc
   module_deps:
     - ether_ip_b27350b
