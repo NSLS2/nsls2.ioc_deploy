@@ -90,24 +90,6 @@
         group: "{{ host_config.softioc_group }}"
         mode: "0775"
 
-    - name: Copy manual IOC files to appropriate directories
-      ansible.builtin.copy:
-        content: "{{ item.value }}"
-        dest: >-
-          {{ deploy_ioc_ioc_directory }}/{{
-            'iocBoot' if item.key.endswith('.cmd')
-            else deploy_ioc_as_dir_name ~ '/req' if item.key.endswith('.req')
-            else 'db'
-          }}/{{ item.key }}
-        owner: "{{ host_config.softioc_user }}"
-        group: "{{ host_config.softioc_group }}"
-        mode: "0664"
-      loop: "{{ deploy_ioc_manual_ioc_files | dict2items }}"
-      when:
-        - deploy_ioc_manual_ioc_files is defined
-        - deploy_ioc_manual_ioc_files | length > 0
-        - item.key | regex_search('\.(cmd|req|db|template|substitutions)$')
-
     - name: Delete any existing autosave files if requested
       ansible.builtin.shell:
         cmd: find . -name '*.sav*' -type f -print -delete
@@ -117,6 +99,42 @@
         - deploy_ioc_clear_autosave_files is defined
         - deploy_ioc_clear_autosave_files | bool
       changed_when: deploy_ioc_cleared_autosave.stdout | length > 0
+
+- name: Create manual IOC file destination directories
+  ansible.builtin.file:
+    path: >-
+      {{ deploy_ioc_ioc_directory }}/{{
+        'iocBoot' if item.key.endswith('.cmd')
+        else deploy_ioc_as_dir_name ~ '/req' if item.key.endswith('.req')
+        else 'db'
+      }}
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    state: directory
+    mode: "02775"
+  loop: "{{ deploy_ioc_manual_ioc_files | default({}) | dict2items }}"
+  when:
+    - deploy_ioc_manual_ioc_files is defined
+    - deploy_ioc_manual_ioc_files | length > 0
+    - item.key | regex_search('\.(cmd|req|db|template|substitutions|xml|json|yaml|toml)$')
+
+- name: Copy manual IOC files to appropriate directories
+  ansible.builtin.copy:
+    content: "{{ item.value }}"
+    dest: >-
+      {{ deploy_ioc_ioc_directory }}/{{
+        'iocBoot' if item.key.endswith('.cmd')
+        else deploy_ioc_as_dir_name ~ '/req' if item.key.endswith('.req')
+        else 'db'
+      }}/{{ item.key }}
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+  loop: "{{ deploy_ioc_manual_ioc_files | default({}) | dict2items }}"
+  when:
+    - deploy_ioc_manual_ioc_files is defined
+    - deploy_ioc_manual_ioc_files | length > 0
+    - item.key | regex_search('\.(cmd|req|db|template|substitutions|xml|json|yaml|toml)$')
 
 - name: Deploy IOC template
   ansible.builtin.include_role:

@@ -20,7 +20,17 @@ NSLS2NETWORK_PKG_AVAILABLE = importlib.util.find_spec("nsls2network") is not Non
 
 BASE_CONTAINER_IMAGE = "ghcr.io/nsls2/epics-alma"
 
-MANUAL_FILE_EXTENSIONS = {".template", ".substitutions", ".db", ".cmd", ".req"}
+MANUAL_FILE_EXTENSIONS = {
+    ".template",
+    ".substitutions",
+    ".db",
+    ".cmd",
+    ".req",
+    ".xml",
+    ".json",
+    ".yaml",
+    ".toml",
+}
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("nsls2.ioc_deploy")
