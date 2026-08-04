@@ -1,0 +1,18 @@
+---
+
+type: enum("omegartc")
+
+environment:
+  PREFIX: str()
+  ENGINEER: str()
+
+devices: list(include('device'), min=1)
+
+---
+
+device:
+  SYS: str()
+  DEV: str()
+  PORT: str()
+  COMM: enum("RS-232", "RS-485")
+  HOST: str()
