@@ -13,10 +13,10 @@
   when: not pixi_toml_stat.stat.exists
   changed_when: not pixi_toml_stat.stat.exists
 
-- name: Add Python dependency
+- name: Add Python and numpy dependency
   ansible.builtin.command:
     # yamllint disable-line rule:line-length
-    cmd: "{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} add 'python{{ ioc.python_version | default(device_roles_xrt_caproto_python_version) }}'"
+    cmd: "{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} add 'python{{ ioc.python_version | default(device_roles_xrt_caproto_python_version) }}' numpy"
     chdir: "{{ deploy_ioc_ioc_directory }}"
   changed_when: true
 
