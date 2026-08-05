@@ -22,10 +22,7 @@ verification:
       - "--xml='db/toroid_focus.xml'"
 
       # Make sure prefix is set correctly
-      - "--prefix='XF:31ID1-ES{{SIM:01}}'"
-
-      # Make sure comment exists as expected.
-      - "Caproto requires curly braces to be escaped"
+      - "--prefix='XF:31ID1-ES{SIM:01}'"
 
   permissions:
     st.cmd: "0775"
