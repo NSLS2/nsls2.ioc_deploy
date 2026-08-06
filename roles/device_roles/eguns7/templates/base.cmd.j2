@@ -7,4 +7,4 @@ dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable
 s7plcConfigure("$(PLC_NAME)","$(IP_ADDR)", 2000, 176, 88, 1, 5000, 100)
 
 ## Load PLC record instances
-dbLoadRecords("$(EGUN-S7PLC)/db/es.db" ,"P=Egun-Test:")
+dbLoadRecords("$(EGUNPLC)/db/es.db" ,"P=Egun-Test:")
