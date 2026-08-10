@@ -9,5 +9,5 @@ epicsEnvSet("STREAM_PROTOCOL_PATH", "$(DCPSES150)/protocol")
 #Configure serial port for DC power supplies
 
 {% for device in ioc.devices %}
-drvAsynIPPortConfigure("{{ device.PORT }}", "{{ device.HOST }}:{{ device.IP_PORT }}")
+drvAsynIPPortConfigure("{{ device.PORT }}", "{{ device.HOST }}:{{ device.IP_PORT }}", 0, 0, 0)
 {% endfor %}
