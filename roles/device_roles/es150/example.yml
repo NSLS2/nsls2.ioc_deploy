@@ -21,7 +21,7 @@ es150-01:
 # Schema is in-exact, so caution must be used when copying filepath/patern
   substitutions:
     dcps: # DC Power Supply
-      - filepath: "$(ES150)/db/powersupply.template"
+      - filepath: "$(DCPSES150)/db/powersupply.template"
         pattern: ["Sys", "Dev"]
         instances:
           - ["Egun-Test:DC1", "ES150-1"]
