@@ -1,6 +1,0 @@
----
-dcpses150_7fe969e:
-  name: DCPSES150
-  version: 7fe969e
-  url: https://github.com/NSLS2/es15-dcps
-  compilation_command: make -s
