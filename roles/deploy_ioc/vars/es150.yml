@@ -2,6 +2,6 @@
 
 deploy_ioc_use_common: true
 deploy_ioc_use_ad_common: false
-deploy_ioc_required_module: dcpses150_8a8294a
+deploy_ioc_required_module: dcpses150_80ff267
 deploy_ioc_executable: es150
 deploy_ioc_template_root_path: "{{ install_module_leaf_module_path }}"

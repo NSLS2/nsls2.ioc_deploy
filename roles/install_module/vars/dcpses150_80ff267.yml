@@ -1,6 +1,6 @@
 ---
-dcpses150_8a8294a:
+dcpses150_80ff267:
   name: DCPSES150
-  version: 8a8294a
+  version: 80ff267
   url: https://github.com/NSLS2/es15dcps
   compilation_command: make -s
