@@ -13,17 +13,17 @@
   when: not pixi_toml_stat.stat.exists
   changed_when: not pixi_toml_stat.stat.exists
 
-- name: Add Python and numpy dependency
+- name: Add Python, numpy, h5py dependency
   ansible.builtin.command:
     # yamllint disable-line rule:line-length
-    cmd: "{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} add 'python{{ ioc.python_version | default(device_roles_xrt_caproto_python_version) }}' numpy"
+    cmd: "{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} add 'python{{ ioc.python_version | default(device_roles_xrt_caproto_python_version) }}' numpy h5py"
     chdir: "{{ deploy_ioc_ioc_directory }}"
   changed_when: true
 
 - name: Add caproto git repository and xrt as PyPI dependencies via Pixi
   ansible.builtin.command:
     # yamllint disable-line rule:line-length
-    cmd: "{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} add --pypi 'caproto @ git+https://github.com/thopkins32/caproto.git@200f3279413fa8f486d4a565c903a53e32e209e1' xrt>=2.0.0b1"
+    cmd: "{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} add --pypi 'caproto @ git+https://github.com/thopkins32/caproto.git@02a70c32c179e1e356eeb4dd65d36e8aeb53c1d3' xrt>=2.0.0b1"
     chdir: "{{ deploy_ioc_ioc_directory }}"
   changed_when: true
 
