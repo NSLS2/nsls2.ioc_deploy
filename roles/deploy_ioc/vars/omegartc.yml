@@ -1,0 +1,11 @@
+---
+
+deploy_ioc_use_common: true
+deploy_ioc_required_module: omegartc_764faf1
+deploy_ioc_as_dir_name: as
+
+deploy_ioc_device_specific_env:
+  OMEGA_RTC: "{{ deploy_ioc_required_module_path }}"
+  EPICS_DB_INCLUDE_PATH: "$(OMEGA_RTC)/db"
+
+deploy_ioc_make_autosave_files: true
