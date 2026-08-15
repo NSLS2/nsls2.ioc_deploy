@@ -1,0 +1,312 @@
+#===================================================
+# Get rate.
+record(ai, "$(P){$(DEV)-Ax:A}RATE:RBV") {
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getStatusRateAxA($(P), $(DEV), $(CMD)) $(PORT)")
+  field(PREC, "0")
+  field(SDIS, "$(P)$(R)DISABLE")
+  field(SCAN,"1 second")
+}
+
+
+#===================================================
+# Get time.
+record(ai, "$(P){$(DEV)-Ax:A}TIME:RBV") {
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getStatusTimeAxA($(P), $(DEV), $(CMD)) $(PORT)")
+  field(PREC, "0")
+  field(SCAN, "I/O Intr")
+  field(SDIS, "$(P){$(DEV)-Ax:A}DISABLE")
+}
+
+#===================================================
+# Get volume.
+record(ai, "$(P){$(DEV)-Ax:A}VOL:RBV") {
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getStatusVolAxA($(P), $(DEV)) $(PORT)")
+  field(PREC, "0")
+  field(SCAN, "I/O Intr")
+  field(SDIS, "$(P){$(DEV)-Ax:A}DISABLE")
+}
+
+
+#===================================================
+# Get motor direction.
+record(ai, "$(P){$(DEV)-Ax:A}MTRDIR:RBV-RAW") {
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getStatusMtrDirAxA($(P), $(DEV)) $(PORT)")
+  field(PREC, "0")
+  field(SCAN, "I/O Intr")
+  field(SDIS, "$(P){$(DEV)-Ax:A}DISABLE")
+}
+
+
+record(mbbi, "$(P){$(DEV)-Ax:A}MTRDIR:RBV") {
+  field(ZRVL, "0")
+  field(ZRST, "Infuse/idle")
+  field(ONVL, "1")
+  field(ONST, "Infusing")
+  field(TWVL, "2")
+  field(TWST, "Withdraw/idle")
+  field(THVL, "3")
+  field(THST, "Withdrawing")
+}
+
+
+
+
+#===================================================
+# Get limit switch status.
+record(ai, "$(P){$(DEV)-Ax:A}LIMSW:RBV-RAW") {
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getStatusLimSwAxA($(P), $(DEV)) $(PORT)")
+  field(PREC, "0")
+  field(SCAN, "I/O Intr")
+  field(SDIS, "$(P){$(DEV)-Ax:A}DISABLE")
+}
+
+
+record(mbbi, "$(P){$(DEV)-Ax:A}LIMSW:RBV") {
+  field(ZRVL, "0")
+  field(ZRST, "Infuse limit")
+  field(ONVL, "1")
+  field(ONST, "Infuse limit")
+  field(TWVL, "2")
+  field(TWST, "Withdraw limit")
+  field(THVL, "3")
+  field(THST, "Withdraw limit")
+  field(FRVL, "4")
+  field(FRST, "Not on limit")
+}
+
+
+
+#===================================================
+# Get stall status.
+record(ai, "$(P){$(DEV)-Ax:A}STALL:RBV-RAW") {
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getStatusStallAxA($(P), $(DEV)) $(PORT)")
+  field(PREC, "0")
+  field(SCAN, "I/O Intr")
+  field(SDIS, "$(P){$(DEV)-Ax:A}DISABLE")
+}
+
+
+record(mbbi, "$(P){$(DEV)-Ax:A}STALL:RBV") {
+  field(ZRVL, "0")
+  field(ZRST, "Stalled")
+  field(ONVL, "1")
+  field(ONST, "Not stalled")
+}
+
+#===================================================
+# Get trigger input status.
+record(ai, "$(P){$(DEV)-Ax:A}TRIGIN:RBV-RAW") {
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getStatusTrigInAxA($(P), $(DEV)) $(PORT)")
+  field(PREC, "0")
+  field(SCAN, "I/O Intr")
+  field(SDIS, "$(P){$(DEV)-Ax:A}DISABLE")
+}
+
+
+record(mbbi, "$(P){$(DEV)-Ax:A}TRIGIN:RBV") {
+  field(ZRVL, "0")
+  field(ZRST, "High")
+  field(ONVL, "1")
+  field(ONST, "Low")
+}
+
+#===================================================
+# Get direction port status.
+record(ai, "$(P){$(DEV)-Ax:A}DIRPORT:RBV-RAW") {
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getStatusDirPortAxA($(P), $(DEV)) $(PORT)")
+  field(PREC, "0")
+  field(SCAN, "I/O Intr")
+  field(SDIS, "$(P){$(DEV)-Ax:A}DISABLE")
+}
+
+
+record(mbbi, "$(P){$(DEV)-Ax:A}DIRPORT:RBV") {
+  field(ZRVL, "0")
+  field(ZRST, "Infuse")
+  field(ONVL, "1")
+  field(ONST, "Withdraw")
+}
+
+
+#===================================================
+# Get target reached status.
+record(ai, "$(P){$(DEV)-Ax:A}TARGET:RBV-RAW") {
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getStatusTargetAxA($(P), $(DEV)) $(PORT)")
+  field(PREC, "0")
+  field(SCAN, "I/O Intr")
+  field(SDIS, "$(P){$(DEV)-Ax:A}DISABLE")
+}
+
+
+record(mbbi, "$(P){$(DEV)-Ax:A}TARGET:RBV") {
+  field(ZRVL, "0")
+  field(ZRST, "Reached")
+  field(ONVL, "1")
+  field(ONST, "Not reached")
+}
+
+#===================================================
+# Get rate.
+record(ai, "$(P){$(DEV)-Ax:B}RATE:RBV") {
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getStatusRateAxB($(P), $(DEV), $(CMD)) $(PORT)")
+  field(PREC, "0")
+  field(SCAN, "I/O Intr")
+  field(SDIS, "$(P){$(DEV)-Ax:B}DISABLE")
+}
+
+
+#===================================================
+# Get time.
+record(ai, "$(P){$(DEV)-Ax:B}TIME:RBV") {
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getStatusTimeAxB($(P), $(DEV), $(CMD)) $(PORT)")
+  field(PREC, "0")
+  field(SCAN, "I/O Intr")
+  field(SDIS, "$(P){$(DEV)-Ax:B}DISABLE")
+}
+
+#===================================================
+# Get volume.
+record(ai, "$(P){$(DEV)-Ax:B}VOL:RBV") {
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getStatusVolAxB($(P), $(DEV)) $(PORT)")
+  field(PREC, "0")
+  field(SCAN, "I/O Intr")
+  field(SDIS, "$(P){$(DEV)-Ax:B}DISABLE")
+}
+
+
+
+
+
+#===================================================
+# Get motor direction.
+record(ai, "$(P){$(DEV)-Ax:B}MTRDIR:RBV-RAW") {
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getStatusMtrDirAxB($(P), $(DEV)) $(PORT)")
+  field(PREC, "0")
+  field(SCAN, "I/O Intr")
+  field(SDIS, "$(P){$(DEV)-Ax:B}DISABLE")
+}
+
+
+record(mbbi, "$(P){$(DEV)-Ax:B}MTRDIR:RBV") {
+  field(ZRVL, "0")
+  field(ZRST, "Infuse/idle")
+  field(ONVL, "1")
+  field(ONST, "Infusing")
+  field(TWVL, "2")
+  field(TWST, "Withdraw/idle")
+  field(THVL, "3")
+  field(THST, "Withdrawing")
+}
+
+
+
+
+#===================================================
+# Get limit switch status.
+record(ai, "$(P){$(DEV)-Ax:B}LIMSW:RBV-RAW") {
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getStatusLimSwAxB($(P), $(DEV)) $(PORT)")
+  field(PREC, "0")
+  field(SCAN, "I/O Intr")
+  field(SDIS, "$(P){$(DEV)-Ax:B}DISABLE")
+}
+
+record(mbbi, "$(P){$(DEV)-Ax:B}LIMSW:RBV") {
+  field(ZRVL, "0")
+  field(ZRST, "Infuse limit")
+  field(ONVL, "1")
+  field(ONST, "Infuse limit")
+  field(TWVL, "2")
+  field(TWST, "Withdraw limit")
+  field(THVL, "3")
+  field(THST, "Withdraw limit")
+  field(FRVL, "4")
+  field(FRST, "Not on limit")
+}
+
+
+
+#===================================================
+# Get stall status.
+record(ai, "$(P){$(DEV)-Ax:B}STALL:RBV-RAW") {
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getStatusStallAxB($(P), $(DEV)) $(PORT)")
+  field(PREC, "0")
+  field(SCAN, "I/O Intr")
+  field(SDIS, "$(P){$(DEV)-Ax:B}DISABLE")
+}
+
+
+record(mbbi, "$(P){$(DEV)-Ax:B}STALL:RBV") {
+  field(ZRVL, "0")
+  field(ZRST, "Stalled")
+  field(ONVL, "1")
+  field(ONST, "Not stalled")
+}
+
+#===================================================
+# Get trigger input status.
+record(ai, "$(P){$(DEV)-Ax:B}TRIGIN:RBV-RAW") {
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getStatusTrigInAxB($(P), $(DEV)) $(PORT)")
+  field(PREC, "0")
+  field(SCAN, "I/O Intr")
+  field(SDIS, "$(P){$(DEV)-Ax:B}DISABLE")
+}
+
+
+record(mbbi, "$(P){$(DEV)-Ax:B}TRIGIN:RBV") {
+  field(ZRVL, "0")
+  field(ZRST, "High")
+  field(ONVL, "1")
+  field(ONST, "Low")
+}
+
+#===================================================
+# Get direction port status.
+record(ai, "$(P){$(DEV)-Ax:B}DIRPORT:RBV-RAW") {
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getStatusDirPortAxB($(P), $(DEV)) $(PORT)")
+  field(PREC, "0")
+  field(SCAN, "I/O Intr")
+  field(SDIS, "$(P){$(DEV)-Ax:B}DISABLE")
+}
+
+
+record(mbbi, "$(P){$(DEV)-Ax:B}DIRPORT:RBV") {
+  field(ZRVL, "0")
+  field(ZRST, "Infuse")
+  field(ONVL, "1")
+  field(ONST, "Withdraw")
+}
+
+#===================================================
+# Get target reached status.
+record(ai, "$(P){$(DEV)-Ax:B}TARGET:RBV-RAW") {
+  field(DTYP, "stream")
+  field(INP, "@pump33dds.proto getStatusTargetAxB($(P), $(DEV)) $(PORT)")
+  field(PREC, "0")
+  field(SCAN, "I/O Intr")
+  field(SDIS, "$(P){$(DEV)-Ax:B}DISABLE")
+}
+
+
+record(mbbi, "$(P){$(DEV)-Ax:B}TARGET:RBV") {
+  field(ZRVL, "0")
+  field(ZRST, "Reached")
+  field(ONVL, "1")
+  field(ONST, "Not reached")
+}

@@ -1,0 +1,7 @@
+record(ao, "$(P){$(DEV)-Ax:$(AX)}$(CMD)") {
+  field(DESC, "$(CMD)")
+  field(DTYP, "stream")
+  field(OUT, "@pump33dds.proto cmd($(P), $(DEV), $(AX), $(CMD)) $(PORT)")
+  field(PREC, "0")
+  field(SDIS, "$(P)$(R)DISABLE")
+}
