@@ -1,0 +1,29 @@
+---
+
+type: enum("smaract")
+model: enum("MCS", "MCS2")
+num_axes: int(min=1, required=True)
+environment:
+  PREFIX: str(required=True)
+  ENGINEER: str(required=False)
+  CONTROLLER_IP: any(ip(), hostname(), required=True)
+  PORT: str(required=True)
+  NUM_AXES: int(min=1, required=True)
+  MODEL: enum("MCS", "MCS2", required=True)
+  AXES_MASK: str(required=False)
+substitutions:
+  smaract:
+    templates:
+      - filepath: enum("$(MOTOR)/db/basic_asyn_motor.db")
+        pattern: list(any(enum("P"), enum("N"), enum("M"),
+                          enum("DTYP"), enum("PORT"), enum("ADDR"),
+                          enum("DESC"), enum("EGU"), enum("DIR"),
+                          enum("VELO"), enum("VBAS"), enum("ACCL"),
+                          enum("BDST"), enum("BVEL"), enum("BACC"),
+                          enum("MRES"), enum("PREC"), enum("DHLM"),
+                          enum("DLLM"), enum("INIT")))
+        instances: list(list(min=20, max=20))
+      - filepath: enum("$(SMARACT)/db/MCS2_Extra.db")
+        pattern: list(any(enum("P"), enum("N"), enum("M"),
+                          enum("PORT"), enum("ADDR"), enum("TIMEOUT")))
+        instances: list(list(min=6, max=6))
