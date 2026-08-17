@@ -96,7 +96,7 @@ drvModbusAsynConfigure("$(IOLOGIK_ID)_RTD", "$(IOLOGIK_ID)", 0, 4, 1536, 6, "INT
 drvModbusAsynConfigure("$(IOLOGIK_ID)_TC", "$(IOLOGIK_ID)", 0, 4, 2048, 16, "INT32_BE", 500, "ioLogik")
 
 {% endif %}
-# dbLoadTemplate("$(TOP)/db/ioLogik_{{ loop.index }}_{{ ioLogik.model }}.substitutions")
+dbLoadTemplate("$(TOP)/db/ioLogik_{{ loop.index }}_{{ ioLogik.model }}.substitutions")
 
 #######################################################################################
 
