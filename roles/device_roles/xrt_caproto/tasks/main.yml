@@ -23,7 +23,7 @@
 - name: Add caproto git repository and xrt as PyPI dependencies via Pixi
   ansible.builtin.command:
     # yamllint disable-line rule:line-length
-    cmd: "{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} add --pypi 'caproto @ git+https://github.com/thopkins32/caproto.git@02a70c32c179e1e356eeb4dd65d36e8aeb53c1d3' xrt>=2.0.0b1"
+    cmd: "{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} add --pypi 'caproto @ git+https://github.com/thopkins32/caproto.git@e3f8966b177b813f92331553ced85c20288b1712' xrt>=2.0.0b1"
     chdir: "{{ deploy_ioc_ioc_directory }}"
   changed_when: true
 
