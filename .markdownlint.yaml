@@ -1,0 +1,34 @@
+---
+###########################
+###########################
+## Markdown Linter rules ##
+###########################
+###########################
+
+# Linter rules doc:
+# - https://github.com/DavidAnson/markdownlint
+#
+# Note:
+# To comment out a single error:
+#   <!-- markdownlint-disable -->
+#   any violations you want
+#   <!-- markdownlint-restore -->
+#
+
+###############
+# Rules by id #
+###############
+MD004:
+  style: dash  # All unordered lists use - markers
+MD013:
+  line_length: 300  # 80 is way too short
+  tables: false  # tables exempt (long aligned cells)
+  code_blocks: false  # code blocks exempt (long shell/URL)
+  # headings enforced (default = include in line-length check)
+MD026:
+  # Normalized: full-width chars, no ? (rhetorical headings OK)
+  punctuation: ".,;:!。，；：！"
+MD029:
+  style: one_or_ordered  # Numbered lists: all 1., or strict 1.2.3.
+MD040: false  # Don't require language on fenced code blocks
+MD060: false  # Allow compact table style (no spaces around pipes)

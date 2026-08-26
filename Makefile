@@ -22,3 +22,6 @@ module:
 
 report:
 	pixi run report
+
+docs-table:
+	pixi run docs-table

@@ -51,6 +51,7 @@ The name of the IOC being deployed. This is typically set automatically by the r
 **`deploy_ioc_target`** (string, required)
 
 Specifies which IOCs to deploy. Can be:
+
 - `"all"`: Deploy all IOCs found in host_config
 - Comma-separated list: Deploy specific IOCs (e.g., `"ioc1,ioc2"`)
 
@@ -61,36 +62,43 @@ The following variables can be overridden to customize the deployment behavior. 
 ### Directory Configuration
 
 **`deploy_ioc_base_directory`**
+
 - **Type**: string
 - **Default**: `"/epics"`
 - **Description**: Base directory for all EPICS-related files and IOCs.
 
 **`deploy_ioc_common_directory`**
+
 - **Type**: string
 - **Default**: `"{{ deploy_ioc_base_directory }}/common"`
 - **Description**: Directory for common EPICS files shared across IOCs, such as network setup configuration files.
 
 **`deploy_ioc_template_root_path`**
+
 - **Type**: string
 - **Default**: `"/usr/lib/epics"`
 - **Description**: Root path where EPICS modules and templates are installed. Used as the base for locating support modules.
 
 **`deploy_ioc_iocs_directory`**
+
 - **Type**: string
 - **Default**: `"{{ deploy_ioc_base_directory }}/iocs"`
 - **Description**: Parent directory where all IOC instances are deployed.
 
 **`deploy_ioc_ioc_directory`**
+
 - **Type**: string
 - **Default**: `"{{ deploy_ioc_iocs_directory }}/{{ deploy_ioc_ioc_name }}"`
 - **Description**: Full path to the specific IOC directory being deployed. Automatically constructed from parent directory and IOC name.
 
 **`deploy_ioc_as_dir_name`**
+
 - **Type**: string
 - **Default**: `"as"`
 - **Description**: Name of the autosave directory within the IOC directory.
 
 **`deploy_ioc_as_directory`**
+
 - **Type**: string
 - **Default**: `"{{ deploy_ioc_ioc_directory }}/{{ deploy_ioc_as_dir_name }}"`
 - **Description**: Full path to the autosave directory containing `req/` and `save/` subdirectories.
@@ -98,36 +106,43 @@ The following variables can be overridden to customize the deployment behavior. 
 ### IOC Deployment Behavior
 
 **`deploy_ioc_executable`**
+
 - **Type**: string
 - **Default**: `"softIoc"`
 - **Description**: The EPICS IOC executable to use. Should be overridden by most device roles.
 
 **`deploy_ioc_standard_st_cmd`**
+
 - **Type**: boolean
 - **Default**: `true`
 - **Description**: Whether to generate standard EPICS startup scripts and directory structure. Set to false for IOCs with completely custom startup procedures.
 
 **`deploy_ioc_use_common`**
+
 - **Type**: boolean
 - **Default**: `true`
 - **Description**: Whether to include `common.cmd` in the IOC startup script. The common.cmd file loads frequently-used EPICS modules.
 
 **`deploy_ioc_use_ad_common`**
+
 - **Type**: boolean
 - **Default**: `false`
 - **Description**: Whether to use Area Detector common configuration. Set to true for Area Detector-based IOCs.
 
 **`deploy_ioc_load_as_substitutions`**
+
 - **Type**: boolean
 - **Default**: `true`
 - **Description**: Whether to process and load database substitutions defined in the IOC configuration. Device roles should set this to false if they handle substitutions manually.
 
 **`deploy_ioc_post_deploy_step`**
+
 - **Type**: string
 - **Default**: `"None"`
 - **Description**: Action to perform after deployment. Options: `"None"`, `"Install"`, `"Install and Enable"`, `"Install and Start"`, `"Install and Enable and Start"`, `"Restart"`.
 
 **`deploy_ioc_nextport`**
+
 - **Type**: integer
 - **Default**: `4000`
 - **Description**: Starting port number for IOC services (e.g., procServ telnet port). Automatically incremented for multiple IOCs.
@@ -135,11 +150,13 @@ The following variables can be overridden to customize the deployment behavior. 
 ### Autosave Configuration
 
 **`deploy_ioc_make_autosave_files`**
+
 - **Type**: boolean
 - **Default**: `false`
 - **Description**: Whether to automatically generate autosave request files. When true, creates `.req` files from the IOC's PV list.
 
 **`deploy_ioc_req_file_list`**
+
 - **Type**: list
 - **Default**: `[]`
 - **Description**: List of autosave request files to copy or reference. Used when autosave configuration is managed by the device role.
@@ -147,6 +164,7 @@ The following variables can be overridden to customize the deployment behavior. 
 ### Database Configuration
 
 **`deploy_ioc_dbpf_list`**
+
 - **Type**: list
 - **Default**: `[]`
 - **Description**: List of database put-field (dbpf) commands to execute during IOC initialization. Each entry should specify PV name and value.
@@ -154,16 +172,19 @@ The following variables can be overridden to customize the deployment behavior. 
 ### Environment Variables
 
 **`deploy_ioc_os_env_exports`**
+
 - **Type**: dict
 - **Default**: `{}`
 - **Description**: Operating system environment variables to export before starting the IOC. Used for system-level configuration that doesn't belong in EPICS environment.
 
 **`deploy_ioc_device_specific_env`**
+
 - **Type**: dict
 - **Default**: `{}`
 - **Description**: Device-specific environment variables that override or extend the default EPICS environment. Merged with `deploy_ioc_default_env`.
 
 **`deploy_ioc_default_env`**
+
 - **Type**: dict
 - **Default**: See below
 - **Description**: Default EPICS environment variables available to all IOCs. Includes paths to EPICS base and common support modules.
@@ -212,6 +233,7 @@ EPICS_BASE: /usr/lib/epics
 ### System Configuration
 
 **`deploy_ioc_required_system_packages`**
+
 - **Type**: list
 - **Default**: `["procServ"]`
 - **Description**: List of system packages required for IOC operation. These packages are automatically installed via dnf/yum during deployment.
@@ -227,6 +249,7 @@ When creating a new device role, you can rely on the `deploy_ioc` role to handle
 5. **Service Management**: The role handles systemd service generation and management based on `deploy_ioc_post_deploy_step`
 
 Your device role should focus on:
+
 - Device-specific templates and configuration files
 - Custom database files or substitution patterns
 - Hardware initialization commands

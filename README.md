@@ -38,6 +38,7 @@ pixi run make-role
 Follow the prompts to get started. See [deploy_ioc](roles/deploy_ioc/README.md) and [install_module](roles/install_module/README.md) for full references on supported options. Furthermore, if a similar device exists (it probably does), then browse the [device_roles](roles/device_roles/) before starting.
 
 There are a few required items to help make this repository more maintainable. They are:
+
 - a `schema.yml` defining how to configure the role for deployment
 - an example configuration (either `examples/<name>/config.yml` or legacy `example.yml`)
 
@@ -54,6 +55,7 @@ If you require a new version of the IOC, you will need to [add a new installable
 If the newest version is not a major release (i.e. does not contain breaking changes), then you can likely update the existing installable module to use the new Git commit hash. Be sure to extensively test with real hardware before and after doing this.
 
 You can update the module by running:
+
 ```bash
 pixi run update-module
 ```

@@ -1,0 +1,34 @@
+---
+site_name: nsls2.ioc_deploy
+site_description: Ansible collection for centralized EPICS IOC deployments at NSLS-II
+repo_url: https://github.com/NSLS2/nsls2.ioc_deploy
+use_directory_urls: false
+
+theme:
+  name: readthedocs
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+  - attr_list
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Installation: getting-started/installation.md
+      - Usage Patterns: getting-started/usage-patterns.md
+  - Guides:
+      - Adding a New Module: guides/adding-a-module.md
+      - Adding a New Device Role: guides/adding-a-device-role.md
+      - Adding an areaDetector Role: guides/adding-an-areadetector-role.md
+      - Updating Existing Roles: guides/updating-roles.md
+  - Reference:
+      - deploy_ioc Defaults: reference/deploy-ioc-defaults.md
+      - install_module Reference: reference/install-module-reference.md
+      - Supported Modules: reference/supported-modules.md
+  - Testing:
+      - Local Testing: testing/local-testing.md
+      - CI Workflows: testing/ci-workflows.md
+      - Writing Verification Tests: testing/verification-tests.md

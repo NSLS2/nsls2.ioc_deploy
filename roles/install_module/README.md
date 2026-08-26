@@ -21,6 +21,7 @@ Because EPICS doesn't have a built-in dependency solver, compatible versions mus
 The role builds a dependency tree with the target module as a leaf and compiles all modules from the top down. You only need to specify immediate parent dependencies; the role handles transitive dependencies automatically. Unless otherwise stated, the `epics-bundle` package provides baseline dependencies.
 
 Once a dependency list is established, the role:
+
 1. Clones and checks out the correct version of each module
 2. Finds and removes existing `RELEASE` and `CONFIG_SITE` files
 3. Auto-generates new configuration files from Jinja templates
@@ -66,13 +67,16 @@ See `schemas/install_module.yml` for the complete validation schema.
 **Required Fields:**
 
 **`name`** (string, required)
+
 - Human-readable name of the module (e.g., "ADVimba", "MotorSim")
 
 **`url`** (string, required)
+
 - Public git URL from which to clone the module
 - Example: `https://github.com/areaDetector/ADVimba`
 
 **`version`** (string, required)
+
 - Git tag, commit hash, or branch to check out
 - **Recommended**: commit hashes for reproducibility
 - **Not recommended**: Branches or tags (unpredictable)
@@ -81,42 +85,50 @@ See `schemas/install_module.yml` for the complete validation schema.
 **Optional Fields:**
 
 **`epics_deps`** (dict, optional)
+
 - EPICS module dependencies provided by `epics-bundle` (not built by this role)
 - Maps module names to their installation paths
 - Default: Inherits from `install_module_default_epics_deps`
 - Typically set to `/usr/lib/epics` for bundle-provided modules
 
 **`pkg_deps`** (list, optional)
+
 - System packages to install via dnf/yum
 - Default: `["epics-bundle"]`
 - Add additional packages as needed (e.g., development libraries)
 
 **`include_base_ad_config`** (boolean, optional)
+
 - Set to `true` for Area Detector modules
 - Includes comprehensive AD configuration from `install_module_ad_config_dict`
 - Handles HDF5, JPEG, TIFF, netCDF, GraphicsMagick, and other AD features
 
 **`config`** (dict, optional)
+
 - Custom CONFIG_SITE values (e.g., `TIRPC: "YES"`, `WITH_XXX: "YES"`)
 - Overrides default configuration values
 - Merged with `install_module_default_config_dict` and optionally `install_module_ad_config_dict`
 
 **`module_deps`** (list, optional)
+
 - Additional EPICS modules to be built by this role
 - Only specify immediate parent dependencies (transitive deps are resolved automatically)
 - Reference by configuration file name (e.g., `adgenicam_5d08a11`)
 
 **`compilation_command`** (string, optional)
+
 - Custom build command if not a simple top-level make
 - Default: `make -sj`
 - Example: `cd subdir && make -sj`
 
 **`executable`** (string, optional)
+
 - Name of the IOC executable within the compiled module
 - Used when the module includes a runnable IOC application
 - Example: `"vimbaApp"`
 
 **`use_token`** (boolean, optional)
+
 - Whether to use authentication token for private repositories
 - Requires token configuration in the calling playbook
 
@@ -163,21 +175,25 @@ The following variables can be overridden to customize the installation behavior
 ### Installation Configuration
 
 **`install_module_install_dir`**
+
 - **Type**: string
 - **Default**: `"/epics/modules"`
 - **Description**: Directory where compiled EPICS modules are installed. Each module is installed in a subdirectory named after the module configuration.
 
 **`install_module_default_compilation_command`**
+
 - **Type**: string
 - **Default**: `"make -sj"`
 - **Description**: Default command used to compile modules. The `-sj` flags enable silent mode and parallel compilation. Can be overridden per-module via the `compilation_command` field.
 
 **`install_module_force_reinstall`**
+
 - **Type**: boolean
 - **Default**: `false`
 - **Description**: Whether to force reinstallation even if the module already exists. When true, performs a hard reset of the git repository.
 
 **`install_module_skip_compilation`**
+
 - **Type**: boolean
 - **Default**: `false`
 - **Description**: Whether to skip module compilation. Useful for CI testing of roles that require proprietary SDKs not available in the test environment.
@@ -185,6 +201,7 @@ The following variables can be overridden to customize the installation behavior
 ### Package Dependencies
 
 **`install_module_default_pkg_deps`**
+
 - **Type**: list
 - **Default**: `["epics-bundle"]`
 - **Description**: Default system packages required for module compilation. The `epics-bundle` package provides EPICS Base and common support modules. Individual modules can extend this list via `pkg_deps`.
@@ -192,6 +209,7 @@ The following variables can be overridden to customize the installation behavior
 ### EPICS Dependencies
 
 **`install_module_default_epics_deps`**
+
 - **Type**: dict
 - **Default**: See below
 - **Description**: Default paths to EPICS modules provided by `epics-bundle`. These modules are not compiled by the role but are referenced in generated RELEASE files.
@@ -215,6 +233,7 @@ EPICS_BASE: /usr/lib/epics
 ### Build Configuration
 
 **`install_module_default_config_dict`**
+
 - **Type**: dict
 - **Default**: See below
 - **Description**: Default CONFIG_SITE values applied to all modules. These control EPICS build behavior.
@@ -227,11 +246,13 @@ BUILD_IOCS: 'YES'        # Build example IOCs by default
 ```
 
 **`install_module_ad_config_dict`**
+
 - **Type**: dict
 - **Default**: See below
 - **Description**: Comprehensive Area Detector configuration applied when `include_base_ad_config: true`. Controls which plugins and external libraries are enabled for AD modules.
 
 Area Detector configuration includes settings for:
+
 - **PVA/QSRV**: PV Access and QSR server support
 - **Image Formats**: HDF5, JPEG, TIFF, netCDF, Nexus
 - **Compression**: Blosc, Bitshuffle, szip, zlib
@@ -320,18 +341,22 @@ adnewcamera_abc1234:
 After running the role, the following variables are set and can be used by subsequent tasks:
 
 **`install_module_installed`**
+
 - **Type**: dict
 - **Description**: Maps uppercase module names to their installation paths
 
 **`install_module_installed_list`**
+
 - **Type**: list
 - **Description**: List of all module names installed during this run
 
 **`install_module_leaf_module_path`**
+
 - **Type**: string
 - **Description**: Path to the final (leaf) module that was requested
 
 **`install_module_leaf_executable`**
+
 - **Type**: string
 - **Description**: Executable path for the leaf module (if specified in configuration)
 
