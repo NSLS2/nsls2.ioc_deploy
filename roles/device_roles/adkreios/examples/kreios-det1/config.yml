@@ -1,0 +1,12 @@
+---
+
+kreios-det1:
+  type: "adkreios"
+
+  environment:
+    PREFIX: "XF:29ID2-ES{Det:Kreios}:"
+    ENGINEER: "A. Sligar"
+    PRODIGY_HOST: "xf29id2-kreios1.nsls2.bnl.local"
+    PRODIGY_PORT: 7010
+    XSIZE: 1285
+    YSIZE: 730

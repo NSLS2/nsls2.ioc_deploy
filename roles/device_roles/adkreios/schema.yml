@@ -1,0 +1,18 @@
+---
+type: enum("adkreios")
+
+environment:
+  PREFIX: str()  # Base PV prefix
+  ENGINEER: str(required=False)  # Responsible engineer
+
+  # SpecsLab Prodigy "Remote In" server connection (TCP, default port 7010)
+  PRODIGY_HOST: str()  # Hostname/IP of the machine running SpecsLab Prodigy
+  PRODIGY_PORT: int(min=1, max=65535, required=False)  # Prodigy TCP port
+
+  # KREIOS-150 detector image size in pixels/channels
+  XSIZE: int(min=1, required=False)
+  YSIZE: int(min=1, required=False)
+
+  PORT: str(required=False)  # Optional asyn port name for the driver
+  QSIZE: int(min=1, required=False)  # Optional plugin queue size
+  MAX_THREADS: int(min=1, required=False)  # Optional max plugin threads
