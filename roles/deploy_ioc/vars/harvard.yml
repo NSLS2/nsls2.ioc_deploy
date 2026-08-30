@@ -1,0 +1,11 @@
+---
+deploy_ioc_use_common: false
+deploy_ioc_use_ad_common: false
+deploy_ioc_required_module: base_stream_ioc_093e6cf
+deploy_ioc_device_specific_env:
+  PORT: HRVD1
+  DEV: Pump:Syrng-Ultra:1
+  P: XF:31ID1-ES
+  R: "{$(DEV)}"
+  PREFIX: $(P)$(R)
+deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"

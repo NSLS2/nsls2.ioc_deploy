@@ -1,0 +1,19 @@
+
+# For pump33dds models, perform some dbpf commands
+
+cd $(TOP)/autosave/req
+makeAutosaveFiles()
+create_monitor_set("info_positions.req", 5 , "")
+
+cd $(TOP)
+
+dbpf $(P)$(R)ASYN.AOUT "RSAVE OFF"
+
+dbpf $(P)$(R)ASYN.TMSK 9
+dbpf $(P)$(R)ASYN.TIOM 2
+#dbpf $(P)$(R)ASYN.OEOS "\r\n"
+
+dbpf $(P)$(R)DISABLE 0
+
+dbl > /tmp/{{ deploy_ioc_ioc_name }}-records.dbl
+date

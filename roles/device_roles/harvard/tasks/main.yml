@@ -1,0 +1,45 @@
+---
+# Tasks for harvard role
+
+- name: Copy base.cmd
+  ansible.builtin.template:
+    src: base.cmd.j2
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Create protocol directory
+  ansible.builtin.file:
+    path: "{{ deploy_ioc_ioc_directory }}/protocol"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    state: directory
+    mode: "0775"
+
+- name: Copy databases file for specified model
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ deploy_ioc_ioc_directory }}/db"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+  with_fileglob: "files/{{ ioc.model }}*.db"
+
+- name: Copy protocol files for specified model
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ deploy_ioc_ioc_directory }}/protocol"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+  with_fileglob: "files/{{ ioc.model }}*.proto"
+
+- name: Generate custom postInit cmd file for pump33dds models
+  ansible.builtin.template:
+    src: postInit.cmd.j2
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/postInit.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+  when: ioc.model == "pump33dds"
