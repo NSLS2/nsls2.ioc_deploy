@@ -1,0 +1,21 @@
+---
+# Variables for the smaract role
+deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
+deploy_ioc_required_module: motorsmaract_ab4dfeb
+deploy_ioc_use_common: false
+deploy_ioc_executable: smarAct
+deploy_ioc_req_file_list:
+  - name: auto_settings.req
+    macros: ""
+  - name: auto_positions.req
+    macros: ""
+  - name: info_settings.req
+    macros: ""
+  - name: info_positions.req
+    macros: ""
+deploy_ioc_device_specific_env:
+  PORT: SMARACT
+  CONTROLLER_IP: 127.0.0.1
+  MODEL: MCS2
+  NUM_AXES: 3
+  AXES_MASK: "0x7"

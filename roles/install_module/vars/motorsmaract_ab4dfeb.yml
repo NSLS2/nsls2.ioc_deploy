@@ -1,0 +1,6 @@
+---
+motorsmaract_ab4dfeb:
+  name: motorSmarAct
+  url: https://github.com/epics-motor/motorSmarAct
+  version: ab4dfeb
+  executable: smarAct

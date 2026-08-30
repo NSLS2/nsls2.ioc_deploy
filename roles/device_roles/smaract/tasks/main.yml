@@ -1,0 +1,33 @@
+---
+
+- name: Deploy base startup script
+  ansible.builtin.template:
+    src: base.cmd.j2
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/base.cmd"
+    mode: "0664"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+
+- name: Install autosave settings req file
+  ansible.builtin.template:
+    src: auto_settings.req.j2
+    dest: "{{ deploy_ioc_as_directory }}/req/auto_settings.req"
+    mode: "0664"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+
+- name: Install autosave positions req file
+  ansible.builtin.template:
+    src: auto_positions.req.j2
+    dest: "{{ deploy_ioc_as_directory }}/req/auto_positions.req"
+    mode: "0664"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+
+- name: Deploy postInit script
+  ansible.builtin.template:
+    src: postInit.cmd.j2
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/postInit.cmd"
+    mode: "0664"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
