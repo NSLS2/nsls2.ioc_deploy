@@ -1,0 +1,29 @@
+---
+
+rtc:
+  type: omegartc
+
+  # SYS and DEV: used to generate prefix for each device
+  # HOST may be an IP address or host name
+  # Parameter COMM can be RS-232 or RS-485
+  environment:
+    # PREFIX is used for common IOC PVs
+    PREFIX: XF:31ID1-CT{IOC:RTC}
+    ENGINEER: "C. Engineer"
+
+  devices:
+    - SYS: "XF:31ID1-CT"
+      DEV: "{RG:A1-RTC:1}"
+      PORT: "tsrv1-px1"
+      COMM: "RS-232"
+      HOST: "xf31id1-lab3-tsrv1.nsls2.bnl.local:4001"
+    - SYS: "XF:31ID1-CT"
+      DEV: "{RG:A2-RTC:1}"
+      PORT: "tsrv1-px2"
+      COMM: "RS-232"
+      HOST: "xf31id1-lab3-tsrv1.nsls2.bnl.local:4002"
+    - SYS: "XF:31ID1-CT"
+      DEV: "{RG:A3-RTC:1}"
+      PORT: "tsrv1-px3"
+      COMM: "RS-232"
+      HOST: "xf31id1-lab3-tsrv1.nsls2.bnl.local:4003"
