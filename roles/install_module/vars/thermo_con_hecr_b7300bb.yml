@@ -1,0 +1,8 @@
+---
+
+thermo_con_hecr_b7300bb:
+  name: "thermo_con_hecr"
+  url: "https://github.com/NSLS2/thermo-con-hecr-ioc"
+  version: "b7300bb"
+  module_deps:
+    - modbus_bb9fa05

@@ -1,0 +1,24 @@
+## Register all support components
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# Configure the low level communication port
+drvAsynIPPortConfigure("$(HECR_ASYNPORT)", "$(HOST)", 0, 0, 0)
+asynOctetSetOutputEos("$(HECR_ASYNPORT)", 0, "\r\n")
+asynOctetSetInputEos("$(HECR_ASYNPORT)", 0, "\r\n")
+modbusInterposeConfig("$(HECR_ASYNPORT)", 2, 2000, 0) # linkType 2 = Modbus ASCII interposer; the HECR uses CRLF-delimited ASCII framing over this TCP socket
+
+# Configure chiller Modbus
+{% for op in ioc.operations %}
+
+epicsEnvSet("PORT_NAME","$(HECR_ASYNPORT)_{{ op.PORT_NAME }}")
+epicsEnvSet("MODBUS_FUNC", "{{ op.MODBUS_FUNC }}")
+epicsEnvSet("START_ADDR", "{{ op.START_ADDR }}")
+epicsEnvSet("MODBUS_LEN", "{{ op.MODBUS_LEN }}")
+epicsEnvSet("DATA_TYPE", "{{ op.DATA_TYPE }}")
+
+drvModbusAsynConfigure("$(PORT_NAME)", "$(HECR_ASYNPORT)", 1, $(MODBUS_FUNC), $(START_ADDR), $(MODBUS_LEN), "$(DATA_TYPE)", 1000, "HECR")
+
+{% endfor %}
+
+dbLoadRecords("$(THERMO_CON_HECR)/db/thermo-con-HECR.db", "Sys=$(SYS), Dev=$(DEV), ASYNPORT=$(HECR_ASYNPORT)")
