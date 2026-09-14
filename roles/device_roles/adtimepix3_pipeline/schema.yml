@@ -10,4 +10,4 @@ environment:
     # this will really need to be changed, though this is a runtime changeable default path
     # designed so that the pipeline always dumps data somewhere (admin can manage later)
     # philosophy is in worst case data surviving is more important than clean access management
-  PATH: str()
+  DATA_PATH: str()

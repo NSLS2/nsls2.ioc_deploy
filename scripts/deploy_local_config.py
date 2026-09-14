@@ -369,6 +369,8 @@ def deploy_configs(options: DeploymentOptions):
                     [
                         "docker",
                         "exec",
+                        "-u",
+                        "root",
                         f"{options.hostname}",
                         "pixi",
                         "run",
