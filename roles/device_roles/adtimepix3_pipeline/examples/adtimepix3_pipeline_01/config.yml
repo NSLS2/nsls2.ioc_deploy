@@ -4,6 +4,6 @@ adtimepix3_pipeline_01:
   python_ioc_git_revision: "v0.2.0"
   python_version: ">=3.14.0"
   environment:
-    PREFIX: "XF:11ID1-ES:{TPX:PIPE:1}:"
+    PREFIX: "XF:11ID1-ES:TPX:PIPE:1:"
     ENGINEER: "Rhys Takahashi"
     DATA_PATH: "/nsls2/data/chx/assets/timepix/fallback"
