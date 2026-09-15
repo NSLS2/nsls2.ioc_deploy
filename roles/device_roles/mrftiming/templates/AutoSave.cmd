@@ -1,0 +1,10 @@
+# autosave config
+set_requestfile_path("./")
+set_requestfile_path("$(MRF)/db", "")
+set_requestfile_path("$(EPICS_BASE)", "req")
+set_requestfile_path("$(TOP)/as/req")
+set_savefile_path("$(TOP)/as/save")
+set_pass0_restoreFile("auto_settings.sav")
+set_pass1_restoreFile("auto_settings.sav")
+save_restoreSet_status_prefix("OP-CT{IOC:$(IOCNAME)}")
+dbLoadRecords("$(EPICS_BASE)/db/save_restoreStatus.db", "P=OP-CT{IOC:$(IOCNAME)}")

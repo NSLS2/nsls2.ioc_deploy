@@ -1,0 +1,21 @@
+---
+
+mrftiming-01:
+  type: mrftiming
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{MRFTIMING:01}
+    MRFTiming: "/epics/modules/mrftiming_3bb9fcf"
+    MRF: "/epics/modules/epics_mrf_82f7bbb"
+    UO_01: "1"
+    UO_23: "1"
+    UO_01FD: "1"
+    UO_23FD: "1"
+    TB_01: "1"
+    TB_23: "1"
+    TB_45: "1"
+    TB_67: "1"
+    TB_89: "1"
+    TB_1011: "1"
+    TB_1213: "1"
+    TB_1415: "1"
