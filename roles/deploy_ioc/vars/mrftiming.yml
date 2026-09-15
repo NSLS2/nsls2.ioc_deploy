@@ -5,9 +5,6 @@ deploy_ioc_required_module: mrftiming_3bb9fcf
 deploy_ioc_executable: MRFTiming
 deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
 deploy_ioc_device_specific_env:
-  PREFIX: "XF:31ID1-ES{MRFTIMING:01}"
-  MRFTiming: "/epics/modules/mrftiming_3bb9fcf"
-  MRF: "/epics/modules/epics_mrf_82f7bbb"
   UO_01: "1"
   UO_23: "1"
   UO_01FD: "1"
