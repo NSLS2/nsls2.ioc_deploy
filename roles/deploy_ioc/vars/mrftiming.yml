@@ -3,8 +3,20 @@ deploy_ioc_use_common: true
 deploy_ioc_use_ad_common: false
 deploy_ioc_required_module: mrftiming_3bb9fcf
 deploy_ioc_executable: MRFTiming
+deploy_ioc_make_autosave_files: true
 deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
+deploy_ioc_req_file_list:
+  - name: "auto_settings.req"
+    macros: 'P=$(P), R=$(R)'
+deploy_ioc_dbpf_list:
+  - pv: $(P)$(R)DBus:Status.PROC
+    value: 1
+  - pv: $(P)$(R)PulseGen0:Status.PROC
+    value: 1
 deploy_ioc_device_specific_env:
+  R: ""
+  PREFIX: "$(P)$(R)"
+  IOC_PREFIX: "OP{$(IOCNAME)}"
   UO_01: "1"
   UO_23: "1"
   UO_01FD: "1"

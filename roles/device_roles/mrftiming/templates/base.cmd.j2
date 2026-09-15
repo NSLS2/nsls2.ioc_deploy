@@ -1,11 +1,8 @@
-epicsEnvSet("TOP", "{{ deploy_ioc_template_root_path }}")
-
 #Use MRFTIMING generated in RELEASE.local. In misc.substitutions, the MRFTiming is used.  So we replace it here.
 epicsEnvSet("MRFTiming", "$(MRFTIMING)")
 
-cd "$(TOP)"
-dbLoadDatabase "dbd/{{ deploy_ioc_executable }}.dbd"
-{{ deploy_ioc_executable }}_registerRecordDeviceDriver pdbbase
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
 
 mrfUdpIpEvrDevice("EVR01", "$(IP)")
 
@@ -15,9 +12,4 @@ dbLoadRecords("$(EPICS_MRF)/db/vme-evr-230rf.db","P=$(P), R=$(R), DEVICE=EVR01, 
 dbLoadRecords("$(EPICS_MRF)/db/mrf-autosave-menu.db","P=$(P),R=$(R),CONFIG_PV_PREFIX=Presets:,CONFIG_NAME=evr01_preset")
 dbLoadRecords("$(EPICS_MRF)/db/mrf-write-all-settings-with-status.db","P=$(P), R=$(R)")
 
-dbLoadTemplate("$(MRFTIMING)/db/misc.substitutions", "P=$(P), R=$(R)")
-
-dbLoadRecords("$(EPICS_BASE)/db/reccaster.db", "P=OP{$(IOCNAME)}RecSync")
-dbLoadRecords("$(EPICS_BASE)/db/iocAdminSoft.db", "IOC=OP{$(IOCNAME)}")
-
-< ./AutoSave.cmd
+dbLoadTemplate("$(MRFTiming)/db/misc.substitutions", "P=$(P), R=$(R)")
