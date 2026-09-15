@@ -18,6 +18,6 @@ dbLoadRecords("$(EPICS_MRF)/db/mrf-write-all-settings-with-status.db","P=$(P), R
 dbLoadTemplate("$(MRFTIMING)/db/misc.substitutions", "P=$(P), R=$(R)")
 
 dbLoadRecords("$(EPICS_BASE)/db/reccaster.db", "P=OP{$(IOCNAME)}RecSync")
-dbLoadRecords("$(EPICS_BASE)/db/iocAdminSoft.db", "IOC=OP{$(IOCNAME)}"
+dbLoadRecords("$(EPICS_BASE)/db/iocAdminSoft.db", "IOC=OP{$(IOCNAME)}")
 
 < ./AutoSave.cmd
