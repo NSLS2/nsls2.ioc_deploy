@@ -1,6 +1,6 @@
 # autosave config
 set_requestfile_path("./")
-set_requestfile_path("$(MRF)/db", "")
+set_requestfile_path("$(EPICS_MRF)/db", "")
 set_requestfile_path("$(EPICS_BASE)", "req")
 set_requestfile_path("$(TOP)/as/req")
 set_savefile_path("$(TOP)/as/save")
