@@ -5,10 +5,10 @@ thermo_con_hecr-01:
 
   environment:
     SYS: "XF:31ID1-CT"
-    DEV: "{Mir:1-Env:1}"
+    DEV: "{Mir:1-Chl:1}"
     HOST: 10.69.58.105:4001
     HECR_ASYNPORT: "tsrv1-p1"
-    PREFIX: "XF:31ID1-CT{IOC:Env01}"
+    PREFIX: "XF:31ID1-CT{IOC:Chl01}"
     ENGINEER: "Engineer Name"
 
   operations:
