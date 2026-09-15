@@ -9,9 +9,9 @@ deploy_ioc_req_file_list:
   - name: "auto_settings.req"
     macros: 'P=$(P), R=$(R)'
 deploy_ioc_dbpf_list:
-  - pv: $(P)$(R)DBus:Status.PROC
+  - pv: $(PREFIX)DBus:Status.PROC
     value: 1
-  - pv: $(P)$(R)PulseGen0:Status.PROC
+  - pv: $(PREFIX)PulseGen0:Status.PROC
     value: 1
 deploy_ioc_device_specific_env:
   R: ""
