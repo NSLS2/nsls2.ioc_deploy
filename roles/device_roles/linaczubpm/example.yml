@@ -1,0 +1,14 @@
+---
+
+linaczubpm-01:
+  type: linaczubpm
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: "LN-BI{BPM:1}"
+    BPMNo: BPM1
+    BPMIP: "10.xx.xx.xx"
+    ALIVELEN: 100
+    FLEN : ""
+    TLEN: ""
+    ALEN: ""
+    PSCNo: ""
