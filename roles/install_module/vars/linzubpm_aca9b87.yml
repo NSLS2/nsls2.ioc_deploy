@@ -8,3 +8,4 @@ linzubpm_aca9b87:
     - fftw-devel
   module_deps:
     - pscdrv_1ed650d
+  compilation_command: "make -s"

@@ -1,0 +1,13 @@
+---
+
+type: enum("linaczubpm")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
+  BPMNo: str()
+  BPMIP: str()
+  ALIVELEN: str()
+  FLEN: str()
+  TLEN: str()
+  ALEN: str()
+  PSCNo: str()
