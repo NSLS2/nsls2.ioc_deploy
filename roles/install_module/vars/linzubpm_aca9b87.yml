@@ -1,0 +1,10 @@
+---
+
+linzubpm_aca9b87:
+  name: linzubpm
+  version: aca9b87
+  url: https://github.com/NSLS2/zubpm-ioc
+  pkg_deps:
+    - fftw-devel
+  module_deps:
+    - pscdrv_1ed650d
