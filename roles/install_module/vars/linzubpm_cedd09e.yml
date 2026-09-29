@@ -1,0 +1,10 @@
+---
+
+linzubpm_cedd09e:
+  name: linzubpm
+  version: cedd09e
+  url: https://github.com/NSLS2/zubpm-ioc
+  pkg_deps:
+    - fftw-devel
+  module_deps:
+    - pscdrv_1ed650d
