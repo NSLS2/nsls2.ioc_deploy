@@ -1,8 +1,8 @@
 ---
 
-linzubpm_cedd09e:
+linzubpm_aca9b87:
   name: linzubpm
-  version: cedd09e
+  version: aca9b87
   url: https://github.com/NSLS2/zubpm-ioc
   pkg_deps:
     - fftw-devel
