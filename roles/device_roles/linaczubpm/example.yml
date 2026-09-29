@@ -6,9 +6,9 @@ linaczubpm-01:
     ENGINEER: C. Engineer
     PREFIX: "LN-BI{BPM:1}"
     BPMNo: BPM1
-    BPMIP:
-    ALIVELEN: 100
-    FLEN:
-    TLEN:
-    ALEN:
-    PSCNo:
+    BPMIP: ""
+    ALIVELEN: ""
+    FLEN: ""
+    TLEN: ""
+    ALEN: ""
+    PSCNo: ""
