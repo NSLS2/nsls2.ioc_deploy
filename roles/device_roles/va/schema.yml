@@ -51,6 +51,7 @@ ipc_substitution_block:
     "$(VA)/db/variandual-ip-download.template",
     "$(VA)/db/variandual_controller.template",
     "$(VA)/db/variandual_ip.template"
+    "$(VA)/db/cell-tsp-download.template"
     )
   pattern: list(
     enum("Sys", "Dev", "CHAN", "PORT", "Cntl", "SPNUM", "Indx", "P")
