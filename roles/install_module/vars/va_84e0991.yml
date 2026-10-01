@@ -1,0 +1,6 @@
+---
+va_84e0991:
+  name: va
+  version: 84e0991
+  url: https://github.com/nsls2/va-ioc
+  compilation_command: "make -s"
