@@ -50,7 +50,7 @@ ipc_substitution_block:
     "$(VA)/db/varian_tsp.template",
     "$(VA)/db/variandual-ip-download.template",
     "$(VA)/db/variandual_controller.template",
-    "$(VA)/db/variandual_ip.template"
+    "$(VA)/db/variandual_ip.template",
     "$(VA)/db/cell-tsp-download.template"
     )
   pattern: list(
