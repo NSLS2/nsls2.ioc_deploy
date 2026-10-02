@@ -1,5 +1,8 @@
 ---
 xspress3_82eae5a:
+  # Commit: https://github.com/epics-modules/xspress3/commit/82eae5a731aa6933dc4ce57ddc9b268cd802d827
+  # Date: Dec 11, 2023
+  # In versions: 3.2.8, 3.3.0
   name: xspress3
   version: 82eae5a
   url: https://github.com/epics-modules/xspress3
