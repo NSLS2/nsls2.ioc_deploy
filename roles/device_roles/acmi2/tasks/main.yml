@@ -13,11 +13,12 @@
     state: directory
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
-    mode: "02775"
+    mode: "02777"
   loop:
     - Correction
     - COW
     - gui
+    - opi
     - PM
     - python
     - settings
@@ -34,6 +35,7 @@
     - Correction
     - COW
     - gui
+    - opi
     - PM
     - python
     - settings
