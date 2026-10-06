@@ -30,7 +30,6 @@
     remote_src: true
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
-    mode: "0664"
   loop:
     - Correction
     - COW
@@ -38,4 +37,15 @@
     - opi
     - PM
     - python
+    - settings
+
+- name: Force writeable directories permissions recursively
+  ansible.builtin.file:
+    path: "{{ deploy_ioc_ioc_directory }}/{{ item }}"
+    state: directory
+    recurse: true
+    mode: "02777"
+  loop:
+    - Correction
+    - COW
     - settings
