@@ -1,0 +1,6 @@
+---
+
+epics_mrf_82f7bbb:
+  name: epics_mrf
+  version: 82f7bbb
+  url: https://github.com/NSLS2/epics-mrf.git
