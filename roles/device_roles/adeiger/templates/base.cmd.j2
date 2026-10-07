@@ -10,7 +10,8 @@ eigerDetectorConfig("$(PORT)", "$(DCU_IP)", "$(STREAM_IP)", 0, 0)
 {% else %}
 eigerDetectorConfig("$(PORT)", "$(DCU_IP)", 0, 0)
 {% endif %}
-dbLoadRecords("$(ADEIGER)/db/{{ ioc.detector_model }}.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
+{% set detector_template = "eiger2" if ioc.detector_model == "selun" else ioc.detector_model %}
+dbLoadRecords("$(ADEIGER)/db/{{ detector_template }}.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT),ADDR=0,TIMEOUT=1")
 
 
 # Debug
