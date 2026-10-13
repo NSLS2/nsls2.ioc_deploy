@@ -1,0 +1,12 @@
+---
+
+type: enum("harvard")
+
+model: enum("pump33dds", "phdultra")
+
+environment:
+  DEV: str()
+  P: str()
+  R: str()
+  PORT: str()
+  PREFIX: str()
