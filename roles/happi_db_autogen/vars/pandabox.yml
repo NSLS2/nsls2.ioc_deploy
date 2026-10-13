@@ -1,0 +1,24 @@
+---
+
+happi_db_autogen_device_obj_list:
+  - _id: "{{ happi_db_autogen_device_name }}_path_provider"
+    name: "{{ happi_db_autogen_device_name }}_path_provider"
+    type: "HappiItem"
+    active: true
+    args: []
+    kwargs: {}
+    last_edit: "{{ ansible_date_time.iso8601 }}"
+    device_class: "nslsii.ophyd_async.providers.NSLS2PathProvider"
+
+  - _id: "{{ happi_db_autogen_device_name }}"
+    name: "{{ happi_db_autogen_device_name }}"
+    type: "OphydItem"
+    args:
+      - "{{ happi_db_autogen_device.environment.PREFIX }}"
+      - "{{ happi_db_autogen_device_name }}_path_provider"
+    kwargs:
+      name: "{{ happi_db_autogen_device_name }}"
+    prefix: "{{ happi_db_autogen_device.environment.PREFIX }}"
+    active: true
+    last_edit: "{{ ansible_date_time.iso8601 }}"
+    device_class: "ophyd_async.fastcs.panda.HDFPanda"
