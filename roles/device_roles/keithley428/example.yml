@@ -1,0 +1,8 @@
+---
+
+keithley428-01:
+  type: keithley428
+
+  environment:
+    PREFIX: "XF:31ID1-ES{KEITHLEY428:Dev-1}"
+    ENGINEER: "C. Engineer"

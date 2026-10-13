@@ -1,0 +1,7 @@
+---
+
+type: enum("keithley428")
+
+environment:
+  PREFIX: str()
+  ENGINEER: str()
