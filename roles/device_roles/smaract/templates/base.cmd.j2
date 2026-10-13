@@ -1,0 +1,21 @@
+## Register all support components
+dbLoadDatabase("{{ deploy_ioc_required_module_path }}/dbd/smarAct.dbd")
+smarAct_registerRecordDeviceDriver(pdbbase)
+
+# Configure the low level communication port
+{% if ioc.model == "MCS2" %}
+drvAsynIPPortConfigure("$(PORT)_ETH", "$(CONTROLLER_IP):55551", 0, 0, 0)
+MCS2CreateController("$(PORT)", "$(PORT)_ETH", "$(NUM_AXES)",
+                     {{ device_roles_smaract_moving_poll_period * 1000 }},
+                     {{ device_roles_smaract_moving_poll_period * 1000 }},
+                     $(AXES_MASK))
+{% else %}
+drvAsynIPPortConfigure("$(PORT)_ETH", "$(CONTROLLER_IP):55551", 0, 0, 0)
+smarActMCSCreateController("$(PORT)", "$(PORT)_ETH", {{ ioc.num_axes }},
+                           {{ device_roles_smaract_moving_poll_period }},
+                           {{ device_roles_smaract_idle_poll_period }},
+                           {{ device_roles_smaract_disable_speed }})
+{% for i in range(ioc.num_axes) %}
+smaraActMCSCreateAxis("$(PORT)", {{ i }}, {{ i }})
+{% endfor %}
+{% endif %}
