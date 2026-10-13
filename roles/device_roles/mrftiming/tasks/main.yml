@@ -1,5 +1,5 @@
 ---
-# Tasks for MRFTiming role
+# Tasks for mrftiming role
 
 - name: Install base.cmd
   ansible.builtin.template:
@@ -9,10 +9,18 @@
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
 
-- name: Install auto_settings.req
+- name: Install AutoSave.cmd
   ansible.builtin.copy:
-    src: "files/auto_settings.req"
-    dest: "{{ deploy_ioc_as_directory }}/req/auto_settings.req"
+    src: templates/AutoSave.cmd
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/AutoSave.cmd"
+    mode: "0664"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+
+- name: Install custom postInit.cmd
+  ansible.builtin.template:
+    src: "templates/postInit.cmd"
+    dest: "{{ deploy_ioc_ioc_directory }}/iocBoot/postInit.cmd"
     mode: "0664"
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"

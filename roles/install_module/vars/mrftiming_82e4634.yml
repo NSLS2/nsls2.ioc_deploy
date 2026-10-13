@@ -1,0 +1,9 @@
+---
+
+mrftiming_82e4634:
+  name: MRFTiming
+  version: 82e4634
+  url: https://github.com/NSLS2/MRFTiming.git
+  module_deps:
+    - epics_mrf_82f7bbb
+    - elauncher_21dede8
