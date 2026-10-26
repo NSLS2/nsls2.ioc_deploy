@@ -50,8 +50,8 @@ docker exec -u root $CONTAINER_NAME dnf install -y epel-release > /dev/null 2>&1
 docker exec -u root $CONTAINER_NAME dnf install -y seq > /dev/null 2>&1 || true
 
 # Install Pixi (pinned version with checksum validation)
-PIXI_VERSION="v0.71.3"
-PIXI_SHA256="a23d27e93f2afbaacd9202f72d4d2b31fb423055cc45d1d4d7343e11c687ca32"
+PIXI_VERSION="v0.83.0"
+PIXI_SHA256="064f371e692aaa3400ac581c89da2843c91437f20c2d9155395a5d0037f33551"
 echo "Installing Pixi ${PIXI_VERSION}..."
 docker exec -u root $CONTAINER_NAME bash -c "
     curl -fsSL -o /tmp/pixi.tar.gz https://github.com/prefix-dev/pixi/releases/download/$PIXI_VERSION/pixi-x86_64-unknown-linux-musl.tar.gz
