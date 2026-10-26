@@ -1,4 +1,5 @@
 [workspace]
+requires-pixi = ">=0.82.1"
 authors = ["Jakub Wlodek"]
 channels = ["conda-forge"]
 description = "Collection of ansible roles to perform centralized IOC deployments"
@@ -34,7 +35,7 @@ yamale = "*"
 pre-commit = "*"
 ruff = "*"
 import-linter = "*"
-pip = "*"
+pip = ">=26.2.2"
 pytest = "*"
 pyyaml = "*"
 yamllint = "*"

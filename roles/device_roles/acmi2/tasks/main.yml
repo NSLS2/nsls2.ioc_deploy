@@ -30,6 +30,7 @@
     remote_src: true
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
+    mode: "0664"
   loop:
     - Correction
     - COW

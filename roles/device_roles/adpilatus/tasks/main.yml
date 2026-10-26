@@ -36,7 +36,7 @@
       ignore_errors: true
       changed_when: dcu_ping_result.rc == 0
 
-    - name: Initialize ramdisk mount on IOC server
+    - name: Initialize ramdisk mount on IOC server # noqa: args[module]
       ansible.posix.mount:
         src: "{{ ioc.environment.PILATUS_DCU_IP }}:{{ ioc.ramdisk_path }}"
         path: "{{ ioc.ramdisk_path }}"
