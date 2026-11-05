@@ -48,7 +48,7 @@
           "{{ deploy_ioc_current_max_port.stdout | int + deploy_ioc_loop_index + 1 }}" # yamllint disable-line rule:line-length
       when:
         deploy_ioc_current_max_port.stdout != "" and
-        (deploy_ioc_current_max_port.stdout | int) > (deploy_ioc_nextport | int)
+        (deploy_ioc_current_max_port.stdout | int) >= (deploy_ioc_nextport | int)
 
 - name: Print next port number
   ansible.builtin.debug:
