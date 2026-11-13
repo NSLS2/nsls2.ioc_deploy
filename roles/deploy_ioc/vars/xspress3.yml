@@ -20,6 +20,11 @@ deploy_ioc_dbpf_list:
     value: 16000
   - pv: "$(PREFIX)det1:AcquireTime"
     value: 0.25
+  # Set path to calibration. Must precede CONNECT: the driver restores the
+  # calibration from CONFIG_PATH while connecting.
+  - pv: "$(PREFIX)det1:CONFIG_PATH"
+    value: "$(CALIBRATION_DIR)"
+    sleep: 2
   - pv: "$(PREFIX)det1:CONNECT"
     value: "1"
   - pv: "$(PREFIX)det1:CTRL_DTC"
@@ -60,11 +65,6 @@ deploy_ioc_dbpf_list:
   # Disable EraseOnStart
   - pv: "$(PREFIX)det1:EraseOnStart"
     value: "No"
-
-  # Set path to calibration
-  - pv: "$(PREFIX)det1:CONFIG_PATH"
-    value: "$(CALIBRATION_DIR)"
-    sleep: 2
 
 
 deploy_ioc_device_specific_env:
