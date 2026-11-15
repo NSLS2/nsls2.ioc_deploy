@@ -33,6 +33,7 @@ axis:
   mres: num()
   egu: str()
   disable_limits: bool(required=False)
+  home_plc: int(min=1, max=30, required=False)
 
 virtual_axis:
   name: str()
@@ -42,7 +43,7 @@ virtual_axis:
   desc: str()
   mres: num()
   egu: str()
-  home_plc: int(min=1, max=20)
+  home_plc: int(min=1, max=30, required=False)
 
 poll_period:
   card: int(min=1, max=4)

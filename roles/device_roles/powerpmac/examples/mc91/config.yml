@@ -59,4 +59,4 @@ mc91:
       desc: "X-Y Diagonal translation virtual axis"
       mres: 0.00001
       egu: "mm"
-      home_plc: 17
+      home_plc: 17  # Optional
