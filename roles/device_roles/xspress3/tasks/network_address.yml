@@ -1,4 +1,71 @@
 ---
+- name: Validate Xspress3 network configuration
+  ansible.builtin.assert:
+    that:
+      - ioc.network.target_subnet is defined
+      - ioc.network.address is defined
+    fail_msg: >-
+      Define network.target_subnet and network.address
+      in the IOC configuration.
+
+- name: Gather network facts
+  ansible.builtin.setup:
+    gather_subset:
+      - "!all"
+      - "!min"
+      - network
+
+- name: Initialize matching interface list
+  ansible.builtin.set_fact:
+    xspress3_matching_interfaces: []
+
+- name: Find interfaces matching the target network
+  ansible.builtin.set_fact:
+    xspress3_matching_interfaces: >-
+      {{ xspress3_matching_interfaces + [item] }}
+  loop: "{{ ansible_facts.interfaces }}"
+  vars:
+    iface_facts: "{{ ansible_facts[item | replace('-', '_')] }}"
+  when:
+    - iface_facts.ipv4 is defined
+    - >-
+      iface_facts.ipv4.network ==
+      ioc.network.target_subnet.split('/')[0]
+
+- name: Require exactly one matching interface
+  ansible.builtin.assert:
+    that:
+      - xspress3_matching_interfaces | length == 1
+    fail_msg: >-
+      Expected exactly one interface matching
+      {{ ioc.network.target_subnet }};
+      found {{ xspress3_matching_interfaces }}.
+
+- name: Select matching interface
+  ansible.builtin.set_fact:
+    xspress3_iface: "{{ xspress3_matching_interfaces[0] }}"
+
+- name: Get active NetworkManager connection UUID
+  become: true
+  ansible.builtin.command:
+    argv:
+      - nmcli
+      - --get-values
+      - GENERAL.CON-UUID
+      - device
+      - show
+      - "{{ xspress3_iface }}"
+  register: xspress3_connection
+  changed_when: false
+
+- name: Require an active NetworkManager connection
+  ansible.builtin.assert:
+    that:
+      - (xspress3_connection.stdout | trim) not in ['', '--']
+    fail_msg: >-
+      No active NetworkManager connection found on
+      {{ xspress3_iface }}.
+
 - name: Read saved IPv4 addresses
   become: true
   ansible.builtin.command:
@@ -8,7 +75,8 @@
       - ipv4.addresses
       - connection
       - show
-      - "{{ ioc.network.connection }}"
+      - uuid
+      - "{{ xspress3_connection.stdout | trim }}"
   register: xspress3_saved_addresses
   changed_when: false
 
@@ -19,7 +87,8 @@
       - nmcli
       - connection
       - modify
-      - "{{ ioc.network.connection }}"
+      - uuid
+      - "{{ xspress3_connection.stdout | trim }}"
       - +ipv4.addresses
       - "{{ ioc.network.address }}"
   when: >-
@@ -27,12 +96,45 @@
     (xspress3_saved_addresses.stdout.split(',') | map('trim') | list)
   changed_when: true
 
-- name: Apply saved network settings
+- name: Configure optional MTU
+  when: ioc.network.mtu is defined
+  block:
+    - name: Read saved MTU
+      become: true
+      ansible.builtin.command:
+        argv:
+          - nmcli
+          - --get-values
+          - 802-3-ethernet.mtu
+          - connection
+          - show
+          - uuid
+          - "{{ xspress3_connection.stdout | trim }}"
+      register: xspress3_saved_mtu
+      changed_when: false
+
+    - name: Save requested MTU if different
+      become: true
+      ansible.builtin.command:
+        argv:
+          - nmcli
+          - connection
+          - modify
+          - uuid
+          - "{{ xspress3_connection.stdout | trim }}"
+          - 802-3-ethernet.mtu
+          - "{{ ioc.network.mtu | string }}"
+      when: >-
+        (xspress3_saved_mtu.stdout | int) !=
+        (ioc.network.mtu | int)
+      changed_when: true
+
+- name: Apply network settings before IOC startup
   become: true
   ansible.builtin.command:
     argv:
       - nmcli
       - device
       - reapply
-      - "{{ ioc.network.interface }}"
+      - "{{ xspress3_iface }}"
   changed_when: false
