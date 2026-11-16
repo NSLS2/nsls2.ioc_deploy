@@ -1,5 +1,8 @@
 ---
 # Tasks for xspress3 role
+- name: Configure optional IOC VM address
+  ansible.builtin.include_tasks: network_address.yml
+  when: ioc.network is defined
 
 - name: Install common startup files
   ansible.builtin.copy:

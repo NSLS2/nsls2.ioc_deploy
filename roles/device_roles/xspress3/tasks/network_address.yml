@@ -1,0 +1,38 @@
+---
+- name: Read saved IPv4 addresses
+  become: true
+  ansible.builtin.command:
+    argv:
+      - nmcli
+      - --get-values
+      - ipv4.addresses
+      - connection
+      - show
+      - "{{ ioc.network.connection }}"
+  register: xspress3_saved_addresses
+  changed_when: false
+
+- name: Save additional IOC VM address if missing
+  become: true
+  ansible.builtin.command:
+    argv:
+      - nmcli
+      - connection
+      - modify
+      - "{{ ioc.network.connection }}"
+      - +ipv4.addresses
+      - "{{ ioc.network.address }}"
+  when: >-
+    ioc.network.address not in
+    (xspress3_saved_addresses.stdout.split(',') | map('trim') | list)
+  changed_when: true
+
+- name: Apply saved network settings
+  become: true
+  ansible.builtin.command:
+    argv:
+      - nmcli
+      - device
+      - reapply
+      - "{{ ioc.network.interface }}"
+  changed_when: false
