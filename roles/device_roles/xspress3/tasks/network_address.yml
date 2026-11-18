@@ -18,7 +18,8 @@
   vars:
     iface: "{{ ansible_facts[item | replace('-', '_')] | default({}) }}"
     network_info: >-
-      {{ nsls2network[ioc.network.beamline][ioc.network.name] }}
+      {{ nsls2network[inventory_hostname.split('.')[0].split('-')[0]][ioc.network.name] }}
+
   when:
     - iface.ipv4 is defined
     - iface.ipv4.network == (network_info['subnet'] | string).split('/')[0]
