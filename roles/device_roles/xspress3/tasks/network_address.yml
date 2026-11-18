@@ -17,7 +17,8 @@
   loop: "{{ ansible_facts.interfaces }}"
   vars:
     iface: "{{ ansible_facts[item | replace('-', '_')] | default({}) }}"
-    network_info: "{{ nsls2network[beamline_acronym][ioc.network.name] }}"
+    network_info: >-
+      {{ nsls2network[ioc.network.beamline][ioc.network.name] }}
   when:
     - iface.ipv4 is defined
     - iface.ipv4.network == (network_info['subnet'] | string).split('/')[0]
