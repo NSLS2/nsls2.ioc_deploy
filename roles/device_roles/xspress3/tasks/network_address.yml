@@ -6,87 +6,101 @@
       - "!min"
       - network
 
-- name: Initialize matching interface list
-  ansible.builtin.set_fact:
-    xspress3_matching_interfaces: []
-
-- name: Find interface on the requested beamline network
-  ansible.builtin.set_fact:
-    xspress3_matching_interfaces: >-
-      {{ xspress3_matching_interfaces + [item] }}
-  loop: "{{ ansible_facts.interfaces }}"
+- name: Attach Xspress3 host IP only when absent
+  when: ioc.environment.XSPRESS3_IP not in ansible_facts.all_ipv4_addresses
   vars:
-    iface: "{{ ansible_facts[item | replace('-', '_')] | default({}) }}"
-    network_info: >-
-      {{ nsls2network[inventory_hostname.split('.')[0].split('-')[0]][ioc.network.name] }}
+    xspress3_host_address: "{{ ioc.environment.XSPRESS3_IP }}/24"
+    xspress3_beamline: >-
+      {{ inventory_hostname.split('.')[0].split('-')[0] }}
+    xspress3_network_info: >-
+      {{ nsls2network[xspress3_beamline]['det'] }}
+  block:
+    - name: Initialize matching interface list
+      ansible.builtin.set_fact:
+        xspress3_matching_interfaces: []
 
-  when:
-    - iface.ipv4 is defined
-    - iface.ipv4.network == (network_info['subnet'] | string).split('/')[0]
-    - iface.ipv4.netmask == (network_info['netmask'] | string)
+    - name: Find interface on the beamline DET network
+      ansible.builtin.set_fact:
+        xspress3_matching_interfaces: >-
+          {{ xspress3_matching_interfaces + [item] }}
+      loop: "{{ ansible_facts.interfaces }}"
+      vars:
+        iface: >-
+          {{ ansible_facts[item | replace('-', '_')] | default({}) }}
+      when:
+        - iface.ipv4 is defined
+        - >-
+          iface.ipv4.network ==
+          (xspress3_network_info['subnet'] | string).split('/')[0]
+        - >-
+          iface.ipv4.netmask ==
+          (xspress3_network_info['netmask'] | string)
 
-- name: Require exactly one matching interface
-  ansible.builtin.assert:
-    that:
-      - xspress3_matching_interfaces | length == 1
-    fail_msg: >-
-      Expected one matching interface;
-      found {{ xspress3_matching_interfaces }}.
+    - name: Require exactly one DET interface
+      ansible.builtin.assert:
+        that:
+          - xspress3_matching_interfaces | length == 1
+        fail_msg: >-
+          Expected one DET interface for {{ xspress3_beamline }};
+          found {{ xspress3_matching_interfaces }}.
 
-- name: Get active NetworkManager connection UUID
-  become: true
-  ansible.builtin.command:
-    argv:
-      - nmcli
-      - -g
-      - GENERAL.CON-UUID
-      - device
-      - show
-      - "{{ xspress3_matching_interfaces[0] }}"
-  register: xspress3_connection
-  changed_when: false
+    - name: Get active NetworkManager connection UUID
+      become: true
+      ansible.builtin.command:
+        argv:
+          - nmcli
+          - --get-values
+          - GENERAL.CON-UUID
+          - device
+          - show
+          - "{{ xspress3_matching_interfaces[0] }}"
+      register: xspress3_connection
+      changed_when: false
 
-- name: Require an active NetworkManager connection
-  ansible.builtin.assert:
-    that:
-      - (xspress3_connection.stdout | trim) not in ['', '--']
+    - name: Require an active NetworkManager connection
+      ansible.builtin.assert:
+        that:
+          - (xspress3_connection.stdout | trim) not in ['', '--']
+        fail_msg: >-
+          No active NetworkManager connection on
+          {{ xspress3_matching_interfaces[0] }}.
 
-- name: Read saved IPv4 addresses
-  become: true
-  ansible.builtin.command:
-    argv:
-      - nmcli
-      - -g
-      - ipv4.addresses
-      - connection
-      - show
-      - uuid
-      - "{{ xspress3_connection.stdout | trim }}"
-  register: xspress3_saved_addresses
-  changed_when: false
+    - name: Read saved IPv4 addresses
+      become: true
+      ansible.builtin.command:
+        argv:
+          - nmcli
+          - --get-values
+          - ipv4.addresses
+          - connection
+          - show
+          - uuid
+          - "{{ xspress3_connection.stdout | trim }}"
+      register: xspress3_saved_addresses
+      changed_when: false
 
-- name: Save additional VM address if missing
-  become: true
-  ansible.builtin.command:
-    argv:
-      - nmcli
-      - connection
-      - modify
-      - uuid
-      - "{{ xspress3_connection.stdout | trim }}"
-      - +ipv4.addresses
-      - "{{ ioc.network.address }}"
-  when: >-
-    ioc.network.address not in
-    (xspress3_saved_addresses.stdout.split(',') | map('trim') | list)
-  changed_when: true
+    - name: Save Xspress3 host address if missing
+      become: true
+      ansible.builtin.command:
+        argv:
+          - nmcli
+          - connection
+          - modify
+          - uuid
+          - "{{ xspress3_connection.stdout | trim }}"
+          - +ipv4.addresses
+          - "{{ xspress3_host_address }}"
+      when: >-
+        xspress3_host_address not in
+        (xspress3_saved_addresses.stdout.split(',') | map('trim') | list)
+      changed_when: true
 
-- name: Apply saved network settings
-  become: true
-  ansible.builtin.command:
-    argv:
-      - nmcli
-      - device
-      - reapply
-      - "{{ xspress3_matching_interfaces[0] }}"
-  changed_when: false
+    - name: Apply saved network settings
+      become: true
+      ansible.builtin.command:
+        argv:
+          - nmcli
+          - device
+          - reapply
+          - "{{ xspress3_matching_interfaces[0] }}"
+      changed_when: true
