@@ -10,10 +10,8 @@
   when: ioc.environment.XSPRESS3_IP not in ansible_facts.all_ipv4_addresses
   vars:
     xspress3_host_address: "{{ ioc.environment.XSPRESS3_IP }}/24"
-    xspress3_beamline: >-
-      {{ inventory_hostname.split('.')[0].split('-')[0] }}
     xspress3_network_info: >-
-      {{ nsls2network[xspress3_beamline]['det'] }}
+      {{ nsls2network[xspress3_beamline_system]['det'] }}
   block:
     - name: Initialize matching interface list
       ansible.builtin.set_fact:
@@ -41,7 +39,7 @@
         that:
           - xspress3_matching_interfaces | length == 1
         fail_msg: >-
-          Expected one DET interface for {{ xspress3_beamline }};
+          Expected one DET interface for {{ xspress3_beamline_system }};
           found {{ xspress3_matching_interfaces }}.
 
     - name: Get active NetworkManager connection UUID
