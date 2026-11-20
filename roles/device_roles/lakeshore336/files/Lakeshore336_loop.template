@@ -240,7 +240,7 @@ record(mbbi, "$(P)$(R)Err:Htr-Sts"){
   field(ZRST, "OK")
   field(ONST, "OPEN LOAD")
   field(TWST, "SHORTED")
-  field(THST, "COMPLIENCE")
+  field(THST, "COMPLIANCE")
   field(ZRSV, "NO_ALARM")
   field(ONSV, "MAJOR")
   field(TWSV, "MAJOR")

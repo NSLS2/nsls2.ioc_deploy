@@ -1,47 +1,155 @@
 ---
+# Canonical lint configuration, matching NSLS2/ansible. The same hook set
+# runs locally on commit and in CI via the Lint workflow
+# (.github/workflows/lint.yml). Tool versions are pinned in pixi.toml
+# [feature.dev.dependencies] for the pixi-dispatched hooks and via `rev:`
+# for the upstream pre-commit-managed hooks.
+#
+# Linter configs live at the repository root and are auto-discovered by
+# each tool by its conventional dotfile name. The only exception is
+# zizmor, which takes an explicit --config argument.
 
 exclude: ^collections/ansible_collections/
 
+# Pin the Node.js used by pre-commit-managed node hooks (markdownlint,
+# biome). Without it nodeenv resolves "latest", which can be a pre-release
+# that nodeenv cannot parse.
+default_language_version:
+  node: 26.13.0
+
 repos:
+  # ────────────────────────────────────────────────────────────
+  # Generic hygiene + syntax checks
+  # ────────────────────────────────────────────────────────────
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
+      - id: check-yaml
+        args: ["--unsafe"]
+      - id: check-json
+      - id: check-toml
       - id: check-added-large-files
+      - id: check-merge-conflict
 
+  # ────────────────────────────────────────────────────────────
+  # Python
+  # ────────────────────────────────────────────────────────────
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: ruff check (pixi dev)
+        language: system
+        entry: pixi run --frozen -e dev ruff check --force-exclude
+        types_or: [python, pyi]
+      - id: ruff-format
+        name: ruff format (pixi dev)
+        language: system
+        entry: pixi run --frozen -e dev ruff format --force-exclude
+        types_or: [python, pyi]
+      - id: pyright
+        name: pyright (pixi dev)
+        language: system
+        entry: pixi run --frozen -e dev pyright
+        types: [python]
+
+  # ────────────────────────────────────────────────────────────
+  # Spelling
+  # ────────────────────────────────────────────────────────────
+  - repo: local
+    hooks:
+      - id: codespell
+        name: codespell (pixi dev)
+        language: system
+        entry: pixi run --frozen -e dev codespell
+        types: [text]
+
+  # ────────────────────────────────────────────────────────────
+  # Markdown
+  # ────────────────────────────────────────────────────────────
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.49.1
+    hooks:
+      - id: markdownlint
+        name: Markdownlint
+        entry: markdownlint --fix
+        description: Run markdownlint linter with repair
+
+  # ────────────────────────────────────────────────────────────
+  # YAML + GitHub Actions workflow security
+  # ────────────────────────────────────────────────────────────
+  - repo: local
+    hooks:
+      - id: yamllint
+        name: yamllint (pixi dev)
+        language: system
+        entry: pixi run --frozen -e dev yamllint --strict
+        types: [yaml]
+      - id: zizmor
+        name: zizmor (pixi dev)
+        language: system
+        entry: pixi run --frozen -e dev zizmor --config zizmor.yaml
+        files: '^\.github/workflows/.*\.ya?ml$'
+
+  # ────────────────────────────────────────────────────────────
+  # GitHub Actions workflow correctness
+  # ────────────────────────────────────────────────────────────
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.12
+    hooks:
+      - id: actionlint
+
+  # ────────────────────────────────────────────────────────────
+  # Ansible
+  # ────────────────────────────────────────────────────────────
+  # Runs offline against locally installed galaxy collections. CI skips
+  # this hook and runs ansible-lint in a dedicated job (see
+  # .github/workflows/lint.yml) after installing galaxy collections.
+  # ansible-lint ignores exclude_paths from .ansible-lint for files passed
+  # explicitly by pre-commit, so they are repeated here as --exclude args.
   - repo: local
     hooks:
       - id: ansible-lint
-        name: ansible lint
+        name: ansible-lint (pixi dev)
         language: system
-        # For some reason, pre commit doesn't accept the exclude_paths from the
-        # .ansible-lint file, so we pass them explicitly as an argument here
-        entry: >
-          ansible-lint --offline
-          --exclude roles/install_module/vars/*
+        entry: >-
+          env ANSIBLE_COLLECTIONS_PATH=collections
+          pixi run --frozen -e dev ansible-lint -c .ansible-lint --offline
+          --exclude roles/install_module/vars/
           --exclude scripts/deploy_ioc.yml
           --exclude mkdocs.yml
+        files: \.(yaml|yml)$
+        exclude: '^\.github/'
+        types: [yaml]
         description: Perform ansible linting
-        types: [yaml]
 
-      - id: yamllint
-        name: yaml lint
-        language: system
-        entry: yamllint --strict -c .yamllint.yml
-        description: YamlLint with same config as super-linter
-        types: [yaml]
+  # ────────────────────────────────────────────────────────────
+  # JS / TS / JSON / CSS (Biome)
+  # ────────────────────────────────────────────────────────────
+  - repo: https://github.com/biomejs/pre-commit
+    rev: v2.5.11
+    hooks:
+      - id: biome-check
+        entry: biome check --write --files-ignore-unknown=true --no-errors-on-unmatched
+        types: [text]
+        files: "\\.(jsx?|tsx?|c(js|ts)|m(js|ts)|d\\.(ts|cts|mts)|jsonc?|css|svelte|vue|astro|graphql|gql)$"
+        description: Lint and fix JS/TS/CSS with biome
 
-      - id: ruff
-        name: lint with ruff
-        language: system
-        entry: ruff check --force-exclude
-        types: [python]
-        require_serial: true
+  # ────────────────────────────────────────────────────────────
+  # Shell
+  # ────────────────────────────────────────────────────────────
+  - repo: https://github.com/koalaman/shellcheck-precommit
+    rev: v0.11.0
+    hooks:
+      - id: shellcheck
+        types: [shell]
+        description: Run shellcheck linter
 
-      - id: ruff-format
-        name: format with ruff
-        language: system
-        entry: ruff format --force-exclude
-        types: [python]
-        require_serial: true
+  # ────────────────────────────────────────────────────────────
+  # Secrets
+  # ────────────────────────────────────────────────────────────
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks

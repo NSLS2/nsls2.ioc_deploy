@@ -1,6 +1,9 @@
 # thermo_con_hecr
 
-Deploys a Modbus-based IOC for the Thermo-Con HECR chiller, communicating via Modbus ASCII over a TCP connection (e.g. a terminal server). The IOC is built from [thermo_con_hecr](https://github.com/NSLS2/thermo-con-hecr-ioc) (version `b7300bb`).
+Deploys a Modbus-based IOC for the Thermo-Con HECR chiller, communicating via
+Modbus ASCII over a TCP connection (e.g. a terminal server). The IOC is built
+from [thermo_con_hecr](https://github.com/NSLS2/thermo-con-hecr-ioc) (version
+`b7300bb`).
 
 ## Example Configuration
 
@@ -138,24 +141,28 @@ thermo_con_hecr-01:
 
 ## Settings
 
-| Setting | Required | Default | Description |
-|---|---|---|---|
-| `type` | Yes | - | Must be `thermo_con_hecr`. |
-| `environment.SYS` | Yes | - | System part of the PV prefix (`Sys` macro of `thermo-con-HECR.db`). |
-| `environment.DEV` | Yes | - | Device part of the PV prefix (`Dev` macro of `thermo-con-HECR.db`). |
-| `environment.HOST` | Yes | - | `<ip>:<port>` of the chiller's TCP endpoint, passed to `drvAsynIPPortConfigure`. |
-| `environment.HECR_ASYNPORT` | Yes | - | Name of the low-level asyn IP port; also the prefix for each Modbus port name and the `ASYNPORT` macro of the database. |
-| `environment.PREFIX` | Yes | - | IOC prefix used for iocAdmin/autosave status records. |
-| `environment.ENGINEER` | Yes | - | Name of the responsible engineer. |
-| `environment.EPICS_DB_INCLUDE_PATH` | No | `$(THERMO_CON_HECR)/db` | Database include path. |
-| `operations` | Yes | - | List (at least one) of Modbus register blocks; each creates a `drvModbusAsynConfigure` port. |
-| `operations[].PORT_NAME` | Yes | - | Suffix of the Modbus asyn port; the full port name is `$(HECR_ASYNPORT)_<PORT_NAME>`. |
-| `operations[].MODBUS_FUNC` | Yes | - | Modbus function code (e.g. `3` read holding registers, `6` write single register). |
-| `operations[].START_ADDR` | Yes | - | Starting Modbus register address. |
-| `operations[].MODBUS_LEN` | Yes | - | Number of registers to access. |
-| `operations[].DATA_TYPE` | Yes | - | Modbus data type: one of `UINT16`, `INT16`, `UINT32`, `INT32`, `FLOAT32`, `FLOAT64`, `STRING_HIGH_LOW`. |
+| Setting                             | Required | Default                 | Description                                                                                                             |
+| ----------------------------------- | -------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `type`                              | Yes      | -                       | Must be `thermo_con_hecr`.                                                                                              |
+| `environment.SYS`                   | Yes      | -                       | System part of the PV prefix (`Sys` macro of `thermo-con-HECR.db`).                                                     |
+| `environment.DEV`                   | Yes      | -                       | Device part of the PV prefix (`Dev` macro of `thermo-con-HECR.db`).                                                     |
+| `environment.HOST`                  | Yes      | -                       | `<ip>:<port>` of the chiller's TCP endpoint, passed to `drvAsynIPPortConfigure`.                                        |
+| `environment.HECR_ASYNPORT`         | Yes      | -                       | Name of the low-level asyn IP port; also the prefix for each Modbus port name and the `ASYNPORT` macro of the database. |
+| `environment.PREFIX`                | Yes      | -                       | IOC prefix used for iocAdmin/autosave status records.                                                                   |
+| `environment.ENGINEER`              | Yes      | -                       | Name of the responsible engineer.                                                                                       |
+| `environment.EPICS_DB_INCLUDE_PATH` | No       | `$(THERMO_CON_HECR)/db` | Database include path.                                                                                                  |
+| `operations`                        | Yes      | -                       | List (at least one) of Modbus register blocks; each creates a `drvModbusAsynConfigure` port.                            |
+| `operations[].PORT_NAME`            | Yes      | -                       | Suffix of the Modbus asyn port; the full port name is `$(HECR_ASYNPORT)_<PORT_NAME>`.                                   |
+| `operations[].MODBUS_FUNC`          | Yes      | -                       | Modbus function code (e.g. `3` read holding registers, `6` write single register).                                      |
+| `operations[].START_ADDR`           | Yes      | -                       | Starting Modbus register address.                                                                                       |
+| `operations[].MODBUS_LEN`           | Yes      | -                       | Number of registers to access.                                                                                          |
+| `operations[].DATA_TYPE`            | Yes      | -                       | Modbus data type: one of `UINT16`, `INT16`, `UINT32`, `INT32`, `FLOAT32`, `FLOAT64`, `STRING_HIGH_LOW`.                 |
 
 ## Notes
 
-- `base.cmd` adds a Modbus ASCII interposer (`modbusInterposeConfig(..., 2, 2000, 0)`) with `\r\n` terminators, configures one Modbus port per `operations` entry (slave address 1, 1000 ms poll), and loads `$(THERMO_CON_HECR)/db/thermo-con-HECR.db`. The `PORT_NAME` values must match those expected by that database.
+- `base.cmd` adds a Modbus ASCII interposer
+  (`modbusInterposeConfig(..., 2, 2000, 0)`) with `\r\n` terminators, configures
+  one Modbus port per `operations` entry (slave address 1, 1000 ms poll), and
+  loads `$(THERMO_CON_HECR)/db/thermo-con-HECR.db`. The `PORT_NAME` values must
+  match those expected by that database.
 - Autosave files are generated automatically (`makeAutosaveFiles`).

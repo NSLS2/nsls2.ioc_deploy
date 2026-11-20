@@ -1,6 +1,8 @@
 # tektronix_afg3k
 
-Deploys a StreamDevice-based IOC for Tektronix AFG3000-series arbitrary function generators, communicating over VXI-11. The IOC is built from [BaseStreamIOC](https://github.com/NSLS2/BaseStreamDevice) (version `093e6cf`).
+Deploys a StreamDevice-based IOC for Tektronix AFG3000-series arbitrary function
+generators, communicating over VXI-11. The IOC is built from
+[BaseStreamIOC](https://github.com/NSLS2/BaseStreamDevice) (version `093e6cf`).
 
 ## Example Configuration
 
@@ -38,17 +40,20 @@ afg3k:
 
 ## Settings
 
-| Setting | Required | Default | Description |
-|---|---|---|---|
-| `type` | Yes | - | Must be `tektronix_afg3k`. |
-| `environment.P` | Yes | - | PV prefix (system part); combined with `R` to form `PREFIX`. |
-| `environment.R` | Yes | - | PV prefix (device part); combined with `P` to form `PREFIX`. |
-| `environment.DEVICE_IP` | Yes | - | IP address or hostname of the function generator, passed to `vxi11Configure`. |
-| `environment.PORT` | No | `AFG3K` | asyn port name created by `vxi11Configure` in `base.cmd`. |
-| `environment.PREFIX` | No | `$(P)$(R)` | IOC PV prefix, used for iocAdmin/autosave status records. |
-| `substitutions` | No | - | Map of substitution file name to a list of `filepath`/`pattern`/`instances` entries; each generates `db/<name>.substitutions`, loaded with `dbLoadTemplate`. Available role templates: `TektronixAFG3K.template` (`P`, `R`, `PORT`), `TektronixAFG3K_Output.template` (+ `OUTPUT_NUM`), `TektronixAFG3K_Source.template` (+ `SOURCE_NUM`), `TektronixAFG3K_AM.template` / `TektronixAFG3K_Modulation.template` (+ `SOURCE_NUM`, `MOD_TYPE`), `TektronixAFG3K_PM_FM.template` (+ `SOURCE_NUM`, `MOD_TYPE`, `MOD_NUM`). |
+| Setting                 | Required | Default    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ----------------------- | -------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `type`                  | Yes      | -          | Must be `tektronix_afg3k`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `environment.P`         | Yes      | -          | PV prefix (system part); combined with `R` to form `PREFIX`.                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `environment.R`         | Yes      | -          | PV prefix (device part); combined with `P` to form `PREFIX`.                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `environment.DEVICE_IP` | Yes      | -          | IP address or hostname of the function generator, passed to `vxi11Configure`.                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `environment.PORT`      | No       | `AFG3K`    | asyn port name created by `vxi11Configure` in `base.cmd`.                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `environment.PREFIX`    | No       | `$(P)$(R)` | IOC PV prefix, used for iocAdmin/autosave status records.                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `substitutions`         | No       | -          | Map of substitution file name to a list of `filepath`/`pattern`/`instances` entries; each generates `db/<name>.substitutions`, loaded with `dbLoadTemplate`. Available role templates: `TektronixAFG3K.template` (`P`, `R`, `PORT`), `TektronixAFG3K_Output.template` (+ `OUTPUT_NUM`), `TektronixAFG3K_Source.template` (+ `SOURCE_NUM`), `TektronixAFG3K_AM.template` / `TektronixAFG3K_Modulation.template` (+ `SOURCE_NUM`, `MOD_TYPE`), `TektronixAFG3K_PM_FM.template` (+ `SOURCE_NUM`, `MOD_TYPE`, `MOD_NUM`). |
 
 ## Notes
 
-- Copies all `TektronixAFG3K*.template` files into `db/` and `afg3k.proto` into `protocol/`.
-- `base.cmd` calls `vxi11Configure("$(PORT)", "$(DEVICE_IP)", 0, "0.0", "inst0", 0, 0)` with a `\n` input terminator.
+- Copies all `TektronixAFG3K*.template` files into `db/` and `afg3k.proto` into
+  `protocol/`.
+- `base.cmd` calls
+  `vxi11Configure("$(PORT)", "$(DEVICE_IP)", 0, "0.0", "inst0", 0, 0)` with a
+  `\n` input terminator.

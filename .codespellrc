@@ -1,0 +1,5 @@
+[codespell]
+check-hidden =
+# Vendor-supplied SNMP MIB files are copied verbatim and not ours to fix.
+skip = */package-lock.json,*/go.mod,*/go.sum,*.log,.git,**/pixi.lock,*.mib,*.MIB,*-MIB.txt
+ignore-words = .codespell.ignore

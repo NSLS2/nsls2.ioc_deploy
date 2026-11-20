@@ -1,6 +1,9 @@
 # mdrive
 
-Deploys a motor IOC for Schneider Electric / IMS MDrive Plus integrated stepper motors, each connected over TCP/IP (e.g. via a terminal server port). The IOC is built from [mdrive-ioc](https://github.com/NSLS2/mdrive-ioc) (version `8bc9a09`).
+Deploys a motor IOC for Schneider Electric / IMS MDrive Plus integrated stepper
+motors, each connected over TCP/IP (e.g. via a terminal server port). The IOC is
+built from [mdrive-ioc](https://github.com/NSLS2/mdrive-ioc) (version
+`8bc9a09`).
 
 ## Example Configuration
 
@@ -62,39 +65,43 @@ mdrive-g1:
 
 ## Settings
 
-| Setting | Required | Default | Description |
-|---|---|---|---|
-| `type` | Yes | - | Must be `mdrive`. |
-| `environment.ENGINEER` | Yes | - | Name/contact of the responsible engineer. |
-| `environment.PREFIX` | Yes | - | IOC prefix for iocAdmin, autosave status and reccaster records. |
-| `environment.SYS_IOC` | Yes | - | Default system prefix for the per-device asyn records (`<SYS_IOC>{<CntlDev or Dev>}Asyn`). |
-| `environment.IP_PORT` | Yes | - | TCP port used for every device connection (`<host>:<IP_PORT>`). |
-| `environment.SYS` | Yes | - | Default system prefix for motor PVs (`<SYS>{<Dev>}Mtr`). |
-| `environment.MRES` | Yes | - | Default motor resolution (`MRES`). |
-| `environment.VBAS` | No | - | Default base velocity (`VBAS`). |
-| `environment.VELO` | No | - | Default velocity (`VELO`). |
-| `environment.VMAX` | No | - | Default maximum velocity (`VMAX`). |
-| `environment.ACCL` | No | - | Default acceleration time (`ACCL`). |
-| `environment.EGU` | Yes | - | Default engineering units (`EGU`). |
-| `devices` | Yes | - | List (at least one) of MDrive motors; each gets its own asyn IP port and `ImsMDrivePlusCreateController`. |
-| `devices[].host` | Yes | - | IP address or hostname to connect to. |
-| `devices[].io_port` | Yes | - | asyn IP port name, matching `^P\d+$` (e.g. `P1`); the motor controller port is `<io_port>_Mtr`. |
-| `devices[].Sys` | No | `environment.SYS` | System prefix for this motor's PVs. |
-| `devices[].Sys_IOC` | No | `environment.SYS_IOC` | System prefix for this device's asyn record. |
-| `devices[].Dev` | Yes | - | Device name; motor PV is `<Sys>{<Dev>}Mtr`, extra IMS records use `<Sys>{<Dev>}`. |
-| `devices[].CntlDev` | No | `Dev` | Device name used for the asyn record (`<Sys_IOC>{<CntlDev>}Asyn`). |
-| `devices[].MRES` | No | `environment.MRES` | Per-motor resolution override. |
-| `devices[].VBAS` | No | `environment.VBAS` | Per-motor base velocity override. |
-| `devices[].VELO` | No | `environment.VELO` | Per-motor velocity override. |
-| `devices[].VMAX` | No | `environment.VMAX` | Per-motor maximum velocity override. |
-| `devices[].ACCL` | No | `environment.ACCL` | Per-motor acceleration override. |
-| `devices[].EGU` | No | `environment.EGU` | Per-motor engineering units override. |
-| `devices[].DESC` | Yes | - | Motor record description. |
-| `devices[].ALIAS` | No | `<Dev>Mtr` | Alias for the motor record. |
+| Setting                | Required | Default               | Description                                                                                               |
+| ---------------------- | -------- | --------------------- | --------------------------------------------------------------------------------------------------------- |
+| `type`                 | Yes      | -                     | Must be `mdrive`.                                                                                         |
+| `environment.ENGINEER` | Yes      | -                     | Name/contact of the responsible engineer.                                                                 |
+| `environment.PREFIX`   | Yes      | -                     | IOC prefix for iocAdmin, autosave status and reccaster records.                                           |
+| `environment.SYS_IOC`  | Yes      | -                     | Default system prefix for the per-device asyn records (`<SYS_IOC>{<CntlDev or Dev>}Asyn`).                |
+| `environment.IP_PORT`  | Yes      | -                     | TCP port used for every device connection (`<host>:<IP_PORT>`).                                           |
+| `environment.SYS`      | Yes      | -                     | Default system prefix for motor PVs (`<SYS>{<Dev>}Mtr`).                                                  |
+| `environment.MRES`     | Yes      | -                     | Default motor resolution (`MRES`).                                                                        |
+| `environment.VBAS`     | No       | -                     | Default base velocity (`VBAS`).                                                                           |
+| `environment.VELO`     | No       | -                     | Default velocity (`VELO`).                                                                                |
+| `environment.VMAX`     | No       | -                     | Default maximum velocity (`VMAX`).                                                                        |
+| `environment.ACCL`     | No       | -                     | Default acceleration time (`ACCL`).                                                                       |
+| `environment.EGU`      | Yes      | -                     | Default engineering units (`EGU`).                                                                        |
+| `devices`              | Yes      | -                     | List (at least one) of MDrive motors; each gets its own asyn IP port and `ImsMDrivePlusCreateController`. |
+| `devices[].host`       | Yes      | -                     | IP address or hostname to connect to.                                                                     |
+| `devices[].io_port`    | Yes      | -                     | asyn IP port name, matching `^P\d+$` (e.g. `P1`); the motor controller port is `<io_port>_Mtr`.           |
+| `devices[].Sys`        | No       | `environment.SYS`     | System prefix for this motor's PVs.                                                                       |
+| `devices[].Sys_IOC`    | No       | `environment.SYS_IOC` | System prefix for this device's asyn record.                                                              |
+| `devices[].Dev`        | Yes      | -                     | Device name; motor PV is `<Sys>{<Dev>}Mtr`, extra IMS records use `<Sys>{<Dev>}`.                         |
+| `devices[].CntlDev`    | No       | `Dev`                 | Device name used for the asyn record (`<Sys_IOC>{<CntlDev>}Asyn`).                                        |
+| `devices[].MRES`       | No       | `environment.MRES`    | Per-motor resolution override.                                                                            |
+| `devices[].VBAS`       | No       | `environment.VBAS`    | Per-motor base velocity override.                                                                         |
+| `devices[].VELO`       | No       | `environment.VELO`    | Per-motor velocity override.                                                                              |
+| `devices[].VMAX`       | No       | `environment.VMAX`    | Per-motor maximum velocity override.                                                                      |
+| `devices[].ACCL`       | No       | `environment.ACCL`    | Per-motor acceleration override.                                                                          |
+| `devices[].EGU`        | No       | `environment.EGU`     | Per-motor engineering units override.                                                                     |
+| `devices[].DESC`       | Yes      | -                     | Motor record description.                                                                                 |
+| `devices[].ALIAS`      | No       | `<Dev>Mtr`            | Alias for the motor record.                                                                               |
 
 ## Notes
 
-- Generates `iocBoot/base.cmd`, `db/motor.substitutions` (`$(MDRIVE)/db/motor.db` and `$(IMS)/db/IMS_extra.db` per device) and `db/asynRecord.substitutions` (one `asynRecord.db` per device).
+- Generates `iocBoot/base.cmd`, `db/motor.substitutions`
+  (`$(MDRIVE)/db/motor.db` and `$(IMS)/db/IMS_extra.db` per device) and
+  `db/asynRecord.substitutions` (one `asynRecord.db` per device).
 - The module depends on the `ims` motor module.
 - `makeAutosaveFilesFromDbInfo()` is enabled for this IOC type.
-- `VBAS`, `VELO`, `VMAX` and `ACCL` are optional in the schema but have no fallback in `templates/motor.substitutions.j2`; if neither the device nor `environment` sets them, rendering will likely fail.
+- `VBAS`, `VELO`, `VMAX` and `ACCL` are optional in the schema but have no
+  fallback in `templates/motor.substitutions.j2`; if neither the device nor
+  `environment` sets them, rendering will likely fail.

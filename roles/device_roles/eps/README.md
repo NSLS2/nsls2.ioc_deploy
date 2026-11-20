@@ -1,6 +1,10 @@
 # eps
 
-Deploys an IOC for a beamline Equipment Protection System (EPS) Allen-Bradley PLC, communicating over EtherNet/IP via the `ether_ip` driver. PLC tags (gate valves, shutters, interlocks, thermocouples, flow meters, etc.) are mapped to PVs through user-defined substitutions using the EPS database templates. The IOC is built from [eps-ioc](https://github.com/NSLS2/eps-ioc) (version `afbfea3`).
+Deploys an IOC for a beamline Equipment Protection System (EPS) Allen-Bradley
+PLC, communicating over EtherNet/IP via the `ether_ip` driver. PLC tags (gate
+valves, shutters, interlocks, thermocouples, flow meters, etc.) are mapped to
+PVs through user-defined substitutions using the EPS database templates. The IOC
+is built from [eps-ioc](https://github.com/NSLS2/eps-ioc) (version `afbfea3`).
 
 ## Example Configuration
 
@@ -173,25 +177,30 @@ eps-01:
 
 ## Settings
 
-| Setting | Required | Default | Description |
-|---|---|---|---|
-| `type` | Yes | - | Must be `eps`. |
-| `environment.ENGINEER` | Yes | - | Name/contact of the responsible engineer. |
-| `environment.PREFIX` | Yes | - | PV prefix for IOC-specific PVs (iocStats, autosave status, reccaster). |
-| `environment.PLC` | No* | - | Name of the PLC passed to `drvEtherIP_define_PLC`; typically passed to templates via `template_macros: "PLC=$(PLC)"`. |
-| `environment.PLC_IP` | No* | - | IP address or hostname of the PLC. |
-| `environment.ACF` | No* | - | Path to the EPICS access security file, loaded with `asSetFilename` (used e.g. for the `EPSEXPERT` access security group). |
-| `substitutions` | No | - | Map of substitutions file name to its contents. Each entry generates `$(TOP)/db/<name>.substitutions`, loaded with `dbLoadTemplate` in `common.cmd`. |
-| `substitutions.<name>.template_macros` | No | - | Macro string passed as the second argument to `dbLoadTemplate` (e.g. `"PLC=$(PLC)"`). |
-| `substitutions.<name>.templates` | No | - | List of templates in the generated substitutions file. |
-| `substitutions.<name>.templates[].filepath` | Yes | - | Path of the database template, e.g. `$(EPS)/db/plc-bi.template`. Available EPS templates used in the example: `plc-va-gv`, `plc-bi`, `plc-first`, `plc-va-rly`, `plc-pps-sh`, `plc-tc`, `plc-pt`, `plc-fm`. |
-| `substitutions.<name>.templates[].pattern` | Yes | - | List of macro names forming the substitutions `pattern` row. |
-| `substitutions.<name>.templates[].instances` | Yes | - | List of instances; each is a list of values matching `pattern`. |
+| Setting                                      | Required | Default | Description                                                                                                                                                                                                 |
+| -------------------------------------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `type`                                       | Yes      | -       | Must be `eps`.                                                                                                                                                                                              |
+| `environment.ENGINEER`                       | Yes      | -       | Name/contact of the responsible engineer.                                                                                                                                                                   |
+| `environment.PREFIX`                         | Yes      | -       | PV prefix for IOC-specific PVs (iocStats, autosave status, reccaster).                                                                                                                                      |
+| `environment.PLC`                            | No*      | -       | Name of the PLC passed to `drvEtherIP_define_PLC`; typically passed to templates via `template_macros: "PLC=$(PLC)"`.                                                                                       |
+| `environment.PLC_IP`                         | No*      | -       | IP address or hostname of the PLC.                                                                                                                                                                          |
+| `environment.ACF`                            | No*      | -       | Path to the EPICS access security file, loaded with `asSetFilename` (used e.g. for the `EPSEXPERT` access security group).                                                                                  |
+| `substitutions`                              | No       | -       | Map of substitutions file name to its contents. Each entry generates `$(TOP)/db/<name>.substitutions`, loaded with `dbLoadTemplate` in `common.cmd`.                                                        |
+| `substitutions.<name>.template_macros`       | No       | -       | Macro string passed as the second argument to `dbLoadTemplate` (e.g. `"PLC=$(PLC)"`).                                                                                                                       |
+| `substitutions.<name>.templates`             | No       | -       | List of templates in the generated substitutions file.                                                                                                                                                      |
+| `substitutions.<name>.templates[].filepath`  | Yes      | -       | Path of the database template, e.g. `$(EPS)/db/plc-bi.template`. Available EPS templates used in the example: `plc-va-gv`, `plc-bi`, `plc-first`, `plc-va-rly`, `plc-pps-sh`, `plc-tc`, `plc-pt`, `plc-fm`. |
+| `substitutions.<name>.templates[].pattern`   | Yes      | -       | List of macro names forming the substitutions `pattern` row.                                                                                                                                                |
+| `substitutions.<name>.templates[].instances` | Yes      | -       | List of instances; each is a list of values matching `pattern`.                                                                                                                                             |
 
-\* Not in `schema.yml`, but referenced unconditionally by `iocBoot/base.cmd`, so they must be set for the IOC to work.
+\* Not in `schema.yml`, but referenced unconditionally by `iocBoot/base.cmd`, so
+they must be set for the IOC to work.
 
 ## Notes
 
-- Generates `iocBoot/base.cmd`, which sets `EIP_buffer_limit(492)`, initializes the EtherIP driver, defines the PLC with `drvEtherIP_define_PLC("$(PLC)", "$(PLC_IP)", 0)` (slot 0), sets `EIP_verbosity(6)`, and loads the access security file `$(ACF)`.
+- Generates `iocBoot/base.cmd`, which sets `EIP_buffer_limit(492)`, initializes
+  the EtherIP driver, defines the PLC with
+  `drvEtherIP_define_PLC("$(PLC)", "$(PLC_IP)", 0)` (slot 0), sets
+  `EIP_verbosity(6)`, and loads the access security file `$(ACF)`.
 - `makeAutosaveFilesFromDbInfo()` is enabled for this IOC type.
-- `PLC`, `PLC_IP`, and `ACF` are used by the role but are not declared in `schema.yml`.
+- `PLC`, `PLC_IP`, and `ACF` are used by the role but are not declared in
+  `schema.yml`.

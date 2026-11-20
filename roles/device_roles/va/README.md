@@ -1,6 +1,9 @@
 # va
 
-Deploys a vacuum (VA) IOC that talks to vacuum gauge controllers (MKS 937B) and ion pump controllers (Gamma MPCq, Agilent 4UHV, Varian) over TCP (e.g. via terminal servers) using StreamDevice. The IOC is built from [va-ioc](https://github.com/nsls2/va-ioc) (version `84e0991`).
+Deploys a vacuum (VA) IOC that talks to vacuum gauge controllers (MKS 937B) and
+ion pump controllers (Gamma MPCq, Agilent 4UHV, Varian) over TCP (e.g. via
+terminal servers) using StreamDevice. The IOC is built from
+[va-ioc](https://github.com/nsls2/va-ioc) (version `84e0991`).
 
 ## Example Configuration
 
@@ -59,7 +62,7 @@ va-01:
       IP_PORT: 23
       PORT: xf09id1-ipc4
 
-# Schema is in-exact, so caution must be used when copying filepath/patern
+# Schema is in-exact, so caution must be used when copying filepath/pattern
   substitutions:
     vgc: # Vacuum Gauge Controller
     # Vacuum Gauge Controller
@@ -152,25 +155,31 @@ va-01:
 
 ## Settings
 
-| Setting | Required | Default | Description |
-|---|---|---|---|
-| `type` | Yes | - | Must be `va`. |
-| `environment.ENGINEER` | Yes | - | Name/contact of the responsible engineer. |
-| `environment.PREFIX` | Yes | - | PV prefix for IOC-specific PVs (iocStats, autosave status, reccaster). |
-| `devices` | Yes | - | List (at least one) of TCP connections to create. |
-| `devices[].HOST` | Yes | - | IP address or hostname of the device / terminal server. |
-| `devices[].IP_PORT` | Yes | - | TCP port on `HOST`. |
-| `devices[].PORT` | Yes | - | asyn port name created by `drvAsynIPPortConfigure("<PORT>", "<HOST>:<IP_PORT>")`; referenced by the `PORT` macro in substitutions. |
-| `substitutions.vgc` | Yes | - | List of vacuum gauge controller database blocks, written to `db/vgc.substitutions`. `filepath` must be one of `$(VA)/db/mks937b_{controller,ccg,relay_ccg,pirg,relay_pirg}.template`. |
-| `substitutions.ipc` | Yes | - | List of ion pump controller database blocks, written to `db/ipc.substitutions`. `filepath` must be one of the `$(VA)/db/gammampcq_*`, `agilent4uhv*`, `varian*` or `cell-tsp-download` templates listed in `schema.yml`. |
-| `substitutions.asyn` | Yes | - | List of asyn record blocks, written to `db/asyn.substitutions`. `filepath` must be `$(EPICS_BASE)/db/asynRecord.db`. |
-| `substitutions.<name>[].filepath` | Yes | - | Database template to load. |
-| `substitutions.<name>[].pattern` | Yes | - | List of macro names for the template (allowed names restricted per block in `schema.yml`, e.g. `Sys`, `Dev`, `Cntl`, `PORT`, `ADR`, `CHAN`, `SPNUM`; `P`, `R`, `PORT`, `ADDR`, `IMAX`, `OMAX` for `asyn`). |
-| `substitutions.<name>[].instances` | Yes | - | List of rows of macro values, one per instance, in the same order as `pattern` (4-8 values for `vgc`, 1-8 for `ipc`, exactly 6 for `asyn`). |
+| Setting                            | Required | Default | Description                                                                                                                                                                                                              |
+| ---------------------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `type`                             | Yes      | -       | Must be `va`.                                                                                                                                                                                                            |
+| `environment.ENGINEER`             | Yes      | -       | Name/contact of the responsible engineer.                                                                                                                                                                                |
+| `environment.PREFIX`               | Yes      | -       | PV prefix for IOC-specific PVs (iocStats, autosave status, reccaster).                                                                                                                                                   |
+| `devices`                          | Yes      | -       | List (at least one) of TCP connections to create.                                                                                                                                                                        |
+| `devices[].HOST`                   | Yes      | -       | IP address or hostname of the device / terminal server.                                                                                                                                                                  |
+| `devices[].IP_PORT`                | Yes      | -       | TCP port on `HOST`.                                                                                                                                                                                                      |
+| `devices[].PORT`                   | Yes      | -       | asyn port name created by `drvAsynIPPortConfigure("<PORT>", "<HOST>:<IP_PORT>")`; referenced by the `PORT` macro in substitutions.                                                                                       |
+| `substitutions.vgc`                | Yes      | -       | List of vacuum gauge controller database blocks, written to `db/vgc.substitutions`. `filepath` must be one of `$(VA)/db/mks937b_{controller,ccg,relay_ccg,pirg,relay_pirg}.template`.                                    |
+| `substitutions.ipc`                | Yes      | -       | List of ion pump controller database blocks, written to `db/ipc.substitutions`. `filepath` must be one of the `$(VA)/db/gammampcq_*`, `agilent4uhv*`, `varian*` or `cell-tsp-download` templates listed in `schema.yml`. |
+| `substitutions.asyn`               | Yes      | -       | List of asyn record blocks, written to `db/asyn.substitutions`. `filepath` must be `$(EPICS_BASE)/db/asynRecord.db`.                                                                                                     |
+| `substitutions.<name>[].filepath`  | Yes      | -       | Database template to load.                                                                                                                                                                                               |
+| `substitutions.<name>[].pattern`   | Yes      | -       | List of macro names for the template (allowed names restricted per block in `schema.yml`, e.g. `Sys`, `Dev`, `Cntl`, `PORT`, `ADR`, `CHAN`, `SPNUM`; `P`, `R`, `PORT`, `ADDR`, `IMAX`, `OMAX` for `asyn`).               |
+| `substitutions.<name>[].instances` | Yes      | -       | List of rows of macro values, one per instance, in the same order as `pattern` (4-8 values for `vgc`, 1-8 for `ipc`, exactly 6 for `asyn`).                                                                              |
 
 ## Notes
 
-- Generates `iocBoot/base.cmd`, which sets `STREAM_PROTOCOL_PATH=$(VA)/protocol` and creates one `drvAsynIPPortConfigure` port per entry in `devices`. Each `substitutions` key becomes `db/<key>.substitutions`, loaded with `dbLoadTemplate` by the common startup.
+- Generates `iocBoot/base.cmd`, which sets `STREAM_PROTOCOL_PATH=$(VA)/protocol`
+  and creates one `drvAsynIPPortConfigure` port per entry in `devices`. Each
+  `substitutions` key becomes `db/<key>.substitutions`, loaded with
+  `dbLoadTemplate` by the common startup.
 - `makeAutosaveFilesFromDbInfo()` is enabled for this IOC type.
-- The schema is inexact: it only checks that each `filepath`/`pattern` value is from an allowed list, not that the pattern matches the chosen template, so take care when copying blocks.
-- The comment in `example.yml` mentions `SYS`, `DEV`, `IOC_SYS` and `IOC_DEV` environment variables, which are not used by this role or its schema.
+- The schema is inexact: it only checks that each `filepath`/`pattern` value is
+  from an allowed list, not that the pattern matches the chosen template, so
+  take care when copying blocks.
+- The comment in `example.yml` mentions `SYS`, `DEV`, `IOC_SYS` and `IOC_DEV`
+  environment variables, which are not used by this role or its schema.

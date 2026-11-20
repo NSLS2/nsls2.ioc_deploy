@@ -1,0 +1,5 @@
+{
+	"include": ["plugins", "scripts", "tests"],
+	"exclude": ["**/.pixi", "**/__pycache__", "collections/ansible_collections"],
+	"typeCheckingMode": "standard"
+}

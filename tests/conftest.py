@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pytest
 import yamale
+import yamale.validators
 import yaml
 
 INSTALL_MODULE_FILES = [
@@ -14,7 +15,7 @@ INSTALL_MODULE_FILES = [
 
 
 class ModuleNameValidator(yamale.validators.Validator):
-    tag = "module_name"
+    tag = "module_name"  # pyright: ignore  # yamale tag pattern
 
     def _is_valid(self, value: str) -> bool:
         return value in INSTALL_MODULE_FILES

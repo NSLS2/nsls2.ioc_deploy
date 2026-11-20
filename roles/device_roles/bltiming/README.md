@@ -1,6 +1,8 @@
 # bltiming
 
-Deploys a beamline timing IOC for MRF timing hardware, configured as either an event generator (EVG) or event receiver (EVR). The IOC is built from [elauncher](https://github.com/huyong1979/elauncher) (version `21dede8`).
+Deploys a beamline timing IOC for MRF timing hardware, configured as either an
+event generator (EVG) or event receiver (EVR). The IOC is built from
+[elauncher](https://github.com/huyong1979/elauncher) (version `21dede8`).
 
 ## Example Configuration
 
@@ -43,33 +45,36 @@ bltiming-01:
 
 ## Settings
 
-| Setting | Required | Default | Description |
-|---|---|---|---|
-| `type` | Yes | - | Must be `bltiming`. |
-| `ioc_template_root_path` | Yes | - | Root path of the timing IOC template. Used for the `st.cmd` shebang (`<path>/bin/linux-x86_64/top`) and to load `<path>/commonSt.cmd` and `<path>/commonInitWithAutoSave.cmd`. |
-| `mode` | Yes | - | `EVG` or `EVR`. Sets the `EVG-Mode`/`EVR-Mode` comment macros and `TYPE` in `st.cmd`. |
-| `has_rear_transition_board` | Yes | - | Whether a rear transition board is installed. Sets `HAS_REAR_TRANSITION_BOARD` (`0`/`1`), which enables/disables the `UO_*`, `UI_*` and `TB_*` outputs/inputs. |
-| `environment.ENGINEER` | Yes | - | Name/contact of the responsible engineer. |
-| `environment.CELL` | Yes | - | Beamline cell/sector prefix (e.g. `XF31`), used in `P`. |
-| `environment.AC` | Yes | - | Comment-toggle macro for access control (`""` to enable, `#` to comment out). |
-| `environment.AS` | Yes | - | Comment-toggle macro for autosave. |
-| `environment.AS0` | Yes | - | Comment-toggle macro for autosave. |
-| `environment.AS1` | Yes | - | Comment-toggle macro for autosave. |
-| `environment.ASR` | Yes | - | Comment-toggle macro for autosave restore. |
-| `environment.caputLog` | Yes | - | Comment-toggle macro for caPutLog. |
-| `environment.dbl` | Yes | - | Comment-toggle macro for `dbl` (record list dump). |
-| `environment.MAC` | Yes | - | MAC address of the timing device. |
-| `environment.IP` | Yes | - | IP address of the timing device. |
-| `environment.NET` | Yes | - | Network name the device is connected to. |
-| `environment.PORT` | Yes | - | Network switch port the device is connected to. |
-| `environment.LOC` | Yes | - | Physical location of the device. |
-| `environment.RACK` | Yes | - | Rack the device is installed in. |
-| `environment.TYPE` | Yes | - | Device type (`EVG`/`EVR`). Overridden in `st.cmd` based on `mode`. |
-| `environment.P` | Yes | - | PV prefix, system part (e.g. `XF:$(CELL)`). |
-| `environment.R` | Yes | - | PV prefix, device part (e.g. `{EVG}`). |
-| `environment.D` | Yes | - | Device name. |
-| `environment.PREFIX` | Yes | - | Full PV prefix (e.g. `$(P)$(R)`). |
+| Setting                     | Required | Default | Description                                                                                                                                                                    |
+| --------------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `type`                      | Yes      | -       | Must be `bltiming`.                                                                                                                                                            |
+| `ioc_template_root_path`    | Yes      | -       | Root path of the timing IOC template. Used for the `st.cmd` shebang (`<path>/bin/linux-x86_64/top`) and to load `<path>/commonSt.cmd` and `<path>/commonInitWithAutoSave.cmd`. |
+| `mode`                      | Yes      | -       | `EVG` or `EVR`. Sets the `EVG-Mode`/`EVR-Mode` comment macros and `TYPE` in `st.cmd`.                                                                                          |
+| `has_rear_transition_board` | Yes      | -       | Whether a rear transition board is installed. Sets `HAS_REAR_TRANSITION_BOARD` (`0`/`1`), which enables/disables the `UO_*`, `UI_*` and `TB_*` outputs/inputs.                 |
+| `environment.ENGINEER`      | Yes      | -       | Name/contact of the responsible engineer.                                                                                                                                      |
+| `environment.CELL`          | Yes      | -       | Beamline cell/sector prefix (e.g. `XF31`), used in `P`.                                                                                                                        |
+| `environment.AC`            | Yes      | -       | Comment-toggle macro for access control (`""` to enable, `#` to comment out).                                                                                                  |
+| `environment.AS`            | Yes      | -       | Comment-toggle macro for autosave.                                                                                                                                             |
+| `environment.AS0`           | Yes      | -       | Comment-toggle macro for autosave.                                                                                                                                             |
+| `environment.AS1`           | Yes      | -       | Comment-toggle macro for autosave.                                                                                                                                             |
+| `environment.ASR`           | Yes      | -       | Comment-toggle macro for autosave restore.                                                                                                                                     |
+| `environment.caputLog`      | Yes      | -       | Comment-toggle macro for caPutLog.                                                                                                                                             |
+| `environment.dbl`           | Yes      | -       | Comment-toggle macro for `dbl` (record list dump).                                                                                                                             |
+| `environment.MAC`           | Yes      | -       | MAC address of the timing device.                                                                                                                                              |
+| `environment.IP`            | Yes      | -       | IP address of the timing device.                                                                                                                                               |
+| `environment.NET`           | Yes      | -       | Network name the device is connected to.                                                                                                                                       |
+| `environment.PORT`          | Yes      | -       | Network switch port the device is connected to.                                                                                                                                |
+| `environment.LOC`           | Yes      | -       | Physical location of the device.                                                                                                                                               |
+| `environment.RACK`          | Yes      | -       | Rack the device is installed in.                                                                                                                                               |
+| `environment.TYPE`          | Yes      | -       | Device type (`EVG`/`EVR`). Overridden in `st.cmd` based on `mode`.                                                                                                             |
+| `environment.P`             | Yes      | -       | PV prefix, system part (e.g. `XF:$(CELL)`).                                                                                                                                    |
+| `environment.R`             | Yes      | -       | PV prefix, device part (e.g. `{EVG}`).                                                                                                                                         |
+| `environment.D`             | Yes      | -       | Device name.                                                                                                                                                                   |
+| `environment.PREFIX`        | Yes      | -       | Full PV prefix (e.g. `$(P)$(R)`).                                                                                                                                              |
 
 ## Notes
 
-- Does not use the standard `st.cmd`. The role generates `epicsEnv.cmd` (loads `/epics/common/<hostname>-netsetup.cmd`, calls `errlogInit(20000)`, and sets every environment variable via `epicsEnvSet`) and an `st.cmd` that loads it and then the template's `commonSt.cmd` and `commonInitWithAutoSave.cmd`.
+- Does not use the standard `st.cmd`. The role generates `epicsEnv.cmd` (loads
+  `/epics/common/<hostname>-netsetup.cmd`, calls `errlogInit(20000)`, and sets
+  every environment variable via `epicsEnvSet`) and an `st.cmd` that loads it
+  and then the template's `commonSt.cmd` and `commonInitWithAutoSave.cmd`.

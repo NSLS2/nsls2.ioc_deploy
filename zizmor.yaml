@@ -1,0 +1,7 @@
+---
+rules:
+  unpinned-uses:
+    config:
+      policies:
+        # Allow version tags for GitHub-maintained actions (trusted upstream)
+        actions/*: ref-pin

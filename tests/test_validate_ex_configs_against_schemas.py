@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pytest
 import yamale
+import yamale.validators
 import yaml
 
 DEVICE_ROLES = [
@@ -58,7 +59,7 @@ def get_verify_files(device_role: str) -> list[Path]:
 
 
 class HostnameValidator(yamale.validators.Validator):
-    tag = "hostname"
+    tag = "hostname"  # pyright: ignore  # yamale tag pattern
 
     def _is_valid(self, value):
         if value[-1] == ".":
@@ -78,7 +79,7 @@ class HostnameValidator(yamale.validators.Validator):
 
 
 class IOCTypeValidator(yamale.validators.Validator):
-    tag = "ioc_type"
+    tag = "ioc_type"  # pyright: ignore  # yamale tag pattern
 
     def _is_valid(self, value):
         return value in DEVICE_ROLES

@@ -677,6 +677,7 @@ def main():
                 logger.warning(f"Failed to load config '{cfg}': {e}")
 
     running_deployment_summary: dict[int, dict[str, tuple[Path, bool]]] = {}
+    host_deployment_summary: dict[str, tuple[Path, bool]] = {}
 
     overall_success = True
     if args.container:
@@ -705,7 +706,7 @@ def main():
         logger.info(
             f"Executing {len(configs_to_deploy)} deployment(s) onto {args.limit}"
         )
-        overall_success, running_deployment_summary = deploy_configs(
+        overall_success, host_deployment_summary = deploy_configs(
             DeploymentOptions(
                 hostname=args.limit,
                 configs=configs_to_deploy,
@@ -733,7 +734,7 @@ def main():
                 print(f"  {ioc_name} | {path.absolute()}: {status_msg}")
             print()
     else:
-        for ioc_name, (path, success) in running_deployment_summary.items():
+        for ioc_name, (path, success) in host_deployment_summary.items():
             color = EscapeCodes.GREEN.value if success else EscapeCodes.RED.value
             status_text = "Success" if success else "Failed"
             status_msg = f"{color}{status_text}{EscapeCodes.RESET.value}"

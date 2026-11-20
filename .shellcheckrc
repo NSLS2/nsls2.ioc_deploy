@@ -1,0 +1,13 @@
+# SC1091: sourced files are resolved at runtime via SCRIPT_DIR; shellcheck
+# cannot follow them without -x, which pre-commit does not pass.
+disable=SC1091
+
+# Ignore jinja-related "errors" in Jinja2 templated shell scripts
+disable=SC1009:*.sh.j2
+disable=SC1054:*.sh.j2
+disable=SC1056:*.sh.j2
+disable=SC1064:*.sh.j2
+disable=SC1065:*.sh.j2
+disable=SC1072:*.sh.j2
+disable=SC1073:*.sh.j2
+disable=SC1083:*.sh.j2
