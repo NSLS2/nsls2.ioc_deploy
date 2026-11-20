@@ -12,7 +12,6 @@ verification:
     # Role-specific files
     - iocBoot/base.cmd
     - autosave/req/auto_settings.req
-    - /etc/udev/rules.d/80-picam.rules
 
   file_must_contain:
     iocBoot/st.cmd:
@@ -43,6 +42,5 @@ verification:
 
   permissions:
     iocBoot/st.cmd: "0775"
-    /etc/udev/rules.d/80-picam.rules: "0644"
     /opt/PrincetonInstruments: "0755"
     /opt/pleora: "0755"

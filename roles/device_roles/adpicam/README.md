@@ -40,7 +40,7 @@ adpicam-01:
 ## Notes
 
 - Requires the PICam SDK installed under `/opt/PrincetonInstruments` and `/opt/pleora`; the role recursively sets both to mode `0755`. The example's `verify.yml` skips module compilation.
-- Installs `/etc/udev/rules.d/80-picam.rules`, granting `0666` access to USB devices with vendor `0647` / product `f001`.
+- Installs `/etc/udev/rules.d/80-picam.rules` (only if `/etc/udev/rules.d` exists), granting `0666` access to USB devices with vendor `0647` / product `f001`.
 - Generates `iocBoot/base.cmd`, which calls `PICamConfig("$(PORT)", 0, 0, 0, 0)` and loads `PICam.template`, followed by the ADCore `commonPlugins.cmd`.
 - The autosave directory is named `autosave`; an `auto_settings.req` file is generated with `PICam_settings.req`, `NDStdArrays_settings.req` and `commonPlugin_settings.req`.
 - Additional environment defaults: `PORT=PIC1`, `MAX_THREADS=8`; `EPICS_DB_INCLUDE_PATH` is auto-computed from the installed modules.

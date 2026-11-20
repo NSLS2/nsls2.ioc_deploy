@@ -1,5 +1,10 @@
 ---
 # Tasks for adpicam role
+- name: Check if udev rules directory exists
+  ansible.builtin.stat:
+    path: /etc/udev/rules.d
+  register: adpicam_udev_rules_dir
+
 - name: Add UDEV rules for PICam
   ansible.builtin.copy:
     src: "files/80-picam.rules"
@@ -7,6 +12,7 @@
     owner: "root"
     group: "root"
     mode: "0644"
+  when: adpicam_udev_rules_dir.stat.exists
 
 - name: Change mode of /opt/PrincetonInstruments (PICam SDK)
   ansible.builtin.file:
