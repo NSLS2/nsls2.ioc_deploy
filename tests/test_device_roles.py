@@ -17,6 +17,4 @@ def test_ensure_var_file_for_device_role_exists(device_role):
 def test_every_device_role_has_a_readme(device_role):
     device_role_path = DEVICE_ROLES_PATH / device_role
     readme_path = device_role_path / "README.md"
-    assert readme_path.exists(), (
-        f"README.md not found for device role: {device_role}"
-    )
+    assert readme_path.exists(), f"README.md not found for device role: {device_role}"
