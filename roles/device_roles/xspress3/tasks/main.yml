@@ -1,5 +1,11 @@
 ---
 # Tasks for xspress3 role
+- name: Configure Xspress3 host IP
+  ansible.builtin.include_tasks: network_address.yml
+  vars:
+    xspress3_beamline_system: >-
+      {{ beamline_system | default(ioc.beamline_system) }}
+  when: beamline_system is defined or ioc.beamline_system is defined
 
 - name: Install common startup files
   ansible.builtin.copy:
