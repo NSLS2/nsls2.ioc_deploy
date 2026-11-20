@@ -25,5 +25,5 @@ cas-switch-01:
 ## Notes
 
 - Does not use the standard `st.cmd`. The role generates an `st.cmd` that loads `/epics/common/<hostname>-netsetup.cmd`, loads `cas-switch.db` (copied into the IOC directory from `files/`), calls `asSetFilename(...)`, and runs `iocInit()`.
-- No module is required for this role, so the IOC executable and template root path used in the `st.cmd` shebang are not set by the role and must be provided (e.g. via `executable` and `ioc_template_root_path` in the IOC config).
+- No module is required for this role; the `st.cmd` shebang defaults to the system EPICS base `softIoc` (`/usr/lib64/epics/bin/linux-x86_64/softIoc`). This can be overridden with `executable` and `ioc_template_root_path` in the IOC config.
 - The ACF file at `/epics/common/bl-cas/bl-cas/<BEAMLINE>/cas-switch.acf` must exist on the host.

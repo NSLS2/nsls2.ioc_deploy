@@ -79,6 +79,17 @@ pixi run deploy-all
 
 The deployment script automatically pulls the required `ghcr.io/nsls2/epics-alma{8,9}:latest` container image and manages the container lifecycle.
 
+### Pre-deploy test hooks
+
+If a role needs the test container prepared before its examples deploy (e.g. creating directories or files that exist on real hosts but not in the container), add a script at `roles/device_roles/<role-name>/test_hooks/pre_deploy.sh` and/or `pre_deploy.py`. These hooks:
+
+- only run for `--container` deployments (never against real hosts with `-l`), and are skipped on `--dry-run`
+- run as root inside the container via `bash` / `python3` (the shell script runs first if both exist)
+- run once per role per container, before that role's first example is deployed
+- receive the `IOC_DEPLOY_ROLE` and `IOC_DEPLOY_EL_VERSION` environment variables
+
+If a hook exits non-zero, that role's examples are marked as failed and not deployed. Hooks should be idempotent, since the same container may be reused across runs. The `test_hooks` directories are excluded from the built collection.
+
 ## Helper scripts
 
 Run using `pixi run <command>`.
