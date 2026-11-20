@@ -2,7 +2,10 @@
 
 ## Overview
 
-The `install_module` role is responsible for ensuring that required EPICS software modules are available on the target host during deployment. It provides intelligent compilation and dependency resolution for EPICS modules that don't ship with the standard `epics-bundle` distribution.
+The `install_module` role is responsible for ensuring that required EPICS
+software modules are available on the target host during deployment. It provides
+intelligent compilation and dependency resolution for EPICS modules that don't
+ship with the standard `epics-bundle` distribution.
 
 ### Key Responsibilities
 
@@ -12,15 +15,23 @@ The `install_module` role is responsible for ensuring that required EPICS softwa
 - Compiles modules with configurable build commands
 - Manages system package dependencies (via dnf/yum)
 - Ensures proper file ownership for compiled modules
-- Handles both standard EPICS modules and Area Detector modules with specialized configurations
+- Handles both standard EPICS modules and Area Detector modules with specialized
+  configurations
 
 ### How It Works
 
-Because EPICS doesn't have a built-in dependency solver, compatible versions must be explicitly described in configuration files. Each module supported by this role has one or more configuration files (in `vars/`) that describe a specific version and its dependencies.
+Because EPICS doesn't have a built-in dependency solver, compatible versions
+must be explicitly described in configuration files. Each module supported by
+this role has one or more configuration files (in `vars/`) that describe a
+specific version and its dependencies.
 
-The role builds a dependency tree with the target module as a leaf and compiles all modules from the top down. You only need to specify immediate parent dependencies; the role handles transitive dependencies automatically. Unless otherwise stated, the `epics-bundle` package provides baseline dependencies.
+The role builds a dependency tree with the target module as a leaf and compiles
+all modules from the top down. You only need to specify immediate parent
+dependencies; the role handles transitive dependencies automatically. Unless
+otherwise stated, the `epics-bundle` package provides baseline dependencies.
 
 Once a dependency list is established, the role:
+
 1. Clones and checks out the correct version of each module
 2. Finds and removes existing `RELEASE` and `CONFIG_SITE` files
 3. Auto-generates new configuration files from Jinja templates
@@ -35,7 +46,8 @@ When using this role, the following variables must be provided:
 
 **`host_config`** (dict, required)
 
-The host configuration dictionary containing system-level settings. Must include:
+The host configuration dictionary containing system-level settings. Must
+include:
 
 - `epics_interface.address`: IP address for EPICS Channel Access interface
 - `epics_interface.broadcast`: Broadcast address for EPICS Channel Access
@@ -46,11 +58,14 @@ The host configuration dictionary containing system-level settings. Must include
 
 **`install_module_name`** (string, required)
 
-The name of the module to install, matching a configuration file in `vars/`. Format: `{module_name}_{version}` (e.g., `motorsim_d1d0eb8`, `advimba_34686fe`).
+The name of the module to install, matching a configuration file in `vars/`.
+Format: `{module_name}_{version}` (e.g., `motorsim_d1d0eb8`, `advimba_34686fe`).
 
 ## Module Configuration File Structure
 
-Each module is defined by a YAML configuration file in the `vars/` directory. These files describe the module's source, version, dependencies, and build configuration.
+Each module is defined by a YAML configuration file in the `vars/` directory.
+These files describe the module's source, version, dependencies, and build
+configuration.
 
 ### File Naming Convention
 
@@ -66,13 +81,16 @@ See `schemas/install_module.yml` for the complete validation schema.
 **Required Fields:**
 
 **`name`** (string, required)
+
 - Human-readable name of the module (e.g., "ADVimba", "MotorSim")
 
 **`url`** (string, required)
+
 - Public git URL from which to clone the module
 - Example: `https://github.com/areaDetector/ADVimba`
 
 **`version`** (string, required)
+
 - Git tag, commit hash, or branch to check out
 - **Recommended**: commit hashes for reproducibility
 - **Not recommended**: Branches or tags (unpredictable)
@@ -81,42 +99,52 @@ See `schemas/install_module.yml` for the complete validation schema.
 **Optional Fields:**
 
 **`epics_deps`** (dict, optional)
+
 - EPICS module dependencies provided by `epics-bundle` (not built by this role)
 - Maps module names to their installation paths
 - Default: Inherits from `install_module_default_epics_deps`
 - Typically set to `/usr/lib/epics` for bundle-provided modules
 
 **`pkg_deps`** (list, optional)
+
 - System packages to install via dnf/yum
 - Default: `["epics-bundle"]`
 - Add additional packages as needed (e.g., development libraries)
 
 **`include_base_ad_config`** (boolean, optional)
+
 - Set to `true` for Area Detector modules
 - Includes comprehensive AD configuration from `install_module_ad_config_dict`
 - Handles HDF5, JPEG, TIFF, netCDF, GraphicsMagick, and other AD features
 
 **`config`** (dict, optional)
+
 - Custom CONFIG_SITE values (e.g., `TIRPC: "YES"`, `WITH_XXX: "YES"`)
 - Overrides default configuration values
-- Merged with `install_module_default_config_dict` and optionally `install_module_ad_config_dict`
+- Merged with `install_module_default_config_dict` and optionally
+  `install_module_ad_config_dict`
 
 **`module_deps`** (list, optional)
+
 - Additional EPICS modules to be built by this role
-- Only specify immediate parent dependencies (transitive deps are resolved automatically)
+- Only specify immediate parent dependencies (transitive deps are resolved
+  automatically)
 - Reference by configuration file name (e.g., `adgenicam_5d08a11`)
 
 **`compilation_command`** (string, optional)
+
 - Custom build command if not a simple top-level make
 - Default: `make -sj`
 - Example: `cd subdir && make -sj`
 
 **`executable`** (string, optional)
+
 - Name of the IOC executable within the compiled module
 - Used when the module includes a runnable IOC application
 - Example: `"vimbaApp"`
 
 **`use_token`** (boolean, optional)
+
 - Whether to use authentication token for private repositories
 - Requires token configuration in the calling playbook
 
@@ -158,43 +186,59 @@ motorsim_d1d0eb8:
 
 ## Role Variables
 
-The following variables can be overridden to customize the installation behavior. These are defined in `defaults/main.yml`.
+The following variables can be overridden to customize the installation
+behavior. These are defined in `defaults/main.yml`.
 
 ### Installation Configuration
 
 **`install_module_install_dir`**
+
 - **Type**: string
 - **Default**: `"/epics/modules"`
-- **Description**: Directory where compiled EPICS modules are installed. Each module is installed in a subdirectory named after the module configuration.
+- **Description**: Directory where compiled EPICS modules are installed. Each
+  module is installed in a subdirectory named after the module configuration.
 
 **`install_module_default_compilation_command`**
+
 - **Type**: string
 - **Default**: `"make -sj"`
-- **Description**: Default command used to compile modules. The `-sj` flags enable silent mode and parallel compilation. Can be overridden per-module via the `compilation_command` field.
+- **Description**: Default command used to compile modules. The `-sj` flags
+  enable silent mode and parallel compilation. Can be overridden per-module via
+  the `compilation_command` field.
 
 **`install_module_force_reinstall`**
+
 - **Type**: boolean
 - **Default**: `false`
-- **Description**: Whether to force reinstallation even if the module already exists. When true, performs a hard reset of the git repository.
+- **Description**: Whether to force reinstallation even if the module already
+  exists. When true, performs a hard reset of the git repository.
 
 **`install_module_skip_compilation`**
+
 - **Type**: boolean
 - **Default**: `false`
-- **Description**: Whether to skip module compilation. Useful for CI testing of roles that require proprietary SDKs not available in the test environment.
+- **Description**: Whether to skip module compilation. Useful for CI testing of
+  roles that require proprietary SDKs not available in the test environment.
 
 ### Package Dependencies
 
 **`install_module_default_pkg_deps`**
+
 - **Type**: list
 - **Default**: `["epics-bundle"]`
-- **Description**: Default system packages required for module compilation. The `epics-bundle` package provides EPICS Base and common support modules. Individual modules can extend this list via `pkg_deps`.
+- **Description**: Default system packages required for module compilation. The
+  `epics-bundle` package provides EPICS Base and common support modules.
+  Individual modules can extend this list via `pkg_deps`.
 
 ### EPICS Dependencies
 
 **`install_module_default_epics_deps`**
+
 - **Type**: dict
 - **Default**: See below
-- **Description**: Default paths to EPICS modules provided by `epics-bundle`. These modules are not compiled by the role but are referenced in generated RELEASE files.
+- **Description**: Default paths to EPICS modules provided by `epics-bundle`.
+  These modules are not compiled by the role but are referenced in generated
+  RELEASE files.
 
 Default EPICS dependencies:
 
@@ -215,9 +259,11 @@ EPICS_BASE: /usr/lib/epics
 ### Build Configuration
 
 **`install_module_default_config_dict`**
+
 - **Type**: dict
 - **Default**: See below
-- **Description**: Default CONFIG_SITE values applied to all modules. These control EPICS build behavior.
+- **Description**: Default CONFIG_SITE values applied to all modules. These
+  control EPICS build behavior.
 
 Default configuration:
 
@@ -227,11 +273,15 @@ BUILD_IOCS: 'YES'        # Build example IOCs by default
 ```
 
 **`install_module_ad_config_dict`**
+
 - **Type**: dict
 - **Default**: See below
-- **Description**: Comprehensive Area Detector configuration applied when `include_base_ad_config: true`. Controls which plugins and external libraries are enabled for AD modules.
+- **Description**: Comprehensive Area Detector configuration applied when
+  `include_base_ad_config: true`. Controls which plugins and external libraries
+  are enabled for AD modules.
 
 Area Detector configuration includes settings for:
+
 - **PVA/QSRV**: PV Access and QSR server support
 - **Image Formats**: HDF5, JPEG, TIFF, netCDF, Nexus
 - **Compression**: Blosc, Bitshuffle, szip, zlib
@@ -256,11 +306,14 @@ ARAVIS_INCLUDE: /usr/include/aravis-0.8
 GLIB_INCLUDE: /usr/include/glib-2.0 /usr/lib64/glib-2.0/include
 ```
 
-Most external dependencies use `_EXTERNAL: 'NO'` to indicate they should be built from AD's vendored sources rather than system libraries. This ensures compatibility across different target systems.
+Most external dependencies use `_EXTERNAL: 'NO'` to indicate they should be
+built from AD's vendored sources rather than system libraries. This ensures
+compatibility across different target systems.
 
 ## Adding a New Module
 
-To add a module to `install_module`, create a single YAML configuration file in the `vars/` directory following the structure documented above.
+To add a module to `install_module`, create a single YAML configuration file in
+the `vars/` directory following the structure documented above.
 
 ### Step-by-Step Process
 
@@ -278,9 +331,11 @@ To add a module to `install_module`, create a single YAML configuration file in 
    - For Area Detector modules, set `include_base_ad_config: true`
 
 3. **Handle dependencies:**
-   - If the module depends on other custom modules (not in epics-bundle), add them to `module_deps`
+   - If the module depends on other custom modules (not in epics-bundle), add
+     them to `module_deps`
    - If the module requires special system libraries, add them to `pkg_deps`
-   - If the module needs specific EPICS modules from epics-bundle, they're typically covered by defaults
+   - If the module needs specific EPICS modules from epics-bundle, they're
+     typically covered by defaults
 
 4. **Test the configuration:**
    - Run the role with your new module
@@ -317,23 +372,29 @@ adnewcamera_abc1234:
 
 ## Output Variables
 
-After running the role, the following variables are set and can be used by subsequent tasks:
+After running the role, the following variables are set and can be used by
+subsequent tasks:
 
 **`install_module_installed`**
+
 - **Type**: dict
 - **Description**: Maps uppercase module names to their installation paths
 
 **`install_module_installed_list`**
+
 - **Type**: list
 - **Description**: List of all module names installed during this run
 
 **`install_module_leaf_module_path`**
+
 - **Type**: string
 - **Description**: Path to the final (leaf) module that was requested
 
 **`install_module_leaf_executable`**
+
 - **Type**: string
-- **Description**: Executable path for the leaf module (if specified in configuration)
+- **Description**: Executable path for the leaf module (if specified in
+  configuration)
 
 ## Usage Examples
 
@@ -371,7 +432,12 @@ After running the role, the following variables are set and can be used by subse
 
 ## Notes
 
-- **Dependency Resolution**: The role automatically resolves transitive dependencies. You only need to specify immediate parent dependencies in `module_deps`.
-- **epics-bundle Integration**: Modules from `epics-bundle` are used as-is from `/usr/lib/epics` and are not compiled by this role.
-- **Area Detector Modules**: Always set `include_base_ad_config: true` for AD modules to ensure proper plugin configuration.
-- **EPICS Base**: The `epics_base` module is handled specially with recursive git clones and no RELEASE/CONFIG_SITE modifications.
+- **Dependency Resolution**: The role automatically resolves transitive
+  dependencies. You only need to specify immediate parent dependencies in
+  `module_deps`.
+- **epics-bundle Integration**: Modules from `epics-bundle` are used as-is from
+  `/usr/lib/epics` and are not compiled by this role.
+- **Area Detector Modules**: Always set `include_base_ad_config: true` for AD
+  modules to ensure proper plugin configuration.
+- **EPICS Base**: The `epics_base` module is handled specially with recursive
+  git clones and no RELEASE/CONFIG_SITE modifications.

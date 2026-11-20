@@ -16,7 +16,7 @@ mcs2-01:
     AXES_MASK: 0x37
     ENGINEER: C. Engineer
 
-  # Define the individal motor axes here
+  # Define the individual motor axes here
   axes:
     - name: "X"
       num: 4

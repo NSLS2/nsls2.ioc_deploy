@@ -152,7 +152,7 @@ def update_module():
 
     write_yaml_config(new_module_config_path, new_module_config)
 
-    print(f"Updating {module_base_name} to {new_version} for all dependant modules...")
+    print(f"Updating {module_base_name} to {new_version} for all dependent modules...")
     module_var_files = [
         os.path.join("roles", "install_module", "vars", file)
         for file in os.listdir(os.path.join("roles", "install_module", "vars"))
@@ -168,7 +168,7 @@ def update_module():
     )
 
     print(
-        f"Updating {module_base_name} to {new_version} for all dependant ioc types..."
+        f"Updating {module_base_name} to {new_version} for all dependent ioc types..."
     )
     ioc_vars_files = [
         os.path.join("roles", "deploy_ioc", "vars", file)
@@ -198,25 +198,25 @@ def delete_module():
         "Select a module to update:", choices=get_module_list()
     ).unsafe_ask()
 
-    dependant_modules = []
-    dependant_ioc_types = []
+    dependent_modules = []
+    dependent_ioc_types = []
     for file in os.listdir(os.path.join("roles", "install_module", "vars")):
         with open(os.path.join("roles", "install_module", "vars", file)) as f:
             module_config = yaml.safe_load(f)
             module_name_ver = list(module_config.keys())[0]
             if module in module_config[module_name_ver]["module_deps"]:
-                dependant_modules.append(os.path.splitext(file)[0])
+                dependent_modules.append(os.path.splitext(file)[0])
 
     for file in os.listdir(os.path.join("roles", "deploy_ioc", "vars")):
         with open(os.path.join("roles", "deploy_ioc", "vars", file)) as f:
             ioc_config = yaml.safe_load(f)
             if ioc_config["deploy_ioc_required_module"] == module:
-                dependant_ioc_types.append(os.path.splitext(file)[0])
-    if dependant_modules or dependant_ioc_types:
+                dependent_ioc_types.append(os.path.splitext(file)[0])
+    if dependent_modules or dependent_ioc_types:
         raise RuntimeError(
             f"Cannot delete {module} as it is required by the following modules: ",
-            f"{', '.join(dependant_modules)} and IOC types: ",
-            f"{', '.join(dependant_ioc_types)}.",
+            f"{', '.join(dependent_modules)} and IOC types: ",
+            f"{', '.join(dependent_ioc_types)}.",
         )
 
     module_path = os.path.join("roles", "install_module", "vars", f"{module}.yml")

@@ -3,6 +3,7 @@ import re
 
 import pytest
 import yamale
+import yamale.validators
 import yaml
 
 REQUIRED_KEYS: dict[str, type] = {
@@ -36,7 +37,7 @@ pytestmark = pytest.mark.parametrize(
 
 
 class URLValidator(yamale.validators.Validator):
-    tag = "url"
+    tag = "url"  # pyright: ignore  # yamale tag pattern
 
     def _is_valid(self, value: str) -> bool:
         return value.startswith("http://") or value.startswith("https://")
@@ -50,7 +51,7 @@ class GitCommitHashValidator(yamale.validators.Validator):
     The 're.IGNORECASE' flag makes the match case-insensitive for hex characters.
     """
 
-    tag = "git_commit_hash"
+    tag = "git_commit_hash"  # pyright: ignore  # yamale tag pattern
 
     def _is_valid(self, value: str) -> bool:
         return bool(re.fullmatch(r"^[0-9a-fA-F]{7,40}$", value))

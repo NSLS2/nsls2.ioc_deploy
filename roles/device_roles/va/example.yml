@@ -52,7 +52,7 @@ va-01:
       IP_PORT: 23
       PORT: xf09id1-ipc4
 
-# Schema is in-exact, so caution must be used when copying filepath/patern
+# Schema is in-exact, so caution must be used when copying filepath/pattern
   substitutions:
     vgc: # Vacuum Gauge Controller
     # Vacuum Gauge Controller

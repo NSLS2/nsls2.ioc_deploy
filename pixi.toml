@@ -9,6 +9,7 @@ version = "1.2.0"
 
 [environments]
 default = { solve-group = "default" }
+dev = { features = ["dev"], solve-group = "default" }
 
 [tasks]
 make-role = "scripts/manage_collection.py add role"
@@ -17,9 +18,6 @@ update-module = "scripts/manage_collection.py update module"
 delete-role = "scripts/manage_collection.py delete role"
 delete-module = "scripts/manage_collection.py delete module"
 report = "scripts/manage_collection.py report"
-lint-changes = "pre-commit"
-lint = "pre-commit run --all-files"
-ruff-fix = "ruff check --fix"
 tests = "pytest"
 deployment = "scripts/deploy_local_config.py"
 deploy-all = "scripts/deploy_local_config.py --all --container --matrix 8 9"
@@ -32,15 +30,29 @@ requests = "*"
 tabulate = "*"
 questionary = "*"
 yamale = "*"
-pre-commit = "*"
-ruff = "*"
-import-linter = "*"
 pip = ">=26.2.2"
 pytest = "*"
 pyyaml = "*"
-yamllint = "*"
 
 ansible = "*"
 ansible-compat = "==24.10.0"
 ansible-core = "==2.15.5"
 ansible-lint = "==6.22.2"
+
+# Dev environment - linting tools, matching NSLS2/ansible.
+# Versions must stay in lockstep with the rev:/entry: pins in
+# .pre-commit-config.yaml. When bumping any tool version, update both.
+[feature.dev.dependencies]
+pre-commit = "*"
+nodejs = ">=26.12.1,<27"
+ruff = "==0.16.5"
+codespell = "==2.4.3"
+yamllint = "==1.38.0"
+zizmor = "==1.30.0"
+pyright = "*"
+
+[feature.dev.tasks]
+lint = { cmd = "pre-commit run --all-files", description = "Run all pre-commit hooks against every file in the repo." }
+lint-files = { cmd = "pre-commit run --files", description = "Run pre-commit hooks against specific files (pass paths after --)." }
+lint-changes = { cmd = "pre-commit run", description = "Run pre-commit hooks against staged changes." }
+ruff-fix = { cmd = "ruff check --fix", description = "Auto-fix ruff linting issues." }

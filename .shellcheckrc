@@ -1,0 +1,3 @@
+# SC1091: sourced files are resolved at runtime via SCRIPT_DIR; shellcheck
+# cannot follow them without -x, which pre-commit does not pass.
+disable=SC1091

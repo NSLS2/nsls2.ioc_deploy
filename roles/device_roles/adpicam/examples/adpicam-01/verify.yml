@@ -12,6 +12,7 @@ verification:
     # Role-specific files
     - iocBoot/base.cmd
     - autosave/req/auto_settings.req
+    # Created by test_hooks/pre_deploy.sh so the udev rule gets installed
     - /etc/udev/rules.d/80-picam.rules
 
   file_must_contain:

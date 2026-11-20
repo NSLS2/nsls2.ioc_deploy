@@ -11,7 +11,7 @@
 #
 
 #
-# Initalization fanout records
+# Initialization fanout records
 #
 
 grecord(dfanout,"$(P)$(R):INIT") {
@@ -413,7 +413,7 @@ record(scalcout, "$(P)$(R):SAMPLE_A") {
 }
 
 record(scalcout, "$(P)$(R):SAMPLE_B") {
-    field(DESC, "Convrt str from SplB query")
+    field(DESC, "Convert str from SplB query")
     field(CALC, "DBL(AA)")
     field(INAA, "$(P)$(R):READ_SAMPLE_B.AINP  PP MS")
     field(INEE, "0")

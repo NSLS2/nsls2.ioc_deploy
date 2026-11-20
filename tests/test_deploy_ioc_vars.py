@@ -2,6 +2,7 @@ import os
 
 import pytest
 import yamale
+import yamale.validators
 import yaml
 
 DEPLOY_IOC_VARS_FILES = [
