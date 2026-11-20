@@ -1,0 +1,47 @@
+---
+
+eurotherm_rtc-01:
+  type: eurotherm_rtc
+
+  environment:
+    SYS: "XF:31ID1-CT"
+    DEV: "{RG:A1-RTC:1}"
+    HOST: "192.168.111.222"
+    EPC_ASYNPORT: "EPC3016"
+    PREFIX: "XF:31ID1-CT{IOC:RTC01}"
+    ENGINEER: "C. Engineer"
+
+  operations:
+    AI_PV: true
+    AI_PV_STATUS: true
+    IO1_PV_RB: true
+    IO1_STATUS: true
+    LOOP_SP1: true
+    LOOP_SP1_RB: true
+    LOOP_CH1_PROP_BAND: true
+    LOOP_CH1_PROP_BAND_RB: true
+    LOOP_INTEGRAL_TIME: true
+    LOOP_INTEGRAL_TIME_RB: true
+    LOOP_DERIVATIVE_TIME: true
+    LOOP_DERIVATIVE_TIME_RB: true
+    AL1_STATUS: true
+    AL1_ACK: true
+    AL1_TYPE: true
+    AL2_STATUS: true
+    AL2_ACK: true
+    AL2_TYPE: true
+    AL3_STATUS: true
+    AL3_ACK: true
+    AL3_TYPE: true
+    AL4_STATUS: true
+    AL4_ACK: true
+    AL4_TYPE: true
+    AL5_STATUS: true
+    AL5_ACK: true
+    AL5_TYPE: true
+    AL6_STATUS: true
+    AL6_ACK: true
+    AL6_TYPE: true
+    INSTRUMENT_MODE: true
+    INSTRUMENT_MODE_RB: true
+    ACCESS_PASSWORD: true

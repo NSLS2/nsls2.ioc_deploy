@@ -1,0 +1,6 @@
+---
+base_soft_ioc_f4c87af:
+  name: BaseSoftIOC
+  url: https://github.com/NSLS2/BaseSoftIOC
+  version: f4c87af
+  executable: "baseSoftIOC"

@@ -1,0 +1,10 @@
+---
+
+rbd9103-02:
+  type: "rbd9103"
+  environment:
+    PREFIX: "XF:31ID1-ES{RBD9103-AMM:2}"
+    ENGINEER: "J. Wlodek"
+    SERIAL_NUMBER: "AQ01SDRF"
+    PORT: "RBD"
+    SERIAL_PORT: "RBD_TTY"

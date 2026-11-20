@@ -1,0 +1,55 @@
+{% set _channels = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] %}
+{% set _devices = ioc.devices %}
+{% set _n_devices = _devices|length %}
+{% set _n_devices_max = 12 %}
+{##}
+{% set _calc_block_pvs = [] %}
+{% set ns = namespace(n_devices_processed=0) %}
+{##}
+{# First go through all devices #}
+{% for _n_block in range(_n_devices_max) %}
+{##}
+{% if ns.n_devices_processed < _n_devices %}
+{##}
+{% set _block_pv = "$(SYS){RG-RTC}Alrm:Sum-Calc"+_channels[_n_block]+"_" %}
+{% set _ = _calc_block_pvs.append(_block_pv) %}
+{% set _chans = [] %}
+{##}
+record(calc, "{{ _block_pv }}") {
+{% for n in range(_n_devices_max) %}
+{% if ns.n_devices_processed < _n_devices %}
+{% set _dev = _devices[ns.n_devices_processed] %}
+{% set _chan = _channels[n] %}
+{% set _ = _chans.append(_chan) %}
+{% set _prefix = _dev["SYS"] + _dev["DEV"] %}
+{% set _pv = _prefix + "T-I.SEVR" %}
+    field(INP{{ _chan }}, "{{ _pv }} CP")
+{% set ns.n_devices_processed = ns.n_devices_processed + 1 %}
+{% endif %}
+{% endfor %}
+    field(CALC, "MAX({{ _chans|join(",") }})")
+    field(HIGH, "1")
+    field(HIHI, "2")
+    field(HSV, "MINOR")
+    field(HHSV, "MAJOR")
+}
+
+{##}
+{% endif %}
+{##}
+{% endfor %}
+{##}
+{% set _chans = [] %}
+record(calc, "$(SYS){RG-RTC}Alrm:Sum-Calc") {
+{% for n in range(_calc_block_pvs|length) %}
+{% set _pv = _calc_block_pvs[n] %}
+{% set _chan = _channels[n] %}
+{% set _ = _chans.append(_chan) %}
+    field(INP{{ _chan }}, "{{ _pv }} CP")
+{% endfor %}
+    field(CALC, "MAX({{ _chans|join(",") }})")
+    field(HIGH, "1")
+    field(HIHI, "2")
+    field(HSV, "MINOR")
+    field(HHSV, "MAJOR")
+}

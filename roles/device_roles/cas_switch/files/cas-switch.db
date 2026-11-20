@@ -3,5 +3,5 @@ record(bo, "$(CT_PREFIX){}Prmt:RemoteExp-Sel") {
   field(ZNAM, "Restricted")
   field(ONAM, "Permitted")
   field(ASG, "EXPERT")
-  field(VAL, 0)  # Initialize with 'Restricted' value
+  field(VAL, 1)  # Initialize with 'Permitted' value
 }

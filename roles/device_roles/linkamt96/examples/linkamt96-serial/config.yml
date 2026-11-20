@@ -1,0 +1,12 @@
+---
+
+# Direct serial connection via local device file.
+linkamt96-serial:
+  type: linkamt96
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{LINKAMT96:02}
+    PORT: "LINK3"
+    SERIAL_PORT: "/dev/ttyUSB0"
+    LINKAM3_LICENSE_PATH: "/path/to/linkamt96_license.txt"
+    LINKAM3_LOG_PATH: "/path/to/linkamt96_log.txt"

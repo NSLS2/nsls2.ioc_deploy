@@ -1,0 +1,12 @@
+---
+
+type: enum("eurotherm_rtc")
+environment:
+  SYS: str()
+  DEV: str()
+  HOST: str()
+  EPC_ASYNPORT: str()
+  PREFIX: str()
+  ENGINEER: str()
+
+operations: map(bool(), key=enum("AI_PV", "AI_PV_STATUS", "IO1_PV_RB", "IO1_STATUS", "LOOP_SP1", "LOOP_SP1_RB", "LOOP_CH1_PROP_BAND", "LOOP_CH1_PROP_BAND_RB", "LOOP_INTEGRAL_TIME", "LOOP_INTEGRAL_TIME_RB", "LOOP_DERIVATIVE_TIME", "LOOP_DERIVATIVE_TIME_RB", "AL1_STATUS", "AL1_ACK", "AL1_TYPE", "AL2_STATUS", "AL2_ACK", "AL2_TYPE", "AL3_STATUS", "AL3_ACK", "AL3_TYPE", "AL4_STATUS", "AL4_ACK", "AL4_TYPE", "AL5_STATUS", "AL5_ACK", "AL5_TYPE", "AL6_STATUS", "AL6_ACK", "AL6_TYPE", "INSTRUMENT_MODE", "INSTRUMENT_MODE_RB", "ACCESS_PASSWORD"), min=1) # yamllint disable-line rule:line-length

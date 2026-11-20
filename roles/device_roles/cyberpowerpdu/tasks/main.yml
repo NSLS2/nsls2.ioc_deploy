@@ -15,7 +15,7 @@
     path: "{{ deploy_ioc_ioc_directory }}/mibs"
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
-    mode: "0775"
+    mode: "02775"
 
 - name: Install CyberPower PDU MIB files
   ansible.builtin.copy:

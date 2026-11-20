@@ -23,7 +23,7 @@
     state: directory
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
-    mode: "0775"
+    mode: "02775"
 
 - name: Install Tektronix AFG3K protocol file
   ansible.builtin.copy:

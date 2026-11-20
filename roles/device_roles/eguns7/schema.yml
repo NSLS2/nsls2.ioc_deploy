@@ -1,0 +1,8 @@
+---
+
+type: enum("eguns7")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
+  IP_ADDR: str()
+  PLC_NAME: str()

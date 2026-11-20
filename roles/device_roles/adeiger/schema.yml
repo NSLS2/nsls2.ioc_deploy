@@ -1,8 +1,8 @@
 ---
 
 type: enum("adeiger")
-# Eiger version must be 1 for Eiger or 2 for Eiger2
-eiger_version: enum(1, 2)
+
+detector_model: enum("eiger1", "eiger2", "pilatus4", "selun")
 
 # Configure local port if Eiger is connected directly to the server.
 # Comment out otherwise.
@@ -12,7 +12,7 @@ adeiger_local_intf_ip: any(ip(), hostname(), required=False)
 environment:
   ENGINEER: str()
   PREFIX: str()
-  EIGER_IP: any(ip(), hostname())
+  DCU_IP: any(ip(), hostname())
   STREAM_IP: any(ip(), hostname(), required=False)
 
   XSIZE: int()

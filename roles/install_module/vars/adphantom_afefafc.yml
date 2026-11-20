@@ -6,6 +6,6 @@ adphantom_afefafc:
   url: https://github.com/jwlodek/ADPhantom
   include_base_ad_config: true
   module_deps:
-    - adcore_60080dc
+    - adcore_5860bd3
   pkg_deps:
     - libpcap-devel

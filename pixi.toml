@@ -1,4 +1,5 @@
-[project]
+[workspace]
+requires-pixi = ">=0.82.1"
 authors = ["Jakub Wlodek"]
 channels = ["conda-forge"]
 description = "Collection of ansible roles to perform centralized IOC deployments"
@@ -10,19 +11,21 @@ version = "1.2.0"
 default = { solve-group = "default" }
 
 [tasks]
-make-role = "make role"
-make-module = "make module"
-update-module = "make update module"
-delete-role = "make delete role"
-delete-module = "make delete module"
-report = "make report"
+make-role = "scripts/manage_collection.py add role"
+make-module = "scripts/manage_collection.py add module"
+update-module = "scripts/manage_collection.py update module"
+delete-role = "scripts/manage_collection.py delete role"
+delete-module = "scripts/manage_collection.py delete module"
+report = "scripts/manage_collection.py report"
 lint-changes = "pre-commit"
 lint = "pre-commit run --all-files"
 ruff-fix = "ruff check --fix"
 tests = "pytest"
+deployment = "scripts/deploy_local_config.py"
+deploy-all = "scripts/deploy_local_config.py --all --container --matrix 8 9"
 
-[build-dependencies]
-make = "*"
+# Package should not be in pixi lock file, but instead manually installed when on NSLS2 systems
+install-nsls2network = "pip install --upgrade git+https://github.com/NSLS2/nsls2network"
 
 [dependencies]
 requests = "*"
@@ -32,7 +35,7 @@ yamale = "*"
 pre-commit = "*"
 ruff = "*"
 import-linter = "*"
-pip = "*"
+pip = ">=26.2.2"
 pytest = "*"
 pyyaml = "*"
 yamllint = "*"
@@ -41,29 +44,3 @@ ansible = "*"
 ansible-compat = "==24.10.0"
 ansible-core = "==2.15.5"
 ansible-lint = "==6.22.2"
-
-[tasks.reinstall-collection]
-args = [
-    { arg = "path", default = "$PWD/../ansible-roles-nsls2" }, # Path into which to install collection
-]
-cmd = "echo Installing collection to {{ path }} && ansible-galaxy collection install $PWD -p {{ path }}/collections --force"
-
-[tasks.deploy-example]
-args = [
-    "type",
-    "limit"
-]
-cmd = "scripts/deploy_example.py {{ type }} {{ limit }}"
-
-[tasks.install-module]
-args = [
-    "module",
-    "limit"
-]
-cmd = "scripts/install_module.py {{ module }} {{ limit }}"
-
-[tasks.test-role]
-args = [
-    "role"
-]
-cmd = "scripts/test-role.sh {{ role }}"

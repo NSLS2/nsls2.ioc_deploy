@@ -1,0 +1,9 @@
+---
+
+type: enum("adpco")
+environment:
+  ENGINEER: str()
+  PREFIX: str()
+  XSIZE: int(min=1)
+  YSIZE: int(min=1)
+  CAM_ID: int(min=0, required=False)

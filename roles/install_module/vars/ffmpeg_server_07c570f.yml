@@ -6,4 +6,4 @@ ffmpeg_server_07c570f:
   compilation_command: "bash install.sh" # ffmpegServer builds custom script
   include_base_ad_config: true
   module_deps:
-    - adcore_60080dc
+    - adcore_5860bd3

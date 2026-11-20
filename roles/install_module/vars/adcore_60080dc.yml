@@ -6,4 +6,4 @@ adcore_60080dc:
   include_base_ad_config: true
   version: 60080dc
   module_deps:
-    - adsupport_6acf83f
+    - adsupport_fe23754

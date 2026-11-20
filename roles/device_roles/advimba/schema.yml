@@ -3,8 +3,8 @@ type: enum("advimba")
 
 environment:
   PREFIX: str()  # Base PV prefix
-  # Camera ID. DEV_ followed by the MAC address w/o colons uppercase
-  CAMERA_ID: regex('DEV_[A-Z0-9]{12}')
+  # Camera ID: DEV_ + uppercase MAC w/o colons, or (GigE only) the camera's IP address
+  CAMERA_ID: any(regex('DEV_[A-Z0-9]{12}'), ip())
   XSIZE: int(min=1)
   YSIZE: int(min=1)  # Camera image size in pixels
   FFMSTREAM_PORT: int(min=8000, required=False)  # Port for the ffmpeg server

@@ -29,7 +29,6 @@
 - name: Auto generate feature databases and bob screens
   ansible.builtin.include_tasks: autogen_files.yml
 
-
 - name: Install base startup script
   ansible.builtin.template:
     src: "templates/base.cmd.j2"

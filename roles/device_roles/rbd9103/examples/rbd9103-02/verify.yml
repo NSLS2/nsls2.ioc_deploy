@@ -1,0 +1,46 @@
+---
+# Verification schema for rbd9103 rbd9103-02 example
+# This example uses a manual .substitutions file instead of config-generated ones.
+
+skip_compilation: false
+
+verification:
+  files_must_exist:
+    - iocBoot/st.cmd
+    - iocBoot/epicsEnv.cmd
+    - iocBoot/common.cmd
+    - iocBoot/postInit.cmd
+    - iocBoot/base.cmd
+    - db/rbd9103.substitutions
+
+  file_must_contain:
+    iocBoot/st.cmd:
+      - "iocInit"
+    iocBoot/base.cmd:
+      - "RBD9103Config"
+      - "drvAsynSerialPortConfigure"
+      - "asynSetOption"
+    iocBoot/common.cmd:
+      - "dbLoadTemplate"
+      - "rbd9103.substitutions"
+    db/rbd9103.substitutions:
+      - "rbd9103.template"
+      - "rbd9103_recording.template"
+      - "asynRecord.db"
+
+  file_must_not_contain:
+    iocBoot/st.cmd:
+      - "{{"
+      - "}}"
+    iocBoot/base.cmd:
+      - "{{"
+      - "}}"
+    iocBoot/common.cmd:
+      - "{{"
+      - "}}"
+    iocBoot/epicsEnv.cmd:
+      - "{{"
+      - "}}"
+
+  permissions:
+    iocBoot/st.cmd: "0775"

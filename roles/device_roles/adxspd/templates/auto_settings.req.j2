@@ -1,0 +1,8 @@
+file "ADXSPD_settings.req",                P=$(P),  R=cam1:
+file "commonPlugin_settings.req",          P=$(P)
+{% if deploy_ioc_merged_env.FFMPEGSERVER is defined and ioc.environment.FFMSTREAM_PORT is defined%}
+file "ffmpegServer_settings.req",         P=$(P),  R=ffmstream1:
+{% endif %}
+{% if deploy_ioc_merged_env.ADCOMPVISION is defined %}
+file "NDCV_settings.req",              P=$(P),  R=CV1:
+{% endif %}

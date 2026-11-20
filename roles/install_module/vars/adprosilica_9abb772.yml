@@ -7,4 +7,4 @@ adprosilica_9abb772:
   include_base_ad_config: true
   version: 9abb772
   module_deps:
-    - adcore_60080dc
+    - adcore_5860bd3

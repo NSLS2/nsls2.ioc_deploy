@@ -1,0 +1,6 @@
+---
+egunplc_4d595bf:
+  name: egunplc
+  version: 4d595bf
+  url: https://github.com/NSLS2/eguns7
+  compilation_command: make -s

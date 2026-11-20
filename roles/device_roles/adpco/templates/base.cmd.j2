@@ -1,0 +1,12 @@
+
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# ADPcoConfig(const char *portName, const char *cameraId,
+#                 size_t maxMemory, int priority, int stackSize)
+ADPcoConfig("$(PORT)", "$(CAM_ID=0)")
+
+# Main database.  This just loads and modifies ADBase.template
+dbLoadRecords("$(ADPCO)/db/pco.template", "P=$(PREFIX),R=cam1:,PORT=$(PORT)")
+
+set_requestfile_path("$(ADPCO)/db")

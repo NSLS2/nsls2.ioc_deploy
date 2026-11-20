@@ -1,0 +1,13 @@
+---
+
+# USB connection via Linkam SDK.
+linkamt96-usb:
+  type: linkamt96
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{LINKAMT96:03}
+    PORT: "LINK3"
+    VENDOR_ID: "1234"
+    PRODUCT_ID: "5678"
+    LINKAM3_LICENSE_PATH: "/path/to/linkamt96_license.txt"
+    LINKAM3_LOG_PATH: "/path/to/linkamt96_log.txt"

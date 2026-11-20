@@ -1,0 +1,13 @@
+---
+
+adxspd-01:
+  type: adxspd
+  environment:
+    ENGINEER: C. Engineer
+    PREFIX: XF:31ID1-ES{XSPD-Det:1}
+    XSIZE: 1576
+    YSIZE: 1200
+    NUM_MODULES: 1
+    IP: "192.168.1.1"
+    PORT_NUM: 8008
+    DEVICE_ID: "lambda01"

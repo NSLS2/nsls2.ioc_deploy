@@ -1,0 +1,62 @@
+
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# eurotherm_rtc specific commands
+
+
+# Configure the low level communication port
+drvAsynIPPortConfigure("$(EPC_ASYNPORT)", "$(HOST):502", 0, 0, 1)
+modbusInterposeConfig("$(EPC_ASYNPORT)", 0, 2000, 0)
+
+# Configure Eurotherm Modbus
+{% set operations = [
+	{"name": "AI_PV", "modbus_func": 3, "start_addr": 289, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "AI_PV_STATUS", "modbus_func": 3, "start_addr": 1932, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "IO1_PV_RB", "modbus_func": 3, "start_addr": 1952, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "IO1_STATUS", "modbus_func": 3, "start_addr": 1953, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "LOOP_SP1", "modbus_func": 6, "start_addr": 24, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "LOOP_SP1_RB", "modbus_func": 3, "start_addr": 24, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "LOOP_CH1_PROP_BAND", "modbus_func": 6, "start_addr": 6, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "LOOP_CH1_PROP_BAND_RB", "modbus_func": 3, "start_addr": 6, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "LOOP_INTEGRAL_TIME", "modbus_func": 6, "start_addr": 8, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "LOOP_INTEGRAL_TIME_RB", "modbus_func": 3, "start_addr": 8, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "LOOP_DERIVATIVE_TIME", "modbus_func": 6, "start_addr": 9, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "LOOP_DERIVATIVE_TIME_RB", "modbus_func": 3, "start_addr": 9, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "AL1_STATUS", "modbus_func": 3, "start_addr": 2113, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "AL1_ACK", "modbus_func": 6, "start_addr": 2126, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "AL1_TYPE", "modbus_func": 3, "start_addr": 536, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "AL2_STATUS", "modbus_func": 3, "start_addr": 2137, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "AL2_ACK", "modbus_func": 6, "start_addr": 2150, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "AL2_TYPE", "modbus_func": 3, "start_addr": 537, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "AL3_STATUS", "modbus_func": 3, "start_addr": 2161, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "AL3_ACK", "modbus_func": 6, "start_addr": 2174, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "AL3_TYPE", "modbus_func": 3, "start_addr": 538, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "AL4_STATUS", "modbus_func": 3, "start_addr": 2185, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "AL4_ACK", "modbus_func": 6, "start_addr": 2198, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "AL4_TYPE", "modbus_func": 3, "start_addr": 539, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "AL5_STATUS", "modbus_func": 3, "start_addr": 2209, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "AL5_ACK", "modbus_func": 6, "start_addr": 2222, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "AL5_TYPE", "modbus_func": 3, "start_addr": 2208, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "AL6_STATUS", "modbus_func": 3, "start_addr": 2233, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "AL6_ACK", "modbus_func": 6, "start_addr": 2246, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "AL6_TYPE", "modbus_func": 3, "start_addr": 2232, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "INSTRUMENT_MODE", "modbus_func": 6, "start_addr": 199, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "INSTRUMENT_MODE_RB", "modbus_func": 3, "start_addr": 199, "modbus_len": 1, "data_type": "UINT16"},
+	{"name": "ACCESS_PASSWORD", "modbus_func": 16, "start_addr": 21760, "modbus_len": 9, "data_type": "ZSTRING_HIGH_LOW"}
+] %}
+{% for op in operations %}
+{% if ioc.operations.get(op.name, false) %}
+
+epicsEnvSet("PORT_NAME","$(EPC_ASYNPORT)_{{ op.name }}")
+epicsEnvSet("MODBUS_FUNC", "{{ op.modbus_func }}")
+epicsEnvSet("START_ADDR", "{{ op.start_addr }}")
+epicsEnvSet("MODBUS_LEN", "{{ op.modbus_len }}")
+epicsEnvSet("DATA_TYPE", "{{ op.data_type }}")
+
+drvModbusAsynConfigure("$(PORT_NAME)", "$(EPC_ASYNPORT)", 1, $(MODBUS_FUNC), $(START_ADDR), $(MODBUS_LEN), "$(DATA_TYPE)", 1000, "EPC3016")
+
+{% endif %}
+{% endfor %}
+
+dbLoadRecords("$(EUROTHERM_RTC)/db/EPC3016.db", "Sys=$(SYS), Dev=$(DEV), ASYNPORT=$(EPC_ASYNPORT)")

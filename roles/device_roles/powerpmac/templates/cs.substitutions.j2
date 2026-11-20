@@ -1,22 +1,24 @@
 #
 # {{ ansible_managed }}
 #
+# Define virtual axes in a coordinate system
 {% if ioc.virtual_axes is defined %}
-file "$(PPMAC)/db/motor.db"
+file "${PPMAC}/db/cs_motor.db"
 {{"{"}}
 pattern
-{{"{"}}P, M, MOTOR, PORT, ADDR, DESC, DTYP, MRES, EGU, PREC, ALIAS{{"}"}}
+{{"{"}}P, M, MOTOR, PORT, ADDR, DESC, MRES, EGU, PREC{{"}"}}
 {% for axis in ioc.virtual_axes %}
-{{"{"}}"{{ deploy_ioc_merged_env.SYS }}", "{{"{"}}{{ axis.component }}-Ax:{{ axis.name }}{{"}"}}Mtr", "{{ deploy_ioc_merged_env.CTRL_PORT }}", "CS{{ axis.cs }}", {{ axis.num }}, "{{ axis.desc }}", asynMotor, {{ axis.mres }}, "{{ axis.egu }}", 4, ""{{"}"}}
+{{"{"}}"{{ deploy_ioc_merged_env.SYS }}", "{{"{"}}{{ axis.component }}-Ax:{{ axis.name }}{{"}"}}", "CS{{ axis.cs }}", "{{ deploy_ioc_merged_env.CTRL_PORT }}", {{ axis.num }}, "{{ axis.desc }}", {{ axis.mres }}, "{{ axis.egu }}", 4{{"}"}}
 {% endfor %}
 {{"}"}}
 
 {% endif %}
-file "$(PPMAC)/db/motor_in_cs.template"
+# Define real motors that are used in a coordinate system
+file "${PPMAC}/db/motor_in_cs.template"
 {{"{"}}
 pattern
-{{"{"}}P, M, SPORT{{"}"}}
+{{"{"}}P, M, PORT, ADDR{{"}"}}
 {% for axis in ioc.axes %}
-{{"{"}}"{{ deploy_ioc_merged_env.SYS }}", "{{"{"}}{{ axis.component }}-Ax:{{ axis.name }}{{"}"}}Mtr", "{{ deploy_ioc_merged_env.SSH_PORT }}"{{"}"}}
+{{"{"}}"{{ deploy_ioc_merged_env.SYS }}", "{{"{"}}{{ axis.component }}-Ax:{{ axis.name }}{{"}"}}", "{{ deploy_ioc_merged_env.CTRL_PORT }}", {{ axis.num }}{{"}"}}
 {% endfor %}
 {{"}"}}

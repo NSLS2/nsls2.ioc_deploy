@@ -4,11 +4,6 @@
   ansible.builtin.include_vars:
     file: defaults/main.yml
 
-- name: Make sure IOC with given name is configured on host
-  ansible.builtin.fail:
-    msg: "IOC with name {{ deploy_ioc_ioc_name }} is not configured on host"
-  when: deploy_ioc_ioc_name not in deploy_ioc_full_ioc_list
-
 - name: Set IOC configuration to variable
   ansible.builtin.set_fact:
     ioc: "{{ host_config[deploy_ioc_ioc_name] }}"
@@ -19,6 +14,14 @@
 
 - name: Get IOC type specific default vars
   ansible.builtin.include_vars: "vars/{{ ioc.type }}.yml"
+
+- name: Check to make sure IOC can be deployed on this host
+  ansible.builtin.fail:
+    msg: "EL version {{ ansible_distribution_major_version }} not supported"
+  when: >
+    deploy_ioc_supported_el_versions is defined
+    and ansible_distribution == "RedHat"
+    and ansible_distribution_major_version | int not in deploy_ioc_supported_el_versions
 
 - name: Handle any module requirements
   when: deploy_ioc_required_module is defined or ioc.required_module is defined
@@ -43,10 +46,25 @@
       ansible.builtin.set_fact:
         deploy_ioc_required_module_path: "{{ install_module_leaf_module_path }}"
 
-    - name: If specified, override ioc exe with installed module exe
+    - name: If specified, save module-level executable
       ansible.builtin.set_fact:
         deploy_ioc_executable: "{{ install_module_leaf_executable }}"
-      when: install_module_leaf_executable is defined
+      when: install_module_leaf_executable is defined and deploy_ioc_executable is not defined
+
+    - name: If specified, save module-level template root path
+      ansible.builtin.set_fact:
+        deploy_ioc_template_root_path: "{{ install_module_leaf_template_root_path }}"
+      when: install_module_leaf_template_root_path is defined and deploy_ioc_template_root_path is not defined
+
+- name: Override IOC exe name with instance-level value, if set
+  ansible.builtin.set_fact:
+    deploy_ioc_executable: "{{ ioc.executable }}"
+  when: ioc.executable is defined
+
+- name: Override IOC template root path with instance-level value, if set
+  ansible.builtin.set_fact:
+    deploy_ioc_template_root_path: "{{ ioc.ioc_template_root_path }}"
+  when: ioc.ioc_template_root_path is defined
 
 - name: Get default environment variables for ioc type
   ansible.builtin.set_fact:
@@ -67,6 +85,34 @@
       "{{ deploy_ioc_merged_env | combine(ioc.environment) }}"
   when: ioc.environment is defined
 
+# Auto-compute EPICS_DB_INCLUDE_PATH from locally-installed module locations
+# so device role vars don't have to set it manually. Honors any explicit
+# value the user already supplied via device_specific_env or ioc.environment.
+#
+# Only `install_module_installed` is consulted: it lists modules built into
+# non-bundle paths that need their own `$(MOD)/db` entry. The other env
+# dicts (install_module_default_epics_deps, install_module_epics_deps) all
+# point at /usr/lib/epics for unbuilt modules, which is the EPICS_BASE
+# bundle path already covered by `$(EPICS_BASE)/db` at the tail of the list.
+- name: Auto-compute EPICS_DB_INCLUDE_PATH if not explicitly set
+  ansible.builtin.set_fact:
+    deploy_ioc_merged_env:
+      "{{ deploy_ioc_merged_env
+          | combine({'EPICS_DB_INCLUDE_PATH':
+                     deploy_ioc_auto_db_include_path}) }}"
+  vars:
+    deploy_ioc_db_module_keys: >-
+      {{ (install_module_installed | default({})).keys() | list
+         | reject('equalto', 'EPICS_BASE')
+         | select('in', deploy_ioc_merged_env)
+         | list }}
+    deploy_ioc_auto_db_include_path: >-
+      {{ (['$(TOP)/db']
+          + (deploy_ioc_db_module_keys
+             | map('regex_replace', '^(.*)$', '$(\1)/db') | list)
+          + ['$(EPICS_BASE)/db']) | join(':') }}
+  when: "'EPICS_DB_INCLUDE_PATH' not in deploy_ioc_merged_env"
+
 - name: Show merged environment pre-macro substitution
   ansible.builtin.debug:
     msg: "{{ deploy_ioc_merged_env }}"
@@ -85,16 +131,6 @@
 - name: Display merged environment
   ansible.builtin.debug:
     msg: "{{ deploy_ioc_merged_env }}"
-
-- name: Override default IOC exe root path if specified
-  ansible.builtin.set_fact:
-    deploy_ioc_template_root_path: "{{ ioc.ioc_template_root_path }}"
-  when: ioc.ioc_template_root_path is defined
-
-- name: Override default IOC exe name if specified
-  ansible.builtin.set_fact:
-    deploy_ioc_executable: "{{ ioc.executable }}"
-  when: ioc.executable is defined
 
 - name: Get list of substitution files
   ansible.builtin.set_fact:

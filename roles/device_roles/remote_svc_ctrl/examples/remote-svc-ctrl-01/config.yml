@@ -1,0 +1,10 @@
+---
+remote-svc-ctrl-01:
+  type: "remote_svc_ctrl"
+  service_type: systemd
+  environment:
+    PREFIX: "XF:31ID1-CT{SVC-XSPD:1}"
+    USERNAME: xspadmin
+    HOST: "xf31id1-lambda1"
+    SERVICE: xspd.service
+    ENGINEER: "C. Engineer"

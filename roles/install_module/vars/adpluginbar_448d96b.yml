@@ -6,6 +6,6 @@ adpluginbar_448d96b:
   url: https://github.com/areaDetector/ADPluginBar
   include_base_ad_config: true
   module_deps:
-    - adcore_60080dc
+    - adcore_5860bd3
   pkg_deps:
     - zbar-devel

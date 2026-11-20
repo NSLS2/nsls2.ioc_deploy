@@ -1,0 +1,22 @@
+## Register all support components
+dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable }}.dbd")
+{{ deploy_ioc_executable }}_registerRecordDeviceDriver(pdbbase)
+
+# Configure the low level communication port
+drvAsynIPPortConfigure("$(CB_ASYNPORT)","$(HOST):502", 0, 0, 1)
+modbusInterposeConfig("$(CB_ASYNPORT)", 0, 2000, 0)
+
+# Configure circuit breakers
+{% for op in ioc.operations %}
+
+epicsEnvSet("PORT_NAME","{{ op.PORT_NAME }}")
+epicsEnvSet("MODBUS_FUNC", "{{ op.MODBUS_FUNC }}")
+epicsEnvSet("START_ADDR", "{{ op.START_ADDR }}")
+epicsEnvSet("MODBUS_LEN", "{{ op.MODBUS_LEN }}")
+epicsEnvSet("DATA_TYPE", "{{ op.DATA_TYPE }}")
+
+drvModbusAsynConfigure("$(PORT_NAME)", "$(CB_ASYNPORT)", 0, $(MODBUS_FUNC), $(START_ADDR), $(MODBUS_LEN), "$(DATA_TYPE)", 100, "caparoc")
+
+{% endfor %}
+
+dbLoadRecords("$(CAPAROC)/db/caparoc_cb.db","Sys=$(SYS), Dev=$(DEV), ASYNPORT=$(CB_ASYNPORT)")

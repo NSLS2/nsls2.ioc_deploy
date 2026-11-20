@@ -1,0 +1,11 @@
+---
+adsupport_fe23754:
+  name: ADSupport
+  url: https://github.com/areaDetector/ADSupport
+  include_base_ad_config: true
+  version: fe23754
+  pkg_deps:
+    - libxml2-devel
+    - libXext-devel
+    - zlib-devel
+    - libX11-devel

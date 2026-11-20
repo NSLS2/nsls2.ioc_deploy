@@ -2,9 +2,14 @@
 
 Ansible collection meant for centralizing deployment logic for EPICS IOC instances.
 
-The `nsls2.ioc_deploy` collection expects to be used in tandem with two other repositories; one with the playbooks that call these roles with some input parameters, and another repository for storing IOC instance configurations.
+The `nsls2.ioc_deploy` collection expects to be used in tandem with two other (currently private)
+repositories: one with the playbook that eventually calls these roles with input parameters
+([deploy_ioc.yml](https://github.com/NSLS2/ansible/blob/main/deploy_ioc.yml)), and another for
+storing IOC instance configurations ([ioc_host_vars](https://github.com/NSLS2/ioc_host_vars)).
+See the NSLS2 internal deployment documentation:
+[Development Environment Setup](https://docs.nsls2.bnl.gov/docs/how-to/develop-ioc-deployment-role.html).
 
-The collection includes several core central roles that are shared by all deployments, and then one role per type of IOC/hardware, found under `roles/`. Each IOC type also has a `vars` file for overriding default behaviors in `roles/deploy_ioc/vars/`.
+The collection includes several core central roles that are shared by all deployments, and then one role per type of IOC/hardware/device, found under `roles/device_roles/`. Each IOC type also has a `vars` file for overriding default behaviors in `roles/deploy_ioc/vars/`.
 Any required EPICS modules can be automatically built by the `install_module` role. The configured modules can be seen at `roles/install_module/vars/`.
 
 ## Contributing
@@ -34,9 +39,9 @@ Follow the prompts to get started. See [deploy_ioc](roles/deploy_ioc/README.md) 
 
 There are a few required items to help make this repository more maintainable. They are:
 - a `schema.yml` defining how to configure the role for deployment
-- an `example.yml` to demonstrate a working example
+- an example configuration (either `examples/<name>/config.yml` or legacy `example.yml`)
 
-You can deploy your `example.yml` easily. Please see the section on [Local Testing](#local-testing).
+You can deploy your example configuration locally. Please see the section on [Local Testing](#local-testing).
 
 ### Updating an existing role or module
 
@@ -60,19 +65,19 @@ pixi run update-module
 
 This requires pixi and docker or podman.
 
-To get the latest EPICS container for local testing:
+Deploy a device role's example configuration into a local container:
 
 ```bash
-docker login ghcr.io
-docker pull ghcr.io/nsls2/epics-alma8:latest
-docker run -dit --name epics-dev ghcr.io/nsls2/epics-alma8:latest
+pixi run deployment --container -t <role-name>
 ```
 
-Test IOC role locally against an EPICS container:
+Deploy all examples across multiple EL versions:
 
 ```bash
-pixi run test-role <role-name>
+pixi run deploy-all
 ```
+
+The deployment script automatically pulls the required `ghcr.io/nsls2/epics-alma{8,9}:latest` container image and manages the container lifecycle.
 
 ## Helper scripts
 
@@ -89,4 +94,6 @@ Run using `pixi run <command>`.
 | `lint` | Run the linter to check for errors |
 | `lint-changes` | Lint only the changed files |
 | `tests` | Run tests |
-| `test-role` | Test deploying a role using [a local container](#local-testing) |
+| `deployment` | Deploy example configs locally (interactive) |
+| `deploy-all` | Deploy all examples in containers across EL matrix |
+| `ruff-fix` | Auto-fix linting issues |

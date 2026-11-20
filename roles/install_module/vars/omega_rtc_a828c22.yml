@@ -1,0 +1,6 @@
+---
+
+omega_rtc_a828c22:
+  name: omega_rtc
+  version: a828c22
+  url: https://github.com/NSLS-II/omega_rtc_ioc

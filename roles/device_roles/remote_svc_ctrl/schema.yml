@@ -1,0 +1,12 @@
+---
+
+type: enum("remote_svc_ctrl")
+pixi_executable_path: str(required=False)
+service_type: enum("systemd", "initd", default="systemd", required=False)
+environment:
+  PREFIX: str()  # IOC PV Prefix
+  USERNAME: str()  # Username on the remote (DCU) host
+  HOST: any(ip(), hostname())  # Hostname or IP address of the remote (DCU) host
+  SERVICE: str()  # Service name to control on the remote (DCU) host. Typically ends in *.service
+  ENGINEER: str(required=False)
+  LOG_FILE: str(required=False)  # Optionally, log file to watch for output. If not specified, the service's journal will be used.

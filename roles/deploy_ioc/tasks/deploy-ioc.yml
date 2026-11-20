@@ -3,6 +3,11 @@
 - name: Set deployment facts
   ansible.builtin.include_tasks: set-facts.yml
 
+- name: Initialize deploy_ioc_loop_index only if not defined
+  ansible.builtin.set_fact:
+    deploy_ioc_loop_index: 0
+  when: deploy_ioc_loop_index is not defined
+
 - name: Stop existing IOC instance if running
   when: >
     deploy_ioc_post_deploy_step == "Restart" or
@@ -21,13 +26,13 @@
         manage_iocs_subcommand: "{{ deploy_ioc_ioc_name }}"
       when: deploy_ioc_service_file.stat.exists
 
-- name: Create IOC directory
+- name: Create IOC directory if it doesn't exist
   ansible.builtin.file:
     path: "{{ deploy_ioc_ioc_directory }}"
+    state: directory
     owner: "{{ host_config.softioc_user }}"
     group: "{{ host_config.softioc_group }}"
-    state: directory
-    mode: "0775"
+    mode: "02775"
 
 - name: Perform base setup when using standard startup script format
   when: deploy_ioc_standard_st_cmd
@@ -38,7 +43,7 @@
         owner: "{{ host_config.softioc_user }}"
         group: "{{ host_config.softioc_group }}"
         state: directory
-        mode: "0775"
+        mode: "02775"
       with_items:
         - "db"
         - "iocBoot"
@@ -85,6 +90,52 @@
         group: "{{ host_config.softioc_group }}"
         mode: "0775"
 
+    - name: Delete any existing autosave files if requested
+      ansible.builtin.shell:
+        cmd: find . -name '*.sav*' -type f -print -delete
+        chdir: "{{ deploy_ioc_as_directory }}/save"
+      register: deploy_ioc_cleared_autosave
+      when:
+        - deploy_ioc_clear_autosave_files is defined
+        - deploy_ioc_clear_autosave_files | bool
+      changed_when: deploy_ioc_cleared_autosave.stdout | length > 0
+
+- name: Create manual IOC file destination directories
+  ansible.builtin.file:
+    path: >-
+      {{ deploy_ioc_ioc_directory }}/{{
+        'iocBoot' if item.key.endswith('.cmd')
+        else deploy_ioc_as_dir_name ~ '/req' if item.key.endswith('.req')
+        else 'db'
+      }}
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    state: directory
+    mode: "02775"
+  loop: "{{ deploy_ioc_manual_ioc_files | default({}) | dict2items }}"
+  when:
+    - deploy_ioc_manual_ioc_files is defined
+    - deploy_ioc_manual_ioc_files | length > 0
+    - item.key | regex_search('\.(cmd|req|db|template|substitutions|xml|json|yaml|toml)$')
+
+- name: Copy manual IOC files to appropriate directories
+  ansible.builtin.copy:
+    content: "{{ item.value }}"
+    dest: >-
+      {{ deploy_ioc_ioc_directory }}/{{
+        'iocBoot' if item.key.endswith('.cmd')
+        else deploy_ioc_as_dir_name ~ '/req' if item.key.endswith('.req')
+        else 'db'
+      }}/{{ item.key }}
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+  loop: "{{ deploy_ioc_manual_ioc_files | default({}) | dict2items }}"
+  when:
+    - deploy_ioc_manual_ioc_files is defined
+    - deploy_ioc_manual_ioc_files | length > 0
+    - item.key | regex_search('\.(cmd|req|db|template|substitutions|xml|json|yaml|toml)$')
+
 - name: Deploy IOC template
   ansible.builtin.include_role:
     name: "nsls2.ioc_deploy.device_roles.{{ ioc.type }}"
@@ -107,6 +158,69 @@
 
 - name: Generate manage-iocs config file
   ansible.builtin.include_tasks: update-config.yml
+
+- name: Ensure ownership of all files and directories is correct
+  ansible.builtin.command:
+    cmd: "chown -R {{ host_config.softioc_user }}:{{ host_config.softioc_group }} {{ deploy_ioc_ioc_directory }}"
+  changed_when: true
+
+- name: Query IOC directory ACLs
+  ansible.posix.acl:
+    path: "{{ deploy_ioc_ioc_directory }}"
+    state: query
+  register: deploy_ioc_ioc_directory_acl_query
+  changed_when: false
+
+- name: Get IOC directory ACL users and groups
+  ansible.builtin.set_fact:
+    deploy_ioc_group_acls: >-
+      {{
+        (
+          deploy_ioc_group_acls | default([])
+        )
+        + (
+          deploy_ioc_ioc_directory_acl_query.acl
+          | select('match', '^(default:)?group:[^:]+:')
+          | reject('match', '^(default:)?group::')
+          | map('regex_replace', '^(?:default:)?group:([^:]+):.*$', '\1')
+          | list
+        )
+        | unique
+      }}
+    deploy_ioc_user_acls: >-
+      {{
+        (
+          deploy_ioc_user_acls | default([])
+        )
+        + (
+          deploy_ioc_ioc_directory_acl_query.acl
+          | select('match', '^(default:)?user:[^:]+:')
+          | reject('match', '^(default:)?user::')
+          | map('regex_replace', '^(?:default:)?user:([^:]+):.*$', '\1')
+          | list
+        )
+        | unique
+      }}
+  changed_when: false
+
+- name: Make contents of EPICS writable by groups via ACLs
+  ansible.builtin.command: >-
+    setfacl -nR{{ item.1 }}m g:{{ item.0 }}:rwX {{ deploy_ioc_ioc_directory }}
+  changed_when: true
+  loop: >-
+    {{ deploy_ioc_group_acls | product(['', 'd']) | list }}
+  loop_control:
+    label: "{{ item.0 }}{{ ' default' if 'd' in item.1 else '' }}"
+
+- name: Make contents of EPICS writable by users via ACLs
+  ansible.builtin.command: >-
+    setfacl -nR{{ item.1 }}m u:{{ item.0 }}:rwX {{ deploy_ioc_ioc_directory }}
+  changed_when: true
+  loop: >-
+    {{ deploy_ioc_user_acls |
+       product(['', 'd']) | list }}
+  loop_control:
+    label: "{{ item.0 }}{{ ' default' if 'd' in item.1 else '' }}"
 
 - name: Perform post-deployment IOC setup tasks
   when: deploy_ioc_post_deploy_step != "None"

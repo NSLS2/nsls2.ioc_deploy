@@ -1,0 +1,8 @@
+---
+deploy_ioc_use_common: true
+deploy_ioc_required_module: thermo_con_hecr_b7300bb
+deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
+deploy_ioc_make_autosave_files: true
+deploy_ioc_executable: thermo_con_hecr
+deploy_ioc_device_specific_env:
+  EPICS_DB_INCLUDE_PATH: "$(THERMO_CON_HECR)/db"

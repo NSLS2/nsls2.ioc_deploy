@@ -1,0 +1,10 @@
+---
+
+ppmac_91b4edc:
+  name: "ppmac"
+  url: "https://github.com/NSLS2/ppmac"
+  version: "91b4edc"
+  executable: "ppmac"
+  overwrite_release: true
+  module_deps:
+    - pmac_f811ee1

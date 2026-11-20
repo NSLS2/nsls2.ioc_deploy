@@ -1,0 +1,12 @@
+---
+
+zpsc-01:
+  type: zpsc
+  environment:
+    ENGINEER: Y. Tian
+    SYSTEMS: SR:C12-MG
+    DEVICE: PS:SKQ
+    NUM: "1"
+    BLEN: 100000
+    PSC1_IP: "10.0.140.201"
+    PREFIX: $(SYSTEMS){$(DEVICE)$(NUM)}

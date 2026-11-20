@@ -4,7 +4,11 @@ dbLoadDatabase("{{ deploy_ioc_template_root_path }}/dbd/{{ deploy_ioc_executable
 
 # linkamt96 specific commands
 
-{% if ioc.environment.get('SERIAL_PORT') %}
+{% if ioc.environment.get('MOXA_HOST') and ioc.environment.get('MOXA_PORT') %}
+# Connection via socat PTY bridge to Moxa terminal server
+# Managed by systemd service: linkam-pty-{{ deploy_ioc_ioc_name }}
+Linkam3ConnectSerial("$(PORT)", "/dev/linkam-pty-{{ deploy_ioc_ioc_name }}", "$(LINKAM3_LICENSE_PATH)", "$(LINKAM3_LOG_PATH)")
+{% elif ioc.environment.get('SERIAL_PORT') %}
 Linkam3ConnectSerial("$(PORT)", "$(SERIAL_PORT)", "$(LINKAM3_LICENSE_PATH)", "$(LINKAM3_LOG_PATH)")
 {% else %}
 Linkam3ConnectUSB("$(PORT)", "$(VENDOR_ID)", "$(PRODUCT_ID)", "$(LINKAM3_LICENSE_PATH)", "$(LINKAM3_LOG_PATH)")

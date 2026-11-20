@@ -1,7 +1,0 @@
----
-
-va_f4f62f6:
-  name: va
-  version: f4f62f6
-  url: https://github.com/nsls2/va-ioc
-  module_deps: []

@@ -1,0 +1,8 @@
+---
+zpsc_4abc489:
+  name: ZPSC
+  url: https://github.com/NSLS2/zPSC.git
+  version: 4abc489
+  compilation_command: "make -s"
+  module_deps:
+    - pscdrv_1ed650d

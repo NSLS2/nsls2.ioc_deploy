@@ -10,6 +10,23 @@ import tabulate
 import yaml
 
 
+class IndentedDumper(yaml.SafeDumper):
+    def increase_indent(self, flow=False, indentless=False):
+        return super().increase_indent(flow, False)
+
+
+def write_yaml_config(path, data):
+    with open(path, "w") as file:
+        yaml.dump(
+            data,
+            file,
+            Dumper=IndentedDumper,
+            default_flow_style=False,
+            sort_keys=False,
+            explicit_start=True,
+        )
+
+
 def get_module_list():
     """Return a list of module names from the install_module vars directory."""
     return [
@@ -24,6 +41,19 @@ def get_role_list():
         os.path.splitext(f)[0]
         for f in os.listdir(os.path.join("roles", "deploy_ioc", "vars"))
     ]
+
+
+def parse_package_list(raw_input):
+    """Parse package names from comma/space-separated user input."""
+    if not raw_input:
+        return []
+
+    packages = []
+    for package in raw_input.replace(",", " ").split():
+        if package not in packages:
+            packages.append(package)
+
+    return packages
 
 
 def add_module():
@@ -52,6 +82,12 @@ def add_module():
         choices=get_module_list(),
     ).unsafe_ask()
 
+    pkg_deps_raw = questionary.text(
+        "Additional system packages (e.g., fftw-devel) to be installed? "
+        "Hit Enter if no.",
+    ).unsafe_ask()
+    pkg_deps = parse_package_list(pkg_deps_raw)
+
     module_name_ver = f"{module_name.lower()}_{module_version}"
 
     module_config = {
@@ -61,6 +97,7 @@ def add_module():
             "url": url,
             "include_base_ad_config": is_ad,
             "module_deps": module_deps,
+            "pkg_deps": pkg_deps,
         }
     }
 
@@ -72,14 +109,14 @@ def add_module():
         file.write("---\n\n")
         file.write(f"{module_name_ver}:\n")
         for key, value in module_config[module_name_ver].items():
-            if key != "module_deps" and not (
-                key == "include_base_ad_config" and not value
-            ):
+            if key in ["module_deps", "pkg_deps"]:
+                if len(value) > 0:
+                    file.write(f"  {key}:\n")
+                    for dep in value:
+                        file.write(f"    - {dep}\n")
+                continue
+            if not (key == "include_base_ad_config" and not value):
                 file.write(f"  {key}: {value}\n")
-            elif key == "module_deps" and len(value) > 0:
-                file.write(f"  {key}:\n")
-                for dep in value:
-                    file.write(f"    - {dep}\n")
 
     return module_name_ver
 
@@ -113,8 +150,7 @@ def update_module():
         "roles", "install_module", "vars", f"{new_module_name_ver}.yml"
     )
 
-    with open(new_module_config_path, "w") as file:
-        yaml.dump(new_module_config, file, default_flow_style=False, sort_keys=False)
+    write_yaml_config(new_module_config_path, new_module_config)
 
     print(f"Updating {module_base_name} to {new_version} for all dependant modules...")
     module_var_files = [

@@ -1,0 +1,8 @@
+---
+
+eurotherm_rtc_43bcabd:
+  name: eurotherm_rtc
+  version: 43bcabd
+  url: https://github.com/NSLS2/eurotherm-rtc-ioc.git
+  module_deps:
+    - modbus_bb9fa05

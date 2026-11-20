@@ -1,0 +1,13 @@
+[workspace]
+requires-pixi = ">=0.82.1"
+authors = ["Jakub Wlodek <jwlodek@bnl.gov>"]
+channels = ["conda-forge"]
+name = "files"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[dependencies]
+python = ">=3.13,<3.14"
+
+[pypi-dependencies]
+remote-svc-ctrl = { git = "https://github.com/NSLS2/remote-svc-ctrl.git", branch = "main" }

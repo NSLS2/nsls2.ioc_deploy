@@ -6,6 +6,6 @@ adcompvision_9750d13:
   include_base_ad_config: true
   version: 9750d13
   module_deps:
-    - adcore_60080dc
+    - adcore_5860bd3
   pkg_deps:
     - opencv-devel

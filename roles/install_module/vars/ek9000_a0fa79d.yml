@@ -1,0 +1,8 @@
+---
+
+ek9000_a0fa79d:
+    name: "ek9000"
+    url: "https://github.com/NSLS2/ek9000"
+    version: a0fa79d
+    module_deps:
+        - modbus_bb9fa05

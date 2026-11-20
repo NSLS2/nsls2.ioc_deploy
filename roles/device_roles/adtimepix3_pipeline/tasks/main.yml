@@ -1,0 +1,39 @@
+---
+
+- name: Install toml
+  ansible.builtin.template:
+    src: "templates/pixi.toml.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/pixi.toml"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Install lock
+  ansible.builtin.template:
+    src: "templates/pixi.lock.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/pixi.lock"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Install conversion config
+  ansible.builtin.copy:
+    src: "files/tpx3.json"
+    dest: "{{ deploy_ioc_ioc_directory }}/tpx3.json"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0664"
+
+- name: Install dependencies
+  ansible.builtin.command:
+    cmd: "{{ ioc.pixi_executable_path | default(deploy_ioc_pixi_executable_path) }} install"
+    chdir: "{{ deploy_ioc_ioc_directory }}"
+  changed_when: true
+
+- name: Install startup script
+  ansible.builtin.template:
+    src: "templates/st.cmd.j2"
+    dest: "{{ deploy_ioc_ioc_directory }}/st.cmd"
+    owner: "{{ host_config.softioc_user }}"
+    group: "{{ host_config.softioc_group }}"
+    mode: "0775"

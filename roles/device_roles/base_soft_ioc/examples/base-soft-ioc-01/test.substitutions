@@ -1,0 +1,6 @@
+file "$(TOP)/db/test.db"
+{
+pattern
+{ P		        , R	}
+{ "TEST"	, "{PRM:CONFIG}" }
+}

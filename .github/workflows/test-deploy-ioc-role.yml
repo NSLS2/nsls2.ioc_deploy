@@ -1,0 +1,78 @@
+---
+
+name: Test Deploy IOC Role
+permissions:
+  contents: read
+  packages: read
+
+on:
+
+  # Specifically avoid triggering on changes to vars in deploy_ioc and
+  # install_module. Changes to `vars` are tested via test-device-roles.yml,
+  # so don't re-test with this workflow.
+  pull_request:
+    branches: [main]
+    paths:
+      - 'roles/deploy_ioc/**'
+      - 'roles/install_module/**'
+      - '!roles/deploy_ioc/vars/**'
+      - '!roles/install_module/vars/**'
+  workflow_dispatch:
+
+jobs:
+  test-single-python-ioc:
+    name: Test deployment of a Python IOC
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rhel_version: [8, 9]
+      fail-fast: false
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Pixi
+        uses: prefix-dev/setup-pixi@8ca4608ef7f4daeb54f5205b20d0b7cb42f11143
+        with:
+          pixi-version: v0.83.0
+          cache: false
+          frozen: true
+
+      - name: Test Deployment
+        run: >
+          pixi run deployment -t pandabox
+          --container -m ${{ matrix.rhel_version }}
+
+  test-compiled-ioc:
+    name: Test deployment of compiled IOCs
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rhel_version: [8, 9]
+      fail-fast: false
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Pixi
+        uses: prefix-dev/setup-pixi@8ca4608ef7f4daeb54f5205b20d0b7cb42f11143
+        with:
+          pixi-version: v0.83.0
+          cache: false
+          frozen: true
+
+      - name: Test Deployment of PowerPMAC IOC
+        run: >
+          pixi run deployment -t powerpmac
+          --container -m ${{ matrix.rhel_version }}
+
+      - name: Test Deployment of RBD9103 IOC
+        run: >
+          pixi run deployment -t rbd9103
+          --container -m ${{ matrix.rhel_version }}

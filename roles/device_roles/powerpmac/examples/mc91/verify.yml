@@ -1,0 +1,75 @@
+---
+# Set to true to skip module compilation (for roles requiring proprietary SDKs)
+skip_compilation: false
+
+verification:
+  files_must_exist:
+    # Standard IOC boot files (created by deploy_ioc)
+    - iocBoot/st.cmd
+    - iocBoot/epicsEnv.cmd
+    - iocBoot/postInit.cmd
+    # Role-specific files
+    - iocBoot/base.cmd
+    - db/motor.substitutions
+    - db/motorstatus.substitutions
+    - db/pmacStatus.substitutions
+    - db/cs.substitutions
+    - db/autohome.substitutions
+
+  file_must_contain:
+    iocBoot/st.cmd:
+      - "iocInit"
+    iocBoot/base.cmd:
+      - "dbLoadDatabase"
+      - 'pmacCreateController("$(CTRL_PORT)", "$(SSH_PORT)", 0, $(NUM_AXES), 100, 1000)'
+      - pmacDisableLimitsCheck("$(CTRL_PORT)", 1, 0)
+      - pmacCreateCS("CS2", "$(CTRL_PORT)", 2, 10)
+      - pmacCreateAxes("$(CTRL_PORT)", $(NUM_AXES))
+      - pmacSetCoordStepsPerUnit("CS2", 7, 100000)
+      - 'dbLoadTemplate("$(TOP)/db/cs.substitutions")' # Loaded because virtual axes are defined
+
+    db/motor.substitutions:
+      - '{"XF:31ID1-OP:1", "{CMT:1-Ax:Rot}", "M0", "P0", 1, "Rotation", 0.045, "deg", 4}'
+      - '{"XF:31ID1-OP:1", "{CMT:1-Ax:X}", "M0", "P0", 2, "X translation", 5e-05, "mm", 4}'
+      - '{"XF:31ID1-OP:1", "{CMT:1-Ax:Y}", "M0", "P0", 3, "Y translation", 5e-05, "mm", 4}'
+      - '{"XF:31ID1-OP:1", "{CMT:1-Ax:Z}", "M0", "P0", 4, "Z translation", 5e-05, "mm", 4}'
+    db/cs.substitutions:
+      - '{"XF:31ID1-OP:1", "{CMT:1-Ax:Diag}", "CS2", "M0", 7, "X-Y Diagonal translation virtual axis", 1e-05, "mm", 4}'
+      - '{"XF:31ID1-OP:1", "{CMT:1-Ax:Rot}", "M0", 1}'
+    db/autohome.substitutions:
+      - '{"XF:31ID1-OP:1", "{CMT:1-Ax:Rot}", 8, "P0"}'
+      - '{"XF:31ID1-OP:1", "{CMT:1-Ax:X}", 9, "P0"}'
+      - '{"XF:31ID1-OP:1", "{CMT:1-Ax:Y}", 10, "P0"}'
+      - '{"XF:31ID1-OP:1", "{CMT:1-Ax:Z}", 11, "P0"}'
+      - '{"XF:31ID1-OP:1", "{CMT:1-Ax:Diag}", 17, "P0"}'
+
+  file_must_not_contain:
+    iocBoot/st.cmd:
+      - "{{"  # No unrendered jinja
+      - "}}"
+    iocBoot/base.cmd:
+      - "{{"
+      - "}}"
+      - "# Disable limits check for all axes"
+      - pmacDisableLimitsCheck("$(CTRL_PORT)", 0, 1)
+    iocBoot/epicsEnv.cmd:
+      - "{{"
+      - "}}"
+    db/motor.substitutions:
+      - "{{"
+      - "}}"
+    db/motorstatus.substitutions:
+      - "{{"
+      - "}}"
+    db/pmacStatus.substitutions:
+      - "{{"
+      - "}}"
+    db/cs.substitutions:
+      - "{{"
+      - "}}"
+    db/autohome.substitutions:
+      - "{{"
+      - "}}"
+
+  permissions:
+    iocBoot/st.cmd: "0775"
