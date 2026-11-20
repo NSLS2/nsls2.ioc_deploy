@@ -3,4 +3,7 @@
 mrftiming_3bb9fcf:
   name: MRFTiming
   version: 3bb9fcf
-  url: https://github.com/NSLS2/MRFTiming
+  url: https://github.com/NSLS2/MRFTiming.git
+  module_deps:
+    - epics_mrf_82f7bbb
+    - elauncher_21dede8

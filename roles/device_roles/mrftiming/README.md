@@ -1,3 +1,3 @@
-# MRFTiming
+# mrftiming
 
-Ansible role for deploying MRFTiming IOC instances.
+Ansible role for deploying mrftiming IOC instances.
