@@ -144,6 +144,8 @@ repos:
     hooks:
       - id: shellcheck
         types: [shell]
+        # Unrendered Jinja2 templates aren't valid shell until rendered
+        exclude: '\.j2$'
         description: Run shellcheck linter
 
   # ────────────────────────────────────────────────────────────
