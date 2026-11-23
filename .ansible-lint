@@ -4,7 +4,11 @@ mock_modules:
   - ansible.posix.mount # For some reason ansible lint doesn't find this
 
 exclude_paths:
-  - ".github/workflows/super-linter.yml"
+  - ".github/workflows/"
+  - ".markdownlint.yaml"
+  - ".pre-commit-config.yaml"
+  - ".yamllint.yml"
+  - "zizmor.yaml"
   # Be more flexible for install module vars, since they are based
   # on epics module names
   - "roles/install_module/vars/"

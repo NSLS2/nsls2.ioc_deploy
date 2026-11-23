@@ -22,15 +22,18 @@ jobs:
       has-changes: ${{ steps.set-roles.outputs.has-changes }}
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Detect Modified Device Roles
         id: set-roles
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
             # Manual run: test all roles
             ROLES=$(find roles/device_roles/ -mindepth 1 -maxdepth 1 \
               -type d -exec basename {} \; \
@@ -41,7 +44,7 @@ jobs:
           else
             # PR: test only modified roles
             ROLES=$(git diff --name-only \
-              "origin/${{ github.base_ref }}...HEAD" \
+              "origin/${BASE_REF}...HEAD" \
               | awk '{
                   if ($0 ~ /^roles\/device_roles\//) {
                     split($0, a, "/")
@@ -81,16 +84,19 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
 
       - name: Setup Pixi
-        uses: prefix-dev/setup-pixi@8ca4608ef7f4daeb54f5205b20d0b7cb42f11143
+        uses: prefix-dev/setup-pixi@9936258fee697aff89b3fed6ca1f80a382ef694e
         with:
           pixi-version: v0.83.0
           cache: false
           frozen: true
 
       - name: Test Deployment
-        run: pixi run deployment -t ${{ matrix.role }} --container -m ${{ matrix.rhel_version }}
+        env:
+          ROLE: ${{ matrix.role }}
+          RHEL_VERSION: ${{ matrix.rhel_version }}
+        run: pixi run deployment -t "$ROLE" --container -m "$RHEL_VERSION"

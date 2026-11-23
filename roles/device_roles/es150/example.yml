@@ -18,7 +18,7 @@ es150-01:
       IP_PORT: 4003
       PORT: ES150-3
 
-# Schema is in-exact, so caution must be used when copying filepath/patern
+# Schema is in-exact, so caution must be used when copying filepath/pattern
   substitutions:
     dcps: # DC Power Supply
       - filepath: "$(DCPSES150)/db/powersupply.template"

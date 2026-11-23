@@ -32,6 +32,12 @@ MANUAL_FILE_EXTENSIONS = {
     ".toml",
 }
 
+DEVICE_ROLES_PATH = Path(__file__).parent.parent / "roles" / "device_roles"
+PRE_DEPLOY_HOOK_INTERPRETERS = {
+    "pre_deploy.sh": "bash",
+    "pre_deploy.py": "python3",
+}
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("nsls2.ioc_deploy")
 
@@ -154,6 +160,53 @@ def ensure_container_running(container_name: str, el_version: int = 8):
         raise RuntimeError(f"Failed to ensure container is running: {e}") from e
 
 
+def run_pre_deploy_hooks(container_name: str, role: str, el_version: int) -> bool:
+    """Run a role's test_hooks/pre_deploy.{sh,py} scripts inside the container.
+
+    Returns False if any hook fails, True otherwise (including when no hooks exist).
+    """
+    hooks_dir = DEVICE_ROLES_PATH / role / "test_hooks"
+    for hook_name, interpreter in PRE_DEPLOY_HOOK_INTERPRETERS.items():
+        hook_path = hooks_dir / hook_name
+        if not hook_path.is_file():
+            continue
+
+        container_hook_path = f"/tmp/{role}_{hook_name}"
+        logger.info(f"Running pre-deploy hook {hook_path} in {container_name}")
+        try:
+            subprocess.run(
+                [
+                    "docker",
+                    "cp",
+                    str(hook_path),
+                    f"{container_name}:{container_hook_path}",
+                ],
+                check=True,
+            )
+            subprocess.run(
+                [
+                    "docker",
+                    "exec",
+                    "-u",
+                    "root",
+                    "-e",
+                    f"IOC_DEPLOY_ROLE={role}",
+                    "-e",
+                    f"IOC_DEPLOY_EL_VERSION={el_version}",
+                    container_name,
+                    interpreter,
+                    container_hook_path,
+                ],
+                check=True,
+            )
+        except subprocess.CalledProcessError as e:
+            logger.error(
+                f"Pre-deploy hook {hook_path} failed with exit code {e.returncode}"
+            )
+            return False
+    return True
+
+
 def install_galaxy_collection(
     name: str, is_req_file: bool = False, force: bool = False
 ):
@@ -239,6 +292,7 @@ class DeploymentOptions:
 
 def deploy_configs(options: DeploymentOptions):
     deployment_summary: dict[str, tuple[Path, bool]] = {}
+    pre_deploy_hook_results: dict[str, bool] = {}
 
     if options.container:
         ensure_container_running(options.hostname, el_version=options.el_version)
@@ -258,6 +312,21 @@ def deploy_configs(options: DeploymentOptions):
                 f"Skipping {ioc_name} on el{options.el_version}, unsupported"
             )
             continue
+
+        ioc_type = (config_data.get(ioc_name) or {}).get("type")
+        if options.container and ioc_type:
+            if options.dry_run:
+                logger.info(f"Dry run; skipping pre-deploy hooks for {ioc_type}")
+            elif ioc_type not in pre_deploy_hook_results:
+                pre_deploy_hook_results[ioc_type] = run_pre_deploy_hooks(
+                    options.hostname, ioc_type, options.el_version
+                )
+            if not pre_deploy_hook_results.get(ioc_type, True):
+                logger.error(
+                    f"Skipping {ioc_name}; pre-deploy hook(s) for {ioc_type} failed"
+                )
+                deployment_summary[ioc_name] = (path, False)
+                continue
 
         example_skip_compilation = False
 
@@ -608,6 +677,7 @@ def main():
                 logger.warning(f"Failed to load config '{cfg}': {e}")
 
     running_deployment_summary: dict[int, dict[str, tuple[Path, bool]]] = {}
+    host_deployment_summary: dict[str, tuple[Path, bool]] = {}
 
     overall_success = True
     if args.container:
@@ -636,7 +706,7 @@ def main():
         logger.info(
             f"Executing {len(configs_to_deploy)} deployment(s) onto {args.limit}"
         )
-        overall_success, running_deployment_summary = deploy_configs(
+        overall_success, host_deployment_summary = deploy_configs(
             DeploymentOptions(
                 hostname=args.limit,
                 configs=configs_to_deploy,
@@ -664,7 +734,7 @@ def main():
                 print(f"  {ioc_name} | {path.absolute()}: {status_msg}")
             print()
     else:
-        for ioc_name, (path, success) in running_deployment_summary.items():
+        for ioc_name, (path, success) in host_deployment_summary.items():
             color = EscapeCodes.GREEN.value if success else EscapeCodes.RED.value
             status_text = "Success" if success else "Failed"
             status_msg = f"{color}{status_text}{EscapeCodes.RESET.value}"

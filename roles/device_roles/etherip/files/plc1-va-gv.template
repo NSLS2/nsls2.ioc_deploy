@@ -1,6 +1,6 @@
 # Gate Valve Template
 # Interfaces to GV UDTs in PLC, i.e. GV_GV_Sts and GV_GV_Cmd
-# This template can be used for non-vacuum valves which re-use GV Handler objects
+# This template can be used for non-vacuum valves which reuse GV Handler objects
 
 #
 # Gate Valve Readbacks/Statuses

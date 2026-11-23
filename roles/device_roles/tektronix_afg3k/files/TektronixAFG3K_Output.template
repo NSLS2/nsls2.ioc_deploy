@@ -54,7 +54,7 @@ record(ao, "$(P)$(R)$(OUTPUT_NUM):Impedance") {
 }
 
 record(ai, "$(P)$(R)$(OUTPUT_NUM):Impedance_RBV") {
-    field(DESC, "Impedence Status")
+    field(DESC, "Impedance Status")
     field(DTYP, "stream")
     field(HIHI, "10000")
     field(LOLO, "1")
