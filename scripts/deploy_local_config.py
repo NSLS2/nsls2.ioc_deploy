@@ -514,7 +514,7 @@ def main():
         "--extra-environment",
         type=str,
         nargs="+",
-        help="Extra environmnet to pass to ansible-playbook"
+        help="Extra environment to pass to ansible-playbook",
     )
 
     example_source_group = parser.add_mutually_exclusive_group()
@@ -709,7 +709,7 @@ def main():
                     el_version=el_version,
                     pixi_path=args.pixi_path,
                     manual_ioc_files=manual_ioc_files,
-                    extra_environment=args.extra_environment,
+                    extra_environment=args.extra_environment or [],
                 )
             )
             overall_success = overall_success and el_version_success
@@ -729,7 +729,7 @@ def main():
                 container=args.container,
                 pixi_path=args.pixi_path,
                 manual_ioc_files=manual_ioc_files,
-                extra_environment=args.extra_environment,
+                extra_environment=args.extra_environment or [],
             )
         )
 
