@@ -288,6 +288,7 @@ class DeploymentOptions:
     el_version: int = 8
     pixi_path: str = "pixi"
     manual_ioc_files: dict[str, dict[str, str]] = field(default_factory=dict)
+    extra_environment: list[str] = field(default_factory=list)
 
 
 def deploy_configs(options: DeploymentOptions):
@@ -378,6 +379,9 @@ def deploy_configs(options: DeploymentOptions):
         if options.skip_compilation or (options.container and example_skip_compilation):
             logger.info("Skipping any module compilations")
             playbook_cmd.extend(["-e", "install_module_skip_compilation=true"])
+
+        for extra_env in options.extra_environment:
+            playbook_cmd.extend(["-e", extra_env])
 
         manual_files_tmpfile = None
         if ioc_name in options.manual_ioc_files:
@@ -481,7 +485,7 @@ def main():
         nargs="+",
         help="Path to local IOC configuration files to deploy",
     )
-    parser.add_argument("-e", "--examples", nargs="+", help="Which examples to deploy")
+    parser.add_argument("--examples", nargs="+", help="Which examples to deploy")
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="Enable verbose output"
     )
@@ -504,6 +508,13 @@ def main():
             "Skip reinstall/rebuild of the local nsls2.ioc_deploy collection before "
             "deployment"
         ),
+    )
+    parser.add_argument(
+        "-e",
+        "--extra-environment",
+        type=str,
+        nargs="+",
+        help="Extra environmnet to pass to ansible-playbook"
     )
 
     example_source_group = parser.add_mutually_exclusive_group()
@@ -698,6 +709,7 @@ def main():
                     el_version=el_version,
                     pixi_path=args.pixi_path,
                     manual_ioc_files=manual_ioc_files,
+                    extra_environment=args.extra_environment,
                 )
             )
             overall_success = overall_success and el_version_success
@@ -717,6 +729,7 @@ def main():
                 container=args.container,
                 pixi_path=args.pixi_path,
                 manual_ioc_files=manual_ioc_files,
+                extra_environment=args.extra_environment,
             )
         )
 
