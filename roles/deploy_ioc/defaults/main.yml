@@ -14,6 +14,13 @@ deploy_ioc_as_directory:
 # Specifies what post deployment step to take for each IOC.
 deploy_ioc_post_deploy_step: "None"
 
+# Category of device that the IOC type controls. Each device role sets this in
+# its vars file. Must be one of: "Motor", "Camera", "Detector",
+# "Sample Environment", "Electrometer", "Diagnostic", "Timing", "Vacuum", "PLC",
+# "Power", "IO", or "Misc" (for anything that does not fit the other
+# categories).
+deploy_ioc_device_type: "Misc"
+
 # The two below are concatenated to form the full IOC executable path,
 # and its associated dbd file. These can be overridden as needed.
 # They must be set either at the role level (in device role vars), at the module level (ioc_template_root_path and executable),

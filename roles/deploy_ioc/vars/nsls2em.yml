@@ -1,4 +1,7 @@
 ---
+
+deploy_ioc_device_type: "Electrometer"
+
 deploy_ioc_required_module: nsls2em_0e8b996
 deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"
 deploy_ioc_executable: nsls2em

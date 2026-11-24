@@ -1,5 +1,7 @@
 ---
 
+deploy_ioc_device_type: "Detector"
+
 deploy_ioc_use_common: true
 deploy_ioc_use_ad_common: true
 deploy_ioc_required_module: adeiger_a7b25dc

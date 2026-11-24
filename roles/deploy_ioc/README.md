@@ -121,6 +121,16 @@ These are defined in `defaults/main.yml`.
 
 ### IOC Deployment Behavior
 
+**`deploy_ioc_device_type`**
+
+- **Type**: string (enum)
+- **Default**: `"Misc"`
+- **Description**: Category of device the IOC type controls. Every device role
+  must set this in `vars/<type>.yml`. Allowed values: `"Motor"`, `"Camera"`,
+  `"Detector"`, `"Sample Environment"`, `"Electrometer"`, `"Diagnostic"`,
+  `"Timing"`, `"Vacuum"`, `"PLC"`, `"Power"`, `"IO"`, and `"Misc"` for devices
+  that do not fit any other category.
+
 **`deploy_ioc_executable`**
 
 - **Type**: string

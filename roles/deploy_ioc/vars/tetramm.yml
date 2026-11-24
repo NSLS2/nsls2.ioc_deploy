@@ -1,4 +1,7 @@
 ---
+
+deploy_ioc_device_type: "Electrometer"
+
 deploy_ioc_standard_st_cmd: true
 deploy_ioc_executable: "quadEMTestApp"
 deploy_ioc_as_dir_name: autosave

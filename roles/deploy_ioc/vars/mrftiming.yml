@@ -1,5 +1,7 @@
 ---
 
+deploy_ioc_device_type: "Timing"
+
 deploy_ioc_required_module: mrftiming_3bb9fcf
 deploy_ioc_executable: MRFTiming
 deploy_ioc_use_common: true
