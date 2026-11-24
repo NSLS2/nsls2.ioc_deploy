@@ -1,4 +1,7 @@
 ---
+
+deploy_ioc_device_type: "Sample Environment"
+
 deploy_ioc_use_common: true
 deploy_ioc_use_ad_common: false
 deploy_ioc_required_module: modbus_bb9fa05

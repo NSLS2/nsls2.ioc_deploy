@@ -1,5 +1,7 @@
 ---
 
+deploy_ioc_device_type: "Camera"
+
 deploy_ioc_as_dir_name: autosave
 deploy_ioc_required_module: adkinetix_aa87406
 deploy_ioc_template_root_path:

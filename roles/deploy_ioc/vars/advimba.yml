@@ -1,5 +1,7 @@
 ---
 
+deploy_ioc_device_type: "Camera"
+
 deploy_ioc_template_root_path:
   "{{ deploy_ioc_required_module_path }}/iocs/vimbaIOC"
 deploy_ioc_required_module: advimba_34686fe

@@ -1,4 +1,7 @@
 ---
+
+deploy_ioc_device_type: "Motor"
+
 deploy_ioc_use_common: true
 deploy_ioc_required_module: "tpmac_44274d1"
 deploy_ioc_executable: tpmac

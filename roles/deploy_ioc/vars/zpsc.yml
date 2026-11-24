@@ -1,5 +1,7 @@
 ---
 
+deploy_ioc_device_type: "Power"
+
 deploy_ioc_required_module: zpsc_4abc489
 deploy_ioc_executable: zpsc
 deploy_ioc_template_root_path: "{{ install_module_leaf_module_path }}"

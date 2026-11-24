@@ -182,7 +182,10 @@ pixi run make-role     # optionally creates the install_module entry too
 
 A complete device role needs:
 
-1. **`roles/deploy_ioc/vars/<role>.yml`**: required module, executable,
+1. **`roles/deploy_ioc/vars/<role>.yml`**: `deploy_ioc_device_type` (required;
+   one of `Motor`, `Camera`, `Detector`, `Sample Environment`, `Electrometer`,
+   `Diagnostic`, `Timing`, `Vacuum`, `PLC`, `Power`, `IO`, or `Misc`), required
+   module, executable,
    template root path, common/AD-common flags, autosave `.req` list,
    device-specific env defaults, required system packages, and
    `deploy_ioc_supported_el_versions` if the role only works on one EL version.

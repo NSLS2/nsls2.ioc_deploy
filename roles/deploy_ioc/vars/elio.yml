@@ -1,4 +1,7 @@
 ---
+
+deploy_ioc_device_type: "IO"
+
 deploy_ioc_use_common: true
 deploy_ioc_required_module: elio_b6c1512
 deploy_ioc_template_root_path: "{{ deploy_ioc_required_module_path }}"

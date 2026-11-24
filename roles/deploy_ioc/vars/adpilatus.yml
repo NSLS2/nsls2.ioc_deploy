@@ -1,4 +1,7 @@
 ---
+
+deploy_ioc_device_type: "Detector"
+
 deploy_ioc_use_ad_common: true
 deploy_ioc_required_module: adpilatus_72c7844
 deploy_ioc_template_root_path:

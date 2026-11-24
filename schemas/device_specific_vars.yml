@@ -1,4 +1,17 @@
 ---
+deploy_ioc_device_type: >-
+  enum("Motor",
+  "Camera",
+  "Detector",
+  "Sample Environment",
+  "Electrometer",
+  "Diagnostic",
+  "Timing",
+  "Vacuum",
+  "PLC",
+  "Power",
+  "IO",
+  "Misc")
 deploy_ioc_post_deploy_step: str(required=False)
 deploy_ioc_template_root_path: str(required=False)
 deploy_ioc_required_module: module_name(required=False)

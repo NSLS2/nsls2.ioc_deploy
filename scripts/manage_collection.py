@@ -9,6 +9,22 @@ import questionary
 import tabulate
 import yaml
 
+# Must match the deploy_ioc_device_type enum in schemas/device_specific_vars.yml
+DEVICE_TYPES = [
+    "Motor",
+    "Camera",
+    "Detector",
+    "Sample Environment",
+    "Electrometer",
+    "Diagnostic",
+    "Timing",
+    "Vacuum",
+    "PLC",
+    "Power",
+    "IO",
+    "Misc",
+]
+
 
 class IndentedDumper(yaml.SafeDumper):
     def increase_indent(self, flow=False, indentless=False):
@@ -245,6 +261,12 @@ def add_role():
         )
 
     ioc_type_config = {}
+
+    ioc_type_config["deploy_ioc_device_type"] = questionary.select(
+        "Select the category of device this role controls:",
+        choices=DEVICE_TYPES,
+        default="Misc",
+    ).unsafe_ask()
 
     standard_st_cmd = questionary.confirm(
         "Should this role use standard st.cmd (epicsEnv/base/common/postInit)?",
