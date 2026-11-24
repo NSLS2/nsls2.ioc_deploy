@@ -11,7 +11,7 @@
   vars:
     xspress3_host_address: "{{ ioc.environment.XSPRESS3_IP }}/24"
     xspress3_network_info: >-
-      {{ nsls2network[xspress3_beamline_system]['det'] }}
+      {{ nsls2network[beamline_system]['det'] }}
   block:
     - name: Initialize matching interface list
       ansible.builtin.set_fact:
@@ -39,7 +39,7 @@
         that:
           - xspress3_matching_interfaces | length == 1
         fail_msg: >-
-          Expected one DET interface for {{ xspress3_beamline_system }};
+          Expected one DET interface for {{ beamline_system }};
           found {{ xspress3_matching_interfaces }}.
 
     - name: Get active NetworkManager connection UUID
